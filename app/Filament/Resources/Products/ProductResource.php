@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ProductResource extends Resource
 {
@@ -23,6 +24,11 @@ class ProductResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    {
+        return 'icon-box';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -52,7 +58,7 @@ class ProductResource extends Resource
             'index' => ListProducts::route('/'),
             'create' => CreateProduct::route('/create'),
             'view' => ViewProduct::route('/{record}'),
-            'edit' => EditProduct::route('/{record}/edit'),
+            //'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
 }
