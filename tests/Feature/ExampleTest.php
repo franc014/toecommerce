@@ -1,7 +1,11 @@
 <?php
 
-test('returns a successful response', function () {
-    $response = $this->get(route('home'));
+use App\Models\ProductVariant;
 
-    $response->assertStatus(200);
+test('check product variant sizes', function () {
+    $productVariant = ProductVariant::factory()->count(2)->create();
+
+    ray($productVariant[0]->sizes);
+
+    $this->assertCount(2, $productVariant->sizes);
 });

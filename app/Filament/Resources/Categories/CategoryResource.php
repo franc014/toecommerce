@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Categories;
 
+use App\Enums\NavigationGroup;
 use App\Filament\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use UnitEnum;
 
 class CategoryResource extends Resource
 {
@@ -25,6 +27,11 @@ class CategoryResource extends Resource
     public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
     {
         return 'icon-category';
+    }
+
+    public static function getNavigationGroup(): UnitEnum | string | null
+    {
+        return NavigationGroup::TAXONOMIES;
     }
 
     public static function form(Schema $schema): Schema
@@ -53,9 +60,9 @@ class CategoryResource extends Resource
     {
         return [
             'index' => ListCategories::route('/'),
-            'create' => CreateCategory::route('/create'),
-            'view' => ViewCategory::route('/{record}'),
-            'edit' => EditCategory::route('/{record}/edit'),
+            //'create' => CreateCategory::route('/create'),
+            //'view' => ViewCategory::route('/{record}'),
+            //'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }

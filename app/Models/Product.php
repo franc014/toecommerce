@@ -22,9 +22,7 @@ class Product extends Model implements HasMedia
 
 
     protected $casts = [
-        'id' => 'integer',
         'published_at' => 'datetime',
-        'user_id' => 'integer',
         'status' => ProductStatus::class,
         'price' => Money::class,
     ];
@@ -51,7 +49,7 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany(ProductCollection::class);
     }
 
-    public function productVariants(): HasMany
+    public function variants(): HasMany
     {
         return $this->hasMany(ProductVariant::class);
     }
@@ -68,7 +66,7 @@ class Product extends Model implements HasMedia
 
     public function hasVariants()
     {
-        return $this->productVariants->count() >= 1;
+        return $this->variants->count() >= 1;
     }
 
     public static function bySlug(string $slug)

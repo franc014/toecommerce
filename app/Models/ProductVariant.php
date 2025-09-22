@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,13 +15,19 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class ProductVariant extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Publishable;
 
-    protected $casts = [
-        'sizes' => 'array',
-        'price' => Money::class,
-        'status' => ProductStatus::class,
-    ];
+    protected function casts(): array
+    {
+
+        return  [
+           'sizes' => 'array',
+           'published_at' => 'datetime',
+           'price' => Money::class,
+           'status' => ProductStatus::class,
+        ];
+
+    }
 
     public function product(): BelongsTo
     {

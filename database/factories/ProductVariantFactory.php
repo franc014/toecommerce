@@ -23,6 +23,7 @@ class ProductVariantFactory extends Factory
         $title = $this->faker->sentence(1);
         $slug = str()->slug($title);
 
+
         $sizes = array_column(ProductSizes::cases(), 'name');
 
         return [

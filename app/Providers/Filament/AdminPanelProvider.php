@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->databaseTransactions()
             ->sidebarCollapsibleOnDesktop()
+
             ->colors([
                 'primary' => Color::Indigo,
             ])
