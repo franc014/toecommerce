@@ -12,15 +12,10 @@ class CategoryInfolist
         return $schema
             ->components([
                 TextEntry::make('title'),
+                TextEntry::make('slug'),
                 TextEntry::make('description')
                     ->columnSpanFull(),
-                TextEntry::make('slug'),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+
             ]);
     }
 }

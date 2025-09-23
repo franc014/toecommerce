@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Products\RelationManagers;
 use App\Enums\ProductStatus;
 use App\Filament\Resources\Products\Tables\ProductsTable;
 use App\Filament\Resources\ProductVariants\Schemas\ProductVariantForm;
+use App\Filament\Resources\ProductVariants\Schemas\ProductVariantInfolist;
 use App\Filament\Resources\ProductVariants\Tables\ProductVariantsTable;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
@@ -37,6 +38,11 @@ class VariantsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return ProductVariantsTable::configure($table);
+    }
+
+    public function infolist(Schema $schema): Schema
+    {
+        return ProductVariantInfolist::configure($schema);
     }
 
     public static function getTabComponent(Model $ownerRecord, string $pageClass): Tab

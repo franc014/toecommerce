@@ -80,12 +80,11 @@ class ProductsTable
                 Action::make('variants')
                     ->label('Variantes')
                     ->visible(function (Product $product) {
-                        //ray('variants', $product->variants);
                         return $product->hasVariants();
                     })
                     ->url(function (Product $product) {
-                        return "#";
-                        ///return route('filament.admin.resources.products.productVariants', ['record' => $product]);
+                        //return "#";
+                        return route('filament.admin.resources.products.variants', ['record' => $product]);
                     })->icon(Heroicon::OutlinedSwatch),
                 Action::make('taxes')->label('Impuestos')
                     ->icon(Heroicon::OutlinedReceiptPercent)

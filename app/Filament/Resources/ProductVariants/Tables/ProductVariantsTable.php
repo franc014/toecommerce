@@ -17,11 +17,11 @@ class ProductVariantsTable
     {
         return $table
             ->columns([
-                TextColumn::make('product.title')->limit(30)->sortable()->label('Producto'),
+                TextColumn::make('product.title')->limit(30)->sortable()->searchable()->label('Producto'),
                 ColorColumn::make('color'),
-                TextColumn::make('sizes')->badge(),
+                TextColumn::make('sizes')->badge()->searchable(),
                 TextColumn::make('status')->badge()->sortable(),
-                TextColumn::make('price')->money('USD'),
+                TextColumn::make('price')->sortable()->searchable()->money('USD'),
             ])
             ->filters([
                 //
