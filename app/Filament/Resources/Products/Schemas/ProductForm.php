@@ -5,8 +5,6 @@ namespace App\Filament\Resources\Products\Schemas;
 use App\Enums\ProductStatus;
 use App\Models\Tax;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
@@ -16,9 +14,11 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use App\Filament\Forms\Components\SharedFields;
 
 class ProductForm
 {
+    use SharedFields;
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -34,10 +34,7 @@ class ProductForm
                     ->icon(Heroicon::OutlinedCube)
                     ->schema(
                         [
-                            TextInput::make('title')
-                                ->required(),
-                            TextInput::make('slug')
-                            ->required(),
+                            ...self::titleAndSlugFields(),
                              Select::make('status')
                                     ->required()
                                     ->default(ProductStatus::DRAFT)

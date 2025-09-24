@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProductVariants\Schemas;
 
 use App\Enums\ProductSizes;
 use App\Enums\ProductStatus;
+use App\Filament\Forms\Components\SharedFields;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
@@ -15,33 +16,19 @@ use Filament\Schemas\Schema;
 
 class ProductVariantForm
 {
+    use SharedFields;
     public static function configure(Schema $schema, $productId = null): Schema
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                ->label('Título')
-                ->unique(ignoreRecord: true)
-                ->live(onBlur: true)
-                ->debounce(200)
-                ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                    //self::generateSlug($get, $set, $old, $state);
-                })
-                ->required()
-                ->maxLength(255),
-                    TextInput::make('slug')
-                ->required()
-                ->unique(ignoreRecord: true)
-                ->maxLength(255),
+                ...self::titleAndSlugFields(),
             ColorPicker::make('color')
                 ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
                 ->default('#000000'),
-
             CheckboxList::make('sizes')
                 ->options(ProductSizes::class)
                 ->columns(3)
                 ->gridDirection('row'),
-
             TextInput::make('price')
                 ->required()
                 ->numeric()
