@@ -42,7 +42,7 @@ class ListProducts extends ListRecords
             }),
             'archived' => Tab::make('Archivados')->modifyQueryUsing(function ($query) {
                 return $query->archived();
-            })
+            }),
         ];
     }
 }

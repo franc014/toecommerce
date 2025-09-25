@@ -24,12 +24,12 @@ class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return 'icon-category';
     }
 
-    public static function getNavigationGroup(): UnitEnum | string | null
+    public static function getNavigationGroup(): UnitEnum|string|null
     {
         return NavigationGroup::TAXONOMIES;
     }
@@ -60,9 +60,9 @@ class CategoryResource extends Resource
     {
         return [
             'index' => ListCategories::route('/'),
-            //'create' => CreateCategory::route('/create'),
-            //'view' => ViewCategory::route('/{record}'),
-            //'edit' => EditCategory::route('/{record}/edit'),
+            // 'create' => CreateCategory::route('/create'),
+            // 'view' => ViewCategory::route('/{record}'),
+            // 'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }

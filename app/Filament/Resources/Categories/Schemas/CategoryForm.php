@@ -9,6 +9,7 @@ use Filament\Schemas\Schema;
 class CategoryForm
 {
     use SharedFields;
+
     public static function configure(Schema $schema): Schema
     {
         return $schema

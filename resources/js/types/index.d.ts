@@ -34,4 +34,33 @@ export interface User {
     updated_at: string;
 }
 
+export interface Product {
+    id: number;
+    title: string;
+    slug: string;
+    price_in_dollars: string;
+    images: Array<string>;
+}
+
+export interface Cart {
+    id: string;
+    items: CartItem[];
+}
+
+export interface CartItem {
+    title: string;
+    slug: string;
+    product_id: number;
+    price: number;
+    tax: number;
+    quantity: number;
+    total: number;
+    total_with_tax: number;
+
+}
+
+export interface CartDrawer {
+    open: boolean;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

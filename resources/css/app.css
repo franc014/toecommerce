@@ -4,6 +4,8 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.ts';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -164,4 +166,24 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    h1 {
+        @apply text-2xl font-semibold;
+    }
+
+    h2 {
+        @apply text-xl font-semibold;
+    }
 }
+
+.wrapper {
+    @apply w-5/6 mx-auto py-10 max-w-screen-lg;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.75rem;
+}
+
+

@@ -24,7 +24,7 @@ class ProductCollectionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function getNavigationGroup(): UnitEnum | string | null
+    public static function getNavigationGroup(): UnitEnum|string|null
     {
         return NavigationGroup::TAXONOMIES;
     }
@@ -57,9 +57,9 @@ class ProductCollectionResource extends Resource
     {
         return [
             'index' => ListProductCollections::route('/'),
-            //'create' => CreateProductCollection::route('/create'),
-            //'view' => ViewProductCollection::route('/{record}'),
-            //'edit' => EditProductCollection::route('/{record}/edit'),
+            // 'create' => CreateProductCollection::route('/create'),
+            // 'view' => ViewProductCollection::route('/{record}'),
+            // 'edit' => EditProductCollection::route('/{record}/edit'),
         ];
     }
 }

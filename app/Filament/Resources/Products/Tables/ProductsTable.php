@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
-use App\Enums\ProductStatus;
 use App\Models\Product;
 use App\Models\Tax;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Notifications\Notification;
@@ -68,7 +63,7 @@ class ProductsTable
                     ->label('Fecha de archivo')
                     ->dateTime()
                     ->sortable()
-                     ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Filter::make('has_variants')->query(function ($query) {
@@ -83,7 +78,7 @@ class ProductsTable
                         return $product->hasVariants();
                     })
                     ->url(function (Product $product) {
-                        //return "#";
+                        // return "#";
                         return route('filament.admin.resources.products.variants', ['record' => $product]);
                     })->icon(Heroicon::OutlinedSwatch),
                 Action::make('taxes')->label('Impuestos')
@@ -94,7 +89,7 @@ class ProductsTable
                             ->label('Impuestos')
                             ->options(function () {
                                 return Tax::all()->pluck('name', 'id');
-                            })
+                            }),
                     ])
                     ->fillForm(function (Product $record) {
                         return [
@@ -116,11 +111,11 @@ class ProductsTable
             ])
             ->toolbarActions([
 
-                    BulkAction::make('assignTaxes')
+                BulkAction::make('assignTaxes')
                     ->schema([
                         CheckboxList::make('taxes')->options(Tax::query()->pluck('name', 'id'))
                             ->label('Impuestos')
-                            ->default([])
+                            ->default([]),
                     ])
                     ->action(function (array $data, Collection $records) {
                         foreach ($records as $record) {
@@ -133,10 +128,9 @@ class ProductsTable
                     })
                     ->color('info')
                     ->icon(Heroicon::OutlinedPercentBadge),
-                    DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
 
-                    PublishingActions::getBulkPublishingActions(),
-
+                PublishingActions::getBulkPublishingActions(),
 
             ]);
     }

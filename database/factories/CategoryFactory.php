@@ -19,6 +19,7 @@ class CategoryFactory extends Factory
     {
         $title = fake()->sentence(4);
         $slug = Str::slug($title);
+
         return [
             'title' => $title,
             'description' => fake()->text(),

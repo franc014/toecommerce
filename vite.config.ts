@@ -1,17 +1,25 @@
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
-import laravel from 'laravel-vite-plugin';
+import laravel, { refreshPaths } from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
+import { resolve } from 'node:path';
+import path from 'path';
 
 export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
-            ssr: 'resources/js/ssr.ts',
-            refresh: true,
+            refresh: [
+                ...refreshPaths,
+                "app/Filament/**",
+                "app/Livewire/**",
+                "app/Providers/Filament/**",
+                "app/Models/**",
+            ],
         }),
         tailwindcss(),
-
+        wayfinder(),
         vue({
             template: {
                 transformAssetUrls: {
@@ -21,4 +29,9 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './resources/js'),
+        },
+    },
 });

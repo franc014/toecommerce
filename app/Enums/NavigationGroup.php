@@ -9,7 +9,6 @@ enum NavigationGroup implements HasLabel
     case STORE;
     case TAXONOMIES;
 
-
     public function getLabel(): string
     {
         return match ($this) {

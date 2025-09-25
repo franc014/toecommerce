@@ -7,7 +7,7 @@ use UnitEnum;
 
 trait StoreNavigationGroup
 {
-    public static function getNavigationGroup(): UnitEnum | string | null
+    public static function getNavigationGroup(): UnitEnum|string|null
     {
         return NavigationGroup::STORE;
     }

@@ -15,7 +15,6 @@ use App\Models\Product;
 use App\Traits\StoreNavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -23,7 +22,6 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class ProductResource extends Resource
 {
-
     use StoreNavigationGroup;
 
     protected static ?string $model = Product::class;
@@ -32,7 +30,7 @@ class ProductResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return 'icon-box';
     }
@@ -55,17 +53,15 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            'variants' => VariantsRelationManager::class
+            'variants' => VariantsRelationManager::class,
         ];
     }
-
-
 
     public static function getPages(): array
     {
         return [
             'index' => ListProducts::route('/'),
-            //'create' => CreateProduct::route('/create'),
+            // 'create' => CreateProduct::route('/create'),
             'view' => ViewProduct::route('/{record}'),
             'edit' => EditProduct::route('/{record}/edit'),
             'variants' => ManageProductVariants::route('/{record}/variants'),

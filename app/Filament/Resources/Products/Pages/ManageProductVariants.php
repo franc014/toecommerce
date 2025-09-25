@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Products\Pages;
 
-use App\Filament\Resources\ProductVariants\ProductVariantResource;
 use App\Filament\Resources\Products\ProductResource;
+use App\Filament\Resources\ProductVariants\ProductVariantResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;

@@ -1,0 +1,127 @@
+<template>
+    <li>
+        <div class="prod-card-v2">
+            <div class="p-3 text-center lg:p-5">
+                <h1 class="text-lg lg:text-2xl">
+                    <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
+                </h1>
+
+                <div class="my-1 lg:my-1.5">
+                    <span class="prod-card-v2__price">{{ product.price_in_dollars }}</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-4">
+                        <Quantity @update:modelValue="setQuantity" class="w-32" />
+                        <Button class="bg-emerald-500 tracking-wider text-zinc-100 hover:bg-emerald-400" @click="addToCart">
+                            <DiamondPlus class="h-5 w-5" /> Añadir
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</template>
+
+<script lang="ts" setup>
+import { Button } from '@/components/ui/button';
+import { DiamondPlus } from 'lucide-vue-next';
+import { ref } from 'vue';
+import { Product } from '../types';
+import Quantity from './Quantity.vue';
+const { product } = defineProps<{ product: Product }>();
+const { slug } = product;
+const qty = ref(1);
+
+const productUrl = `/products/${slug}`;
+
+function setQuantity(quantity: number) {
+    qty.value = quantity;
+}
+
+function addToCart() {
+    console.log('added to cart', product, qty.value);
+}
+</script>
+
+<style scoped>
+@reference '../../css/app.css';
+
+/* --------------------------------
+
+File#: _2_product-card-v2
+Title: Product Card v2
+Descr: A selection of product information used as a teaser for further content
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.prod-card-v2 {
+    --rating-icon-size: 28px;
+    position: relative;
+}
+
+.prod-card-v2__img-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+.prod-card-v2__img-link img {
+    display: block;
+    width: 100%;
+    transition: 0.3s;
+}
+.prod-card-v2__img-link img:nth-child(2) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    opacity: 0;
+}
+.prod-card-v2__img-link:hover img:nth-child(1) {
+    opacity: 0.85;
+}
+.prod-card-v2__img-link:hover img:nth-child(2) {
+    opacity: 1;
+}
+
+.prod-card-v2__badge {
+    position: absolute;
+    z-index: 1;
+    @apply top-3 lg:top-5;
+    @apply right-3 lg:right-5;
+    @apply bg-gray-900/90;
+    @apply px-3 py-1.5 lg:px-5 lg:py-2;
+    @apply rounded;
+    pointer-events: none;
+    @apply text-sm lg:text-base;
+    @apply text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.product-card-v2__title {
+    @apply text-gray-900;
+    text-decoration: none;
+    font-weight: bold;
+}
+.product-card-v2__title:hover {
+    text-decoration: underline;
+}
+
+.prod-card-v2__price {
+    text-decoration: none;
+}
+
+.prod-card-v2__old-price {
+    @apply text-gray-500;
+    text-decoration: line-through;
+}
+.prod-card-v2__old-price::before {
+    content: 'original price';
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+}
+</style>

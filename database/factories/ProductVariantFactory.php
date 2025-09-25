@@ -23,19 +23,18 @@ class ProductVariantFactory extends Factory
         $title = $this->faker->sentence(1);
         $slug = str()->slug($title);
 
-
         $sizes = array_column(ProductSizes::cases(), 'name');
 
         return [
             'title' => $title,
-            'slug' => $slug . '-' . $this->faker->uuid(),
+            'slug' => $slug.'-'.$this->faker->uuid(),
             'product_id' => Product::factory(),
             'color' => fake()->hexColor(),
-            'sizes' =>  Arr::random($sizes, 2),
+            'sizes' => Arr::random($sizes, 2),
             'price' => fake()->randomFloat(2, 50, 300),
             'status' => fake()->randomElement(ProductStatus::class),
             'sku' => fake()->uuid(),
-            'stock' => fake()->numberBetween(100, 300)
+            'stock' => fake()->numberBetween(100, 300),
         ];
     }
 

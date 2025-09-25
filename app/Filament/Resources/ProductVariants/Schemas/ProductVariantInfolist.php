@@ -41,19 +41,19 @@ class ProductVariantInfolist
 
                         Group::make()->schema([
                             TextEntry::make('price')->label('Precio')->money('USD'),
-                            TextEntry::make('discount')->label('Descuento')->suffix('%')->placeholder('Sin descuento')
+                            TextEntry::make('discount')->label('Descuento')->suffix('%')->placeholder('Sin descuento'),
                         ])->columnSpan(1),
 
                         Group::make()->schema([
                             TextEntry::make('sku'),
-                            TextEntry::make('stock')
+                            TextEntry::make('stock'),
                         ])->columnSpan(1),
 
                     ])->columnSpan(3),
 
                 Section::make('Fotos')
-                ->columnSpanFull()
-                ->collapsible()->collapsed(false)->schema([
+                    ->columnSpanFull()
+                    ->collapsible()->collapsed(false)->schema([
                     SpatieMediaLibraryImageEntry::make('product_images')->label('Fotos de Variantes')
                         ->placeholder('No hay fotos todavía')
                         ->conversion('thumb')

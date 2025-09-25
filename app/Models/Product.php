@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,9 +18,7 @@ use Spatie\Tags\HasTags;
 
 class Product extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\ProductFactory> */
-    use HasFactory, HasTags, InteractsWithMedia, Publishable;
-
+    use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable;
 
     protected $casts = [
         'published_at' => 'datetime',

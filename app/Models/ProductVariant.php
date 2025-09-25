@@ -4,27 +4,29 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ProductVariant extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
-    use HasFactory, InteractsWithMedia, Publishable;
+    use HasFactory, InteractsWithMedia, MoneyFormat, Publishable;
 
     protected function casts(): array
     {
 
-        return  [
-           'sizes' => 'array',
-           'published_at' => 'datetime',
-           'price' => Money::class,
-           'status' => ProductStatus::class,
+        return [
+            'sizes' => 'array',
+            'published_at' => 'datetime',
+            'price' => Money::class,
+            'status' => ProductStatus::class,
         ];
 
     }
@@ -46,5 +48,12 @@ class ProductVariant extends Model implements HasMedia
         $price = (int) $this->getAttributes()['price'];
 
         return round(($price * (1 + $this->product->taxes->sum('percentage') / 100)) / 100, 2);
+    }
+
+    public function formattedSizes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::join($this->sizes, ', ')
+        );
     }
 }

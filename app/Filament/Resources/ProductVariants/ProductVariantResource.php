@@ -9,14 +9,13 @@ use App\Filament\Resources\ProductVariants\Pages\ViewProductVariant;
 use App\Filament\Resources\ProductVariants\Schemas\ProductVariantForm;
 use App\Filament\Resources\ProductVariants\Schemas\ProductVariantInfolist;
 use App\Filament\Resources\ProductVariants\Tables\ProductVariantsTable;
+use App\Models\ProductVariant;
+use App\Traits\StoreNavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use App\Models\ProductVariant;
-use App\Traits\StoreNavigationGroup;
-use UnitEnum;
 
 class ProductVariantResource extends Resource
 {
@@ -25,6 +24,7 @@ class ProductVariantResource extends Resource
     protected static ?string $model = ProductVariant::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSwatch;
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -55,9 +55,9 @@ class ProductVariantResource extends Resource
     {
         return [
             'index' => ListProductVariants::route('/'),
-            //'create' => CreateProductVariant::route('/create'),
-            //'view' => ViewProductVariant::route('/{record}'),
-            //'edit' => EditProductVariant::route('/{record}/edit'),
+            // 'create' => CreateProductVariant::route('/create'),
+            // 'view' => ViewProductVariant::route('/{record}'),
+            // 'edit' => EditProductVariant::route('/{record}/edit'),
         ];
     }
 }
