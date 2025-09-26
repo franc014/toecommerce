@@ -24,6 +24,7 @@
 
 <script lang="ts" setup>
 import { Button } from '@/components/ui/button';
+import { useCartStore } from '@/stores/cartStore';
 import { DiamondPlus } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { Product } from '../types';
@@ -31,6 +32,8 @@ import Quantity from './Quantity.vue';
 const { product } = defineProps<{ product: Product }>();
 const { slug } = product;
 const qty = ref(1);
+
+const cartStore = useCartStore();
 
 const productUrl = `/products/${slug}`;
 
@@ -40,6 +43,11 @@ function setQuantity(quantity: number) {
 
 function addToCart() {
     console.log('added to cart', product, qty.value);
+    cartStore.addOrUpdateItem({
+        ui_cart_id: cartStore.id,
+        product_id: product.id,
+        quantity: qty.value,
+    });
 }
 </script>
 

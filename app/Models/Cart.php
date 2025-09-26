@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\ProductOutOfStockException;
 use App\Traits\MoneyFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,5 +45,65 @@ class Cart extends Model
     public function hasItems(): bool
     {
         return $this->items->count() > 0;
+    }
+
+    public function getItemByPurchasableId(int $purchasableId): ?CartItem
+    {
+        return $this->items->where('purchasable_id', $purchasableId)->first();
+    }
+
+    public function addOrUpdateItem(array $data): CartItem
+    {
+
+        $this->productOutOfStockCheck($data);
+
+        $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
+
+        if ($cartItem) {
+            $this->updateItem($cartItem->id, $data['quantity']);
+        } else {
+            $cartItem =  $this->items()->create($data);
+        }
+
+        return $cartItem;
+    }
+
+    public function updateItem(int $itemId, $quantity): void
+    {
+
+        $item = $this->itemById($itemId);
+
+        $this->productOutOfStockCheck([
+            'buyable_type' => $item->buyable_type,
+            'buyable_id' => $item->buyable_id,
+            'quantity' => $quantity
+        ]);
+
+        $taxes = json_decode($item->taxes);
+        $totalTaxes = collect($taxes)->sum('percentage');
+        $item->quantity = $quantity;
+        $item->total = $item->price * $item->quantity;
+        $item->total_with_taxes = $quantity * $item->price * (1 + $totalTaxes / 100);
+        $item->save();
+    }
+
+    private function productOutOfStockCheck(array $data):void
+    {
+
+        if (AppSettings::isStockControlStrict()) {
+
+            $items = CartItem::allByProductInOpenCarts($data['purchasable_id'], $data['purchasable_type']);
+
+            $totalQuantity = $items->sum('quantity') + $data['quantity'];
+
+            $purchasable = $data['purchasable_type']::find($data['purchasable_id']);
+
+            //ray($purchasable, $totalQuantity);
+
+            if ($purchasable && $purchasable->stock - $totalQuantity <= 0) {
+                ray('yeah');
+                throw new ProductOutOfStockException();
+            }
+        }
     }
 }

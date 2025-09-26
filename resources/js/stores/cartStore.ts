@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { CartItem } from "../types/index";
 
-//import { route } from "ziggy-js";
 import axios from "axios";
 import {init} from './cartStoreActions';
+import { addOrUpdate } from '@/routes/cart/items';
 
 
 export const useCartStore = defineStore('cart', {
@@ -14,11 +14,21 @@ export const useCartStore = defineStore('cart', {
     }),
     actions: {
         init,
-        async addItem(data: object) {
+        async addOrUpdateItem(data: object) {
 
             console.log({ data });
 
-            //todo tests...
+            try {
+                const resp = await axios.post(addOrUpdate().url, data);
+                console.log('data', resp.data.items);
+            } catch (e: any) {
+                console.log({ e });
+            }
+
+
+
+
+            /* //todo tests...
 
             const cartDB = await axios.post(route('cart.items.store', { cart: this.id }), data);
 
@@ -27,7 +37,7 @@ export const useCartStore = defineStore('cart', {
             localStorage.setItem('cart', JSON.stringify({
                 id: this.id,
                 items: this.items,
-            }));
+            })); */
 
         },
 

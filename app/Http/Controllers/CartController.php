@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -27,4 +29,6 @@ class CartController extends Controller
 
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray()];
     }
+
+
 }

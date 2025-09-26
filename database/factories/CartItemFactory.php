@@ -24,14 +24,14 @@ class CartItemFactory extends Factory
 
         return [
             'cart_id' => Cart::factory(),
-            'buyable_id' => Product::factory(),
+            'purchasable_id' => Product::factory(),
             'title' => $this->faker->sentence,
             'slug' => $this->faker->slug,
             'price' => $price,
             'quantity' => $quantity,
             'total' => $total,
             'total_with_taxes' => $total,
-            'buyable_type' => Product::class,
+            'purchasable_type' => Product::class,
         ];
     }
 }
