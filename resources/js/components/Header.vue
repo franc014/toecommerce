@@ -31,27 +31,31 @@
                         <li class="header__item"><Link href="/products">Productos</Link></li>
                         <li class="header__item header__item--divider" aria-hidden="true"></li>
                         <li class="header__item">
-                            <Button class="bg-amber-300 px-4 py-2 hover:bg-amber-50"> <ShoppingCart class="h-6 w-6" /> Cart </Button>
+                            <Button class="cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="toggle">
+                                <ShoppingCartIcon class="h-6 w-6" />
+                            </Button>
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
+        <Cart />
     </header>
 </template>
 
 <script setup lang="ts">
-//import Cart from '@/components/Cart.vue';
+import Cart from '@/components/Cart.vue';
 import { Button } from '@/components/ui/button';
-//import { useCartDrawerStore } from '@/stores/cartDrawerStore';
+import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { Link } from '@inertiajs/vue3';
-import { ShoppingCart } from 'lucide-vue-next';
+import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
-//const cartDrawer = useCartDrawerStore();
+const cartDrawer = useCartDrawerStore();
 
-/* function toggleCart() {
+function toggle() {
+    console.log('toggle cart', cartDrawer.isOpen);
     cartDrawer.toggle();
-} */
+}
 </script>
 
 <style scoped>
@@ -69,14 +73,14 @@ Usage: codyhouse.co/license
 }
 @media (min-width: 64rem) {
     :root {
-        --header-height: 70px;
+        --header-height: 10px;
     }
 }
 
 .header {
     height: var(--header-height);
     width: 100%;
-    @apply bg-indigo-400 py-4;
+    @apply bg-zinc-200;
     @apply z-[3];
 }
 

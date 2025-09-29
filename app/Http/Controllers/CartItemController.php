@@ -17,9 +17,9 @@ class CartItemController extends Controller
             $quantity = $request->input('quantity');
             $product->setQuantityForCart($quantity);
             $cart->addOrUpdateItem($product->dataforCart());
-            return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->fresh()->items->toArray()];
+            return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->fresh()->items];
         } catch (ProductOutOfStockException $e) {
-            ray('in the catch');
+
             return response()->json([
                 'error' => [
                     'code' => 422,

@@ -1,5 +1,5 @@
-//import { route } from "ziggy-js";
 import { show, create } from '@/routes/cart';
+import { addOrUpdate } from '@/routes/cart/items';
 
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
@@ -65,6 +65,22 @@ export async function init() {
                 }
 
             }
+}
+
+export async function addOrUpdateItem(data: object){
+
+    console.log({ data });
+
+    try {
+        const resp = await axios.post(addOrUpdate().url, data);
+        this.items = resp.data.items;
+
+        console.log('data', resp.data.items);
+    } catch (e: any) {
+        console.log({ e });
+    }
+
+
 }
 
 

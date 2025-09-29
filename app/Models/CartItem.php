@@ -13,6 +13,8 @@ class CartItem extends Model
     /** @use HasFactory<\Database\Factories\CartItemFactory> */
     use HasFactory, MoneyFormat;
 
+    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars'];
+
     protected function casts(): array
     {
         return [
@@ -38,6 +40,11 @@ class CartItem extends Model
         })
         ->get();
     }
+
+
+
+
+
 
 
 }

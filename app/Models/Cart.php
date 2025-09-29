@@ -14,6 +14,8 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
+    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars'];
+
     protected function casts(): array
     {
         return [
@@ -59,7 +61,10 @@ class Cart extends Model
 
         $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
 
+
+
         if ($cartItem) {
+            ray('up');
             $this->updateItem($cartItem->id, $data['quantity']);
         } else {
             $cartItem =  $this->items()->create($data);
@@ -70,15 +75,7 @@ class Cart extends Model
 
     public function updateItem(int $itemId, $quantity): void
     {
-
         $item = $this->itemById($itemId);
-
-        $this->productOutOfStockCheck([
-            'buyable_type' => $item->buyable_type,
-            'buyable_id' => $item->buyable_id,
-            'quantity' => $quantity
-        ]);
-
         $taxes = json_decode($item->taxes);
         $totalTaxes = collect($taxes)->sum('percentage');
         $item->quantity = $quantity;
@@ -98,10 +95,7 @@ class Cart extends Model
 
             $purchasable = $data['purchasable_type']::find($data['purchasable_id']);
 
-            //ray($purchasable, $totalQuantity);
-
             if ($purchasable && $purchasable->stock - $totalQuantity <= 0) {
-                ray('yeah');
                 throw new ProductOutOfStockException();
             }
         }

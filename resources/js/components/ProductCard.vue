@@ -1,7 +1,7 @@
 <template>
     <li>
         <div class="prod-card-v2">
-            <div class="p-3 text-center lg:p-5">
+            <div class="flex flex-col items-center space-y-10 text-center lg:p-5">
                 <h1 class="text-lg lg:text-2xl">
                     <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
                 </h1>
@@ -11,10 +11,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-4">
-                        <Quantity @update:modelValue="setQuantity" class="w-32" />
-                        <Button class="bg-emerald-500 tracking-wider text-zinc-100 hover:bg-emerald-400" @click="addToCart">
-                            <DiamondPlus class="h-5 w-5" /> Añadir
-                        </Button>
+                        <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
                     </div>
                 </div>
             </div>
@@ -23,12 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/stores/cartStore';
-import { DiamondPlus } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { Product } from '../types';
-import Quantity from './Quantity.vue';
+import QuantityHandler from './QuantityHandler.vue';
 const { product } = defineProps<{ product: Product }>();
 const { slug } = product;
 const qty = ref(1);
@@ -38,10 +33,11 @@ const cartStore = useCartStore();
 const productUrl = `/products/${slug}`;
 
 function setQuantity(quantity: number) {
+    console.log('set quantity arg', quantity);
     qty.value = quantity;
 }
 
-function addToCart() {
+function updateCart() {
     console.log('added to cart', product, qty.value);
     cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
@@ -62,6 +58,11 @@ Descr: A selection of product information used as a teaser for further content
 Usage: codyhouse.co/license
 
 -------------------------------- */
+
+li {
+    @apply bg-indigo-200;
+}
+
 .prod-card-v2 {
     --rating-icon-size: 28px;
     position: relative;

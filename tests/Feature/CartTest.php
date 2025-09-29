@@ -157,20 +157,10 @@ test('if out of stock, a product in the cart can not be added', function () {
     ]);
 
     $uiCartId = fake()->uuid();
-    $cart = Cart::factory()->create([
+    Cart::factory()->create([
         'ui_cart_id' => $uiCartId,
     ]);
 
-    /* CartItem::factory()->create([
-        'cart_id' => $cart->id,
-        'purchasable_id' => $product->id,
-        'purchasable_type' => Product::class,
-        'title' => $product->title,
-        'slug' => $product->slug,
-        'price' => $product->price,
-        'quantity' => 4,
-        'total' => 4 * $product->price
-    ]); */
 
     $this->post(route('cart.items.addOrUpdate', [
         'ui_cart_id' => $uiCartId,
@@ -215,7 +205,9 @@ test('if out of stock, a product in the cart can not be updated', function () {
         'total' => 4 * $product->price
     ]);
 
-    $newQuantity = 5;
+    expect($cart->items)->toHaveCount(1);
+
+    $newQuantity = 6;
 
     $this->post(route('cart.items.addOrUpdate', [
         'ui_cart_id' => $uiCartId,

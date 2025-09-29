@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait MoneyFormat
 {
+
+
+
     public function toDollars($amount): string
     {
         return '$'.$amount;
