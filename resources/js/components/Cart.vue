@@ -1,7 +1,7 @@
 <template>
     <div class="absolute top-0 right-0">
         <section
-            v-if="!cartDrawerStore.isOpen"
+            v-if="cartDrawerStore.isOpen"
             class="cart-grid fixed top-0 right-0 z-10 h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
         >
             <header class="flex items-center gap-2 px-4">
@@ -12,8 +12,8 @@
             </header>
 
             <ul class="space-y-8 overflow-scroll border-t border-zinc-200 py-8">
-                <li v-for="item in cartStore.items" :key="item.id">
-                    <CartItem :item="{ item }" />
+                <li v-for="item in cartStore.cartItems" :key="item.id">
+                    <CartItem :item="item" />
                 </li>
             </ul>
 
@@ -39,12 +39,13 @@ import CartItem from '@/components/CartItem.vue';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { CircleX as CloseIcon } from 'lucide-vue-next';
+
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
 
-function closeCart() {
+const closeCart = () => {
     cartDrawerStore.toggle();
-}
+};
 </script>
 
 <style scoped>

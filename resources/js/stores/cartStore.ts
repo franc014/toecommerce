@@ -15,8 +15,11 @@ export const useCartStore = defineStore('cart', {
     actions: {
         init,
         addOrUpdateItem
-
-
+    },
+    getters: {
+        cartItems: (state) => state.items.sort(function(a,b){
+            return a.id - b.id
+        })
     }
 
 

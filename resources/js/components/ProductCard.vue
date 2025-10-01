@@ -33,12 +33,10 @@ const cartStore = useCartStore();
 const productUrl = `/products/${slug}`;
 
 function setQuantity(quantity: number) {
-    console.log('set quantity arg', quantity);
     qty.value = quantity;
 }
 
 function updateCart() {
-    console.log('added to cart', product, qty.value);
     cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
         product_id: product.id,

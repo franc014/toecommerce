@@ -31,7 +31,7 @@ export async function init() {
                 this.items = cartDB.data.items;
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
-                console.error('Nope, sorry. could not get cart: ', e.message);
+                console.error('Sorry. Could not get cart: ', e.message);
                 console.info('Trying to restore cart in DB with LS cart...');
 
                  // todo: restore cart with items function
@@ -61,26 +61,16 @@ export async function init() {
                     this.id = cartDB.data.ui_cart_id;
 
                 } catch (e: any) {
-                    console.error('nope, sorry. could not create cart: ', e.message);
+                    console.error('Sorry. Could not create cart: ', e.message);
                 }
 
             }
 }
 
 export async function addOrUpdateItem(data: object){
-
-    console.log({ data });
-
-    try {
-        const resp = await axios.post(addOrUpdate().url, data);
-        this.items = resp.data.items;
-
-        console.log('data', resp.data.items);
-    } catch (e: any) {
-        console.log({ e });
-    }
-
-
+    await axios.post(addOrUpdate().url, data);
+    const cart = await getCartFromDB(this.id);
+    this.items = cart.data.items;
 }
 
 

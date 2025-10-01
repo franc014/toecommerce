@@ -11,18 +11,14 @@
             @endif -->
         </div>
 
-        <div class="flex w-5/6 items-center justify-between gap-2">
+        <div class="flex w-5/6 items-center justify-between gap-3">
             <p class="flex flex-col gap-1">
                 <span class="text-xs font-bold">Precio:</span>
                 {{ item.price_in_dollars }}
             </p>
 
             <div class="flex items-center justify-between gap-2">
-                <button>+</button>
-
-                <p class="font-bold text-zinc-800">1</p>
-
-                <button>-</button>
+                <Quantity class="w-28 p-1 text-xs" :modelValue="quantity" @update:modelValue="changeQuantity" />
             </div>
             <p>
                 <span class="flex flex-col gap-1 text-xs font-bold">Total:</span>
@@ -39,13 +35,39 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watchEffect } from 'vue';
 import { CartItem } from '../types';
+import Quantity from './Quantity.vue';
+
+import { useCartStore } from '../stores/cartStore';
+const cartStore = useCartStore();
 
 const props = defineProps<{
     item: CartItem;
 }>();
 
-const { item } = props.item;
+const item = ref(props.item);
+
+console.log({ item });
+
+const quantity = ref(item.value.quantity);
+
+const changeQuantity = (value: number) => {
+    quantity.value = value;
+    console.log(item);
+
+    cartStore.addOrUpdateItem({
+        ui_cart_id: cartStore.id,
+        product_id: item.value.purchasable_id,
+        quantity: quantity.value,
+    });
+};
+
+watchEffect(() => {
+    console.log(props.item);
+    item.value = props.item;
+    quantity.value = item.value.quantity;
+});
 </script>
 
 <style scoped></style>

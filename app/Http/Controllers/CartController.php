@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller

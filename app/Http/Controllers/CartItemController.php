@@ -11,13 +11,20 @@ class CartItemController extends Controller
 {
     public function addOrUpdate(Request $request)
     {
+
+        $request->validate([
+            'ui_cart_id' => 'required | uuid',
+            'product_id' => 'required | integer',
+            'quantity' => 'required | integer',
+        ]);
+
         try {
-            $cart = Cart::byUICartId($request->input('ui_cart_id'))->first();
-            $product = Product::find($request->input('product_id'));
+            $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
+            $product = Product::findOrFail($request->input('product_id'));
             $quantity = $request->input('quantity');
             $product->setQuantityForCart($quantity);
-            $cart->addOrUpdateItem($product->dataforCart());
-            return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->fresh()->items];
+            $item = $cart->addOrUpdateItem($product->dataforCart());
+            return ['item' => $item];
         } catch (ProductOutOfStockException $e) {
 
             return response()->json([
