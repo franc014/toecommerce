@@ -29,12 +29,15 @@
                 {{ item.total_with_taxes_in_dollars }}
             </p>
 
-            xderemove
+            <button @click="remove" class="cursor-pointer">
+                <CloseIcon class="text-red-500 hover:text-red-700" />
+            </button>
         </div>
     </li>
 </template>
 
 <script setup lang="ts">
+import { CircleX as CloseIcon } from 'lucide-vue-next';
 import { ref, watchEffect } from 'vue';
 import { CartItem } from '../types';
 import Quantity from './Quantity.vue';
@@ -63,8 +66,14 @@ const changeQuantity = (value: number) => {
     });
 };
 
+function remove() {
+    cartStore.removeItem({
+        ui_cart_id: cartStore.id,
+        item_id: item.value.id,
+    });
+}
+
 watchEffect(() => {
-    console.log(props.item);
     item.value = props.item;
     quantity.value = item.value.quantity;
 });

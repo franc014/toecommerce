@@ -1,5 +1,5 @@
 import { show, create } from '@/routes/cart';
-import { addOrUpdate } from '@/routes/cart/items';
+import { addOrUpdate, remove} from '@/routes/cart/items';
 
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
@@ -29,6 +29,9 @@ export async function init() {
                 console.info('got cart from DB', cartDB);
                 this.id = cartDB.data.ui_cart_id;
                 this.items = cartDB.data.items;
+                this.aggregation['subtotal_in_dollars'] = cartDB.data.cart_aggregation.subtotal_in_dollars;
+                this.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
+
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
                 console.error('Sorry. Could not get cart: ', e.message);
@@ -69,6 +72,12 @@ export async function init() {
 
 export async function addOrUpdateItem(data: object){
     await axios.post(addOrUpdate().url, data);
+    const cart = await getCartFromDB(this.id);
+    this.items = cart.data.items;
+}
+
+export async function removeItem(data: object){
+    await axios.post(remove().url, data);
     const cart = await getCartFromDB(this.id);
     this.items = cart.data.items;
 }

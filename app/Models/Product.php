@@ -109,4 +109,19 @@ class Product extends Model implements HasMedia
 
         return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
     }
+
+    public function productImages()
+    {
+        return $this->getMedia('product-images');
+    }
+
+
+    public function productImagesForList():Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->productImages()->take(2)->map(function ($image) {
+                return $image->getFullUrl();
+            })
+        );
+    }
 }

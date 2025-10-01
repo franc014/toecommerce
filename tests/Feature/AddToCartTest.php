@@ -47,6 +47,30 @@ test('can add a published product to the cart', function () {
 
 });
 
+test('can not add an unpublished product to the cart', function () {
+    $product = Product::factory()->draft()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+    ]);
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+    $quantityToAdd = 1;
+
+    expect($cart->items)->toHaveCount(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+    ]))->assertStatus(404);
+
+    expect($cart->items)->toHaveCount(2);
+
+});
+
 //todo: can not add an unpublished product
 
 test('can update an existing cart item quantity', function () {

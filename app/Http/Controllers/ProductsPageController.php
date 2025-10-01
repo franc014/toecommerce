@@ -11,7 +11,7 @@ class ProductsPageController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         return Inertia::render('Products', [
             'products' => Product::published()->get()->map(function ($product) {

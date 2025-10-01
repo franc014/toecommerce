@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 test('price should be saved as integer in the database', function () {
     Product::factory()->create([
@@ -200,4 +201,101 @@ it('verifies product has taxes', function () {
     $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
 
     expect($product->hasTaxes())->toBeTrue();
+});
+
+test('can get images as media associated to a product', function () {
+    $product = Product::factory()->create();
+    $imageA = Media::create([
+        'model_id' => $product->id,
+        'model_type' => Product::class,
+        'collection_name' => 'product-images',
+        'name' => 't-shirt.jpg',
+        'file_name' => 't-shirt.jpg',
+        'disk' => 'public',
+        'size' => 1000,
+        'manipulations' => '[]',
+        'custom_properties' => '[]',
+        'generated_conversions' => '[]',
+        'responsive_images' => '[]',
+        'order_column' => 1
+
+    ]);
+
+    $imageB = Media::create([
+        'model_id' => $product->id,
+        'model_type' => Product::class,
+        'collection_name' => 'product-images',
+        'name' => 'jeans.jpg',
+        'file_name' => 'jeans.jpg',
+        'disk' => 'public',
+        'size' => 1000,
+        'manipulations' => '[]',
+        'custom_properties' => '[]',
+        'generated_conversions' => '[]',
+        'responsive_images' => '[]',
+        'order_column' => 2
+
+    ]);
+
+    expect($product->productImages())->toHaveCount(2);
+
+    $product->productImages()->assertEquals([$imageA, $imageB]);
+
+});
+
+test('can get product images as URLs for products list component', function () {
+
+    $product = Product::factory()->create();
+    $imageA = Media::create([
+        'model_id' => $product->id,
+        'model_type' => Product::class,
+        'collection_name' => 'product-images',
+        'name' => 't-shirt.jpg',
+        'file_name' => 't-shirt.jpg',
+        'disk' => 'public',
+        'size' => 1000,
+        'manipulations' => '[]',
+        'custom_properties' => '[]',
+        'generated_conversions' => '[]',
+        'responsive_images' => '[]',
+        'order_column' => 1
+
+    ]);
+
+    $imageB = Media::create([
+        'model_id' => $product->id,
+        'model_type' => Product::class,
+        'collection_name' => 'product-images',
+        'name' => 'jeans.jpg',
+        'file_name' => 'jeans.jpg',
+        'disk' => 'public',
+        'size' => 1000,
+        'manipulations' => '[]',
+        'custom_properties' => '[]',
+        'generated_conversions' => '[]',
+        'responsive_images' => '[]',
+        'order_column' => 2
+
+    ]);
+
+    $imageC = Media::create([
+        'model_id' => $product->id,
+        'model_type' => Product::class,
+        'collection_name' => 'product-images',
+        'name' => 'jeans.jpg',
+        'file_name' => 'jeans.jpg',
+        'disk' => 'public',
+        'size' => 1000,
+        'manipulations' => '[]',
+        'custom_properties' => '[]',
+        'generated_conversions' => '[]',
+        'responsive_images' => '[]',
+        'order_column' => 2
+
+    ]);
+
+
+    expect($product->productImagesForList)->toHaveCount(2);
+    expect($product->productImagesForList->toArray())->toEqual([$imageA->getFullUrl(), $imageB->getFullUrl()]);
+
 });

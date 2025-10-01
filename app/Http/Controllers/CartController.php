@@ -25,7 +25,10 @@ class CartController extends Controller
     {
         $cart = Cart::byUICartId($request->input('id'))->first();
 
-        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray()];
+        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
+            'subtotal_in_dollars' => $cart->subtotal_in_dollars,
+            'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars
+        ]];
     }
 
 

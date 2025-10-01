@@ -27,6 +27,19 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
     }
+
+    if (name === 'removeItem') {
+        after((result) => {
+            toast.success('Item removed from cart');
+        });
+        onError((error) => {
+            if (error.response.data.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error(error.response.data.error.message);
+            }
+        });
+    }
 });
 </script>
 

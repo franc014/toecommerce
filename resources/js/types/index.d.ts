@@ -47,7 +47,13 @@ export interface Cart {
     items: CartItem[];
 }
 
+export interface CartAggregation{
+    subtotal_in_dollars: string;
+    total_with_tax_in_dollars: string;
+}
+
 export interface CartItem {
+    id: number;
     title: string;
     slug: string;
     product_id: number;

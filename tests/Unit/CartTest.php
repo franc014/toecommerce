@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Facades\Exceptions;
 
 function createCartWithoutItem(array $productData, $isVariant = false)
@@ -209,4 +210,65 @@ to the quantity in the cart throws an exception', function () {
         ProductOutOfStockException::class
     );
 
+});
+
+test('getting the subtotal', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
+        'price' => 40.00,
+        'quantity' => 3,
+        'total' => 120.00
+    ], [
+        'price' => 50.00,
+        'quantity' => 2,
+        'total' => 100.00
+    ])), 'items')->create();
+
+    expect($cart->subtotal)->toBe(220.0);
+});
+
+test('getting the subtotal in dollars', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
+        'price' => 40.00,
+        'quantity' => 3,
+        'total' => 120.00
+    ], [
+        'price' => 50.00,
+        'quantity' => 2,
+        'total' => 100.00
+    ])), 'items')->create();
+
+    expect($cart->subtotalInDollars)->toBe('$220');
+});
+
+test('getting the total with taxes', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
+        'price' => 40.00,
+        'quantity' => 3,
+        'total' => 120.00,
+        'total_with_taxes' => 140.00
+    ], [
+        'price' => 50.00,
+        'quantity' => 2,
+        'total' => 100.00,
+        'total_with_taxes' => 120.00
+    ])), 'items')->create();
+
+    ray($cart);
+
+    expect($cart->total_with_taxes)->toBe(260.0);
+});
+
+test('getting the total with taxes in dollars', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
+        'price' => 40.00,
+        'quantity' => 3,
+        'total' => 120.00,
+        'total_with_taxes' => 140.00
+    ], [
+        'price' => 50.00,
+        'quantity' => 2,
+        'total' => 100.00,
+        'total_with_taxes' => 120.00
+    ])), 'items')->create();
+    expect($cart->total_with_taxes_in_dollars)->toBe('$260');
 });

@@ -20,7 +20,7 @@ class CartItemController extends Controller
 
         try {
             $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
-            $product = Product::findOrFail($request->input('product_id'));
+            $product = Product::published()->findOrFail($request->input('product_id'));
             $quantity = $request->input('quantity');
             $product->setQuantityForCart($quantity);
             $item = $cart->addOrUpdateItem($product->dataforCart());
@@ -34,5 +34,16 @@ class CartItemController extends Controller
                 ]
             ], 422);
         }
+    }
+
+    public function remove(Request $request)
+    {
+        $request->validate([
+            'ui_cart_id' => 'required | uuid',
+            'item_id' => 'required | integer',
+        ]);
+
+        $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
+        $cart->removeItem($request->input('item_id'));
     }
 }

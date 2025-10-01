@@ -19,8 +19,12 @@
 
             <footer class="border-t border-zinc-200 pt-4">
                 <div class="mb-6 flex flex-col gap-4 border-b border-zinc-200 pb-4">
-                    <p class="text-xl font-bold">Total: <span class="italic">10</span></p>
-                    <p class="text-xl font-bold">Total (con impuestos): <span class="italic">10</span></p>
+                    <p class="text-xl font-bold">
+                        Total: <span class="italic">{{ cartStore.aggregation.subtotal_in_dollars }}</span>
+                    </p>
+                    <p class="text-xl font-bold">
+                        Total (con impuestos): <span class="italic">{{ cartStore.aggregation.total_with_taxes_in_dollars }}</span>
+                    </p>
                 </div>
 
                 <div class="flex items-center justify-between gap-4">checkout, clear</div>
