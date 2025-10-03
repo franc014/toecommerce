@@ -31,8 +31,9 @@
                         <li class="header__item"><Link href="/products">Productos</Link></li>
                         <li class="header__item header__item--divider" aria-hidden="true"></li>
                         <li class="header__item">
-                            <Button class="cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="toggle">
+                            <Button class="relative cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="toggle">
                                 <ShoppingCartIcon class="h-6 w-6" />
+                                <Badge class="absolute -top-3 -right-2 bg-fuchsia-300 text-black">{{ cartStore.aggregation.items_count }}</Badge>
                             </Button>
                         </li>
                     </ul>
@@ -45,17 +46,29 @@
 
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
+import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
 const cartDrawer = useCartDrawerStore();
 
+const cartStore = useCartStore();
+
 function toggle() {
     console.log('toggle cart', cartDrawer.isOpen);
     cartDrawer.toggle();
 }
+
+/* cartStore.$onAction(({ name, after }) => {
+    after(() => {
+        console.log('items count', cartStore.itemsCount);
+
+        items_count.value = cartStore.itemsCount;
+    });
+}); */
 </script>
 
 <style scoped>

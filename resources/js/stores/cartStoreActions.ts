@@ -31,6 +31,7 @@ export async function init() {
                 this.items = cartDB.data.items;
                 this.aggregation['subtotal_in_dollars'] = cartDB.data.cart_aggregation.subtotal_in_dollars;
                 this.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
+                this.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
 
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
@@ -66,7 +67,6 @@ export async function init() {
                 } catch (e: any) {
                     console.error('Sorry. Could not create cart: ', e.message);
                 }
-
             }
 }
 
@@ -74,12 +74,18 @@ export async function addOrUpdateItem(data: object){
     await axios.post(addOrUpdate().url, data);
     const cart = await getCartFromDB(this.id);
     this.items = cart.data.items;
+    this.aggregation['subtotal_in_dollars'] = cart.data.cart_aggregation.subtotal_in_dollars;
+    this.aggregation['total_with_taxes_in_dollars'] = cart.data.cart_aggregation.total_with_taxes_in_dollars;
+    this.aggregation['items_count'] = cart.data.cart_aggregation.items_count;
 }
 
 export async function removeItem(data: object){
     await axios.post(remove().url, data);
     const cart = await getCartFromDB(this.id);
     this.items = cart.data.items;
+    this.aggregation['subtotal_in_dollars'] = cart.data.cart_aggregation.subtotal_in_dollars;
+    this.aggregation['total_with_taxes_in_dollars'] = cart.data.cart_aggregation.total_with_taxes_in_dollars;
+    this.aggregation['items_count'] = cart.data.cart_aggregation.items_count;
 }
 
 

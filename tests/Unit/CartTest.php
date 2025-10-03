@@ -272,3 +272,17 @@ test('getting the total with taxes in dollars', function () {
     ])), 'items')->create();
     expect($cart->total_with_taxes_in_dollars)->toBe('$260');
 });
+
+test('getting the total count of items in the cart', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
+        'price' => 40.00,
+        'quantity' => 3,
+        'total' => 120.00
+    ], [
+        'price' => 50.00,
+        'quantity' => 2,
+        'total' => 100.00
+    ])), 'items')->create();
+
+    expect($cart->items_count)->toBe(5);
+});

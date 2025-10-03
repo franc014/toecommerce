@@ -27,7 +27,8 @@ class CartController extends Controller
 
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
             'subtotal_in_dollars' => $cart->subtotal_in_dollars,
-            'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars
+            'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
+            'items_count' => $cart->items_count,
         ]];
     }
 

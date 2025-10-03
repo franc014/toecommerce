@@ -15,7 +15,7 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['subtotal','subtotal_in_dollars','total_with_taxes','total_with_taxes_in_dollars'];
+    protected $appends = ['subtotal','subtotal_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count'];
 
     protected function casts(): array
     {
@@ -135,6 +135,13 @@ class Cart extends Model
         ray('twt', $this->totalWithTaxes);
         return Attribute::make(
             get: fn () => $this->toDollars($this->totalWithTaxes)
+        );
+    }
+
+    protected function itemsCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->items ? $this->items->sum('quantity') : 0
         );
     }
 

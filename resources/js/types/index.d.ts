@@ -49,7 +49,8 @@ export interface Cart {
 
 export interface CartAggregation{
     subtotal_in_dollars: string;
-    total_with_tax_in_dollars: string;
+    total_with_taxes_in_dollars: string;
+    items_count: number;
 }
 
 export interface CartItem {

@@ -5,7 +5,10 @@
             class="cart-grid fixed top-0 right-0 z-10 h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
         >
             <header class="flex items-center gap-2 px-4">
-                <h2 class="flex items-center gap-2">Tu carrito de compras</h2>
+                <h2 class="flex items-center gap-2">
+                    <span>{{ cartStore.aggregation.items_count }} items</span>
+                    en tu carrito de compras
+                </h2>
                 <button @click="closeCart" class="ml-auto cursor-pointer">
                     <CloseIcon />
                 </button>
