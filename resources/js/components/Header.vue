@@ -58,17 +58,8 @@ const cartDrawer = useCartDrawerStore();
 const cartStore = useCartStore();
 
 function toggle() {
-    console.log('toggle cart', cartDrawer.isOpen);
     cartDrawer.toggle();
 }
-
-/* cartStore.$onAction(({ name, after }) => {
-    after(() => {
-        console.log('items count', cartStore.itemsCount);
-
-        items_count.value = cartStore.itemsCount;
-    });
-}); */
 </script>
 
 <style scoped>

@@ -12,10 +12,16 @@ async function createCartInDB(cartId: string) {
     return cartDB;
 }
 
-async function getCartFromDB(cartId: string) {
+async function getCartFromDB(cartId: string, store: any) {
     const cartDB = await axios.post(show().url, {
         id: cartId
     });
+
+    store.items = cartDB.data.items;
+    store.aggregation['subtotal_in_dollars'] = cartDB.data.cart_aggregation.subtotal_in_dollars;
+    store.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
+    store.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
+
     return cartDB;
 }
 
@@ -25,13 +31,9 @@ export async function init() {
         if (cartLS) {
             const cart = JSON.parse(cartLS);
             try {
-                const cartDB = await getCartFromDB(cart.id);
-                console.info('got cart from DB', cartDB);
+                const cartDB = await getCartFromDB(cart.id, this);
+                console.info('got cart from DB');
                 this.id = cartDB.data.ui_cart_id;
-                this.items = cartDB.data.items;
-                this.aggregation['subtotal_in_dollars'] = cartDB.data.cart_aggregation.subtotal_in_dollars;
-                this.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
-                this.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
 
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
@@ -51,7 +53,6 @@ export async function init() {
             }
 
             }else {
-
                 try {
                     const uuid = uuidv4();
 
@@ -72,20 +73,12 @@ export async function init() {
 
 export async function addOrUpdateItem(data: object){
     await axios.post(addOrUpdate().url, data);
-    const cart = await getCartFromDB(this.id);
-    this.items = cart.data.items;
-    this.aggregation['subtotal_in_dollars'] = cart.data.cart_aggregation.subtotal_in_dollars;
-    this.aggregation['total_with_taxes_in_dollars'] = cart.data.cart_aggregation.total_with_taxes_in_dollars;
-    this.aggregation['items_count'] = cart.data.cart_aggregation.items_count;
+    await getCartFromDB(this.id, this);
 }
 
 export async function removeItem(data: object){
     await axios.post(remove().url, data);
-    const cart = await getCartFromDB(this.id);
-    this.items = cart.data.items;
-    this.aggregation['subtotal_in_dollars'] = cart.data.cart_aggregation.subtotal_in_dollars;
-    this.aggregation['total_with_taxes_in_dollars'] = cart.data.cart_aggregation.total_with_taxes_in_dollars;
-    this.aggregation['items_count'] = cart.data.cart_aggregation.items_count;
+    await getCartFromDB(this.id,this);
 }
 
 

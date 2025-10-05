@@ -110,14 +110,35 @@ test('get archived products', function () {
     expect(Product::archived()->get()->count())->toBe(2);
 });
 
-test('a product has variants', function () {
-    $productA = Product::factory()->has(ProductVariant::factory()->count(3), 'variants')->create();
 
-    $productB = Product::factory()->create();
 
-    expect($productA->hasVariants())->toBeTrue();
-    expect($productB->hasVariants())->toBeFalse();
+test('verifying product has published variants', function () {
+    $product = Product::factory()->create();
+    ProductVariant::factory()->published()->count(2)->create([
+        'product_id' => $product->id
+    ]);
+
+    ProductVariant::factory()->draft()->count(1)->create([
+        'product_id' => $product->id
+    ]);
+
+    expect($product->hasPublishedVariants())->toBeTrue();
+
 });
+
+test('verifying product does not have published variants', function () {
+    $product = Product::factory()->create();
+
+    ProductVariant::factory()->draft()->count(2)->create([
+        'product_id' => $product->id
+    ]);
+
+    expect($product->hasPublishedVariants())->toBeFalse();
+
+});
+
+
+
 
 it('gets a product by slug', function () {
     $productA = Product::factory()->create([

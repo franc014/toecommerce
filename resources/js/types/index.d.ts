@@ -39,6 +39,18 @@ export interface Product {
     title: string;
     slug: string;
     price_in_dollars: string;
+    has_variants: boolean;
+    variants: Array<ProductVariant>;
+    images: Array<string>;
+}
+
+export interface ProductVariant {
+    id: number;
+    title: string;
+    slug: string;
+    color: string;
+    price_in_dollars: string;
+    formatted_sizes: string;
     images: Array<string>;
 }
 

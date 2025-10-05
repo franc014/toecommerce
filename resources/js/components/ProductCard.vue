@@ -1,7 +1,7 @@
 <template>
     <li>
         <div class="prod-card-v2">
-            <div class="flex flex-col items-center space-y-10 text-center lg:p-5">
+            <div class="flex flex-col items-center space-y-10 p-5 text-center">
                 <h1 class="text-lg lg:text-2xl">
                     <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
                 </h1>
@@ -12,6 +12,13 @@
                 <div>
                     <div class="flex items-center gap-4">
                         <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
+
+                        <!-- <Button v-if="product.has_variants" class="cursor-pointer bg-indigo-500 tracking-wider text-zinc-100 hover:bg-indigo-400">
+                            <SwatchBook />
+                            Variants
+                        </Button> -->
+
+                        <ProductVariants :variants="product.variants" v-if="product.has_variants" />
                     </div>
                 </div>
             </div>
@@ -23,6 +30,7 @@
 import { useCartStore } from '@/stores/cartStore';
 import { ref } from 'vue';
 import { Product } from '../types';
+import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';
 const { product } = defineProps<{ product: Product }>();
 const { slug } = product;

@@ -88,9 +88,9 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    public function hasVariants()
+    public function hasPublishedVariants(): bool
     {
-        return $this->variants->count() >= 1;
+        return $this->variants()->published()->count() >= 1;
     }
 
     public static function bySlug(string $slug)

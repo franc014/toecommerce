@@ -14,7 +14,7 @@ class ProductsPageController extends Controller
     public function __invoke()
     {
         return Inertia::render('Products', [
-            'products' => Product::published()->get()->map(function ($product) {
+            'products' => Product::published()->with('variants')->get()->map(function ($product) {
                 return [
                     'id' => $product->id,
                     'title' => $product->title,
@@ -22,6 +22,8 @@ class ProductsPageController extends Controller
                     'price' => $product->price,
                     'price_in_dollars' => $product->price_in_dollars,
                     'images' => $product->productImagesForList,
+                    'has_variants' => $product->hasPublishedVariants(),
+                    'variants' => $product->variants
                 ];
             }),
         ]);

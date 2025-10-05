@@ -19,6 +19,8 @@ class ProductVariant extends Model implements HasMedia
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
     use HasFactory, InteractsWithMedia, MoneyFormat, Publishable;
 
+    protected $appends = ['price_in_dollars', 'formatted_sizes'];
+
     protected function casts(): array
     {
 
