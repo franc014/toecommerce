@@ -49,6 +49,7 @@ function updateCart() {
         ui_cart_id: cartStore.id,
         product_id: product.id,
         quantity: qty.value,
+        purchasable_type: 'product',
     });
 }
 </script>

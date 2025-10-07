@@ -16,7 +16,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 
-class Product extends Model implements HasMedia
+class Product extends Model implements HasMedia, Purchasable
 {
     use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable;
 
@@ -26,9 +26,7 @@ class Product extends Model implements HasMedia
         'price' => Money::class,
     ];
 
-    private $quantityForCart = 1;
-
-    public function dataforCart()
+    public function dataforCart(): array
     {
 
         return [
@@ -36,19 +34,10 @@ class Product extends Model implements HasMedia
             'title' => $this->title,
             'price' => $this->price,
             'slug' => $this->slug,
-            'quantity' => $this->quantityForCart,
-            'total' => $this->price * $this->quantityForCart,
-            'image' => $this->main_image_path,
+            //'image' => $this->main_image_path,
             'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
-            'total_with_taxes' => $this->priceWithTaxes() * $this->quantityForCart,
             'purchasable_type' => Product::class
         ];
-    }
-
-
-    public function setQuantityForCart(int $quantity)
-    {
-        $this->quantityForCart = $quantity;
     }
 
     public function scopeWithStock($query)

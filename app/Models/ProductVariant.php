@@ -14,7 +14,7 @@ use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class ProductVariant extends Model implements HasMedia
+class ProductVariant extends Model implements HasMedia, Purchasable
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
     use HasFactory, InteractsWithMedia, MoneyFormat, Publishable;
@@ -33,9 +33,32 @@ class ProductVariant extends Model implements HasMedia
 
     }
 
+    public function dataforCart(): array
+    {
+
+        return [
+            'purchasable_id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
+            'slug' => $this->slug,
+            //todo: add variant data
+            //'image' => $this->main_image_path,
+            'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
+            'purchasable_type' => ProductVariant::class
+        ];
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function taxes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->product->taxes
+        );
+
     }
 
     public function priceWithTaxesInDollars(): Attribute

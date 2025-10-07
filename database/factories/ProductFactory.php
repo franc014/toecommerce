@@ -29,7 +29,6 @@ class ProductFactory extends Factory
             'price' => fake()->randomFloat(2, 50, 300),
             'stock' => fake()->numberBetween(0, 200),
             'sku' => fake()->ean13(),
-            'main_image_path' => '',
             'published_at' => null,
 
         ];

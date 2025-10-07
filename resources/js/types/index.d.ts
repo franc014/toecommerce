@@ -74,8 +74,18 @@ export interface CartItem {
     tax: number;
     quantity: number;
     total: number;
-    total_with_tax: number;
+    price_in_dollars: string;
+    total_in_dollars: number;
+    total_with_taxes_in_dollars: string;
+    purchasable_id: number;
+    purchasable_type: string;
+}
 
+export interface DataForCart {
+    ui_cart_id: string;
+    product_id: number;
+    quantity: number;
+    purchasable_type: string;
 }
 
 export interface CartDrawer {

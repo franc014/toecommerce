@@ -57,10 +57,13 @@ const changeQuantity = (value: number) => {
     quantity.value = value;
     console.log(item);
 
+    const type = item.value.purchasable_type === 'App\Models\Product' ? 'product' : 'product-variant';
+
     cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
         product_id: item.value.purchasable_id,
         quantity: quantity.value,
+        purchasable_type: type,
     });
 };
 

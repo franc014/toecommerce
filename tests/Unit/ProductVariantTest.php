@@ -32,6 +32,34 @@ test('getting price in dollars', function () {
     $this->assertEquals('$10.99', $product->priceInDollars);
 });
 
+test('getting the parent product', function () {
+    $product = Product::factory()->create();
+
+    $variant = ProductVariant::factory()->create([
+        'product_id' => $product->id,
+    ]);
+
+    $this->assertEquals($product->id, $variant->product->id);
+});
+
+test('variant taxes are defined by the parent product taxes', function () {
+
+    $tax = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15,
+    ]);
+
+    $product = Product::factory()->create();
+
+    $product->taxes()->attach($tax->id);
+
+    $variant = ProductVariant::factory()->create([
+        'product_id' => $product->id,
+    ]);
+
+    $this->assertEquals($variant->taxes->first()->id, $tax->id);
+});
+
 test('publishing a variant', function () {
     $product = Product::factory()->create();
 

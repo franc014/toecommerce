@@ -13,15 +13,27 @@
 </template>
 
 <script setup lang="ts">
+import { useCartStore } from '@/stores/cartStore';
 import { ProductVariant } from '@/types';
+import { ref } from 'vue';
 import QuantityHandler from './QuantityHandler.vue';
+const cartStore = useCartStore();
+const qty = ref(1);
 
-const props = defineProps<{ variant: ProductVariant }>();
-const { variant } = props;
+const { variant } = defineProps<{ variant: ProductVariant }>();
 
-function setQuantity(quantity: number) {}
+function setQuantity(quantity: number) {
+    qty.value = quantity;
+}
 
-function updateCart() {}
+function updateCart() {
+    cartStore.addOrUpdateItem({
+        ui_cart_id: cartStore.id,
+        product_id: variant.id,
+        quantity: qty.value,
+        purchasable_type: 'product-variant',
+    });
+}
 </script>
 
 <style scoped></style>

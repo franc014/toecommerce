@@ -62,10 +62,7 @@ class Cart extends Model
 
         $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
 
-
-
         if ($cartItem) {
-            ray('up');
             $this->updateItem($cartItem->id, $data['quantity']);
         } else {
             $cartItem =  $this->items()->create($data);
