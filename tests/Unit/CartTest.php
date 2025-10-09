@@ -1,15 +1,10 @@
 <?php
 
-use App\Enums\StockControlModes;
-use App\Exceptions\ProductOutOfStockException;
-use App\Models\AppSettings;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Models\Tax;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Support\Facades\Exceptions;
 
 function createCartWithoutItem(array $productData, $isVariant = false)
 {
@@ -135,8 +130,6 @@ test('getting the total with taxes', function () {
         'total_with_taxes' => 120.00
     ])), 'items')->create();
 
-    ray($cart);
-
     expect($cart->total_with_taxes)->toBe(260.0);
 });
 
@@ -167,4 +160,12 @@ test('getting the total count of items in the cart', function () {
     ])), 'items')->create();
 
     expect($cart->items_count)->toBe(5);
+});
+
+test('cart can empty', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+    expect($cart->items)->toHaveCount(2);
+    $cart->empty();
+    expect($cart->fresh()->items)->toHaveCount(0);
+    expect($cart->fresh()->items_count)->toBe(0);
 });

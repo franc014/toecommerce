@@ -129,7 +129,6 @@ class Cart extends Model
 
     protected function totalWithTaxesInDollars(): Attribute
     {
-        ray('twt', $this->totalWithTaxes);
         return Attribute::make(
             get: fn () => $this->toDollars($this->totalWithTaxes)
         );
@@ -142,6 +141,9 @@ class Cart extends Model
         );
     }
 
-
+    public function empty(): int
+    {
+        return $this->items()->delete();
+    }
 
 }

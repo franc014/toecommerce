@@ -177,6 +177,9 @@ class Product extends Model implements HasMedia, Purchasable
     private function generateCombinations(): Collection
     {
         $options = $this->formattedVariantOptions();
+
+
+
         return collect(array_shift($options))
             ->crossJoin(...$options)
             ->map(function ($combo) {

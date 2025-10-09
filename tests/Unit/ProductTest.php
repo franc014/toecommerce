@@ -229,12 +229,6 @@ test('can not generate variants when no variant options are defined for a produc
 
 });
 
-//todo
-test('existing product variants are not overridden when adding a new variant option', function () {});
-
-//todo
-test('product variants are removed ');
-
 
 test('verifying product has published variants', function () {
     $product = Product::factory()->create();

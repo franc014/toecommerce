@@ -7,8 +7,10 @@ use App\Enums\ProductStatus;
 use App\Filament\Forms\Components\SharedFields;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -21,6 +23,9 @@ class ProductVariantForm
         return $schema
             ->components([
                 ...self::titleAndSlugFields(),
+                RichEditor::make('description')
+                    ->maxLength(2048)
+                    ->columnSpanFull(),
                 TextInput::make('price')
                     ->required()
                     ->numeric()
@@ -34,7 +39,8 @@ class ProductVariantForm
                     ->suffix('%'),
                 Select::make('status')->options(ProductStatus::class)
                     ->default(ProductStatus::DRAFT),
-                TextInput::make('sku'),
+                TextInput::make('sku')
+                    ->required(),
                 TextInput::make('stock')->numeric()->minValue(0),
                 Select::make('product_id')->hidden(function () use ($productId) {
                     return $productId !== null;

@@ -1,5 +1,5 @@
-import { show, create } from '@/routes/cart';
-import { addOrUpdate, remove} from '@/routes/cart/items';
+import { show, create, empty } from '@/routes/cart';
+import { addOrUpdate, remove } from '@/routes/cart/items';
 import { DataForCart } from '@/types';
 
 import axios from "axios";
@@ -81,5 +81,11 @@ export async function removeItem(data: object){
     await axios.post(remove().url, data);
     await getCartFromDB(this.id,this);
 }
+export async function emptyCart(data: object){
+
+    await axios.post(empty().url, data);
+    await getCartFromDB(this.id, this);
+}
+
 
 

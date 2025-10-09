@@ -33,7 +33,9 @@
                         <li class="header__item">
                             <Button class="relative cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="toggle">
                                 <ShoppingCartIcon class="h-6 w-6" />
-                                <Badge class="absolute -top-3 -right-2 bg-fuchsia-300 text-black">{{ cartStore.aggregation.items_count }}</Badge>
+                                <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 -right-2 bg-fuchsia-300 text-black">{{
+                                    cartStore.aggregation.items_count
+                                }}</Badge>
                             </Button>
                         </li>
                     </ul>

@@ -30,10 +30,15 @@
                     </p>
                 </div>
 
-                <div class="flex items-center justify-between gap-4">checkout, clear</div>
+                <div class="flex items-center justify-between gap-4">
+                    <Button>
+                        <Link href="/checkout" class="w-full">Comprar</Link>
+                    </Button>
+                    <Button variant="secondary" @click="emptyCart" class="cursor-pointer">Vaciar</Button>
+                </div>
             </footer>
 
-            <div class="flex flex-col items-center space-y-4 place-self-center">
+            <div class="flex flex-col items-center space-y-4 place-self-center" v-if="cartStore.isEmpty">
                 <p class="text-2xl">El carrito esta vacío.</p>
                 <a href="/" class="text-2xl">Volver a la tienda</a>
             </div>
@@ -43,16 +48,24 @@
 
 <script setup lang="ts">
 import CartItem from '@/components/CartItem.vue';
+import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
+import { Link } from '@inertiajs/vue3';
 import { CircleX as CloseIcon } from 'lucide-vue-next';
 
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
 
-const closeCart = () => {
+function closeCart() {
     cartDrawerStore.toggle();
-};
+}
+
+function emptyCart() {
+    cartStore.emptyCart({
+        id: cartStore.id,
+    });
+}
 </script>
 
 <style scoped>

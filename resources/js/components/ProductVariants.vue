@@ -5,13 +5,13 @@
             Variantes
         </DialogTrigger>
 
-        <DialogContent class="min-w-[800px]">
+        <DialogContent class="max-h-[90dvh] min-w-[800px] sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>Variantes de producto</DialogTitle>
                 <DialogDescription> Puedes agregar variantes de producto a tu carrito </DialogDescription>
             </DialogHeader>
 
-            <div class="variants-grid">
+            <div class="variants-grid overflow-y-auto">
                 <VariantCard :variant="variant" v-for="variant in variants" :key="variant.id" />
             </div>
         </DialogContent>

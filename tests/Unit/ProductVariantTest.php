@@ -169,3 +169,17 @@ it('calculates variant price with product taxes', function () {
 
     expect($variant->priceWithTaxes())->toBe(55.00 * (1 + ($taxIVA->percentage / 100) + ($taxISD->percentage / 100)));
 });
+
+test('getting formatted vatiation', function () {
+    $product = Product::factory()->create();
+    $variant = ProductVariant::factory()->create([
+        'product_id' => $product->id,
+        'variation' => [
+            'Color' => 'Red',
+            'Size' => 'XL'
+        ]
+    ]);
+
+    expect($variant->formatted_variation)->toBe('Color: Red, Size: XL');
+
+});

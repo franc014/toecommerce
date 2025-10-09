@@ -47,10 +47,11 @@ export interface Product {
 export interface ProductVariant {
     id: number;
     title: string;
+    description: string;
     slug: string;
     color: string;
     price_in_dollars: string;
-    formatted_sizes: string;
+    formatted_variation: string;
     images: Array<string>;
 }
 

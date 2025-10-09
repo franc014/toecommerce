@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProductVariants\Tables;
 
 use App\Filament\Resources\Products\Tables\PublishingActions;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -24,6 +25,9 @@ class ProductVariantsTable
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                CreateAction::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

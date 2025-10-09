@@ -186,4 +186,8 @@
     gap: 2.75rem;
 }
 
+.fi-input-wrp fi-fo-rich-editor {
+    @apply h-96;
+}
+
 

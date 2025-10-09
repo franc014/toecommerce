@@ -19,7 +19,7 @@ class ProductVariant extends Model implements HasMedia, Purchasable
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
     use HasFactory, InteractsWithMedia, MoneyFormat, Publishable;
 
-    protected $appends = ['price_in_dollars'];
+    protected $appends = ['price_in_dollars','formatted_variation'];
 
     protected function casts(): array
     {
@@ -74,6 +74,19 @@ class ProductVariant extends Model implements HasMedia, Purchasable
         $price = (int) $this->getAttributes()['price'];
 
         return round(($price * (1 + $this->product->taxes->sum('percentage') / 100)) / 100, 2);
+    }
+
+    public function formattedVariation(): Attribute
+    {
+        $variation = collect($this->variation);
+
+        $formattedVariation = $variation->map(function ($value, $key) {
+            return $key . ': ' . $value;
+        })->implode(', ');
+
+        return Attribute::make(
+            get: fn () => $formattedVariation
+        );
     }
 
 

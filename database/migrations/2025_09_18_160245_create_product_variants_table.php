@@ -15,13 +15,14 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('slug');
+            $table->text('description')->nullable();
             $table->foreignIdFor(Product::class)->constrained()->onDelete('cascade');
             $table->integer('price');
             $table->decimal('discount', 8, 2)->nullable();
             $table->string('status');
             $table->string('sku');
             $table->integer('stock');
-            $table->json('variation');
+            $table->json('variation')->nullable();
             $table->dateTime('published_at')->nullable();
             $table->dateTime('archived_at')->nullable();
             $table->timestamps();

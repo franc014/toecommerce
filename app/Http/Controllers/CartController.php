@@ -9,6 +9,10 @@ class CartController extends Controller
 {
     public function create(Request $request)
     {
+        $request->validate([
+            'id' => 'required | uuid',
+        ]);
+
         $UICartId = $request->input('id');
 
         $cart = Cart::create([
@@ -23,13 +27,20 @@ class CartController extends Controller
 
     public function show(Request $request)
     {
-        $cart = Cart::byUICartId($request->input('id'))->first();
+        $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
 
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
             'subtotal_in_dollars' => $cart->subtotal_in_dollars,
             'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
             'items_count' => $cart->items_count,
         ]];
+    }
+
+    public function empty(Request $request)
+    {
+        $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
+        $cart->empty();
+        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => []];
     }
 
 
