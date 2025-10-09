@@ -18,8 +18,7 @@ class ProductVariantsTable
         return $table
             ->columns([
                 TextColumn::make('product.title')->limit(30)->sortable()->searchable()->label('Producto'),
-                ColorColumn::make('color'),
-                TextColumn::make('sizes')->badge()->searchable(),
+                TextColumn::make('title')->limit(30)->sortable()->searchable()->label('Variante'),
                 TextColumn::make('status')->badge()->sortable(),
                 TextColumn::make('price')->sortable()->searchable()->money('USD'),
             ])

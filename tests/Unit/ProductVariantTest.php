@@ -141,13 +141,7 @@ test('get archived variants', function () {
     expect($product->variants()->archived()->count())->toBe(2);
 });
 
-test('get formatted sizes variant', function () {
-    $variant = ProductVariant::factory()->create([
-        'sizes' => ['S', 'M', 'L'],
-    ]);
 
-    expect($variant->formattedSizes)->toBe('S, M, L');
-});
 
 it('calculates variant price with product taxes', function () {
     $taxIVA = Tax::factory()->create([

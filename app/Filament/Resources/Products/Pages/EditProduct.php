@@ -3,9 +3,13 @@
 namespace App\Filament\Resources\Products\Pages;
 
 use App\Filament\Resources\Products\ProductResource;
+use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditProduct extends EditRecord
 {
@@ -27,5 +31,17 @@ class EditProduct extends EditRecord
     public function getContentTabLabel(): ?string
     {
         return 'Producto';
+    }
+
+    public function getContentTabIcon(): BackedEnum|string|null
+    {
+        return 'icon-box';
+    }
+
+
+
+    public static function getTabComponent(): Tab
+    {
+        return Tab::make('Produit')->icon(Heroicon::OutlinedCube);
     }
 }

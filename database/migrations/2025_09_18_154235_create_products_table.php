@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->decimal('discount', 8, 2)->nullable();
             $table->integer('stock')->nullable();
             $table->json('tags')->nullable();
+            $table->json('variant_options')->nullable();
             $table->dateTime('published_at')->nullable();
             $table->dateTime('archived_at')->nullable();
             $table->foreignIdFor(User::class)->nullable();

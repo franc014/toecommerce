@@ -15,6 +15,7 @@ use App\Models\Product;
 use App\Traits\StoreNavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -67,4 +68,11 @@ class ProductResource extends Resource
             'variants' => ManageProductVariants::route('/{record}/variants'),
         ];
     }
+
+    public static function getTabComponent(): Tab
+    {
+        return Tab::make('Produit')->icon(Heroicon::OutlinedCube);
+    }
+
+
 }

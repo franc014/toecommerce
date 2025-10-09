@@ -47,8 +47,7 @@ class ProductsTable
                     ->money()
                     ->sortable(),
 
-                ImageColumn::make('main_image_path')
-                    ->label('Imagen principal'),
+
                 TextColumn::make('created_at')
                     ->label('Fecha de creación')
                     ->dateTime()
@@ -75,7 +74,7 @@ class ProductsTable
                 Action::make('variants')
                     ->label('Variantes')
                     ->visible(function (Product $product) {
-                        return $product->hasVariants();
+                        return $product->hasPublishedVariants();
                     })
                     ->url(function (Product $product) {
                         // return "#";

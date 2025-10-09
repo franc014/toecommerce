@@ -22,7 +22,7 @@ class PerformsAddsToCart
 
     }
 
-    public function setNumbersData(): void
+    private function setNumbersData(): void
     {
 
         $this->data['quantity'] = $this->quantity;

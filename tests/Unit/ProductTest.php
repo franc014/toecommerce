@@ -111,6 +111,130 @@ test('get archived products', function () {
 });
 
 
+//variants
+
+test('a product can define variant options', function () {
+    $variantOptions = [
+       [
+           'name' => 'size',
+           'values' => [
+                ['value' => 'small'],
+                ['value' => 'medium'],
+                ['value' => 'large']
+           ]
+       ],
+
+       [
+           'name' => 'color',
+           'values' => [
+                ['value' => 'red'],
+                ['value' => 'blue'],
+                ['value' => 'green']
+           ]
+        ],
+
+       [
+           'name' => 'material',
+           'values' => [
+                ['value' => 'leather'],
+                ['value' => 'fabric'],
+                ['value' => 'synthetic']
+           ]
+        ]
+
+    ];
+
+    $product = Product::factory()->create(
+        [
+            'title' => 'Sneakers',
+            'slug' => 'sneakers',
+            'variant_options' => $variantOptions
+        ]
+    );
+
+    expect($product->formattedVariantOptions())->toBe([
+       [['size'=>'small'], ['size'=>'medium'], ['size'=>'large']],
+       [['color'=>'red'], ['color'=>'blue'], ['color'=>'green']],
+       [['material'=>'leather'], ['material'=>'fabric'], ['material'=>'synthetic']]
+    ]);
+});
+
+
+
+test('can generate as many variants as variant options permutations', function () {
+    $variantOptions = [
+       [
+           'name' => 'size',
+           'values' => [
+                ['value' => 'small'],
+                ['value' => 'medium'],
+                ['value' => 'large']
+           ]
+       ],
+
+       [
+           'name' => 'color',
+           'values' => [
+                ['value' => 'red'],
+                ['value' => 'blue'],
+                ['value' => 'green']
+           ]
+        ],
+
+       [
+           'name' => 'material',
+           'values' => [
+                ['value' => 'leather'],
+                ['value' => 'fabric'],
+                ['value' => 'synthetic']
+           ]
+        ]
+    ];
+
+    $product = Product::factory()->create(
+        [
+            'title' => 'Sneakers',
+            'slug' => 'sneakers',
+            'variant_options' => $variantOptions
+        ]
+    );
+
+    $product->generateVariants();
+
+    expect($product->variants()->count())->toBe(27);
+    expect($product->variants[0]->variation)->toBe([
+        'size' => 'small',
+        'color' => 'red',
+        'material' => 'leather']);
+    expect($product->variants[26]->variation)->toBe([
+        'size' => 'large',
+        'color' => 'green',
+        'material' => 'synthetic'
+    ]);
+});
+
+//review...
+test('can not generate variants when no variant options are defined for a product', function () {
+    $product = Product::factory()->create(
+        [
+            'title' => 'Sneakers',
+            'slug' => 'sneakers',
+            'variant_options' => null
+        ]
+    );
+
+    $product->generateVariants();
+
+    expect($product->variants()->count())->toBe(0);
+
+});
+
+//todo
+test('existing product variants are not overridden when adding a new variant option', function () {});
+
+//todo
+test('product variants are removed ');
+
 
 test('verifying product has published variants', function () {
     $product = Product::factory()->create();
@@ -136,8 +260,6 @@ test('verifying product does not have published variants', function () {
     expect($product->hasPublishedVariants())->toBeFalse();
 
 });
-
-
 
 
 it('gets a product by slug', function () {

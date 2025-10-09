@@ -8,6 +8,7 @@ use App\Filament\Resources\ProductVariants\Tables\ProductVariantsTable;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,6 @@ class VariantsRelationManager extends RelationManager
 
     public static function getTabComponent(Model $ownerRecord, string $pageClass): Tab
     {
-        return Tab::make('Variantes');
+        return Tab::make('Variantes')->icon(Heroicon::OutlinedSwatch);
     }
 }

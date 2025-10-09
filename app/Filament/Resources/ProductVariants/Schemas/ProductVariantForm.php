@@ -21,13 +21,6 @@ class ProductVariantForm
         return $schema
             ->components([
                 ...self::titleAndSlugFields(),
-                ColorPicker::make('color')
-                    ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
-                    ->default('#000000'),
-                CheckboxList::make('sizes')
-                    ->options(ProductSizes::class)
-                    ->columns(3)
-                    ->gridDirection('row'),
                 TextInput::make('price')
                     ->required()
                     ->numeric()

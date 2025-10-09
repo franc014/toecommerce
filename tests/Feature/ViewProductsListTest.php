@@ -30,12 +30,14 @@ test('can show a list of published products', function () {
 
 test('can show a list of published products with variants', function () {
 
+    $this->withoutExceptionHandling();
+
     $totalProducts = 3;
     $publishedProducts = Product::factory($totalProducts)->published()->create();
 
     $productWithVariants = $publishedProducts[2];
 
-    $variants = ProductVariant::factory(2)->published()->create([
+    ProductVariant::factory(2)->published()->create([
         'product_id' => $productWithVariants->id,
     ]);
 
@@ -44,7 +46,7 @@ test('can show a list of published products with variants', function () {
             ->has('products', $totalProducts)
             ->has(
                 'products.2',
-                function (Assert $page) use ($publishedProducts, $variants) {
+                function (Assert $page) use ($publishedProducts) {
                     $page->where('id', $publishedProducts[2]->id)
                         ->where('title', $publishedProducts[2]->title)
                         ->where('slug', $publishedProducts[2]->slug)

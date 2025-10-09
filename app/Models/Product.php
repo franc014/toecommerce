@@ -12,19 +12,32 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
+use Illuminate\Support\Str;
 
 class Product extends Model implements HasMedia, Purchasable
 {
     use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable;
 
+
     protected $casts = [
         'published_at' => 'datetime',
         'status' => ProductStatus::class,
         'price' => Money::class,
+        'variant_options' => 'array',
     ];
+
+
+    /* protected static function booted(): void
+    {
+        static::saved(function (Product $product) {
+            $product->generateVariants();
+        });
+    } */
+
 
     public function dataforCart(): array
     {
@@ -77,6 +90,11 @@ class Product extends Model implements HasMedia, Purchasable
         return $this->belongsTo(User::class);
     }
 
+    public function hasVariants(): bool
+    {
+        return $this->variants()->count() >= 1;
+    }
+
     public function hasPublishedVariants(): bool
     {
         return $this->variants()->published()->count() >= 1;
@@ -112,5 +130,81 @@ class Product extends Model implements HasMedia, Purchasable
                 return $image->getFullUrl();
             })
         );
+    }
+
+    public function formattedVariantOptions_bk():array
+    {
+        $options = collect($this->variant_options);
+
+        $options = $options->map(function ($option) {
+            $values = collect($option['values']);
+            $values = $values->pluck('value');
+
+            return [$option['name'] => $values->toArray()];
+        });
+
+        return $options->collapse()->all();
+    }
+
+
+    public function formattedVariantOptions():array
+    {
+        $options = collect($this->variant_options);
+
+        $transformed = collect([]);
+
+        $pairs = collect([]);
+
+        foreach ($options as $key => $option) {
+            $transformed[$option['name']] = collect($option['values'])->pluck('value')->toArray();
+        }
+
+        foreach ($transformed as $key => $options) {
+            //ray($key, $options);
+            $lowL = collect([]);
+
+            foreach ($options as $keyp => $value) {
+                $lowL->push([$key => $value]);
+            }
+
+            $pairs->push($lowL);
+
+        }
+
+        return $pairs->toArray();
+    }
+
+    private function generateCombinations(): Collection
+    {
+        $options = $this->formattedVariantOptions();
+        return collect(array_shift($options))
+            ->crossJoin(...$options)
+            ->map(function ($combo) {
+                // $combo is an array of arrays, merge them
+                return array_merge(...$combo);
+            });
+    }
+
+
+    public function generateVariants(): void
+    {
+
+        foreach ($this->generateCombinations() as $combination) {
+            $values = collect($combination)->values()->join('-');
+            $title = $this->title.'-'.$values;
+            $slug = Str::slug($title);
+
+            $this->variants()->create([
+               'title' => $title,
+               'slug' => $slug,
+               'variation' => $combination,
+               'price' => 0,
+               'stock' => 0,
+               'status' => ProductStatus::DRAFT,
+               'sku' => '',
+            ]);
+        }
+
+
     }
 }

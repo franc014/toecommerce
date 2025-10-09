@@ -3,12 +3,12 @@
 namespace App\Filament\Resources\ProductVariants\Schemas;
 
 use App\Enums\ProductStatus;
-use Filament\Infolists\Components\ColorEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class ProductVariantInfolist
 {
@@ -34,8 +34,7 @@ class ProductVariantInfolist
                                         ProductStatus::ARCHIVED => 'gray',
                                     };
                                 }),
-                            ColorEntry::make('color')->placeholder('Sin color'),
-                            TextEntry::make('sizes')->label('Tallas/Tamaños')->badge()->placeholder('Sin tallas'),
+                            TextEntry::make('variation')->label('Variación')->badge()->color('info'),
 
                         ])->columnSpan(1),
 

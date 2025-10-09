@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Products\Schemas;
 use App\Enums\ProductStatus;
 use App\Filament\Forms\Components\SharedFields;
 use App\Models\Tax;
+use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
@@ -14,7 +16,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Model;
 
 class ProductForm
 {
@@ -90,7 +94,45 @@ class ProductForm
                                     ->numeric()
                                     ->step(1),
                             ]),
-                        Tab::make('Imagenes')
+                        Tab::make('Opciones de variantes')
+                            ->icon(Heroicon::OutlinedSwatch)
+                            ->schema([
+                                Repeater::make('variant_options')
+                                    ->label('Opciones')
+                                     ->collapsible()
+                                     ->collapsed()
+                                     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                                     ->addActionAlignment(Alignment::Start)
+                                    ->schema([
+                                        TextInput::make('name')
+                                        ->label('Opción')
+                                        ->live(debounce: 500)
+                                        ->required(),
+                                        Repeater::make('values')
+                                        ->collapsible()
+                                        ->collapsed()
+                                        ->itemLabel(fn (array $state): ?string => $state['value'] ?? null)
+                                        ->addActionAlignment(Alignment::Start)
+                                        ->label('Valores de la opción')
+                                        ->schema([
+                                            TextInput::make('value')
+                                            ->live(debounce: 500)
+                                            ->label('Valor')
+                                            ->required(),
+                                        ]),
+
+                                    ]),
+                                Action::make('generate_variants')
+                                ->label('Generar variantes')
+                                ->button()
+                                ->color('primary')
+                                ->icon(Heroicon::OutlinedSwatch)
+                                ->action(function (Model $record) {
+                                    $record->generateVariants();
+                                })
+                            ]),
+                        Tab::make('images')
+                            ->label('Imágenes')
 
                             ->icon(Heroicon::OutlinedPhoto)->schema([
                                 SpatieMediaLibraryFileUpload::make('product_images')
