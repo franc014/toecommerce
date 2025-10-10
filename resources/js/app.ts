@@ -17,8 +17,9 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
-            .use(plugin)
             .use(pinia)
+            .use(plugin)
+
             .mount(el);
         const cartPinia = useCartStore();
         cartPinia.init();

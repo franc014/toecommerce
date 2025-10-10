@@ -53,9 +53,8 @@ import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
 import { CircleX as CloseIcon } from 'lucide-vue-next';
-
-const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
+const cartDrawerStore = useCartDrawerStore();
 
 function closeCart() {
     cartDrawerStore.toggle();
