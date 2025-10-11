@@ -5,7 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsPageController;
-
+use App\Http\Controllers\UserInfoEntryController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Auth\Middleware\Authenticate;
@@ -20,7 +20,9 @@ Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
 
 Route::get('/login', function () {
-    return redirect()->route('filament.customer.auth.login');//route to filament...
+    return redirect()->route('filament.customer.auth.login');
 })->name('login');
 
 Route::middleware(Authenticate::class)->get('/checkout', CheckoutController::class)->name('storefront.checkout');
+
+Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('user-info-entry.store');

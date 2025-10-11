@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CheckoutController extends Controller
@@ -10,8 +9,17 @@ class CheckoutController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        return Inertia::render('Checkout');
+        $billingInfo = auth()->user()->mainBillingInfoEntry();
+        $shippingInfo = auth()->user()->mainShippingInfoEntry();
+
+        return Inertia::render(
+            'Checkout',
+            [
+                'billingInfo' => $billingInfo,
+                'shippingInfo' => $shippingInfo,
+            ]
+        );
     }
 }

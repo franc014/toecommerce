@@ -19,7 +19,7 @@ cartStore.$onAction(({ name, onError, after }) => {
         after((result) => {
             toast.success('Item added to cart');
         });
-        onError((error) => {
+        onError((error: any) => {
             if (error.response.data.message) {
                 toast.error(error.response.data.message);
             } else {
@@ -32,7 +32,7 @@ cartStore.$onAction(({ name, onError, after }) => {
         after((result) => {
             toast.success('Item removed from cart');
         });
-        onError((error) => {
+        onError((error: any) => {
             if (error.response.data.message) {
                 toast.error(error.response.data.message);
             } else {

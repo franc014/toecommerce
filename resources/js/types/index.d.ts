@@ -30,8 +30,22 @@ export interface User {
     email: string;
     avatar?: string;
     email_verified_at: string | null;
+    has_billing_info: boolean;
+    has_shipping_info: boolean;
     created_at: string;
     updated_at: string;
+}
+
+export interface UserInfoEntry {
+    email: string;
+    first_name: string;
+    last_name: string;
+    address: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    phone: string;
+    country: string;
 }
 
 export interface Product {
@@ -54,6 +68,8 @@ export interface ProductVariant {
     formatted_variation: string;
     images: Array<string>;
 }
+
+
 
 export interface Cart {
     id: string;

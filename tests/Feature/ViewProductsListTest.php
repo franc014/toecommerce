@@ -30,8 +30,6 @@ test('can show a list of published products', function () {
 
 test('can show a list of published products with variants', function () {
 
-    $this->withoutExceptionHandling();
-
     $totalProducts = 3;
     $publishedProducts = Product::factory($totalProducts)->published()->create();
 
