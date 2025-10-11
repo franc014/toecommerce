@@ -52,6 +52,11 @@ class User extends Authenticatable
     protected $appends = ['has_billing_info', 'has_shipping_info'];
 
 
+    public function userInfoEntries(): HasMany
+    {
+        return $this->hasMany(UserInfoEntry::class);
+    }
+
     public function billingInfoEntry(): HasMany
     {
         return $this->hasMany(UserInfoEntry::class)->where('type', 'billing');

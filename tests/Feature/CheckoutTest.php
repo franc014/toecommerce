@@ -2,8 +2,6 @@
 
 use App\Models\User;
 use App\Models\UserInfoEntry;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -93,7 +91,7 @@ test('shows shipping information form if user has no shipping info', function ()
 
 test('customer can send billing info', function () {
     $this->actingAs($this->user)
-    ->post(route('user-info-entry.store'), [
+    ->post(route('storefront.user-info-entry.store'), [
         'first_name' => 'John',
         'last_name' => 'Doe',
         'type' => 'billing',
@@ -105,8 +103,8 @@ test('customer can send billing info', function () {
         'zipcode' => '12345',
         'email' => 'customer@example.com',
     ])
-    ->assertStatus(200)
-    ->assertJson(fn (AssertableJson $json) => $json->where('message', 'User info entry created successfully'));
+    ->assertStatus(302)
+    ->assertRedirect(route('storefront.checkout'));
 
     $this->assertDatabaseHas('user_info_entries', [
         'first_name' => 'John',
@@ -120,4 +118,234 @@ test('customer can send billing info', function () {
         'zipcode' => '12345',
         'email' => 'customer@example.com',
     ]);
+});
+
+test('customer can send shipping info', function () {
+    $this->actingAs($this->user)
+    ->post(route('storefront.user-info-entry.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'type' => 'shipping',
+        'country' => 'United States',
+        'state' => 'New York',
+        'city' => 'New York',
+        'address' => '123 Main St',
+        'phone' => '1234567890',
+        'zipcode' => '12345',
+        'email' => 'customer@example.com',
+    ])
+    ->assertStatus(302)
+    ->assertRedirect(route('storefront.checkout'));
+
+    $this->assertDatabaseHas('user_info_entries', [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'type' => 'shipping',
+        'country' => 'United States',
+        'state' => 'New York',
+        'city' => 'New York',
+        'address' => '123 Main St',
+        'phone' => '1234567890',
+        'zipcode' => '12345',
+        'email' => 'customer@example.com',
+    ]);
+});
+
+test('guests can not send customer info', function () {
+    $this->post(route('storefront.user-info-entry.store'), [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'type' => 'shipping',
+        'country' => 'United States',
+        'state' => 'New York',
+        'city' => 'New York',
+        'address' => '123 Main St',
+        'phone' => '1234567890',
+        'zipcode' => '12345',
+        'email' => 'customer@example.com',
+    ])
+    ->assertStatus(302)
+    ->assertRedirect(route('login'));
+
+    $this->assertDatabaseMissing('user_info_entries', [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'type' => 'shipping',
+        'country' => 'United States',
+        'state' => 'New York',
+        'city' => 'New York',
+        'address' => '123 Main St',
+        'phone' => '1234567890',
+        'zipcode' => '12345',
+        'email' => 'customer@example.com',
+    ]);
+});
+
+
+
+
+//validation user info
+
+
+function sendUserInfo($data)
+{
+    $response = test()->actingAs(test()->user)
+    ->post(route('storefront.user-info-entry.store'), $data);
+
+    return $response;
+}
+
+function validParams(array $overrides = [])
+{
+    return [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'type' => 'billing',
+        'country' => 'United States',
+        'state' => 'New York',
+        'city' => 'New York',
+        'address' => '123 Main St',
+        'phone' => '1234567890',
+        'zipcode' => '12345',
+        'email' => 'customer@example.com',
+        ...$overrides
+    ];
+}
+
+
+test('first name is required', function () {
+    sendUserInfo(validParams(['first_name' => '']))
+    ->assertSessionHasErrors('first_name');
+});
+
+test('first name has at least 2 characters', function () {
+    sendUserInfo(validParams(['first_name' => 'k']))
+    ->assertSessionHasErrors('first_name');
+});
+
+test('first name has no more than 16 characters', function () {
+    sendUserInfo(validParams(['first_name' => str_repeat('a', 17)]))
+    ->assertSessionHasErrors('first_name');
+});
+
+
+test('last name is required', function () {
+    sendUserInfo(validParams(['last_name' => '']))
+    ->assertSessionHasErrors('last_name');
+});
+
+test('last name has at least 2 characters', function () {
+    sendUserInfo(validParams(['last_name' => 'k']))
+    ->assertSessionHasErrors('last_name');
+});
+
+test('last name has no more than 16 characters', function () {
+    sendUserInfo(validParams(['last_name' => str_repeat('a', 17)]))
+    ->assertSessionHasErrors('last_name');
+});
+
+test('country is not required', function () {
+    sendUserInfo(validParams(['country' => '']))
+    ->assertSessionHasNoErrors('country');
+});
+
+
+test('country has no more than 24 characters', function () {
+    sendUserInfo(validParams(['country' => str_repeat('a', 25)]))
+    ->assertSessionHasErrors('country');
+});
+
+test('state is not required', function () {
+    sendUserInfo(validParams(['state' => '']))
+    ->assertSessionHasNoErrors('state');
+});
+
+test('state has no more than 24 characters', function () {
+    sendUserInfo(validParams(['state' => str_repeat('a', 25)]))
+    ->assertSessionHasErrors('state');
+});
+
+test('city is required', function () {
+    sendUserInfo(validParams(['city' => '']))
+    ->assertSessionHasErrors('city');
+});
+
+test('city has at least 2 characters', function () {
+    sendUserInfo(validParams(['city' => 'k']))
+    ->assertSessionHasErrors('city');
+});
+
+test('city has no more than 24 characters', function () {
+    sendUserInfo(validParams(['city' => str_repeat('a', 25)]))
+    ->assertSessionHasErrors('city');
+});
+
+test('address is required', function () {
+    sendUserInfo(validParams(['address' => '']))
+    ->assertSessionHasErrors('address');
+});
+
+test('address has at least 2 characters', function () {
+    sendUserInfo(validParams(['address' => 'k']))
+    ->assertSessionHasErrors('address');
+});
+
+test('address has no more than 128 characters', function () {
+    sendUserInfo(validParams(['address' => str_repeat('a', 129)]))
+    ->assertSessionHasErrors('address');
+});
+
+test('phone is not required', function () {
+    sendUserInfo(validParams(['phone' => '']))
+    ->assertSessionHasNoErrors('phone');
+});
+
+test('phone has no more than 24 characters', function () {
+    sendUserInfo(validParams(['phone' => str_repeat('a', 25)]))
+    ->assertSessionHasErrors('phone');
+});
+
+test('zipcode is required', function () {
+    sendUserInfo(validParams(['zipcode' => '']))
+    ->assertSessionHasErrors('zipcode');
+});
+
+test('zipcode has at least 4 characters', function () {
+    sendUserInfo(validParams(['zipcode' => 'fes']))
+    ->assertSessionHasErrors('zipcode');
+});
+
+test('zipcode has no more than 6 characters', function () {
+    sendUserInfo(validParams(['zipcode' => str_repeat('a', 7)]))
+    ->assertSessionHasErrors('zipcode');
+});
+
+test('email is required', function () {
+    sendUserInfo(validParams(['email' => '']))
+    ->assertSessionHasErrors('email');
+});
+
+test('email should be valid', function () {
+    sendUserInfo(validParams(['email' => 'invalid-email']))
+    ->assertSessionHasErrors('email');
+});
+
+test('info type is required', function () {
+    sendUserInfo(validParams(['type' => '']))
+    ->assertSessionHasErrors('type');
+});
+
+test('info type can be billing or shipping', function () {
+    sendUserInfo(validParams(['type' => 'another-type']))
+    ->assertSessionHasErrors('type');
+});
+
+test('info type can be billing', function () {
+    sendUserInfo(validParams(['type' => 'billing']))
+    ->assertSessionHasNoErrors('type');
+});
+
+test('info type can be shipping', function () {
+    sendUserInfo(validParams(['type' => 'shipping']))
+    ->assertSessionHasNoErrors('type');
 });

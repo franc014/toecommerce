@@ -23,6 +23,8 @@ Route::get('/login', function () {
     return redirect()->route('filament.customer.auth.login');
 })->name('login');
 
-Route::middleware(Authenticate::class)->get('/checkout', CheckoutController::class)->name('storefront.checkout');
 
-Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('user-info-entry.store');
+Route::middleware([Authenticate::class])->group(function () {
+    Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
+    Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('storefront.user-info-entry.store');
+});
