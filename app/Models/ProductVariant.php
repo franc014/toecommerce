@@ -76,6 +76,11 @@ class ProductVariant extends Model implements HasMedia, Purchasable
         return round(($price * (1 + $this->product->taxes->sum('percentage') / 100)) / 100, 2);
     }
 
+    public function computedTaxes(): float
+    {
+        return $this->price * ($this->product->taxes->sum('percentage') / 100);
+    }
+
     public function formattedVariation(): Attribute
     {
         $variation = collect($this->variation);

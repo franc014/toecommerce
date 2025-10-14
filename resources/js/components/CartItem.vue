@@ -25,8 +25,8 @@
                 {{ item.total_in_dollars }}
             </p>
             <p>
-                <span class="flex flex-col gap-1 text-xs font-bold">Con impuestos:</span>
-                {{ item.total_with_taxes_in_dollars }}
+                <span class="flex flex-col gap-1 text-xs font-bold">Impuesto:</span>
+                {{ item.computed_taxes_in_dollars }}
             </p>
 
             <button @click="remove" class="cursor-pointer">

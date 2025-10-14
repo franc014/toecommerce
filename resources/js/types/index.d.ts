@@ -77,8 +77,10 @@ export interface Cart {
 }
 
 export interface CartAggregation{
-    subtotal_in_dollars: string;
     total_with_taxes_in_dollars: string;
+    total_without_taxes_in_dollars: string;
+    total_computed_taxes_in_dollars: string;
+    total_in_dollars: string;
     items_count: number;
 }
 
@@ -93,7 +95,7 @@ export interface CartItem {
     total: number;
     price_in_dollars: string;
     total_in_dollars: number;
-    total_with_taxes_in_dollars: string;
+    computed_taxes_in_dollars: string;
     purchasable_id: number;
     purchasable_type: string;
 }

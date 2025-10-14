@@ -117,6 +117,11 @@ class Product extends Model implements HasMedia, Purchasable
         return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
     }
 
+    public function computedTaxes(): float
+    {
+        return $this->price * ($this->taxes->sum('percentage') / 100);
+    }
+
     public function productImages()
     {
         return $this->getMedia('product-images');

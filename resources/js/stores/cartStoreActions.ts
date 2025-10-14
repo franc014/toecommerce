@@ -19,9 +19,14 @@ async function getCartFromDB(cartId: string, store: any) {
     });
 
     store.items = cartDB.data.items;
-    store.aggregation['subtotal_in_dollars'] = cartDB.data.cart_aggregation.subtotal_in_dollars;
+    store.aggregation['total_without_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_without_taxes_in_dollars;
     store.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
+    store.aggregation['total_computed_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_computed_taxes_in_dollars;
+    store.aggregation['total_in_dollars'] = cartDB.data.cart_aggregation.total_in_dollars;
     store.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
+
+
+
 
     return cartDB;
 }

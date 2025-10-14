@@ -21,6 +21,7 @@ class CartItemFactory extends Factory
         $price = fake()->randomFloat(2, 50, 300);
         $quantity = $this->faker->randomNumber(1, 5);
         $total = $price * $quantity;
+        $computedTaxes = 0;
 
         return [
             'cart_id' => Cart::factory(),
@@ -30,6 +31,7 @@ class CartItemFactory extends Factory
             'price' => $price,
             'quantity' => $quantity,
             'total' => $total,
+            'computed_taxes' => $computedTaxes,
             'total_with_taxes' => $total,
             'purchasable_type' => Product::class,
         ];

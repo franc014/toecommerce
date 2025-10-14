@@ -57,6 +57,8 @@ test('a product can be added to the cart', function () {
     expect($cart->fresh()->items[0]->quantity)->toBe(4);
     expect($cart->fresh()->items[0]->total)->toBe(4 * 50.00);
     expect($cart->fresh()->items[0]->taxes)->toBe(json_encode($itemTaxes));
+    expect($cart->fresh()->items[0]->price)->toBe($product->price);
+    expect($cart->fresh()->items[0]->computed_taxes)->toBe(4 * $product->price * ($taxIVA->percentage + $taxISD->percentage) / 100);
     expect($cart->fresh()->items[0]->total_with_taxes)->toBe(4 * $product->priceWithTaxes());
     //expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
 });
@@ -112,6 +114,7 @@ test('a product variant can be added to the cart', function () {
     expect($cart->fresh()->items[0]->total)->toBe(4 * 50.00);
     expect($cart->fresh()->items[0]->taxes)->toBe(json_encode($itemTaxes));
     expect($cart->fresh()->items[0]->total_with_taxes)->toBe(4 * $variant->priceWithTaxes());
+    expect($cart->fresh()->items[0]->computed_taxes)->toBe(4 * $variant->price * ($taxIVA->percentage + $taxISD->percentage) / 100);
     //expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
 });
 
@@ -136,6 +139,7 @@ test('can update quantity of a cart item', function () {
         'price' => 50,
     ]);
 
+
     expect($cart->items)->toHaveCount(1);
 
     $newQuantity = 5;
@@ -147,6 +151,8 @@ test('can update quantity of a cart item', function () {
     expect($cart->fresh()->items)->toHaveCount(1);
     expect($cart->fresh()->items[0]->quantity)->toBe($newQuantity);
     expect($cart->fresh()->items[0]->total)->toBe($newQuantity * $product->price);
+    expect($cart->fresh()->items[0]->total_with_taxes)->toBe($newQuantity * $product->priceWithTaxes());
+    expect($cart->fresh()->items[0]->computed_taxes)->toBe($newQuantity * $product->price * $product->taxes->sum('percentage') / 100);
 
 });
 

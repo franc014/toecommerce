@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'payphone_app_url' => env('PAYPHONE_APP_URL', 'https://pay.payphonetodoesposible.com/api/button/js?appId='),
+    'payphone_app_id' => env('PAYPHONE_APP_ID', 'xkEKqdLzEeR4w0XgTvp4A'),
+    'payphone_token' => env('PAYPHONE_TOKEN', '2FsnlxHM30zsuRcAQkrDYS5T8lHYVs-3VOP__MM6ayLQedPi_QaAweWr9v9JQHXUDwi_gNwEb_otq9tSlOaGHEO1hNFOmtE7XsAMCnlEHlc3BJzLqq4wyChS_pbUuk8bQCUaAyGT58cnEE_y_9DhSa4iXngNVQv3o3EWbNOzb4-nN0IKzC4-W7H7uaAZqUNT86-EzxM96-nAQJAaAHiPq2eSqLTPOsnqcgGFrBseUu_2Mpa4wKlQ3ARZVFpR90t6qPSkdtF5wUE6HhuTkDii5BtRrDeQzrJhWu_A8hOgaa05JAvBb2rYHoa-coH1M3KJ2R2HwGDvZJdeLz6Y5Nz2IGMGaD0'),
+
 ];

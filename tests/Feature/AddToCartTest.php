@@ -46,6 +46,7 @@ test('can add a published product to the cart', function () {
         'taxes' => json_encode($product->taxes->toArray()),
         'total' => $product->price * 100 * $quantityToAdd,
         'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100
     ]);
 
 });
@@ -97,6 +98,7 @@ test('can add a published product variant to the cart', function () {
         'taxes' => json_encode($product->taxes->toArray()),
         'total' => $variant->price * 100 * $quantityToAdd,
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100
     ]);
 
 });
@@ -208,6 +210,7 @@ test('can update an existing cart item quantity', function () {
         'taxes' => json_encode($product->taxes->toArray()),
         'total' => $product->price * 100 * $newQuantity,
         'total_with_taxes' => ($product->priceWithTaxes() * $newQuantity) * 100,
+        'computed_taxes' => $product->computedTaxes() * $newQuantity * 100
     ]);
 
 });

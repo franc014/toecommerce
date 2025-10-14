@@ -22,6 +22,7 @@ test('can create a new cart from pinia', function () {
 
     expect(Cart::count())->toBe(1);
     expect(Cart::first()->items()->count())->toBe(0);
+    //instead of session, cookies
     expect(session('cart'))->toBeInstanceOf(Cart::class);
     expect(session('cart')->ui_cart_id)->toBe($uiCartId);
 
@@ -51,8 +52,10 @@ test('can get a cart from the ui stored in local storage', function () {
             'ui_cart_id' => $uiCartId,
             'items' => $cart->items->toArray(),
             'cart_aggregation' => [
-                'subtotal_in_dollars' => $cart->subtotal_in_dollars,
+                'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
                 'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
+                'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
+                'total_in_dollars' => $cart->total_in_dollars,
                 'items_count' => $cart->items_count,
             ],
         ]);

@@ -36,12 +36,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            //'shoppingCart' => $request->session()->get('cart')->with('items')->first(),
+            'shoppingCart' => $request->cookie('cart'),
             'auth' => [
                 'user' => $request->user(),
             ],

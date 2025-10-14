@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->json('taxes')->nullable();
             $table->integer('total');
             $table->integer('total_with_taxes');
+            $table->integer('computed_taxes');
             $table->timestamps();
         });
     }

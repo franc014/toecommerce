@@ -23,17 +23,25 @@
             <footer class="border-t border-zinc-200 pt-4">
                 <div class="mb-6 flex flex-col gap-4 border-b border-zinc-200 pb-4">
                     <p class="text-xl font-bold">
-                        Total: <span class="italic">{{ cartStore.aggregation.subtotal_in_dollars }}</span>
+                        Total sin impuestos: <span class="italic">{{ cartStore.aggregation.total_without_taxes_in_dollars }}</span>
                     </p>
                     <p class="text-xl font-bold">
-                        Total (con impuestos): <span class="italic">{{ cartStore.aggregation.total_with_taxes_in_dollars }}</span>
+                        Total con impuestos: <span class="italic">{{ cartStore.aggregation.total_with_taxes_in_dollars }}</span>
+                    </p>
+
+                    <p class="text-xl font-bold">
+                        Impuestos: <span class="italic">{{ cartStore.aggregation.total_computed_taxes_in_dollars }}</span>
+                    </p>
+                    <p class="text-xl font-bold">
+                        Total: <span class="italic">{{ cartStore.aggregation.total_in_dollars }}</span>
                     </p>
                 </div>
 
                 <div class="flex items-center justify-between gap-4">
-                    <Button>
-                        <Link href="/checkout" class="w-full">Comprar</Link>
-                    </Button>
+                    <!-- <Button>
+                        <Link :href="checkoutLink" class="w-full">Checkout</Link>
+                    </Button> -->
+                    <Button @click="goToCheckout" class="cursor-pointer">Checkout</Button>
                     <Button variant="secondary" @click="emptyCart" class="cursor-pointer">Vaciar</Button>
                 </div>
             </footer>
@@ -51,11 +59,15 @@ import CartItem from '@/components/CartItem.vue';
 import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { Link } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { CircleX as CloseIcon } from 'lucide-vue-next';
 
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
+
+console.log(cartStore.id);
+
+//const checkoutLink = `/checkout/?ui_cart_id=${cartStore.id}`;
 
 function closeCart() {
     cartDrawerStore.toggle();
@@ -64,6 +76,15 @@ function closeCart() {
 function emptyCart() {
     cartStore.emptyCart({
         id: cartStore.id,
+    });
+}
+
+function goToCheckout() {
+    router.visit('/checkout', {
+        method: 'get',
+        data: {
+            ui_cart_id: cartStore.id,
+        },
     });
 }
 </script>

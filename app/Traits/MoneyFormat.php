@@ -34,4 +34,11 @@ trait MoneyFormat
             get: fn () => $this->toDollars($this->total_with_taxes)
         );
     }
+
+    public function computedTaxesInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->computed_taxes)
+        );
+    }
 }

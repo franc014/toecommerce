@@ -15,7 +15,7 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['subtotal','subtotal_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count'];
+    protected $appends = ['total_without_taxes','total_without_taxes_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count','total_computed_taxes','total_computed_taxes_in_dollars', 'total,','total_in_dollars'];
 
     protected function casts(): array
     {
@@ -62,6 +62,7 @@ class Cart extends Model
 
         $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
 
+
         if ($cartItem) {
             $this->updateItem($cartItem->id, $data['quantity']);
         } else {
@@ -75,11 +76,16 @@ class Cart extends Model
     {
         $item = $this->itemById($itemId);
         $taxes = json_decode($item->taxes);
+
         $totalTaxes = collect($taxes)->sum('percentage');
+
         $item->quantity = $quantity;
         $item->total = $item->price * $item->quantity;
         $item->total_with_taxes = $quantity * $item->price * (1 + $totalTaxes / 100);
+        $item->computed_taxes = $item->total_with_taxes - $item->total;
+
         $item->save();
+
     }
 
     public function removeItem(int $itemId): void
@@ -105,25 +111,44 @@ class Cart extends Model
         }
     }
 
-    protected function subtotal(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('total') : 0
-        );
-    }
-
-    protected function subtotalInDollars(): Attribute
-    {
-
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->subtotal)
-        );
-    }
-
     protected function totalWithTaxes(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('total_with_taxes') : 0
+            get: function () {
+                $itemsWithTaxes = $this->items->filter(function ($item) {
+                    return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
+                });
+                return $itemsWithTaxes->sum('total');
+            }
+        );
+    }
+
+    protected function totalWithoutTaxes(): Attribute
+    {
+
+        return Attribute::make(
+            get: function () {
+                $itemsWithoutTaxes = $this->items->filter(function ($item) {
+                    return $item->taxes === null || count(json_decode($item->taxes)) === 0;
+                });
+                return $itemsWithoutTaxes->sum('total');
+            }
+        );
+    }
+
+    protected function totalWithoutTaxesInDollars(): Attribute
+    {
+
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->totalWithoutTaxes)
+        );
+    }
+
+
+    protected function totalComputedTaxes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->items ? $this->items->sum('computed_taxes') : 0
         );
     }
 
@@ -131,6 +156,27 @@ class Cart extends Model
     {
         return Attribute::make(
             get: fn () => $this->toDollars($this->totalWithTaxes)
+        );
+    }
+
+    protected function totalComputedTaxesInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->totalComputedTaxes)
+        );
+    }
+
+    protected function total(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->items ? $this->items->sum('total_with_taxes') : 0
+        );
+    }
+
+    protected function totalInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->total)
         );
     }
 

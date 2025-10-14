@@ -41,7 +41,7 @@ test('getting the price in dollars', function () {
     expect($cartItem->priceInDollars)->toBe("$24.32");
 });
 
-test('getting the total in dollars', function () {
+/* test('getting the total in dollars', function () {
     $cartItem = CartItem::factory()->create([
         'price' => 24.32,
         'quantity' => 2,
@@ -49,9 +49,9 @@ test('getting the total in dollars', function () {
     ]);
 
     expect($cartItem->totalInDollars)->toBe("$48.64");
-});
+}); */
 
-test('getting the total with taxes in dollars', function () {
+test('getting totals in dollars', function () {
     $taxes = [
         [
             'name' => 'IVA',
@@ -71,12 +71,16 @@ test('getting the total with taxes in dollars', function () {
         'quantity' => 2,
         'total' => 48.64,
         'taxes' => json_encode($taxes),
+        'computed_taxes' => 2 * 24.32 * (0.15 + 0.10),
         'total_with_taxes' => $totalWithTaxes
     ]);
 
-    expect($cartItem->totalWithTaxesInDollars)->toBe("$" . $totalWithTaxes);
+    expect($cartItem->totalInDollars)->toBe("$" . 48.64);
+    expect($cartItem->computedTaxesInDollars)->toBe("$" . 2 * 24.32 * (0.15 + 0.10));
 
     $this->assertDatabaseHas('cart_items', [
+        'total' => 48.64 * 100,
         'total_with_taxes' => $totalWithTaxes * 100,
+        'computed_taxes' => 2 * 24.32 * (0.15 + 0.10) * 100
     ]);
 });

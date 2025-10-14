@@ -9,6 +9,7 @@ use App\Http\Controllers\UserInfoEntryController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Auth\Middleware\Authenticate;
+use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('storefront.home');
 Route::get('/products', ProductsPageController::class)->name('storefront.products');
@@ -20,11 +21,15 @@ Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
 
 Route::get('/login', function () {
-    return redirect()->route('filament.customer.auth.login');
+    return Inertia::location('/customer/login');//redirect()->route('filament.customer.auth.login');
 })->name('login');
 
 
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
     Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('storefront.user-info-entry.store');
+
+    Route::get('/response', function () {
+        return 'in payphone response, get the data from the request';
+    });
 });

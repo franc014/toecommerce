@@ -1,5 +1,8 @@
 <?php
 
+use App\Facades\PayphoneClientTransactionIdGenerator;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\User;
 use App\Models\UserInfoEntry;
 
@@ -12,8 +15,13 @@ beforeEach(function () {
 });
 
 test('signed in user can access the checkout page', function () {
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+
     $this->actingAs($this->user)
-    ->get(route('storefront.checkout'))
+    ->get(route('storefront.checkout', [
+        'ui_cart_id' => $cart->ui_cart_id
+    ]))
     ->assertStatus(200);
 });
 
@@ -23,6 +31,11 @@ test('guest users should login to access the checkout page', function () {
 });
 
 test('can show the customer information for invoice and shipping', function () {
+
+    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+
     $invoiceInfo = UserInfoEntry::factory()->create([
         'user_id' => $this->user->id,
         'first_name' => 'John',
@@ -35,6 +48,7 @@ test('can show the customer information for invoice and shipping', function () {
         'phone' => '1234567890',
         'zipcode' => '12345',
         'email' => 'customer@example.com',
+        'is_main' => true
     ]);
 
     $shippingInfo = UserInfoEntry::factory()->create([
@@ -49,27 +63,70 @@ test('can show the customer information for invoice and shipping', function () {
         'phone' => '9876543210',
         'zipcode' => 'A1B2C3',
         'email' => 'customershipping@example.com',
+        'is_main' => true
     ]);
 
-    $this->actingAs($this->user)
-    ->get(route('storefront.checkout'))
-    ->assertStatus(200)
-    ->assertSee($invoiceInfo->first_name)
-    ->assertSee($invoiceInfo->last_name)
-    ->assertSee($invoiceInfo->email)
-    ->assertSee($invoiceInfo->phone)
-    ->assertSee($invoiceInfo->country)
-    ->assertSee($invoiceInfo->state)
-    ->assertSee($invoiceInfo->city)
-    ->assertSee($invoiceInfo->address)
-    ->assertSee($shippingInfo->first_name)
-    ->assertSee($shippingInfo->last_name)
-    ->assertSee($shippingInfo->email)
-    ->assertSee($shippingInfo->phone)
-    ->assertSee($shippingInfo->country)
-    ->assertSee($shippingInfo->state)
-    ->assertSee($shippingInfo->city)
-    ->assertSee($shippingInfo->address);
+    $response = $this->actingAs($this->user)
+    ->get(route('storefront.checkout', [
+        'ui_cart_id' => $cart->ui_cart_id
+    ]));
+
+    expect($response->inertiaProps('auth.user.has_billing_info'))->toBeTrue();
+    expect($response->inertiaProps('auth.user.has_shipping_info'))->toBeTrue();
+
+
+    expect($response->inertiaProps('billingInfo')['id'])->toBe($invoiceInfo->id);
+    expect($response->inertiaProps('shippingInfo')['id'])->toBe($shippingInfo->id);
+
+
+
+});
+
+test('can show the purchase information for payment with Payphone', function () {
+
+    $this->withoutExceptionHandling();
+
+    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+
+    $cart = Cart::factory()->create();
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 100,
+        'quantity' => 2,
+        'total' => 200,
+        'taxes' => json_encode([
+            [
+                'percentage' => 15,
+                'name' => 'IVA'
+            ]
+        ]),
+        'total_with_taxes' => 230,
+        'computed_taxes' => 30
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 40,
+        'quantity' => 3,
+        'total' => 120,
+        'taxes' => json_encode([]),
+        'total_with_taxes' => 120,
+        'computed_taxes' => 0
+    ]);
+
+
+    $response = $this->actingAs($this->user)
+    ->get(route('storefront.checkout', [
+        'ui_cart_id' => $cart->ui_cart_id
+    ]));
+
+    expect($response->inertiaProps('gatewayInfo')['clientTransactionId'])->toBe('1234567890');
+    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe((int) $cart->total);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe((int) $cart->total_with_taxes);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe((int) $cart->total_without_taxes);
+    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe((int) $cart->total_computed_taxes);
+
 
 });
 

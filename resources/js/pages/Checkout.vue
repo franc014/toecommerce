@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="container mx-auto space-y-10 py-20">
+        <div class="wrapper space-y-10 py-20">
             <h1>
                 Checkout for <span class="text-lg italic">{{ user.name }}</span>
             </h1>
@@ -42,13 +42,16 @@
                     </div>
                 </div>
 
-                <div class="bg-indigo-100">cart and gateway info</div>
+                <div>
+                    <PayphoneButton :gatewayInfo="page.props.gatewayInfo" />
+                </div>
             </div>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
+import PayphoneButton from '@/components/PayphoneButton.vue';
 import UserInfoForm from '@/components/UserInfoForm.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { UserInfoEntry } from '@/types';

@@ -318,6 +318,28 @@ it('calculates product price with taxes', function () {
     expect($product->priceWithTaxes())->toBe((5232 * (1 + ($taxIVA->percentage / 100) + ($taxISD->percentage / 100))) / 100);
 });
 
+it('calculates computed price with taxes', function () {
+    $taxIVA = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15,
+        'description' => 'IVA 15%',
+    ]);
+
+    $taxISD = Tax::factory()->create([
+        'name' => 'ISD',
+        'percentage' => 10,
+        'description' => 'ISD 10%',
+    ]);
+
+    $product = Product::factory()->published()->create([
+        'price' => 52.32,
+    ]);
+
+    $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
+
+    expect($product->computedTaxes())->toBe((5232 * ($taxISD->percentage  + $taxIVA->percentage) / 100) / 100);
+});
+
 it('verifies product has taxes', function () {
     $taxIVA = Tax::factory()->create([
         'name' => 'IVA',

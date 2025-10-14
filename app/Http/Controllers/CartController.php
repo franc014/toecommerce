@@ -19,9 +19,10 @@ class CartController extends Controller
             'ui_cart_id' => $UICartId,
         ]);
 
-        session()->put('cart', $cart);
+        //session()->put('cart', $cart);
 
-        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => []];
+        return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => []])
+        ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
 
     }
 
@@ -30,8 +31,10 @@ class CartController extends Controller
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
 
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
-            'subtotal_in_dollars' => $cart->subtotal_in_dollars,
+            'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
             'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
+            'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
+            'total_in_dollars' => $cart->total_in_dollars,
             'items_count' => $cart->items_count,
         ]];
     }
