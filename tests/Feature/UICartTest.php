@@ -22,9 +22,6 @@ test('can create a new cart from pinia', function () {
 
     expect(Cart::count())->toBe(1);
     expect(Cart::first()->items()->count())->toBe(0);
-    //instead of session, cookies
-    expect(session('cart'))->toBeInstanceOf(Cart::class);
-    expect(session('cart')->ui_cart_id)->toBe($uiCartId);
 
 });
 

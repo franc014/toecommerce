@@ -38,10 +38,10 @@
                 </div>
 
                 <div class="flex items-center justify-between gap-4">
-                    <!-- <Button>
-                        <Link :href="checkoutLink" class="w-full">Checkout</Link>
-                    </Button> -->
-                    <Button @click="goToCheckout" class="cursor-pointer">Checkout</Button>
+                    <Button>
+                        <Link href="/checkout" class="w-full">Checkout</Link>
+                    </Button>
+
                     <Button variant="secondary" @click="emptyCart" class="cursor-pointer">Vaciar</Button>
                 </div>
             </footer>
@@ -59,15 +59,11 @@ import CartItem from '@/components/CartItem.vue';
 import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { router } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { CircleX as CloseIcon } from 'lucide-vue-next';
 
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
-
-console.log(cartStore.id);
-
-//const checkoutLink = `/checkout/?ui_cart_id=${cartStore.id}`;
 
 function closeCart() {
     cartDrawerStore.toggle();
@@ -76,15 +72,6 @@ function closeCart() {
 function emptyCart() {
     cartStore.emptyCart({
         id: cartStore.id,
-    });
-}
-
-function goToCheckout() {
-    router.visit('/checkout', {
-        method: 'get',
-        data: {
-            ui_cart_id: cartStore.id,
-        },
     });
 }
 </script>

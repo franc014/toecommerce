@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Money;
 use App\Exceptions\ProductOutOfStockException;
 use App\Traits\MoneyFormat;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,13 +16,14 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['total_without_taxes','total_without_taxes_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count','total_computed_taxes','total_computed_taxes_in_dollars', 'total,','total_in_dollars'];
+    protected $appends = ['total_without_taxes','total_without_taxes_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count','total_computed_taxes','total_computed_taxes_in_dollars', 'total_amount','total_in_dollars'];
 
     protected function casts(): array
     {
         return [
             'cart_items' => 'array',
             'paid_at' => 'datetime: Y-m-d H:i:s',
+
         ];
     }
 
@@ -118,7 +120,7 @@ class Cart extends Model
                 $itemsWithTaxes = $this->items->filter(function ($item) {
                     return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
                 });
-                return $itemsWithTaxes->sum('total');
+                return $itemsWithTaxes->sum('total') * 100;
             }
         );
     }
@@ -131,7 +133,7 @@ class Cart extends Model
                 $itemsWithoutTaxes = $this->items->filter(function ($item) {
                     return $item->taxes === null || count(json_decode($item->taxes)) === 0;
                 });
-                return $itemsWithoutTaxes->sum('total');
+                return $itemsWithoutTaxes->sum('total') * 100;
             }
         );
     }
@@ -140,7 +142,7 @@ class Cart extends Model
     {
 
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalWithoutTaxes)
+            get: fn () => $this->toDollars($this->totalWithoutTaxes / 100)
         );
     }
 
@@ -148,35 +150,35 @@ class Cart extends Model
     protected function totalComputedTaxes(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('computed_taxes') : 0
+            get: fn () => $this->items ?  $this->items->sum('computed_taxes') * 100 : 0
         );
     }
 
     protected function totalWithTaxesInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalWithTaxes)
+            get: fn () => $this->toDollars($this->totalWithTaxes / 100)
         );
     }
 
     protected function totalComputedTaxesInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalComputedTaxes)
+            get: fn () => $this->toDollars($this->totalComputedTaxes / 100)
         );
     }
 
-    protected function total(): Attribute
+    protected function totalAmount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('total_with_taxes') : 0
+            get: fn () => $this->items ? ($this->items->sum('total_with_taxes') * 100)  : 0
         );
     }
 
     protected function totalInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->toDollars($this->total)
+            get: fn () => $this->toDollars($this->total_amount / 100)
         );
     }
 

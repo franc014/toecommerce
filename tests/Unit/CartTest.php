@@ -169,7 +169,7 @@ test('getting the total without taxes', function () {
 
 
 
-    expect($cart->total_without_taxes)->toBe(100.0);
+    expect($cart->total_without_taxes)->toBe(10000.0);
 });
 
 test('getting the total without taxes in dollars', function () {
@@ -270,7 +270,7 @@ test('getting the total with taxes', function () {
         ]
     )), 'items')->create();
 
-    expect($cart->total_with_taxes)->toBe(160.0);
+    expect($cart->total_with_taxes)->toBe(16000.0);
 });
 
 test('getting the total with taxes in dollars', function () {
@@ -342,7 +342,7 @@ test('getting the total computed taxes', function () {
 
     $computedTaxes = 40.00 * 3 * 0.15 + 50.00 * 2 * 0.15;
 
-    expect($cart->fresh()->total_computed_taxes)->toBe($computedTaxes);
+    expect($cart->fresh()->total_computed_taxes)->toBe($computedTaxes * 100);
 });
 
 test('getting the total computed taxes in dollars', function () {
@@ -366,7 +366,7 @@ test('getting the total computed taxes in dollars', function () {
     expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$'.$computedTaxes);
 });
 
-test('getting the total', function () {
+test('getting the cart total amount', function () {
 
     $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
     $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
@@ -413,7 +413,7 @@ test('getting the total', function () {
         ]
     )), 'items')->create();
 
-    expect($cart->total)->toBe($itemATotalWithTaxes + $itemBTotalWithTaxes + $itemCTotalWithTaxes);
+    expect($cart->total_amount)->toBe(($itemATotalWithTaxes * 100 + $itemBTotalWithTaxes * 100 + $itemCTotalWithTaxes * 100));
 });
 
 test('getting the total in dollars', function () {

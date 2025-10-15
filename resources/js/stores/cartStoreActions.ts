@@ -31,13 +31,13 @@ async function getCartFromDB(cartId: string, store: any) {
     return cartDB;
 }
 
-export async function init() {
-    const cartLS = localStorage.getItem('cart');
+export async function init(cookieCart) {
+    //const cartLS = localStorage.getItem('cart');
 
-        if (cartLS) {
-            const cart = JSON.parse(cartLS);
+        if (cookieCart) {
+
             try {
-                const cartDB = await getCartFromDB(cart.id, this);
+                const cartDB = await getCartFromDB(cookieCart, this);
                 console.info('got cart from DB');
                 this.id = cartDB.data.ui_cart_id;
 
@@ -63,11 +63,6 @@ export async function init() {
                     const uuid = uuidv4();
 
                     const cartDB = await createCartInDB(uuid);
-
-                    localStorage.setItem('cart', JSON.stringify({
-                        id: cartDB.data.ui_cart_id,
-                        items: [],
-                    }));
 
                     this.id = cartDB.data.ui_cart_id;
 

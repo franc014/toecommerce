@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -19,10 +20,9 @@ class CartController extends Controller
             'ui_cart_id' => $UICartId,
         ]);
 
-        //session()->put('cart', $cart);
 
         return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => []])
-        ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
+                        ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
 
     }
 

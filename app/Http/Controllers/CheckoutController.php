@@ -17,7 +17,8 @@ class CheckoutController extends Controller
         $billingInfo = auth()->user()->mainBillingInfoEntry();
         $shippingInfo = auth()->user()->mainShippingInfoEntry();
 
-        $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
+        $cart = Cart::byUICartId($request->cookie('cart'))->firstOrFail();
+
 
         return Inertia::render(
             'Checkout',
@@ -28,10 +29,10 @@ class CheckoutController extends Controller
                     //'payphoneAPIURL' => config('app.payphone_app_url'),
                     'clientTransactionId' => PayphoneClientTransactionIdGenerator::generate(),
                     'payment' => [
-                        'amount' => $cart->total * 100,
-                        'amountWithTax' => $cart->total_with_taxes * 100,
-                        'amountWithoutTax' => $cart->total_without_taxes * 100,
-                        'tax' => $cart->total_computed_taxes * 100
+                        'amount' => $cart->total_amount,
+                        'amountWithTax' => $cart->total_with_taxes,
+                        'amountWithoutTax' => $cart->total_without_taxes,
+                        'tax' => $cart->total_computed_taxes
                     ]
                 ]
             ]

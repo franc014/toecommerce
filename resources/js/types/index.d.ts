@@ -76,6 +76,7 @@ export interface Cart {
     items: CartItem[];
 }
 
+
 export interface CartAggregation{
     total_with_taxes_in_dollars: string;
     total_without_taxes_in_dollars: string;
@@ -98,6 +99,19 @@ export interface CartItem {
     computed_taxes_in_dollars: string;
     purchasable_id: number;
     purchasable_type: string;
+}
+
+export interface PayphoneInfo {
+    clientTransactionId: string;
+    payment: PayphonePayment;
+}
+
+interface PayphonePayment {
+    id: string;
+    amount: number;
+    amountWithoutTax: number;
+    amountWithTax: number;
+    tax: number;
 }
 
 export interface DataForCart {

@@ -6,6 +6,7 @@
 </template>
 
 <script setup lang="ts">
+import { PayphoneInfo } from '@/types';
 import { onMounted } from 'vue';
 
 onMounted(() => {
@@ -29,7 +30,7 @@ onMounted(() => {
 });
 
 const props = defineProps<{
-    gatewayInfo: object;
+    gatewayInfo: PayphoneInfo;
 }>();
 
 console.log(props.gatewayInfo);

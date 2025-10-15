@@ -19,6 +19,7 @@ test('signed in user can access the checkout page', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
 
     $this->actingAs($this->user)
+    ->withCookie('cart', $cart->ui_cart_id)
     ->get(route('storefront.checkout', [
         'ui_cart_id' => $cart->ui_cart_id
     ]))
@@ -67,9 +68,8 @@ test('can show the customer information for invoice and shipping', function () {
     ]);
 
     $response = $this->actingAs($this->user)
-    ->get(route('storefront.checkout', [
-        'ui_cart_id' => $cart->ui_cart_id
-    ]));
+    ->withCookie('cart', $cart->ui_cart_id)
+    ->get(route('storefront.checkout'));
 
     expect($response->inertiaProps('auth.user.has_billing_info'))->toBeTrue();
     expect($response->inertiaProps('auth.user.has_shipping_info'))->toBeTrue();
@@ -116,23 +116,23 @@ test('can show the purchase information for payment with Payphone', function () 
     ]);
 
 
-    $response = $this->actingAs($this->user)
-    ->get(route('storefront.checkout', [
-        'ui_cart_id' => $cart->ui_cart_id
-    ]));
+    $response = $this->withCookie('cart', $cart->ui_cart_id)->actingAs($this->user)
+    ->get(route('storefront.checkout'));
 
     expect($response->inertiaProps('gatewayInfo')['clientTransactionId'])->toBe('1234567890');
-    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe((int) $cart->total);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe((int) $cart->total_with_taxes);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe((int) $cart->total_without_taxes);
-    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe((int) $cart->total_computed_taxes);
-
+    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe(35000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe(20000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe(12000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe(3000);
 
 });
 
 
 test('shows billing information form if user has no billing info', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+
     $response = $this->actingAs($this->user)
+    ->withCookie('cart', $cart->ui_cart_id)
     ->get(route('storefront.checkout'));
 
     expect($response->inertiaProps('auth.user.has_billing_info'))->toBeFalse();
@@ -140,7 +140,9 @@ test('shows billing information form if user has no billing info', function () {
 });
 
 test('shows shipping information form if user has no shipping info', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
     $response = $this->actingAs($this->user)
+    ->withCookie('cart', $cart->ui_cart_id)
     ->get(route('storefront.checkout'));
 
     expect($response->inertiaProps('auth.user.has_shipping_info'))->toBeFalse();

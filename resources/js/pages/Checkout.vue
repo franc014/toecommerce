@@ -64,6 +64,8 @@ const page = usePage();
 const user = page.props.auth.user;
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
+
+//todo: liten cart changes and reload page
 </script>
 
 <style scoped>

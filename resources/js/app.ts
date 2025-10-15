@@ -21,7 +21,7 @@ createInertiaApp({
             .use(pinia)
             .mount(el);
         const cartPinia = useCartStore();
-        cartPinia.init();
+        cartPinia.init(props.initialPage.props.shoppingCart);
     },
     progress: {
         color: '#4B5563',
