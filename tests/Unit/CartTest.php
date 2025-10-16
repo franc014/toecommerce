@@ -495,3 +495,10 @@ test('a cart can have an order', function () {
     $order = Order::placeFor(User::factory()->create(), $cart);
     expect($cart->order->id)->toBe($order->id);
 });
+
+test('a cart is paid', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'paid_at' => now()
+    ]);
+    expect($cart->isPaid())->toBeTrue();
+});

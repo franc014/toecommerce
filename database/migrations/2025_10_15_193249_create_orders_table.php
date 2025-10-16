@@ -23,7 +23,6 @@ return new class extends Migration {
             $table->integer('total_computed_taxes');
             $table->dateTime('paid_at')->nullable();
             $table->json('payphone_metadata')->nullable();
-
             $table->timestamps();
         });
     }

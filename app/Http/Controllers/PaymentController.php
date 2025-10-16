@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\PayphonePaymentGateway;
-use App\Models\Cart;
-use App\Models\Order;
+use App\Exceptions\OrderAlreadyConfirmedException;
+use App\Exceptions\PayphoneTransactionErrorException;
+use App\Utils\ConfirmsPayment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     public function confirm(Request $request)
     {
-        $confirmation = PayphonePaymentGateway::confirm(request()->id, request()->clientTransactionId);
-        $cartUiId = $request->cookie('cart');
 
-        $cart = Cart::byUICartId($cartUiId)->firstOrFail();
+        try {
+            $confirms = new ConfirmsPayment($request->cookie('cart'), [
+                'id' => $request->id,
+                'clientTransactionId' => $request->clientTransactionId,
+            ]);
 
-        $order = $cart->order;
+            $confirms->handle();
 
-        $order->confirm($confirmation);
+            return response()->redirectTo(route('storefront.products'))->withoutCookie('cart');
 
-        $cart->update([
-            'paid_at' => now(),
-        ]);
+        } catch (OrderAlreadyConfirmedException $e) {
+            return redirect(route('storefront.products'));
+        } catch (PayphoneTransactionErrorException $e) {
+            return redirect(route('storefront.products'));
+        }
 
-
-
-        return redirect()->route('storefront.products');
     }
 }

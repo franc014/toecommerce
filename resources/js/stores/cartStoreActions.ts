@@ -31,7 +31,7 @@ async function getCartFromDB(cartId: string, store: any) {
     return cartDB;
 }
 
-export async function init(cookieCart) {
+export async function init(cookieCart:string) {
     //const cartLS = localStorage.getItem('cart');
 
         if (cookieCart) {
@@ -44,7 +44,14 @@ export async function init(cookieCart) {
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
                 console.error('Sorry. Could not get cart: ', e.message);
-                console.info('Trying to restore cart in DB with LS cart...');
+
+                const uuid = uuidv4();
+
+                const cartDB = await createCartInDB(uuid);
+
+                this.id = cartDB.data.ui_cart_id;
+
+                //console.info('Trying to restore cart in DB with cart...');
 
                  // todo: restore cart with items function
                 /* try {

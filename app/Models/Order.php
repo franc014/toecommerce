@@ -3,10 +3,17 @@
 namespace App\Models;
 
 use App\Casts\Money;
+use App\Exceptions\CartAlreadyPaidException;
+use App\Exceptions\OrderAlreadyConfirmedException;
+use App\Exceptions\PayphoneTransactionErrorException;
+use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Facades\PayphoneClientTransactionIdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class Order extends Model
 {
@@ -23,6 +30,11 @@ class Order extends Model
         ];
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -30,6 +42,15 @@ class Order extends Model
 
     public static function placeFor(User $user, Cart $cart)
     {
+        if ($cart->isEmpty()) {
+            throw new PlaceOrderForEmptyCartException;
+        }
+
+        if ($cart->isPaid()) {
+            throw new CartAlreadyPaidException;
+        }
+
+
         $order = self::where('cart_id', $cart->id)
                         ->where('user_id', $user->id)
                         ->first();
@@ -41,7 +62,7 @@ class Order extends Model
         $order = self::create([
             'user_id' => $user->id,
             'cart_id' => $cart->id,
-            'code' => PayphoneClientTransactionIdGenerator::generate(),
+            'code' => (string) Str::ulid(),
             'total_amount' => $cart->total_amount / 100,
             'total_with_taxes' => $cart->total_with_taxes / 100,
             'total_without_taxes' => $cart->total_without_taxes / 100,
@@ -67,11 +88,27 @@ class Order extends Model
         return $order;
     }
 
+    public function isConfirmed(): bool
+    {
+        return $this->paid_at !== null;
+    }
+
     public function confirm(string $payphoneConfirmation)
     {
+
+        $payphoneConfirmation = json_decode($payphoneConfirmation, true);
+
+        //ray($payphoneConfirmation);
+
+        if (Arr::exists($payphoneConfirmation, 'errorCode')) {
+            throw new PayphoneTransactionErrorException;
+        }
+        if ($this->isConfirmed()) {
+            throw new OrderAlreadyConfirmedException;
+        }
         $this->update([
             'paid_at' => now(),
-            'payphone_metadata' => json_decode($payphoneConfirmation, true)
+            'payphone_metadata' => $payphoneConfirmation
         ]);
     }
 }

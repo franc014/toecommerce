@@ -24,11 +24,9 @@ import { ProductVariant } from '../types';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { SwatchBook } from 'lucide-vue-next';
 import VariantCard from './VariantCard.vue';
-const props = defineProps<{
+defineProps<{
     variants: ProductVariant[];
 }>();
-
-console.log(props.variants);
 </script>
 
 <style scoped>

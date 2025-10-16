@@ -211,4 +211,15 @@ class Cart extends Model
         return $this->hasOne(Order::class);
     }
 
+    public function finish(): void
+    {
+        $this->paid_at = now();
+        $this->save();
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->paid_at !== null;
+    }
+
 }

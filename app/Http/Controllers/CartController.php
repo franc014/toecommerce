@@ -30,6 +30,9 @@ class CartController extends Controller
     {
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
 
+        if ($cart->isPaid()) {
+            abort(404);
+        }
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
             'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
             'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,

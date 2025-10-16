@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Utils\PayphoneTransactionIdGenerator;
-use App\Utils\TransactionIdGenerator;
+use App\Utils\PayphoneGateway;
+use App\Utils\PayphonePayment;
+
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -16,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
 {
 
     public $bindings = [
-        TransactionIdGenerator::class => PayphoneTransactionIdGenerator::class,
+        //TransactionIdGenerator::class => PayphoneTransactionIdGenerator::class,
+        PayphonePayment::class => PayphoneGateway::class,
         /* LocalPayment::class => PayphoneGateway::class,
         OrderConfirmationCodeGenerator::class => RandomOrderConfirmationCodeGenerator::class, */
     ];

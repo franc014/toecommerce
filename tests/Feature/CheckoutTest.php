@@ -6,6 +6,8 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\UserInfoEntry;
+use Symfony\Component\Uid\Ulid;
+use Illuminate\Support\Str;
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -27,7 +29,9 @@ test('signed in user can access the checkout page', function () {
 
 test('an order is created when visiting the checkout page for the first time', function () {
 
-    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+    Str::createUlidsUsing(function () {
+        return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
+    });
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
         'user_id' => $this->user->id
@@ -44,7 +48,7 @@ test('an order is created when visiting the checkout page for the first time', f
     $this->assertDatabaseHas('orders', [
         'cart_id' => $cart->id,
         'user_id' => $this->user->id,
-        'code' => '1234567890',
+        'code' => '01HRDBNHHCKNW2AK4Z29SN82T9',
         'paid_at' => null,
         'total_amount' => $cart->total_amount,
         'total_with_taxes' => $cart->total_with_taxes,
@@ -80,6 +84,45 @@ test('an order is created when visiting the checkout page for the first time', f
         'computed_taxes' => $cart->items->last()->computed_taxes * 100,
     ]);
 
+});
+
+test('can not create order if cart is empty', function () {
+
+    Str::createUlidsUsing(function () {
+        return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
+    });
+
+    $cart = Cart::factory()->create([
+        'user_id' => $this->user->id
+    ]);
+
+    $this->actingAs($this->user)
+    ->withCookie('cart', $cart->ui_cart_id)
+    ->get(route('storefront.checkout'))
+    ->assertRedirect(route('storefront.products'));
+
+    expect($this->user->orders)->toHaveCount(0);
+    expect($this->user->orders->first())->toBeNull();
+
+});
+
+test('can not create order if cart has already been paid', function () {
+
+    Str::createUlidsUsing(function () {
+        return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
+    });
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'paid_at' => now()->subDay(),
+    ]);
+
+    $this->actingAs($this->user)
+    ->withCookie('cart', $cart->ui_cart_id)
+    ->get(route('storefront.checkout'))
+    ->assertRedirect(route('storefront.products'));
+
+    expect($this->user->orders)->toHaveCount(0);
+    expect($this->user->orders->first())->toBeNull();
 
 });
 
@@ -193,7 +236,11 @@ test('can show the purchase information for payment with Payphone', function () 
 
     $this->withoutExceptionHandling();
 
-    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+    //PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+
+    Str::createUlidsUsing(function () {
+        return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
+    });
 
     $cart = Cart::factory()->create();
 
@@ -228,11 +275,11 @@ test('can show the purchase information for payment with Payphone', function () 
 
     expect($response->inertiaProps('gatewayInfo')['storeId'])->toBe(config('app.payphone.store_id'));
     expect($response->inertiaProps('gatewayInfo')['token'])->toBe(config('app.payphone.token'));
-    expect($response->inertiaProps('gatewayInfo')['clientTransactionId'])->toBe('1234567890');
-    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe(35000);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe(20000);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe(12000);
-    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe(3000);
+    expect($response->inertiaProps('gatewayInfo')['clientTransactionId'])->toBe('01HRDBNHHCKNW2AK4Z29SN82T9');
+    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe(350);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe(200);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe(120);
+    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe(30);
 
 });
 

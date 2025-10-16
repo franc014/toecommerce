@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CartAlreadyPaidException;
+use App\Exceptions\PlaceOrderForEmptyCartException;
 use Inertia\Inertia;
-use App\Facades\PayphoneClientTransactionIdGenerator;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -15,37 +17,38 @@ class CheckoutController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $billingInfo = auth()->user()->mainBillingInfoEntry();
-        $shippingInfo = auth()->user()->mainShippingInfoEntry();
 
-        $cart = Cart::byUICartId($request->cookie('cart'))->firstOrFail();
+        try {
+            $cart = Cart::byUICartId($request->cookie('cart'))->firstOrFail();
+            $billingInfo = auth()->user()->mainBillingInfoEntry();
+            $shippingInfo = auth()->user()->mainShippingInfoEntry();
+            $cart->assingUser(auth()->user());
+            $order = Order::placeFor(auth()->user(), $cart);
 
-        if ($cart->isEmpty()) {
-            return redirect(route('storefront.products'));
-        }
-        $cart->assingUser(auth()->user());
-        $order = Order::placeFor(auth()->user(), $cart);
+            return Inertia::render(
+                'Checkout',
+                [
 
-
-        return Inertia::render(
-            'Checkout',
-            [
-
-                'billingInfo' => $billingInfo,
-                'shippingInfo' => $shippingInfo,
-                'gatewayInfo' => [
-                    //'payphoneAPIURL' => config('app.payphone_app_url'),
-                    'storeId' => config('app.payphone.store_id'),
-                    'token' => config('app.payphone.token'),
-                    'clientTransactionId' => $order->code,
-                    'payment' => [
-                        'amount' => $cart->total_amount,
-                        'amountWithTax' => $cart->total_with_taxes,
-                        'amountWithoutTax' => $cart->total_without_taxes,
-                        'tax' => $cart->total_computed_taxes
+                    'billingInfo' => $billingInfo,
+                    'shippingInfo' => $shippingInfo,
+                    'gatewayInfo' => [
+                        //'payphoneAPIURL' => config('app.payphone_app_url'),
+                        'storeId' => config('app.payphone.store_id'),
+                        'token' => config('app.payphone.token'),
+                        'clientTransactionId' => (string) Str::ulid(),
+                        'payment' => [
+                            'amount' =>  $order->total_amount,
+                            'amountWithTax' =>  $order->total_with_taxes,
+                            'amountWithoutTax' => $order->total_without_taxes,
+                            'tax' =>  $order->total_computed_taxes
+                        ]
                     ]
                 ]
-            ]
-        );
+            );
+        } catch (PlaceOrderForEmptyCartException $e) {
+            return redirect(route('storefront.products'));
+        } catch (CartAlreadyPaidException $e) {
+            return redirect(route('storefront.products'));
+        }
     }
 }

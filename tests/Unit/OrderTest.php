@@ -1,13 +1,30 @@
 <?php
 
+use App\Exceptions\CartAlreadyPaidException;
+use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Facades\PayphoneClientTransactionIdGenerator;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Support\Str;
+use Symfony\Component\Uid\Ulid;
+
+it('belongs to a user', function () {
+    $user = User::factory()->create();
+    $order = Order::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    expect($order->user->id)->toBe($user->id);
+});
 
 test('can create an order', function () {
-    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
+
+    Str::createUlidsUsing(function () {
+        return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
+    });
     $user = User::factory()->create();
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
 
@@ -17,9 +34,9 @@ test('can create an order', function () {
     expect($order)->toBeInstanceOf(Order::class);
     expect($order->cart_id)->toBe($cart->id);
     expect($order->user_id)->toBe($user->id);
-    expect($order->code)->toBe('1234567890');
+    expect($order->code)->toBe('01HRDBNHHCKNW2AK4Z29SN82T9');
     expect($order->paid_at)->toBeNull();
-    expect($order->total_amount)->toBe($cart->total_amount / 100);
+    expect($order->total_amount * 100)->toBe($cart->total_amount);
     //expect($order->total_with_taxes)->toBe($cart->total_with_taxes / 100);
     expect($order->total_without_taxes)->toBe($cart->total_without_taxes / 100);
     expect($order->total_computed_taxes)->toBe($cart->total_computed_taxes / 100);
@@ -58,6 +75,39 @@ test('can create order items', function () {
     expect($order->orderItems[1]->price)->toBe($cart->items[1]->price);
     expect($order->orderItems[1]->quantity)->toBe($cart->items[1]->quantity);
 
+});
 
+test('trying to place an order for a cart with no items throws an exception', function () {
 
+    Exceptions::fake();
+    $cart = Cart::factory()->create();
+    $user = User::factory()->create();
+
+    $this->assertThrows(
+        fn () => Order::placeFor($user, $cart),
+        PlaceOrderForEmptyCartException::class,
+    );
+});
+
+test('trying to place an order for a cart already paid throws an exception', function () {
+
+    Exceptions::fake();
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'paid_at' => now()->subDay(),
+    ]);
+    $user = User::factory()->create();
+
+    $this->assertThrows(
+        fn () => Order::placeFor($user, $cart),
+        CartAlreadyPaidException::class,
+    );
+});
+
+it('is confirmed', function () {
+
+    $order = Order::factory()->create([
+        'paid_at' => now()->subDay(),
+    ]);
+
+    expect($order->isConfirmed())->toBeTrue();
 });

@@ -64,6 +64,15 @@ test('can not get a cart that does not exist', function () {
     ]))->assertStatus(404);
 });
 
+test('can not get a cart that has been already paid', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'paid_at' => now()->subDays(1),
+    ]);
+    $this->post(route('cart.show', [
+        'id' => $cart->ui_cart_id,
+    ]))->assertStatus(404);
+});
+
 
 test('a cart can be emptied', function () {
 
