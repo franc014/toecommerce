@@ -4,8 +4,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsPageController;
 use App\Http\Controllers\UserInfoEntryController;
+use Faker\Provider\ar_EG\Payment;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Auth\Middleware\Authenticate;
@@ -25,11 +27,12 @@ Route::get('/login', function () {
 })->name('login');
 
 
+Route::get('/payments/response', [PaymentController::class, 'confirm'])->name('payments.confirm');
+
+
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
     Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('storefront.user-info-entry.store');
 
-    Route::get('/response', function () {
-        return 'in payphone response, get the data from the request';
-    });
+
 });

@@ -23,7 +23,6 @@ class CartItem extends Model
            'total' => Money::class,
            'total_with_taxes' => Money::class,
            'computed_taxes' => Money::class,
-           'sizes' => 'array',
         ];
     }
 

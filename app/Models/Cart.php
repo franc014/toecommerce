@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cart extends Model
 {
@@ -50,6 +51,11 @@ class Cart extends Model
     public function hasItems(): bool
     {
         return $this->items->count() > 0;
+    }
+
+    public function isEmpty(): bool
+    {
+        return !$this->hasItems();
     }
 
     public function getItemByPurchasableId(int $purchasableId): ?CartItem
@@ -192,6 +198,17 @@ class Cart extends Model
     public function empty(): int
     {
         return $this->items()->delete();
+    }
+
+    public function assingUser(User $user): void
+    {
+        $this->user_id = $user->id;
+        $this->save();
+    }
+
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
     }
 
 }

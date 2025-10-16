@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\User;
 
 it('gives successful response for home page', function () {
@@ -15,6 +16,7 @@ it('gives successful response for products page', function () {
 
 it('gives successful response for checkout page', function () {
     $cart = Cart::factory()->create();
+    CartItem::factory()->create(['cart_id' => $cart->id]);
     $user = User::factory()->create();
     $response = $this->actingAs($user)->withCookie('cart', $cart->ui_cart_id)->get(route('storefront.checkout'));
     $response->assertStatus(200);

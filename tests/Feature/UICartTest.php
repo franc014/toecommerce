@@ -35,7 +35,7 @@ test('cart id must be a valid uuid', function () {
     ])->assertInvalid(['id']);
 });
 
-test('can get a cart from the ui stored in local storage', function () {
+test('can get a cart from the ui', function () {
 
     $uiCartId = fake()->uuid();
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([

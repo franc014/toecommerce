@@ -2,9 +2,11 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 function createCartWithoutItem(array $productData, $isVariant = false)
@@ -480,10 +482,16 @@ test('getting the total count of items in the cart', function () {
     expect($cart->items_count)->toBe(5);
 });
 
-test('cart can empty', function () {
+it('is empty', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
     expect($cart->items)->toHaveCount(2);
     $cart->empty();
     expect($cart->fresh()->items)->toHaveCount(0);
     expect($cart->fresh()->items_count)->toBe(0);
+});
+
+test('a cart can have an order', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+    $order = Order::placeFor(User::factory()->create(), $cart);
+    expect($cart->order->id)->toBe($order->id);
 });

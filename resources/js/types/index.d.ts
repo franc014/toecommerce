@@ -103,6 +103,8 @@ export interface CartItem {
 
 export interface PayphoneInfo {
     clientTransactionId: string;
+    storeId: string;
+    token: string;
     payment: PayphonePayment;
 }
 

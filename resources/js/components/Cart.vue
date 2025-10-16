@@ -37,7 +37,7 @@
                     </p>
                 </div>
 
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center justify-between gap-4" v-if="!cartStore.isEmpty">
                     <Button>
                         <Link href="/checkout" class="w-full">Checkout</Link>
                     </Button>

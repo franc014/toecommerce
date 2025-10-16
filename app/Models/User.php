@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(UserInfoEntry::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function billingInfoEntry(): HasMany
     {
         return $this->hasMany(UserInfoEntry::class)->where('type', 'billing');
@@ -90,6 +95,8 @@ class User extends Authenticatable
             get: fn () => $this->shippingInfoEntry->count() > 0
         );
     }
+
+
 
 
 

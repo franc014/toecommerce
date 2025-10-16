@@ -123,8 +123,12 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'payphone_app_url' => env('PAYPHONE_APP_URL', 'https://pay.payphonetodoesposible.com/api/button/js?appId='),
-    'payphone_app_id' => env('PAYPHONE_APP_ID', 'xkEKqdLzEeR4w0XgTvp4A'),
-    'payphone_token' => env('PAYPHONE_TOKEN', '2FsnlxHM30zsuRcAQkrDYS5T8lHYVs-3VOP__MM6ayLQedPi_QaAweWr9v9JQHXUDwi_gNwEb_otq9tSlOaGHEO1hNFOmtE7XsAMCnlEHlc3BJzLqq4wyChS_pbUuk8bQCUaAyGT58cnEE_y_9DhSa4iXngNVQv3o3EWbNOzb4-nN0IKzC4-W7H7uaAZqUNT86-EzxM96-nAQJAaAHiPq2eSqLTPOsnqcgGFrBseUu_2Mpa4wKlQ3ARZVFpR90t6qPSkdtF5wUE6HhuTkDii5BtRrDeQzrJhWu_A8hOgaa05JAvBb2rYHoa-coH1M3KJ2R2HwGDvZJdeLz6Y5Nz2IGMGaD0'),
+    'payphone' => [
+        'store_id' => env('PAYPHONE_STORE_ID', '9dcfb52a-4975-4f48-a21c-6df92b37e28d'),
+        'token' => env('PAYPHONE_TOKEN', 'OF8eMoqkBm-eD5MHm_qcbnRdI97AJi4Mni8tycmMmsQls30Wp4vQrnhbjEBr-n5QlEpqrcubM6TFYjbcYptFg82Nt2Div68_wAutiyWvPoX6u4Aqgy_H2bVGeSN-Vc78LD2RrNCrpCRBaDq4HcHbxEoaCcR6KTMT7EBd2Z_m1RqONIMLArIeJozzg02weXayqbCnp6Fh1muokO9PBjdIxGWMhxW8iSW_hyJ5K4M31k7eTojhudwEDpDW-sA9n24cpO_HYybGtlU1Q0vypMdnz_hxp8NgctzCFqNz8KKcYtFMsZXfB18T5V_Ink7-GhBeGqIS3w'),
+        'confirm_url' => env('PAYPHONE_CONFIRM_URL', 'https://pay.payphonetodoesposible.com/api/button/V2/Confirm')
+    ]
+
+
 
 ];
