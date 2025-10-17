@@ -2,7 +2,6 @@
 
 use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
-use App\Facades\PayphoneClientTransactionIdGenerator;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
