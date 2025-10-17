@@ -4,22 +4,22 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Traits\HasProductVariation;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ProductVariant extends Model implements HasMedia, Purchasable
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
-    use HasFactory, InteractsWithMedia, MoneyFormat, Publishable;
+    use HasFactory, InteractsWithMedia, MoneyFormat, Publishable, HasProductVariation;
 
-    protected $appends = ['price_in_dollars','formatted_variation'];
+    protected $appends = ['price_in_dollars','formatted_variation','taxes'];
 
     protected function casts(): array
     {
@@ -39,13 +39,13 @@ class ProductVariant extends Model implements HasMedia, Purchasable
 
         return [
             'purchasable_id' => $this->id,
+            'purchasable_type' => ProductVariant::class,
             'title' => $this->title,
             'price' => $this->price,
             'slug' => $this->slug,
-            //todo: add variant data
-            //'image' => $this->main_image_path,
+            'image' => $this->main_image ?? $this->product->main_image,
             'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
-            'purchasable_type' => ProductVariant::class
+            'variation' => $this->variation
         ];
     }
 
@@ -80,19 +80,5 @@ class ProductVariant extends Model implements HasMedia, Purchasable
     {
         return $this->price * ($this->product->taxes->sum('percentage') / 100);
     }
-
-    public function formattedVariation(): Attribute
-    {
-        $variation = collect($this->variation);
-
-        $formattedVariation = $variation->map(function ($value, $key) {
-            return $key . ': ' . $value;
-        })->implode(', ');
-
-        return Attribute::make(
-            get: fn () => $formattedVariation
-        );
-    }
-
 
 }

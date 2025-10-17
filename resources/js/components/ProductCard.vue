@@ -1,7 +1,14 @@
 <template>
     <li>
         <div class="prod-card-v2">
-            <div class="flex flex-col items-center space-y-10 p-5 text-center">
+            <a class="prod-card-v2__img-link rounded-lg shadow-md" aria-label="Go to product" :href="productUrl">
+                <figure>
+                    <img class="aspect-square object-cover" :src="featureImage" :alt="product.title" />
+                    <img class="aspect-square object-cover" :src="mainImage" :alt="product.title" aria-hidden="true" />
+                </figure>
+            </a>
+
+            <div class="flex flex-col items-center space-y-8 p-5 text-center">
                 <h1 class="text-lg lg:text-2xl">
                     <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
                 </h1>
@@ -34,6 +41,11 @@ import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';
 const { product } = defineProps<{ product: Product }>();
 const { slug } = product;
+const { images } = product;
+
+const mainImage = images[0];
+const featureImage = images[1];
+
 const qty = ref(1);
 
 const cartStore = useCartStore();
@@ -67,7 +79,7 @@ Usage: codyhouse.co/license
 -------------------------------- */
 
 li {
-    @apply bg-indigo-200;
+    @apply bg-zinc-100;
 }
 
 .prod-card-v2 {
@@ -128,6 +140,7 @@ li {
 
 .prod-card-v2__price {
     text-decoration: none;
+    @apply text-2xl font-bold tracking-wider;
 }
 
 .prod-card-v2__old-price {

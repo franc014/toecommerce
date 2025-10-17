@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <main class="bg-indigo-50">
+    <main class="bg-zinc-200">
         <slot />
     </main>
     <Toaster richColors />

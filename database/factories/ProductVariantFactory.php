@@ -22,12 +22,13 @@ class ProductVariantFactory extends Factory
     {
         $title = $this->faker->sentence(1);
         $slug = str()->slug($title);
+        $product = Product::factory()->create();
 
         return [
             'title' => $title,
             'slug' => $slug.'-'.$this->faker->uuid(),
             'description' => fake()->text(),
-            'product_id' => Product::factory(),
+            'product_id' => $product->id,
             'price' => fake()->randomFloat(2, 50, 300),
             'status' => fake()->randomElement(ProductStatus::class),
             'sku' => fake()->uuid(),

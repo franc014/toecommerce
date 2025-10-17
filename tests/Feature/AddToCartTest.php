@@ -7,12 +7,91 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
 
+it('defines the product data to add to the cart', function () {
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+        'main_image' => 'image.jpg'
+    ]);
+
+    $data = $product->dataforCart();
+
+    expect($data)->toEqual([
+        'purchasable_id' => $product->id,
+        'title' => $product->title,
+        'price' => $product->price,
+        'slug' => $product->slug,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'purchasable_type' => Product::class,
+        'image' => 'image.jpg'
+    ]);
+
+});
+
+it('defines the product variant data to add to the cart', function () {
+
+    $variant = ProductVariant::factory()->published()->create([
+        'title' => 'Variant 1',
+        'slug' => 'variant-1',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+        'variation' => [
+            'color' => 'red',
+            'size' => 'L'
+        ]
+    ]);
+
+    $data = $variant->dataforCart();
+
+    expect($data)->toEqual([
+            'purchasable_id' => $variant->id,
+            'purchasable_type' => ProductVariant::class,
+            'title' => $variant->title,
+            'price' => $variant->price,
+            'slug' => $variant->slug,
+            'image' => $variant->main_image ,
+            'taxes' => $variant->taxes,
+            'variation' => $variant->variation
+    ]);
+
+});
+
+it('if no variant image is set it will use the product image', function () {
+
+
+    $variant = ProductVariant::factory()->published()->create([
+        'title' => 'Variant 1',
+        'slug' => 'variant-1',
+        'price' => 20.00,
+        'main_image' => null
+    ]);
+
+    $data = $variant->dataforCart();
+
+    expect($data)->toEqual([
+            'purchasable_id' => $variant->id,
+            'purchasable_type' => ProductVariant::class,
+            'title' => $variant->title,
+            'price' => $variant->price,
+            'slug' => $variant->slug,
+            'image' => $variant->product->main_image ,
+            'taxes' => json_encode([]),
+            'variation' => $variant->variation
+    ]);
+});
+
+
+
+
 test('can add a published product to the cart', function () {
 
     $product = Product::factory()->published()->create([
         'title' => 'Product 1',
         'slug' => 'product-1',
         'price' => 20.00,
+        'main_image' => 'image.jpg'
     ]);
     $uiCartId = fake()->uuid();
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
@@ -39,6 +118,7 @@ test('can add a published product to the cart', function () {
         'cart_id' => $cart->id,
         'title' => $product->title,
         'slug' => $product->slug,
+        'image' => $product->main_image,
         'purchasable_id' => $product->id,
         'purchasable_type' => Product::class,
         'price' => $product->price * 100,
@@ -51,12 +131,15 @@ test('can add a published product to the cart', function () {
 
 });
 
+
+
 test('can add a published product variant to the cart', function () {
 
     $product = Product::factory()->published()->create([
         'title' => 'Product 1',
         'slug' => 'product-1',
         'price' => 20.00,
+        'main_image' => 'image.jpg'
     ]);
 
     $variant = ProductVariant::factory()->published()->create([
@@ -64,6 +147,11 @@ test('can add a published product variant to the cart', function () {
         'price' => 10.00,
         'title' => 'Variant 1',
         'slug' => 'variant-1',
+        'main_image' => $product->main_image,
+        'variation' => [
+            'color' => 'red',
+            'size' => 'L'
+        ]
     ]);
 
     $uiCartId = fake()->uuid();
@@ -91,6 +179,7 @@ test('can add a published product variant to the cart', function () {
         'cart_id' => $cart->id,
         'title' => $variant->title,
         'slug' => $variant->slug,
+        'image' => $variant->main_image,
         'purchasable_id' => $variant->id,
         'purchasable_type' => ProductVariant::class,
         'price' => $variant->price * 100,
@@ -98,7 +187,8 @@ test('can add a published product variant to the cart', function () {
         'taxes' => json_encode($product->taxes->toArray()),
         'total' => $variant->price * 100 * $quantityToAdd,
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
-        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
+        'variation' =>  json_encode($variant->variation)
     ]);
 
 });

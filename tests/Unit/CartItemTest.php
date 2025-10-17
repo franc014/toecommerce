@@ -3,6 +3,27 @@
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\ProductVariant;
+
+test('can get purchasable product', function () {
+    $product = Product::factory()->create();
+    $cartItem = CartItem::factory()->create([
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class
+    ]);
+    expect($cartItem->purchasable)->toBeInstanceOf(Product::class);
+    expect($cartItem->purchasable->title)->toBe($product->title);
+});
+
+test('can get purchasable variant', function () {
+    $variant = ProductVariant::factory()->create();
+    $cartItem = CartItem::factory()->create([
+        'purchasable_id' => $variant->id,
+        'purchasable_type' => ProductVariant::class
+    ]);
+    expect($cartItem->purchasable)->toBeInstanceOf(ProductVariant::class);
+    expect($cartItem->purchasable->title)->toBe($variant->title);
+});
 
 test('a cart item belongs to a cart', function () {
     $cart = Cart::factory()->create();
@@ -41,15 +62,6 @@ test('getting the price in dollars', function () {
     expect($cartItem->priceInDollars)->toBe("$24.32");
 });
 
-/* test('getting the total in dollars', function () {
-    $cartItem = CartItem::factory()->create([
-        'price' => 24.32,
-        'quantity' => 2,
-        'total' => 48.64
-    ]);
-
-    expect($cartItem->totalInDollars)->toBe("$48.64");
-}); */
 
 test('getting totals in dollars', function () {
     $taxes = [
@@ -83,4 +95,16 @@ test('getting totals in dollars', function () {
         'total_with_taxes' => $totalWithTaxes * 100,
         'computed_taxes' => 2 * 24.32 * (0.15 + 0.10) * 100
     ]);
+});
+
+test('getting formatted vatiation', function () {
+    $item = CartItem::factory()->create([
+        'variation' => [
+            'Color' => 'Red',
+            'Size' => 'XL'
+        ]
+    ]);
+
+    expect($item->formatted_variation)->toBe('Color: Red, Size: XL');
+
 });

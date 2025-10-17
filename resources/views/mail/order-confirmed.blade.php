@@ -1,12 +1,12 @@
 <x-mail::message>
-    # Orden Confirmada
+# Orden Confirmada
 
-    Felicidades, tu orden ha sido confirmada. Aquí están los detalles de tu orden:
+Felicidades, tu orden ha sido confirmada. Aquí están los detalles de tu orden:
 
-    <x-mail::button :url="''">
-        Ver mi orden
-    </x-mail::button>
+<x-mail::button :url="''">
+  Ver mi orden
+</x-mail::button>
 
-    Gracias,<br>
-    {{ config('app.name') }}
+Gracias,<br>
+{{ config('app.name') }}
 </x-mail::message>

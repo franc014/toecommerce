@@ -1,14 +1,12 @@
 <template>
     <li class="flex flex-col gap-4 border-b border-dashed border-zinc-400 px-4 py-4 last:border-b-0">
-        <img src="https://dummyimage.com/300" alt="kkk" class="aspect-square w-16 rounded shadow-lg" />
+        <img :src="item.image" :alt="item.title" class="aspect-square w-16 rounded shadow-lg" />
+
         <div class="space-y-2">
             <h3 class="text-lg font-bold text-zinc-800">{{ item.title }}</h3>
-            <!-- @if($this->cartItem->color || $this->cartItem->sizes)
-            <div class="flex items-center gap-2">
-                <p class="h-10 w-10 rounded-full" style="background-color: {{ $this->cartItem->color }}"></p>
-                <p>{{ Arr::join($this->cartItem->sizes, ', ') }}</p>
+            <div class="flex items-center gap-2" v-if="item.formatted_variation">
+                <p>{{ item.formatted_variation }}</p>
             </div>
-            @endif -->
         </div>
 
         <div class="flex w-5/6 items-center justify-between gap-3">
@@ -51,11 +49,12 @@ const props = defineProps<{
 
 const item = ref(props.item);
 
+console.log(item);
+
 const quantity = ref(item.value.quantity);
 
 const changeQuantity = (value: number) => {
     quantity.value = value;
-    console.log(item);
 
     const type = item.value.purchasable_type === 'App\Models\Product' ? 'product' : 'product-variant';
 

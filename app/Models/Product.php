@@ -47,7 +47,7 @@ class Product extends Model implements HasMedia, Purchasable
             'title' => $this->title,
             'price' => $this->price,
             'slug' => $this->slug,
-            //'image' => $this->main_image_path,
+            'image' => $this->main_image,
             'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
             'purchasable_type' => Product::class
         ];
@@ -135,20 +135,6 @@ class Product extends Model implements HasMedia, Purchasable
                 return $image->getFullUrl();
             })
         );
-    }
-
-    public function formattedVariantOptions_bk():array
-    {
-        $options = collect($this->variant_options);
-
-        $options = $options->map(function ($option) {
-            $values = collect($option['values']);
-            $values = $values->pluck('value');
-
-            return [$option['name'] => $values->toArray()];
-        });
-
-        return $options->collapse()->all();
     }
 
 

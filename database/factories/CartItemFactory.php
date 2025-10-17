@@ -23,11 +23,15 @@ class CartItemFactory extends Factory
         $total = $price * $quantity;
         $computedTaxes = 0;
 
+        $product = Product::factory()->published()->create();
+
+
         return [
             'cart_id' => Cart::factory(),
-            'purchasable_id' => Product::factory(),
+            'purchasable_id' => $product->id,
             'title' => $this->faker->sentence,
             'slug' => $this->faker->slug,
+            'image' => $product->main_image,
             'price' => $price,
             'quantity' => $quantity,
             'total' => $total,

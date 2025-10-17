@@ -37,10 +37,10 @@ class CheckoutController extends Controller
                         'token' => config('app.payphone.token'),
                         'clientTransactionId' => (string) Str::ulid(),
                         'payment' => [
-                            'amount' =>  $order->total_amount,
-                            'amountWithTax' =>  $order->total_with_taxes,
-                            'amountWithoutTax' => $order->total_without_taxes,
-                            'tax' =>  $order->total_computed_taxes
+                            'amount' =>  $order->total_amount * 100,
+                            'amountWithTax' =>  $order->total_with_taxes * 100,
+                            'amountWithoutTax' => $order->total_without_taxes * 100,
+                            'tax' =>  $order->total_computed_taxes * 100
                         ]
                     ]
                 ]

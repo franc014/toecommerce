@@ -6,7 +6,8 @@
         >
             <header class="flex items-center gap-2 px-4">
                 <h2 class="flex items-center gap-2">
-                    <span>{{ cartStore.aggregation.items_count }} items</span>
+                    <ShoppingCart />
+                    <span>{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span>
                     en tu carrito de compras
                 </h2>
                 <button @click="closeCart" class="ml-auto cursor-pointer">
@@ -21,7 +22,7 @@
             </ul>
 
             <footer class="border-t border-zinc-200 pt-4">
-                <div class="mb-6 flex flex-col gap-4 border-b border-zinc-200 pb-4">
+                <div class="mb-6 flex flex-col gap-4 border-b border-zinc-200 pb-4" v-if="!cartStore.isEmpty">
                     <p class="text-xl font-bold">
                         Total sin impuestos: <span class="italic">{{ cartStore.aggregation.total_without_taxes_in_dollars }}</span>
                     </p>
@@ -60,7 +61,7 @@ import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
-import { CircleX as CloseIcon } from 'lucide-vue-next';
+import { CircleX as CloseIcon, ShoppingCart } from 'lucide-vue-next';
 
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();

@@ -7,6 +7,7 @@ use App\Filament\Forms\Components\SharedFields;
 use App\Models\Tax;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -135,6 +136,15 @@ class ProductForm
                             ->label('Imágenes')
 
                             ->icon(Heroicon::OutlinedPhoto)->schema([
+                                FileUpload::make('main_image')
+                                    ->label('Imagen principal')
+                                    ->image()
+                                    ->required()
+                                    ->maxSize(1024 * 3)
+                                    ->visibility('public')
+                                    ->columnSpanFull()
+                                    ->imageEditor(),
+
                                 SpatieMediaLibraryFileUpload::make('product_images')
                                     ->label('Imágenes')
                                     ->image()

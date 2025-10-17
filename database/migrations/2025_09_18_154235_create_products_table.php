@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('main_image');
             $table->string('sku')->nullable();
             $table->string('slug');
             $table->string('status');

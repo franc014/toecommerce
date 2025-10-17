@@ -89,6 +89,7 @@ export interface CartItem {
     id: number;
     title: string;
     slug: string;
+    image: string;
     product_id: number;
     price: number;
     tax: number;
@@ -99,6 +100,8 @@ export interface CartItem {
     computed_taxes_in_dollars: string;
     purchasable_id: number;
     purchasable_type: string;
+    formatted_variation: string;
+    purchasable: Product | ProductVariant;
 }
 
 export interface PayphoneInfo {

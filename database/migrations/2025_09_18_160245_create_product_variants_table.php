@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('slug');
+            $table->string('main_image')->nullable();
             $table->text('description')->nullable();
             $table->foreignIdFor(Product::class)->constrained()->onDelete('cascade');
             $table->integer('price');

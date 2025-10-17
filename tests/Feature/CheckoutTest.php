@@ -234,9 +234,6 @@ test('can show the customer information for invoice and shipping', function () {
 
 test('can show the purchase information for payment with Payphone', function () {
 
-    $this->withoutExceptionHandling();
-
-    //PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
 
     Str::createUlidsUsing(function () {
         return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
@@ -276,10 +273,10 @@ test('can show the purchase information for payment with Payphone', function () 
     expect($response->inertiaProps('gatewayInfo')['storeId'])->toBe(config('app.payphone.store_id'));
     expect($response->inertiaProps('gatewayInfo')['token'])->toBe(config('app.payphone.token'));
     expect($response->inertiaProps('gatewayInfo')['clientTransactionId'])->toBe('01HRDBNHHCKNW2AK4Z29SN82T9');
-    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe(350);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe(200);
-    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe(120);
-    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe(30);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amount'])->toBe(35000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithTax'])->toBe(20000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['amountWithoutTax'])->toBe(12000);
+    expect($response->inertiaProps('gatewayInfo')['payment']['tax'])->toBe(3000);
 
 });
 

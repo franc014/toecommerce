@@ -15,11 +15,12 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Cart::class)->constrained()->cascadeOnDelete();
             $table->unsignedInteger('purchasable_id');
+            $table->string('purchasable_type');
             $table->string('title');
             $table->string('slug');
             $table->string('image')->nullable();
-            $table->string('purchasable_type');
             $table->integer('price');
+            $table->json('variation')->nullable();
             $table->integer('quantity');
             $table->json('taxes')->nullable();
             $table->integer('total');
