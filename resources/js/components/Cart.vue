@@ -1,7 +1,11 @@
 <template>
-    <div class="absolute top-0 right-0">
+    <teleport to="body">
+        <div v-if="cartDrawerStore.isOpen" class="fixed inset-0 z-0 bg-black/5" @click="closeCart" />
         <section
             v-if="cartDrawerStore.isOpen"
+            tabindex="0"
+            @keyup.esc="closeCart"
+            ref="cartEl"
             class="cart-grid fixed top-0 right-0 z-10 h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
         >
             <header class="flex items-center gap-2 px-4">
@@ -52,7 +56,7 @@
                 <a href="/" class="text-2xl">Volver a la tienda</a>
             </div>
         </section>
-    </div>
+    </teleport>
 </template>
 
 <script setup lang="ts">
@@ -62,11 +66,15 @@ import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
 import { CircleX as CloseIcon, ShoppingCart } from 'lucide-vue-next';
+import { nextTick, ref, watch } from 'vue';
 
+const cartEl = ref<HTMLElement | null>(null);
 const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
 
 function closeCart() {
+    console.log('close cart');
+
     cartDrawerStore.toggle();
 }
 
@@ -75,6 +83,16 @@ function emptyCart() {
         id: cartStore.id,
     });
 }
+
+watch(
+    () => cartDrawerStore.isOpen,
+    async (open) => {
+        if (open) {
+            await nextTick();
+            cartEl.value?.focus();
+        }
+    },
+);
 </script>
 
 <style scoped>

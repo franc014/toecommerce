@@ -6,7 +6,7 @@
         <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
                 <AccordionTrigger>Descripción</AccordionTrigger>
-                <AccordionContent>{{ variant.description }}</AccordionContent>
+                <AccordionContent v-html="variant.description"></AccordionContent>
             </AccordionItem>
         </Accordion>
         <p class="mx-0 mt-3 mb-4 text-left text-[0.9375rem] leading-[1.58] text-zinc-700">

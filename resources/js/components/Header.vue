@@ -2,7 +2,7 @@
     <header class="header js-header relative">
         <div class="header__container wrapper">
             <div class="header__logo">
-                <a href="#0">
+                <Link href="/">
                     <svg width="104" height="30" viewBox="0 0 104 30">
                         <title>Go to homepage</title>
                         <path
@@ -11,7 +11,7 @@
                         />
                         <circle cx="15" cy="15" r="15" class="fill-indigo-700" />
                     </svg>
-                </a>
+                </Link>
             </div>
 
             <button
@@ -87,7 +87,7 @@ Usage: codyhouse.co/license
     height: var(--header-height);
     width: 100%;
     @apply bg-zinc-200;
-    @apply z-[3];
+    @apply z-[0];
 }
 
 .header__container {
