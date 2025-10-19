@@ -45,7 +45,6 @@ test('cart ui id should be a valid uuid', function () {
     ]))->assertInvalid(['ui_cart_id']);
 });
 
-
 test('item id is required', function () {
     $uiCartId = fake()->uuid();
     Cart::factory()->has(CartItem::factory(), 'items')->create([

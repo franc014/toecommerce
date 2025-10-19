@@ -1,8 +1,8 @@
 <?php
 
 use App\Events\OrderConfirmed;
-use App\Mail\OrderConfirmed as OrderConfirmedMailable;
 use App\Facades\PayphonePaymentGateway;
+use App\Mail\OrderConfirmed as OrderConfirmedMailable;
 use App\Models\AppSettings;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -25,7 +25,6 @@ function confirmation()
     expect($user->orders)->toHaveCount(1);
     expect($user->orders->first()->id)->toBe($order->id);
 
-
     $id = 'tx12345';
 
     $paymentMeta = [
@@ -43,7 +42,7 @@ function confirmation()
 
     $response = test()->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => $id,
-        'clientTransactionId' => $order->code
+        'clientTransactionId' => $order->code,
     ]));
 
     return $response;
@@ -72,8 +71,6 @@ test('an event is emitted after payment is confirmed', function () {
     Event::assertDispatched(OrderConfirmed::class);
 });
 
-
-
 function assertForStockTracking()
 {
 
@@ -88,7 +85,6 @@ function assertForStockTracking()
             'stock' => 5,
         ]
     );
-
 
     $user = User::factory()->create();
     $cart = Cart::factory()->create([
@@ -113,7 +109,6 @@ function assertForStockTracking()
 
     test()->order = $order;
 
-
     $id = 'tx12345';
     $clientTransactionId = 'cltx12345';
 
@@ -132,13 +127,12 @@ function assertForStockTracking()
 
     test()->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => $id,
-        'clientTransactionId' => $clientTransactionId
+        'clientTransactionId' => $clientTransactionId,
     ]));
 
     return [$productA, $productB];
 
 }
-
 
 test('for every product in order its stock is reduced after payment is confirmed in strick mode', function () {
 
@@ -180,7 +174,6 @@ test('for every product in order its stock is not reduced after payment is confi
 
 test('can not confirm if order is already paid', function () {
 
-
     $user = User::factory()->create();
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
         'user_id' => $user->id,
@@ -209,9 +202,8 @@ test('can not confirm if order is already paid', function () {
 
     $this->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => 'tx12345',
-        'clientTransactionId' => 'cltx12345'
+        'clientTransactionId' => 'cltx12345',
     ]))->assertRedirect(route('storefront.products'));
-
 
 });
 
@@ -238,7 +230,7 @@ test('can not confirm if payphone transaction response has errors', function () 
 
     $this->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => 'tx12345',
-        'clientTransactionId' => 'cltx12345'
+        'clientTransactionId' => 'cltx12345',
     ]))->assertRedirect(route('storefront.products'));
 });
 
@@ -261,7 +253,7 @@ it('sends a confirmation email with link to order page', function () {
 
     $orderConfirmedMailable->assertSeeInHtml('Orden Confirmada');
 
-    //todo: test link in email
+    // todo: test link in email
     /* $orderConfirmedMailable->assertSeeInHtml(route('filament.customer.resources.orders.view', [
         'record' => 'CONFIRMATIONCODE123456789',
     ])); */

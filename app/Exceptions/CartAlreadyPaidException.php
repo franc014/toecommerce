@@ -1,6 +1,5 @@
 <?php
+
 namespace App\Exceptions;
 
-class CartAlreadyPaidException extends \Exception
-{
-}
+class CartAlreadyPaidException extends \Exception {}

@@ -1,6 +1,5 @@
 <?php
+
 namespace App\Exceptions;
 
-class ProductOutOfStockException extends \Exception
-{
-}
+class ProductOutOfStockException extends \Exception {}

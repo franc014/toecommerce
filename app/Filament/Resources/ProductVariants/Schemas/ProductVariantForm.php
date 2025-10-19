@@ -2,15 +2,11 @@
 
 namespace App\Filament\Resources\ProductVariants\Schemas;
 
-use App\Enums\ProductSizes;
 use App\Enums\ProductStatus;
 use App\Filament\Forms\Components\SharedFields;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 

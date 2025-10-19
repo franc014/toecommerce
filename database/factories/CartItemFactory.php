@@ -25,7 +25,6 @@ class CartItemFactory extends Factory
 
         $product = Product::factory()->published()->create();
 
-
         return [
             'cart_id' => Cart::factory(),
             'purchasable_id' => $product->id,

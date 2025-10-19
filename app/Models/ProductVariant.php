@@ -17,9 +17,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class ProductVariant extends Model implements HasMedia, Purchasable
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
-    use HasFactory, InteractsWithMedia, MoneyFormat, Publishable, HasProductVariation;
+    use HasFactory, HasProductVariation, InteractsWithMedia, MoneyFormat, Publishable;
 
-    protected $appends = ['price_in_dollars','formatted_variation','taxes'];
+    protected $appends = ['price_in_dollars', 'formatted_variation', 'taxes'];
 
     protected function casts(): array
     {
@@ -29,7 +29,7 @@ class ProductVariant extends Model implements HasMedia, Purchasable
             'published_at' => 'datetime',
             'price' => Money::class,
             'status' => ProductStatus::class,
-            'variation' => 'array'
+            'variation' => 'array',
         ];
 
     }
@@ -45,7 +45,7 @@ class ProductVariant extends Model implements HasMedia, Purchasable
             'slug' => $this->slug,
             'image' => $this->main_image ?? $this->product->main_image,
             'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
-            'variation' => $this->variation
+            'variation' => $this->variation,
         ];
     }
 
@@ -80,5 +80,4 @@ class ProductVariant extends Model implements HasMedia, Purchasable
     {
         return $this->price * ($this->product->taxes->sum('percentage') / 100);
     }
-
 }

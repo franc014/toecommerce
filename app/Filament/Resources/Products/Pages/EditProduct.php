@@ -9,7 +9,6 @@ use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Contracts\Support\Htmlable;
 
 class EditProduct extends EditRecord
 {
@@ -37,8 +36,6 @@ class EditProduct extends EditRecord
     {
         return 'icon-box';
     }
-
-
 
     public static function getTabComponent(): Tab
     {

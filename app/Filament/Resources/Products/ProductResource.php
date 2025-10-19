@@ -73,6 +73,4 @@ class ProductResource extends Resource
     {
         return Tab::make('Produit')->icon(Heroicon::OutlinedCube);
     }
-
-
 }

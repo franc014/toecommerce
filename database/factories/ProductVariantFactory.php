@@ -2,11 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Enums\ProductSizes;
 use App\Enums\ProductStatus;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductVariant>

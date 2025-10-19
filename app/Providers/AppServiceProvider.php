@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Utils\PayphoneGateway;
 use App\Utils\PayphonePayment;
-
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -15,13 +14,13 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-
     public $bindings = [
-        //TransactionIdGenerator::class => PayphoneTransactionIdGenerator::class,
+        // TransactionIdGenerator::class => PayphoneTransactionIdGenerator::class,
         PayphonePayment::class => PayphoneGateway::class,
         /* LocalPayment::class => PayphoneGateway::class,
         OrderConfirmationCodeGenerator::class => RandomOrderConfirmationCodeGenerator::class, */
     ];
+
     /**
      * Register any application services.
      */

@@ -51,7 +51,6 @@ class User extends Authenticatable
 
     protected $appends = ['has_billing_info', 'has_shipping_info'];
 
-
     public function userInfoEntries(): HasMany
     {
         return $this->hasMany(UserInfoEntry::class);
@@ -95,10 +94,4 @@ class User extends Authenticatable
             get: fn () => $this->shippingInfoEntry->count() > 0
         );
     }
-
-
-
-
-
-
 }

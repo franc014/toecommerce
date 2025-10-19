@@ -141,8 +141,6 @@ test('get archived variants', function () {
     expect($product->variants()->archived()->count())->toBe(2);
 });
 
-
-
 it('calculates variant price with product taxes', function () {
     $taxIVA = Tax::factory()->create([
         'name' => 'IVA',
@@ -176,8 +174,8 @@ test('getting formatted vatiation', function () {
         'product_id' => $product->id,
         'variation' => [
             'Color' => 'Red',
-            'Size' => 'XL'
-        ]
+            'Size' => 'XL',
+        ],
     ]);
 
     expect($variant->formatted_variation)->toBe('Color: Red, Size: XL');

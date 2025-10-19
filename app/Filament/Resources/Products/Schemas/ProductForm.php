@@ -100,37 +100,37 @@ class ProductForm
                             ->schema([
                                 Repeater::make('variant_options')
                                     ->label('Opciones')
-                                     ->collapsible()
-                                     ->collapsed()
-                                     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
-                                     ->addActionAlignment(Alignment::Start)
+                                    ->collapsible()
+                                    ->collapsed()
+                                    ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                                    ->addActionAlignment(Alignment::Start)
                                     ->schema([
                                         TextInput::make('name')
-                                        ->label('Opción')
-                                        ->live(debounce: 500)
-                                        ->required(),
-                                        Repeater::make('values')
-                                        ->collapsible()
-                                        ->collapsed()
-                                        ->itemLabel(fn (array $state): ?string => $state['value'] ?? null)
-                                        ->addActionAlignment(Alignment::Start)
-                                        ->label('Valores de la opción')
-                                        ->schema([
-                                            TextInput::make('value')
+                                            ->label('Opción')
                                             ->live(debounce: 500)
-                                            ->label('Valor')
                                             ->required(),
-                                        ]),
+                                        Repeater::make('values')
+                                            ->collapsible()
+                                            ->collapsed()
+                                            ->itemLabel(fn (array $state): ?string => $state['value'] ?? null)
+                                            ->addActionAlignment(Alignment::Start)
+                                            ->label('Valores de la opción')
+                                            ->schema([
+                                                TextInput::make('value')
+                                                    ->live(debounce: 500)
+                                                    ->label('Valor')
+                                                    ->required(),
+                                            ]),
 
                                     ]),
                                 Action::make('generate_variants')
-                                ->label('Generar variantes')
-                                ->button()
-                                ->color('primary')
-                                ->icon(Heroicon::OutlinedSwatch)
-                                ->action(function (Model $record) {
-                                    $record->generateVariants();
-                                })
+                                    ->label('Generar variantes')
+                                    ->button()
+                                    ->color('primary')
+                                    ->icon(Heroicon::OutlinedSwatch)
+                                    ->action(function (Model $record) {
+                                        $record->generateVariants();
+                                    }),
                             ]),
                         Tab::make('images')
                             ->label('Imágenes')

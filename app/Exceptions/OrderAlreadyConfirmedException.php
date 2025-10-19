@@ -1,6 +1,5 @@
 <?php
+
 namespace App\Exceptions;
 
-class OrderAlreadyConfirmedException extends \Exception
-{
-}
+class OrderAlreadyConfirmedException extends \Exception {}

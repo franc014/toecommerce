@@ -11,7 +11,7 @@ use App\Utils\ConfirmsPayment;
 
 it('handles payment confirmation', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-        'user_id' => null
+        'user_id' => null,
     ]);
     $order = Order::placeFor(User::factory()->create(), $cart);
 
@@ -36,10 +36,10 @@ it('handles payment confirmation', function () {
 it('throws an exception if order has been already paid', function () {
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-        'user_id' => User::factory()
+        'user_id' => User::factory(),
     ]);
     Order::factory()->paid()->create([
-        'cart_id' => $cart->id
+        'cart_id' => $cart->id,
     ]);
 
     $payphoneConfirmation = [
@@ -59,7 +59,7 @@ it('throws an exception if order has been already paid', function () {
 test('trying to create an order for a gateway with response error throws an exception', function () {
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-       'user_id' => null
+        'user_id' => null,
     ]);
     Order::placeFor(User::factory()->create(), $cart);
 
@@ -82,7 +82,5 @@ test('trying to create an order for a gateway with response error throws an exce
         fn () => $confirms->handle(),
         PayphoneTransactionErrorException::class,
     );
-
-
 
 });

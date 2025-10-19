@@ -13,15 +13,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
-use Illuminate\Support\Str;
 
 class Product extends Model implements HasMedia, Purchasable
 {
     use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable;
-
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -30,14 +29,12 @@ class Product extends Model implements HasMedia, Purchasable
         'variant_options' => 'array',
     ];
 
-
     /* protected static function booted(): void
     {
         static::saved(function (Product $product) {
             $product->generateVariants();
         });
     } */
-
 
     public function dataforCart(): array
     {
@@ -49,7 +46,7 @@ class Product extends Model implements HasMedia, Purchasable
             'slug' => $this->slug,
             'image' => $this->main_image,
             'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
-            'purchasable_type' => Product::class
+            'purchasable_type' => Product::class,
         ];
     }
 
@@ -127,8 +124,7 @@ class Product extends Model implements HasMedia, Purchasable
         return $this->getMedia('product-images');
     }
 
-
-    public function productImagesForList():Attribute
+    public function productImagesForList(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->productImages()->take(2)->map(function ($image) {
@@ -137,8 +133,7 @@ class Product extends Model implements HasMedia, Purchasable
         );
     }
 
-
-    public function formattedVariantOptions():array
+    public function formattedVariantOptions(): array
     {
         $options = collect($this->variant_options);
 
@@ -151,7 +146,7 @@ class Product extends Model implements HasMedia, Purchasable
         }
 
         foreach ($transformed as $key => $options) {
-            //ray($key, $options);
+            // ray($key, $options);
             $lowL = collect([]);
 
             foreach ($options as $keyp => $value) {
@@ -169,8 +164,6 @@ class Product extends Model implements HasMedia, Purchasable
     {
         $options = $this->formattedVariantOptions();
 
-
-
         return collect(array_shift($options))
             ->crossJoin(...$options)
             ->map(function ($combo) {
@@ -178,7 +171,6 @@ class Product extends Model implements HasMedia, Purchasable
                 return array_merge(...$combo);
             });
     }
-
 
     public function generateVariants(): void
     {
@@ -189,16 +181,15 @@ class Product extends Model implements HasMedia, Purchasable
             $slug = Str::slug($title);
 
             $this->variants()->create([
-               'title' => $title,
-               'slug' => $slug,
-               'variation' => $combination,
-               'price' => 0,
-               'stock' => 0,
-               'status' => ProductStatus::DRAFT,
-               'sku' => '',
+                'title' => $title,
+                'slug' => $slug,
+                'variation' => $combination,
+                'price' => 0,
+                'stock' => 0,
+                'status' => ProductStatus::DRAFT,
+                'sku' => '',
             ]);
         }
-
 
     }
 }

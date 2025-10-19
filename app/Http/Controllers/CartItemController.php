@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
-use App\Utils\ResolvesPurchasable;
 use App\Utils\PerformsAddsToCart;
+use App\Utils\ResolvesPurchasable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 
@@ -34,8 +34,8 @@ class CartItemController extends Controller
             return response()->json([
                 'error' => [
                     'code' => 404,
-                    'message' => 'Product not found'
-                ]
+                    'message' => 'Product not found',
+                ],
             ], 404);
 
         } catch (ProductOutOfStockException $e) {
@@ -43,8 +43,8 @@ class CartItemController extends Controller
             return response()->json([
                 'error' => [
                     'code' => 422,
-                    'message' => 'Product is out of stock'
-                ]
+                    'message' => 'Product is out of stock',
+                ],
             ], 422);
         }
     }

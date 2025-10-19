@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\Money;
 use App\Exceptions\ProductOutOfStockException;
 use App\Traits\MoneyFormat;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +16,7 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['total_without_taxes','total_without_taxes_in_dollars','total_with_taxes','total_with_taxes_in_dollars','items_count','total_computed_taxes','total_computed_taxes_in_dollars', 'total_amount','total_in_dollars'];
+    protected $appends = ['total_without_taxes', 'total_without_taxes_in_dollars', 'total_with_taxes', 'total_with_taxes_in_dollars', 'items_count', 'total_computed_taxes', 'total_computed_taxes_in_dollars', 'total_amount', 'total_in_dollars'];
 
     protected function casts(): array
     {
@@ -55,7 +54,7 @@ class Cart extends Model
 
     public function isEmpty(): bool
     {
-        return !$this->hasItems();
+        return ! $this->hasItems();
     }
 
     public function getItemByPurchasableId(int $purchasableId): ?CartItem
@@ -70,11 +69,10 @@ class Cart extends Model
 
         $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
 
-
         if ($cartItem) {
             $this->updateItem($cartItem->id, $data['quantity']);
         } else {
-            $cartItem =  $this->items()->create($data);
+            $cartItem = $this->items()->create($data);
         }
 
         return $cartItem;
@@ -102,7 +100,7 @@ class Cart extends Model
         $item->delete();
     }
 
-    private function productOutOfStockCheck(array $data):void
+    private function productOutOfStockCheck(array $data): void
     {
 
         if (AppSettings::isStockControlStrict()) {
@@ -114,7 +112,7 @@ class Cart extends Model
             $purchasable = $data['purchasable_type']::find($data['purchasable_id']);
 
             if ($purchasable && $purchasable->stock - $totalQuantity <= 0) {
-                throw new ProductOutOfStockException();
+                throw new ProductOutOfStockException;
             }
         }
     }
@@ -126,6 +124,7 @@ class Cart extends Model
                 $itemsWithTaxes = $this->items->filter(function ($item) {
                     return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
                 });
+
                 return $itemsWithTaxes->sum('total') * 100;
             }
         );
@@ -139,6 +138,7 @@ class Cart extends Model
                 $itemsWithoutTaxes = $this->items->filter(function ($item) {
                     return $item->taxes === null || count(json_decode($item->taxes)) === 0;
                 });
+
                 return $itemsWithoutTaxes->sum('total') * 100;
             }
         );
@@ -152,11 +152,10 @@ class Cart extends Model
         );
     }
 
-
     protected function totalComputedTaxes(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ?  $this->items->sum('computed_taxes') * 100 : 0
+            get: fn () => $this->items ? $this->items->sum('computed_taxes') * 100 : 0
         );
     }
 
@@ -177,7 +176,7 @@ class Cart extends Model
     protected function totalAmount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ? ($this->items->sum('total_with_taxes') * 100)  : 0
+            get: fn () => $this->items ? ($this->items->sum('total_with_taxes') * 100) : 0
         );
     }
 
@@ -221,5 +220,4 @@ class Cart extends Model
     {
         return $this->paid_at !== null;
     }
-
 }

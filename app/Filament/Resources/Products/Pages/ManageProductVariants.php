@@ -23,6 +23,4 @@ class ManageProductVariants extends ManageRelatedRecords
                 CreateAction::make(),
             ]);
     }
-
-
 }

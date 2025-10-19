@@ -11,7 +11,7 @@ trait HasProductVariation
         $variation = collect($this->variation);
 
         $formattedVariation = $variation->map(function ($value, $key) {
-            return $key . ': ' . $value;
+            return $key.': '.$value;
         })->implode(', ');
 
         return Attribute::make(

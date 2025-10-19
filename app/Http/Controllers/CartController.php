@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -20,9 +19,8 @@ class CartController extends Controller
             'ui_cart_id' => $UICartId,
         ]);
 
-
         return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => []])
-                        ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
+            ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
 
     }
 
@@ -33,6 +31,7 @@ class CartController extends Controller
         if ($cart->isPaid()) {
             abort(404);
         }
+
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
             'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
             'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
@@ -46,8 +45,7 @@ class CartController extends Controller
     {
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
         $cart->empty();
+
         return ['ui_cart_id' => $cart->ui_cart_id, 'items' => []];
     }
-
-
 }

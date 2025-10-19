@@ -8,7 +8,6 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class ProductVariantInfolist
 {
@@ -53,11 +52,11 @@ class ProductVariantInfolist
                 Section::make('Fotos')
                     ->columnSpanFull()
                     ->collapsible()->collapsed(false)->schema([
-                    SpatieMediaLibraryImageEntry::make('product_images')->label('Fotos de Variantes')
-                        ->placeholder('No hay fotos todavía')
-                        ->conversion('thumb')
-                        ->collection('product-variant-images'),
-                ]),
+                        SpatieMediaLibraryImageEntry::make('product_images')->label('Fotos de Variantes')
+                            ->placeholder('No hay fotos todavía')
+                            ->conversion('thumb')
+                            ->collection('product-variant-images'),
+                    ]),
             ]);
     }
 }

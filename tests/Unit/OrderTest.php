@@ -29,14 +29,13 @@ test('can create an order', function () {
 
     $order = Order::placeFor($user, $cart);
 
-
     expect($order)->toBeInstanceOf(Order::class);
     expect($order->cart_id)->toBe($cart->id);
     expect($order->user_id)->toBe($user->id);
     expect($order->code)->toBe('01HRDBNHHCKNW2AK4Z29SN82T9');
     expect($order->paid_at)->toBeNull();
     expect($order->total_amount * 100)->toBe($cart->total_amount);
-    //expect($order->total_with_taxes)->toBe($cart->total_with_taxes / 100);
+    // expect($order->total_with_taxes)->toBe($cart->total_with_taxes / 100);
     expect($order->total_without_taxes)->toBe($cart->total_without_taxes / 100);
     expect($order->total_computed_taxes)->toBe($cart->total_computed_taxes / 100);
 

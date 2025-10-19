@@ -111,6 +111,8 @@ export interface PayphoneInfo {
     payment: PayphonePayment;
 }
 
+
+
 interface PayphonePayment {
     id: string;
     amount: number;

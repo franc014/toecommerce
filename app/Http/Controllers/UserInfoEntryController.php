@@ -33,9 +33,9 @@ class UserInfoEntryController extends Controller
             'phone' => $request->phone,
             'zipcode' => $request->zipcode,
             'email' => $request->email,
-            'is_main' => true
+            'is_main' => true,
         ]);
 
-        return  redirect()->intended(route('storefront.checkout', absolute: false));
+        return redirect()->intended(route('storefront.checkout', absolute: false));
     }
 }

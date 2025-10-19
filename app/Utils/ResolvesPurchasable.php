@@ -10,12 +10,12 @@ class ResolvesPurchasable
     public function __construct(
         private int $purchasableId,
         private string $purchasableType,
-    ) {
-    }
+    ) {}
 
     public function resolve(): Model
     {
         $purchasableClass = resolve("\\App\Models\\".Str::studly($this->purchasableType));
+
         return $purchasableClass::published()->findOrFail($this->purchasableId);
     }
 }

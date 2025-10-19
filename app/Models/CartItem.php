@@ -15,21 +15,21 @@ use Illuminate\Support\Facades\Storage;
 class CartItem extends Model
 {
     /** @use HasFactory<\Database\Factories\CartItemFactory> */
-    use HasFactory, MoneyFormat, HasProductVariation;
+    use HasFactory, HasProductVariation, MoneyFormat;
 
     protected $with = ['purchasable'];
 
-    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url','formatted_variation'];
+    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation'];
 
     protected function casts(): array
     {
         return [
-           'price' => Money::class,
-           'quantity' => 'integer',
-           'total' => Money::class,
-           'total_with_taxes' => Money::class,
-           'computed_taxes' => Money::class,
-           'variation' => 'array'
+            'price' => Money::class,
+            'quantity' => 'integer',
+            'total' => Money::class,
+            'total_with_taxes' => Money::class,
+            'computed_taxes' => Money::class,
+            'variation' => 'array',
         ];
     }
 
@@ -46,11 +46,11 @@ class CartItem extends Model
     public function scopeAllByProductInOpenCarts($query, $purchasable_id, $purchasable_type)
     {
         return $query->where('purchasable_id', $purchasable_id)
-        ->where('purchasable_type', $purchasable_type)
-        ->whereHas('cart', function ($q) {
-            $q->where('paid_at', null);
-        })
-        ->get();
+            ->where('purchasable_type', $purchasable_type)
+            ->whereHas('cart', function ($q) {
+                $q->where('paid_at', null);
+            })
+            ->get();
     }
 
     protected function imageUrl(): Attribute
@@ -59,13 +59,4 @@ class CartItem extends Model
             get: fn () => Storage::url($this->image),
         );
     }
-
-
-
-
-
-
-
-
-
 }

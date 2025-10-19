@@ -110,37 +110,36 @@ test('get archived products', function () {
     expect(Product::archived()->get()->count())->toBe(2);
 });
 
-
-//variants
+// variants
 
 test('a product can define variant options', function () {
     $variantOptions = [
-       [
-           'name' => 'size',
-           'values' => [
+        [
+            'name' => 'size',
+            'values' => [
                 ['value' => 'small'],
                 ['value' => 'medium'],
-                ['value' => 'large']
-           ]
-       ],
-
-       [
-           'name' => 'color',
-           'values' => [
-                ['value' => 'red'],
-                ['value' => 'blue'],
-                ['value' => 'green']
-           ]
+                ['value' => 'large'],
+            ],
         ],
 
-       [
-           'name' => 'material',
-           'values' => [
+        [
+            'name' => 'color',
+            'values' => [
+                ['value' => 'red'],
+                ['value' => 'blue'],
+                ['value' => 'green'],
+            ],
+        ],
+
+        [
+            'name' => 'material',
+            'values' => [
                 ['value' => 'leather'],
                 ['value' => 'fabric'],
-                ['value' => 'synthetic']
-           ]
-        ]
+                ['value' => 'synthetic'],
+            ],
+        ],
 
     ];
 
@@ -148,54 +147,52 @@ test('a product can define variant options', function () {
         [
             'title' => 'Sneakers',
             'slug' => 'sneakers',
-            'variant_options' => $variantOptions
+            'variant_options' => $variantOptions,
         ]
     );
 
     expect($product->formattedVariantOptions())->toBe([
-       [['size'=>'small'], ['size'=>'medium'], ['size'=>'large']],
-       [['color'=>'red'], ['color'=>'blue'], ['color'=>'green']],
-       [['material'=>'leather'], ['material'=>'fabric'], ['material'=>'synthetic']]
+        [['size' => 'small'], ['size' => 'medium'], ['size' => 'large']],
+        [['color' => 'red'], ['color' => 'blue'], ['color' => 'green']],
+        [['material' => 'leather'], ['material' => 'fabric'], ['material' => 'synthetic']],
     ]);
 });
 
-
-
 test('can generate as many variants as variant options permutations', function () {
     $variantOptions = [
-       [
-           'name' => 'size',
-           'values' => [
+        [
+            'name' => 'size',
+            'values' => [
                 ['value' => 'small'],
                 ['value' => 'medium'],
-                ['value' => 'large']
-           ]
-       ],
-
-       [
-           'name' => 'color',
-           'values' => [
-                ['value' => 'red'],
-                ['value' => 'blue'],
-                ['value' => 'green']
-           ]
+                ['value' => 'large'],
+            ],
         ],
 
-       [
-           'name' => 'material',
-           'values' => [
+        [
+            'name' => 'color',
+            'values' => [
+                ['value' => 'red'],
+                ['value' => 'blue'],
+                ['value' => 'green'],
+            ],
+        ],
+
+        [
+            'name' => 'material',
+            'values' => [
                 ['value' => 'leather'],
                 ['value' => 'fabric'],
-                ['value' => 'synthetic']
-           ]
-        ]
+                ['value' => 'synthetic'],
+            ],
+        ],
     ];
 
     $product = Product::factory()->create(
         [
             'title' => 'Sneakers',
             'slug' => 'sneakers',
-            'variant_options' => $variantOptions
+            'variant_options' => $variantOptions,
         ]
     );
 
@@ -209,17 +206,17 @@ test('can generate as many variants as variant options permutations', function (
     expect($product->variants[26]->variation)->toBe([
         'size' => 'large',
         'color' => 'green',
-        'material' => 'synthetic'
+        'material' => 'synthetic',
     ]);
 });
 
-//review...
+// review...
 test('can not generate variants when no variant options are defined for a product', function () {
     $product = Product::factory()->create(
         [
             'title' => 'Sneakers',
             'slug' => 'sneakers',
-            'variant_options' => null
+            'variant_options' => null,
         ]
     );
 
@@ -229,15 +226,14 @@ test('can not generate variants when no variant options are defined for a produc
 
 });
 
-
 test('verifying product has published variants', function () {
     $product = Product::factory()->create();
     ProductVariant::factory()->published()->count(2)->create([
-        'product_id' => $product->id
+        'product_id' => $product->id,
     ]);
 
     ProductVariant::factory()->draft()->count(1)->create([
-        'product_id' => $product->id
+        'product_id' => $product->id,
     ]);
 
     expect($product->hasPublishedVariants())->toBeTrue();
@@ -248,13 +244,12 @@ test('verifying product does not have published variants', function () {
     $product = Product::factory()->create();
 
     ProductVariant::factory()->draft()->count(2)->create([
-        'product_id' => $product->id
+        'product_id' => $product->id,
     ]);
 
     expect($product->hasPublishedVariants())->toBeFalse();
 
 });
-
 
 it('gets a product by slug', function () {
     $productA = Product::factory()->create([
@@ -337,7 +332,7 @@ it('calculates computed price with taxes', function () {
 
     $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
 
-    expect($product->computedTaxes())->toBe((5232 * ($taxISD->percentage  + $taxIVA->percentage) / 100) / 100);
+    expect($product->computedTaxes())->toBe((5232 * ($taxISD->percentage + $taxIVA->percentage) / 100) / 100);
 });
 
 it('verifies product has taxes', function () {
@@ -376,7 +371,7 @@ test('can get images as media associated to a product', function () {
         'custom_properties' => '[]',
         'generated_conversions' => '[]',
         'responsive_images' => '[]',
-        'order_column' => 1
+        'order_column' => 1,
 
     ]);
 
@@ -392,7 +387,7 @@ test('can get images as media associated to a product', function () {
         'custom_properties' => '[]',
         'generated_conversions' => '[]',
         'responsive_images' => '[]',
-        'order_column' => 2
+        'order_column' => 2,
 
     ]);
 
@@ -417,7 +412,7 @@ test('can get product images as URLs for products list component', function () {
         'custom_properties' => '[]',
         'generated_conversions' => '[]',
         'responsive_images' => '[]',
-        'order_column' => 1
+        'order_column' => 1,
 
     ]);
 
@@ -433,7 +428,7 @@ test('can get product images as URLs for products list component', function () {
         'custom_properties' => '[]',
         'generated_conversions' => '[]',
         'responsive_images' => '[]',
-        'order_column' => 2
+        'order_column' => 2,
 
     ]);
 
@@ -449,10 +444,9 @@ test('can get product images as URLs for products list component', function () {
         'custom_properties' => '[]',
         'generated_conversions' => '[]',
         'responsive_images' => '[]',
-        'order_column' => 2
+        'order_column' => 2,
 
     ]);
-
 
     expect($product->productImagesForList)->toHaveCount(2);
     expect($product->productImagesForList->toArray())->toEqual([$imageA->getFullUrl(), $imageB->getFullUrl()]);

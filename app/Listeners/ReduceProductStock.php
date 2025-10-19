@@ -3,10 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\OrderConfirmed;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\DB;
 use App\Models\AppSettings;
+use Illuminate\Support\Facades\DB;
 
 class ReduceProductStock
 {
@@ -32,11 +30,11 @@ class ReduceProductStock
                     $purchasableId = $item->purchasable_id;
                     $purchasable = $item->purchasable_type::lockForUpdate()->find($purchasableId);
 
-                    if (!$purchasable) {
+                    if (! $purchasable) {
                         return;
                     }
                     $purchasable->update([
-                        'stock' => $purchasable->stock - $item->quantity
+                        'stock' => $purchasable->stock - $item->quantity,
                     ]);
                 }
             });

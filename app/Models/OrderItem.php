@@ -14,11 +14,11 @@ class OrderItem extends Model
     protected function casts(): array
     {
         return [
-           'price' => Money::class,
-           'quantity' => 'integer',
-           'total' => Money::class,
-           'total_with_taxes' => Money::class,
-           'computed_taxes' => Money::class,
+            'price' => Money::class,
+            'quantity' => 'integer',
+            'total' => Money::class,
+            'total_with_taxes' => Money::class,
+            'computed_taxes' => Money::class,
         ];
     }
 }

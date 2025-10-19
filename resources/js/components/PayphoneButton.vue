@@ -1,38 +1,39 @@
 <template>
-    <div class="space-y-4">
+    <div class="space-y-4 pt-10">
         <h2>Payphone Checkout</h2>
-        <div id="pp-button"></div>
+        <div id="pp-button" ref="payphone-holder"></div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { PayphoneInfo } from '@/types';
-import { onMounted } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
+import { onMounted, useTemplateRef } from 'vue';
+
+const payphoneHolder = useTemplateRef('payphone-holder');
 
 onMounted(() => {
     const storeId = props.gatewayInfo.storeId;
     const token = props.gatewayInfo.token;
 
-    window.addEventListener('DOMContentLoaded', () => {
-        new PPaymentButtonBox({
-            token,
-            clientTransactionId: props.gatewayInfo.clientTransactionId,
-            amount: props.gatewayInfo.payment.amount,
-            amountWithoutTax: props.gatewayInfo.payment.amountWithoutTax,
-            amountWithTax: props.gatewayInfo.payment.amountWithTax,
-            tax: props.gatewayInfo.payment.tax,
-            currency: 'USD',
-            storeId,
-            reference: 'Pago via Website',
-        }).render('pp-button');
-    });
+    console.log(payphoneHolder.value);
+
+    new PPaymentButtonBox({
+        token,
+        storeId,
+        clientTransactionId: uuidv4(),
+        amount: props.gatewayInfo.payment.amount,
+        amountWithoutTax: props.gatewayInfo.payment.amountWithoutTax,
+        amountWithTax: props.gatewayInfo.payment.amountWithTax,
+        tax: props.gatewayInfo.payment.tax,
+        currency: 'USD',
+        reference: 'Pago via Website',
+    }).render(payphoneHolder.value?.id);
 });
 
 const props = defineProps<{
     gatewayInfo: PayphoneInfo;
 }>();
-
-console.log(props.gatewayInfo);
 </script>
 
 <style scoped></style>

@@ -3,17 +3,15 @@
 namespace App\Utils;
 
 use App\Events\OrderConfirmed;
-use App\Models\Cart;
-use App\Models\Order;
 use App\Facades\PayphonePaymentGateway;
+use App\Models\Cart;
 
 class ConfirmsPayment
 {
     public function __construct(
         public string $uiCartId,
         public array $payphoneConfirmation
-    ) {
-    }
+    ) {}
 
     public function handle()
     {

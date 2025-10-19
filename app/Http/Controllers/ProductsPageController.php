@@ -23,7 +23,7 @@ class ProductsPageController extends Controller
                     'price_in_dollars' => $product->price_in_dollars,
                     'images' => $product->productImagesForList,
                     'has_variants' => $product->hasPublishedVariants(),
-                    'variants' => $product->variants
+                    'variants' => $product->variants,
                 ];
             }),
         ]);

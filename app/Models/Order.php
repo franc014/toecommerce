@@ -7,13 +7,12 @@ use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\OrderAlreadyConfirmedException;
 use App\Exceptions\PayphoneTransactionErrorException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
-use App\Facades\PayphoneClientTransactionIdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
@@ -50,10 +49,9 @@ class Order extends Model
             throw new CartAlreadyPaidException;
         }
 
-
         $order = self::where('cart_id', $cart->id)
-                        ->where('user_id', $user->id)
-                        ->first();
+            ->where('user_id', $user->id)
+            ->first();
 
         if ($order) {
             return $order;
@@ -69,7 +67,7 @@ class Order extends Model
             'total_computed_taxes' => $cart->total_computed_taxes / 100,
         ]);
 
-        //$order->orderItems()->createMany($cart->items->toArray());
+        // $order->orderItems()->createMany($cart->items->toArray());
 
         foreach ($cart->items as $item) {
             $order->orderItems()->create([
@@ -85,6 +83,7 @@ class Order extends Model
                 'computed_taxes' => $item->computed_taxes,
             ]);
         }
+
         return $order;
     }
 
@@ -98,7 +97,7 @@ class Order extends Model
 
         $payphoneConfirmation = json_decode($payphoneConfirmation, true);
 
-        //ray($payphoneConfirmation);
+        // ray($payphoneConfirmation);
 
         if (Arr::exists($payphoneConfirmation, 'errorCode')) {
             throw new PayphoneTransactionErrorException;
@@ -108,7 +107,7 @@ class Order extends Model
         }
         $this->update([
             'paid_at' => now(),
-            'payphone_metadata' => $payphoneConfirmation
+            'payphone_metadata' => $payphoneConfirmation,
         ]);
     }
 }

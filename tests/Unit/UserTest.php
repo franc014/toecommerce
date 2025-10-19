@@ -25,14 +25,14 @@ test('can have a main billing info entry', function () {
     UserInfoEntry::factory()->create([
         'user_id' => $user->id,
         'type' => 'billing',
-        'is_main' => true
+        'is_main' => true,
     ]);
 
     UserInfoEntry::factory()->create([
-         'user_id' => $user->id,
-         'type' => 'billing',
-         'is_main' => false
-     ]);
+        'user_id' => $user->id,
+        'type' => 'billing',
+        'is_main' => false,
+    ]);
 
     expect($user->billingInfoEntry[0]->is_main)->toBe(1);
     expect($user->billingInfoEntry[1]->is_main)->toBe(0);
@@ -46,14 +46,14 @@ test('can have a main shipping info entry', function () {
     UserInfoEntry::factory()->create([
         'user_id' => $user->id,
         'type' => 'shipping',
-        'is_main' => true
+        'is_main' => true,
     ]);
 
     UserInfoEntry::factory()->create([
-         'user_id' => $user->id,
-         'type' => 'shipping',
-         'is_main' => false
-     ]);
+        'user_id' => $user->id,
+        'type' => 'shipping',
+        'is_main' => false,
+    ]);
 
     expect($user->shippingInfoEntry[0]->is_main)->toBe(1);
     expect($user->shippingInfoEntry[1]->is_main)->toBe(0);

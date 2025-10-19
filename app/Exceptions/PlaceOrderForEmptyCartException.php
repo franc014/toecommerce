@@ -1,6 +1,5 @@
 <?php
+
 namespace App\Exceptions;
 
-class PlaceOrderForEmptyCartException extends \Exception
-{
-}
+class PlaceOrderForEmptyCartException extends \Exception {}

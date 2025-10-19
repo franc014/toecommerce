@@ -3,8 +3,8 @@
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Purchasable;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use App\Utils\ResolvesPurchasable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Exceptions;
 
 test('can resolve a purchasable product class', function () {
@@ -25,7 +25,7 @@ test('can resolve a purchasable product variant class', function () {
     $product = Product::factory()->published()->create();
 
     $variant = ProductVariant::factory()->published()->create([
-        'product_id' => $product->id
+        'product_id' => $product->id,
     ]);
 
     $resolver = new ResolvesPurchasable($variant->id, 'product-variant');

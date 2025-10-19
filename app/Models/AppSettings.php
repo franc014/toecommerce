@@ -14,7 +14,7 @@ class AppSettings extends Model
     protected function casts(): array
     {
         return [
-            'stock_control_mode' => StockControlModes::class
+            'stock_control_mode' => StockControlModes::class,
         ];
     }
 

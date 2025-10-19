@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\OrderConfirmed;
 use App\Mail\OrderConfirmed as OrderConfirmedMailable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendOrderConfirmationNotification

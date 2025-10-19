@@ -17,13 +17,13 @@ test('a product can be added to the cart', function () {
     $taxIVA = Tax::factory()->create([
         'name' => 'IVA',
         'percentage' => 15,
-        'description' => 'IVA 15%'
+        'description' => 'IVA 15%',
     ]);
 
     $taxISD = Tax::factory()->create([
         'name' => 'ISD',
         'percentage' => 10,
-        'description' => 'ISD 10%'
+        'description' => 'ISD 10%',
     ]);
 
     [$product, $cart] = createCartWithoutItem([
@@ -32,7 +32,6 @@ test('a product can be added to the cart', function () {
 
     expect($product)->toBeInstanceOf(Product::class);
     expect($cart->items)->toHaveCount(0);
-
 
     $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
 
@@ -60,7 +59,7 @@ test('a product can be added to the cart', function () {
     expect($cart->fresh()->items[0]->price)->toBe($product->price);
     expect($cart->fresh()->items[0]->computed_taxes)->toBe(4 * $product->price * ($taxIVA->percentage + $taxISD->percentage) / 100);
     expect($cart->fresh()->items[0]->total_with_taxes)->toBe(4 * $product->priceWithTaxes());
-    //expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
+    // expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
 });
 
 test('a product variant can be added to the cart', function () {
@@ -68,13 +67,13 @@ test('a product variant can be added to the cart', function () {
     $taxIVA = Tax::factory()->create([
         'name' => 'IVA',
         'percentage' => 15,
-        'description' => 'IVA 15%'
+        'description' => 'IVA 15%',
     ]);
 
     $taxISD = Tax::factory()->create([
         'name' => 'ISD',
         'percentage' => 10,
-        'description' => 'ISD 10%'
+        'description' => 'ISD 10%',
     ]);
 
     $product = Product::factory()->published()->create();
@@ -115,10 +114,8 @@ test('a product variant can be added to the cart', function () {
     expect($cart->fresh()->items[0]->taxes)->toBe(json_encode($itemTaxes));
     expect($cart->fresh()->items[0]->total_with_taxes)->toBe(4 * $variant->priceWithTaxes());
     expect($cart->fresh()->items[0]->computed_taxes)->toBe(4 * $variant->price * ($taxIVA->percentage + $taxISD->percentage) / 100);
-    //expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
+    // expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
 });
-
-
 
 test('trying to add a non purchasable type to the cart throws an exception', function () {
     $cart = Cart::factory()->create();
@@ -139,7 +136,6 @@ test('can update quantity of a cart item', function () {
         'price' => 50,
     ]);
 
-
     expect($cart->items)->toHaveCount(1);
 
     $newQuantity = 5;
@@ -156,19 +152,18 @@ test('can update quantity of a cart item', function () {
 
 });
 
-
 test('in strict mode, trying to add a product that is out of stock according
 to the quantity in the cart throws an exception', function () {
 
     Exceptions::fake();
 
     [$product, $cart] = createCartWithoutItem([
-       'price' => 50,
-       'stock' => 0
+        'price' => 50,
+        'stock' => 0,
     ]);
 
     AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value
+        'stock_control_mode' => StockControlModes::STRICT->value,
     ]);
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), 1);
@@ -186,12 +181,12 @@ to the quantity in the cart throws an exception', function () {
     Exceptions::fake();
 
     [$variant, $cart] = createCartWithoutItem([
-       'price' => 50,
-       'stock' => 0
+        'price' => 50,
+        'stock' => 0,
     ], true);
 
     AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value
+        'stock_control_mode' => StockControlModes::STRICT->value,
     ]);
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($variant->id, 'product_variant'), 1);
@@ -209,14 +204,14 @@ to the quantity in the cart throws an exception', function () {
     Exceptions::fake();
 
     [$product, $cart] = createCartWithItem([
-       'price' => 50,
-       'stock' => 5
+        'price' => 50,
+        'stock' => 5,
     ]);
 
     $newQuantity = 6;
 
     AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value
+        'stock_control_mode' => StockControlModes::STRICT->value,
     ]);
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), $newQuantity);
@@ -228,22 +223,20 @@ to the quantity in the cart throws an exception', function () {
 
 });
 
-
 test('in strict mode, trying to update a variant that is out of stock according
 to the quantity in the cart throws an exception', function () {
 
     Exceptions::fake();
 
     [$variant, $cart] = createCartWithItem([
-       'price' => 50,
-       'stock' => 5
+        'price' => 50,
+        'stock' => 5,
     ], true);
-
 
     $newQuantity = 6;
 
     AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value
+        'stock_control_mode' => StockControlModes::STRICT->value,
     ]);
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($variant->id, 'product_variant'), $newQuantity);

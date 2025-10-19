@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Cart;
 use App\Models\CartItem;
 
@@ -73,7 +74,6 @@ test('can not get a cart that has been already paid', function () {
     ]))->assertStatus(404);
 });
 
-
 test('a cart can be emptied', function () {
 
     $uiCartId = fake()->uuid();
@@ -88,6 +88,5 @@ test('a cart can be emptied', function () {
     ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(0);
-
 
 });
