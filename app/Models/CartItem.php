@@ -21,6 +21,7 @@ class CartItem extends Model
 
     protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation'];
 
+
     protected function casts(): array
     {
         return [
@@ -33,6 +34,19 @@ class CartItem extends Model
         ];
     }
 
+    protected static function booted():void
+    {
+        static::saved(function (CartItem $cartItem) {
+            $cartItem->cart->updateCartTally();
+
+        });
+
+        static::deleted(function (CartItem $cartItem) {
+            $cartItem->cart->updateCartTally();
+        });
+    }
+
+
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
@@ -42,6 +56,28 @@ class CartItem extends Model
     {
         return $this->morphTo();
     }
+
+    /* private function updateCartTally(Cart $cart): void
+    {
+        $itemsWithoutTaxes = $cart->items->filter(function ($item) {
+            return $item->taxes === null || count(json_decode($item->taxes)) === 0;
+        });
+
+        $itemsWithTaxes = $cart->items->filter(function ($item) {
+            return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
+        });
+
+        $totalWithoutTaxes = $itemsWithoutTaxes->sum('total');
+        $totalWithTaxes = $itemsWithTaxes->sum('total');
+        $totalComputedTaxes = $cart->items->sum('computed_taxes');
+
+        $cart->update([
+            'total_without_taxes' => $totalWithoutTaxes,
+            'total_with_taxes' => $totalWithTaxes,
+            'total_computed_taxes' => $totalComputedTaxes,
+            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes
+        ]);
+    } */
 
     public function scopeAllByProductInOpenCarts($query, $purchasable_id, $purchasable_type)
     {

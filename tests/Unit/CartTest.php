@@ -48,15 +48,7 @@ function createCartWithItem(array $data, $isVariant = false)
             ...$data,
             'product_id' => $product->id,
         ]);
-        /*  $cart = Cart::factory()->has(CartItem::factory()->count(1)->state([
-             'title' => $purchasable->title,
-             'slug' => $purchasable->slug,
-             'price' => $purchasable->price,
-             'quantity' => 4,
-             'total' => 4 * $purchasable->price,
-             'color' => $purchasable->color,
-             'sizes' => $purchasable->sizes
-         ]), 'items')->create(); */
+
     } else {
         $purchasable = $product;
     }
@@ -115,17 +107,21 @@ test('getting a cart item by id', function () {
     expect($cart->itemById($product->id)->id)->toBe($cart->items->first()->id);
 });
 
-test('getting the total without taxes', function () {
 
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
+
+test('getting totals', function () {
+
+    $itemATotalWithTaxes = 120 * (1 + 0.15 + 0.10); //150 // comp: 30
+    $itemBTotalWithTaxes = 40 * (1 + 0.15); // 46// comp 6
+    $itemCTotalWithTaxes = 100; // 100
+
+    $total = 296;
 
     $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
         [
-            'price' => 40.00,
+            'price' => 40,
             'quantity' => 3,
-            'total' => 120.00,
+            'total' => 120,
             'taxes' => json_encode([
                 [
                     'percentage' => 15,
@@ -137,11 +133,12 @@ test('getting the total without taxes', function () {
                 ],
             ]),
             'total_with_taxes' => $itemATotalWithTaxes,
+            'computed_taxes' => 30,
         ],
         [
-            'price' => 20.00,
+            'price' => 20,
             'quantity' => 2,
-            'total' => 40.00,
+            'total' => 40,
             'taxes' => json_encode([
                 [
                     'percentage' => 15,
@@ -149,305 +146,30 @@ test('getting the total without taxes', function () {
                 ],
             ]),
             'total_with_taxes' => $itemBTotalWithTaxes,
+            'computed_taxes' => 6,
         ],
         [
-            'price' => 50.00,
+            'price' => 50,
             'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
+            'total' => 100,
+            'taxes' => json_encode([]),
             'total_with_taxes' => $itemCTotalWithTaxes,
+            'computed_taxes' => 0,
         ]
     )), 'items')->create();
 
-    expect($cart->total_without_taxes)->toBe(10000.0);
+    expect($cart->fresh()->total_without_taxes)->toBe(100.0);
+    expect($cart->fresh()->total_without_taxes_in_dollars)->toBe('$100');
+    expect($cart->fresh()->total_with_taxes)->toBe(160.0);
+    expect($cart->fresh()->total_with_taxes_in_dollars)->toBe('$160');
+    expect($cart->fresh()->total_computed_taxes)->toBe(36.0);
+    expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$36');
+    expect($cart->fresh()->total_amount)->toBe(296.0);
+    expect($cart->fresh()->total_amount_in_dollars)->toBe('$296');
+
 });
 
-test('getting the total without taxes in dollars', function () {
 
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
-        [
-            'price' => 40.00,
-            'quantity' => 3,
-            'total' => 120.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-                [
-                    'percentage' => 10,
-                    'name' => 'ISD',
-                ],
-            ]),
-            'total_with_taxes' => $itemATotalWithTaxes,
-        ],
-        [
-            'price' => 20.00,
-            'quantity' => 2,
-            'total' => 40.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-            ]),
-            'total_with_taxes' => $itemBTotalWithTaxes,
-        ],
-        [
-            'price' => 50.00,
-            'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
-            'total_with_taxes' => $itemCTotalWithTaxes,
-        ]
-    )), 'items')->create();
-
-    expect($cart->total_without_taxes_in_dollars)->toBe('$100');
-});
-
-test('getting the total with taxes', function () {
-
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
-        [
-            'price' => 40.00,
-            'quantity' => 3,
-            'total' => 120.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-                [
-                    'percentage' => 10,
-                    'name' => 'ISD',
-                ],
-            ]),
-            'total_with_taxes' => $itemATotalWithTaxes,
-        ],
-        [
-            'price' => 20.00,
-            'quantity' => 2,
-            'total' => 40.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-            ]),
-            'total_with_taxes' => $itemBTotalWithTaxes,
-        ],
-        [
-            'price' => 50.00,
-            'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
-            'total_with_taxes' => $itemCTotalWithTaxes,
-        ]
-    )), 'items')->create();
-
-    expect($cart->total_with_taxes)->toBe(16000.0);
-});
-
-test('getting the total with taxes in dollars', function () {
-
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
-        [
-            'price' => 40.00,
-            'quantity' => 3,
-            'total' => 120.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-                [
-                    'percentage' => 10,
-                    'name' => 'ISD',
-                ],
-            ]),
-            'total_with_taxes' => $itemATotalWithTaxes,
-        ],
-        [
-            'price' => 20.00,
-            'quantity' => 2,
-            'total' => 40.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-            ]),
-            'total_with_taxes' => $itemBTotalWithTaxes,
-        ],
-        [
-            'price' => 50.00,
-            'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
-            'total_with_taxes' => $itemCTotalWithTaxes,
-        ]
-    )), 'items')->create();
-
-    expect($cart->total_with_taxes_in_dollars)->toBe('$160');
-});
-
-test('getting the total computed taxes', function () {
-    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
-        'price' => 40.00,
-        'quantity' => 3,
-        'total' => 120.00,
-        'total_with_taxes' => 40.00 * (1 + 0.15) * 3,
-        'computed_taxes' => 40.00 * 3 * 0.15,
-    ], [
-        'price' => 50.00,
-        'quantity' => 2,
-        'total' => 100.00,
-        'total_with_taxes' => 50.00 * 2 * (1 + 0.15),
-        'computed_taxes' => 50.00 * 2 * 0.15,
-    ])), 'items')->create();
-
-    $computedTaxes = 40.00 * 3 * 0.15 + 50.00 * 2 * 0.15;
-
-    expect($cart->fresh()->total_computed_taxes)->toBe($computedTaxes * 100);
-});
-
-test('getting the total computed taxes in dollars', function () {
-    $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
-        'price' => 40.00,
-        'quantity' => 3,
-        'total' => 120.00,
-        'total_with_taxes' => 40.00 * (1 + 0.15) * 3,
-        'computed_taxes' => 40.00 * 3 * 0.15,
-    ], [
-        'price' => 50.00,
-        'quantity' => 2,
-        'total' => 100.00,
-        'total_with_taxes' => 50.00 * 2 * (1 + 0.15),
-        'computed_taxes' => 50.00 * 2 * 0.15,
-    ])), 'items')->create();
-
-    $computedTaxes = 40.00 * 3 * 0.15 + 50.00 * 2 * 0.15;
-
-    expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$'.$computedTaxes);
-});
-
-test('getting the cart total amount', function () {
-
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
-        [
-            'price' => 40.00,
-            'quantity' => 3,
-            'total' => 120.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-                [
-                    'percentage' => 10,
-                    'name' => 'ISD',
-                ],
-            ]),
-            'total_with_taxes' => $itemATotalWithTaxes,
-        ],
-        [
-            'price' => 20.00,
-            'quantity' => 2,
-            'total' => 40.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-            ]),
-            'total_with_taxes' => $itemBTotalWithTaxes,
-        ],
-        [
-            'price' => 50.00,
-            'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
-            'total_with_taxes' => $itemCTotalWithTaxes,
-        ]
-    )), 'items')->create();
-
-    expect($cart->total_amount)->toBe(($itemATotalWithTaxes * 100 + $itemBTotalWithTaxes * 100 + $itemCTotalWithTaxes * 100));
-});
-
-test('getting the total in dollars', function () {
-
-    $itemATotalWithTaxes = 120.00 * (1 + 0.15 + 0.10);
-    $itemBTotalWithTaxes = 40.00 * (1 + 0.15);
-    $itemCTotalWithTaxes = 100;
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
-        [
-            'price' => 40.00,
-            'quantity' => 3,
-            'total' => 120.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-                [
-                    'percentage' => 10,
-                    'name' => 'ISD',
-                ],
-            ]),
-            'total_with_taxes' => $itemATotalWithTaxes,
-        ],
-        [
-            'price' => 20.00,
-            'quantity' => 2,
-            'total' => 40.00,
-            'taxes' => json_encode([
-                [
-                    'percentage' => 15,
-                    'name' => 'IVA',
-                ],
-            ]),
-            'total_with_taxes' => $itemBTotalWithTaxes,
-        ],
-        [
-            'price' => 50.00,
-            'quantity' => 2,
-            'total' => 100.00,
-            'taxes' => json_encode([
-
-            ]),
-            'total_with_taxes' => $itemCTotalWithTaxes,
-        ]
-    )), 'items')->create();
-
-    expect($cart->total_in_dollars)->toBe('$'.$itemATotalWithTaxes + $itemBTotalWithTaxes + $itemCTotalWithTaxes);
-});
 
 test('getting the total count of items in the cart', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([

@@ -28,20 +28,20 @@ class CheckoutController extends Controller
             return Inertia::render(
                 'Checkout',
                 [
-
+                    'order' => $order,
                     'billingInfo' => $billingInfo,
                     'shippingInfo' => $shippingInfo,
                     'gatewayInfo' => [
                         // 'payphoneAPIURL' => config('app.payphone_app_url'),
                         'storeId' => config('app.payphone.store_id'),
                         'token' => config('app.payphone.token'),
-                        'clientTransactionId' => (string) Str::ulid(),
-                        'payment' => [
+                        /* 'payment' => [
                             'amount' => $order->total_amount * 100,
                             'amountWithTax' => $order->total_with_taxes * 100,
                             'amountWithoutTax' => $order->total_without_taxes * 100,
                             'tax' => $order->total_computed_taxes * 100,
-                        ],
+                        ], */
+
                     ],
                 ]
             );

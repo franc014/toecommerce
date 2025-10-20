@@ -37,22 +37,37 @@ test('an order is created when visiting the checkout page for the first time', f
         'user_id' => $this->user->id,
     ]);
 
-    $this->actingAs($this->user)
+    $response = $this->actingAs($this->user)
         ->withCookie('cart', $cart->ui_cart_id)
         ->get(route('storefront.checkout'));
 
+    $order = $response->inertiaProps('order');
+
+    $gatewayInfo = $response->inertiaProps('gatewayInfo');
+
     expect($this->user->orders)->toHaveCount(1);
-    expect($this->user->orders->first()->cart_id)->toBe($cart->id);
+    expect($order['id'])->toBe($this->user->orders->first()->id);
+    expect($order['cart_id'])->toBe($cart->id);
+    expect($order['user_id'])->toBe($this->user->id);
+
+    expect($gatewayInfo['storeId'])->toBe(config('app.payphone.store_id'));
+    expect($gatewayInfo['token'])->toBe(config('app.payphone.token'));
+
+
+    expect($cart->fresh()->total_amount)->toBe($order['total_amount']);
+    expect((int) $cart->fresh()->total_with_taxes)->toBe($order['total_with_taxes']);
+    expect($cart->fresh()->total_without_taxes)->toBe($order['total_without_taxes']);
+    expect((int) $cart->fresh()->total_computed_taxes)->toBe($order['total_computed_taxes']);
 
     $this->assertDatabaseHas('orders', [
         'cart_id' => $cart->id,
         'user_id' => $this->user->id,
         'code' => '01HRDBNHHCKNW2AK4Z29SN82T9',
         'paid_at' => null,
-        'total_amount' => $cart->total_amount,
-        'total_with_taxes' => $cart->total_with_taxes,
-        'total_without_taxes' => $cart->total_without_taxes,
-        'total_computed_taxes' => $cart->total_computed_taxes,
+        'total_amount' => $order['total_amount'] * 100,
+        'total_with_taxes' => $order['total_with_taxes'] * 100,
+        'total_without_taxes' => $order['total_without_taxes'] * 100,
+        'total_computed_taxes' => $order['total_computed_taxes'] * 100,
     ]);
 
     $this->assertDatabaseHas('order_items', [
@@ -67,7 +82,9 @@ test('an order is created when visiting the checkout page for the first time', f
         'total' => $cart->items->first()->total * 100,
         'total_with_taxes' => $cart->items->first()->total_with_taxes * 100,
         'computed_taxes' => $cart->items->first()->computed_taxes * 100,
-    ], [
+    ]);
+
+    $this->assertDatabaseHas('order_items', [
         'order_id' => $this->user->orders->first()->id,
         'purchasable_id' => $cart->items->last()->purchasable_id,
         'purchasable_type' => $cart->items->last()->purchasable_type,
@@ -175,7 +192,6 @@ test('guest users should login to access the checkout page', function () {
 
 test('can show the customer information for invoice and shipping', function () {
 
-    PayphoneClientTransactionIdGenerator::shouldReceive('generate')->andReturn('1234567890');
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
 
@@ -220,6 +236,7 @@ test('can show the customer information for invoice and shipping', function () {
     expect($response->inertiaProps('shippingInfo')['id'])->toBe($shippingInfo->id);
 
 });
+
 
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Money;
 use App\Exceptions\ProductOutOfStockException;
 use App\Traits\MoneyFormat;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,13 +17,17 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['total_without_taxes', 'total_without_taxes_in_dollars', 'total_with_taxes', 'total_with_taxes_in_dollars', 'items_count', 'total_computed_taxes', 'total_computed_taxes_in_dollars', 'total_amount', 'total_in_dollars'];
+    protected $appends = ['total_without_taxes_in_dollars', 'total_with_taxes_in_dollars', 'items_count', 'total_computed_taxes_in_dollars', 'total_amount_in_dollars'];
 
     protected function casts(): array
     {
         return [
             'cart_items' => 'array',
             'paid_at' => 'datetime: Y-m-d H:i:s',
+            'total_without_taxes' => Money::class,
+            'total_with_taxes' => Money::class,
+            'total_computed_taxes' => Money::class,
+            'total_amount' => Money::class,
 
         ];
     }
@@ -100,6 +105,28 @@ class Cart extends Model
         $item->delete();
     }
 
+    public function updateCartTally(): void
+    {
+        $itemsWithoutTaxes = $this->items->filter(function ($item) {
+            return $item->taxes === null || count(json_decode($item->taxes)) === 0;
+        });
+
+        $itemsWithTaxes = $this->items->filter(function ($item) {
+            return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
+        });
+
+        $totalWithoutTaxes = $itemsWithoutTaxes->sum('total');
+        $totalWithTaxes = $itemsWithTaxes->sum('total');
+        $totalComputedTaxes = $this->items->sum('computed_taxes');
+
+        $this->update([
+            'total_without_taxes' => $totalWithoutTaxes,
+            'total_with_taxes' => $totalWithTaxes,
+            'total_computed_taxes' => $totalComputedTaxes,
+            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes
+        ]);
+    }
+
     private function productOutOfStockCheck(array $data): void
     {
 
@@ -117,7 +144,7 @@ class Cart extends Model
         }
     }
 
-    protected function totalWithTaxes(): Attribute
+    /* protected function totalWithTaxes(): Attribute
     {
         return Attribute::make(
             get: function () {
@@ -128,9 +155,9 @@ class Cart extends Model
                 return $itemsWithTaxes->sum('total') * 100;
             }
         );
-    }
+    } */
 
-    protected function totalWithoutTaxes(): Attribute
+    /* protected function totalWithoutTaxes(): Attribute
     {
 
         return Attribute::make(
@@ -142,48 +169,43 @@ class Cart extends Model
                 return $itemsWithoutTaxes->sum('total') * 100;
             }
         );
-    }
+    } */
 
     protected function totalWithoutTaxesInDollars(): Attribute
     {
 
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalWithoutTaxes / 100)
-        );
-    }
-
-    protected function totalComputedTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('computed_taxes') * 100 : 0
+            get: fn () => $this->toDollars($this->total_without_taxes)
         );
     }
 
     protected function totalWithTaxesInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalWithTaxes / 100)
+            get: fn () => $this->toDollars($this->total_with_taxes)
         );
     }
+
+    /* protected function totalComputedTaxes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->items ? $this->items->sum('computed_taxes') * 100 : 0
+        );
+    } */
+
+
 
     protected function totalComputedTaxesInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->toDollars($this->totalComputedTaxes / 100)
+            get: fn () => $this->toDollars($this->total_computed_taxes)
         );
     }
 
-    protected function totalAmount(): Attribute
+    protected function totalAmountInDollars(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items ? ($this->items->sum('total_with_taxes') * 100) : 0
-        );
-    }
-
-    protected function totalInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->total_amount / 100)
+            get: fn () => $this->toDollars($this->total_amount)
         );
     }
 

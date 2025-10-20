@@ -61,10 +61,10 @@ class Order extends Model
             'user_id' => $user->id,
             'cart_id' => $cart->id,
             'code' => (string) Str::ulid(),
-            'total_amount' => $cart->total_amount / 100,
-            'total_with_taxes' => $cart->total_with_taxes / 100,
-            'total_without_taxes' => $cart->total_without_taxes / 100,
-            'total_computed_taxes' => $cart->total_computed_taxes / 100,
+            'total_amount' => $cart->total_amount,
+            'total_with_taxes' => $cart->total_with_taxes,
+            'total_without_taxes' => $cart->total_without_taxes,
+            'total_computed_taxes' => $cart->total_computed_taxes,
         ]);
 
         // $order->orderItems()->createMany($cart->items->toArray());

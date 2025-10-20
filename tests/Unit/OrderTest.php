@@ -25,20 +25,49 @@ test('can create an order', function () {
         return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
     });
     $user = User::factory()->create();
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+    $cart = Cart::factory()->create();
 
-    $order = Order::placeFor($user, $cart);
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 100,
+        'quantity' => 2,
+        'taxes' => json_encode([
+            ['name' => 'IVA',
+            'percentage' => 15],
+            ['name' => 'ISD',
+            'percentage' => 10]
+        ]),
+        'total' => 200,
+        'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
+        'computed_taxes' => 2 * 100 * (0.15 + 0.10), //50
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 30,
+        'quantity' => 3,
+        'taxes' => json_encode([
+            ['name' => 'IVA',
+            'percentage' => 15],
+        ]),
+        'total' => 90,
+        'total_with_taxes' => 3 * 30 * (1 + 0.15),
+        'computed_taxes' => 3 * 30 * (0.15),
+    ]);
+
+
+    $order = Order::placeFor($user, $cart->fresh());
 
     expect($order)->toBeInstanceOf(Order::class);
     expect($order->cart_id)->toBe($cart->id);
     expect($order->user_id)->toBe($user->id);
     expect($order->code)->toBe('01HRDBNHHCKNW2AK4Z29SN82T9');
     expect($order->paid_at)->toBeNull();
-    expect($order->total_amount * 100)->toBe($cart->total_amount);
-    // expect($order->total_with_taxes)->toBe($cart->total_with_taxes / 100);
-    expect($order->total_without_taxes)->toBe($cart->total_without_taxes / 100);
-    expect($order->total_computed_taxes)->toBe($cart->total_computed_taxes / 100);
 
+    expect($order->total_amount)->toBe($cart->fresh()->total_amount);
+    expect($order->total_with_taxes)->toBe($cart->fresh()->total_with_taxes);
+    expect($order->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
+    expect($order->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
     expect($order->paid_at)->toBeNull();
 });
 

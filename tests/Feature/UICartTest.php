@@ -48,13 +48,13 @@ test('can get a cart from the ui', function () {
     ]))->assertStatus(200)
         ->assertJson([
             'ui_cart_id' => $uiCartId,
-            'items' => $cart->items->toArray(),
+            'items' => $cart->fresh()->items->toArray(),
             'cart_aggregation' => [
-                'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
-                'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
-                'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
-                'total_in_dollars' => $cart->total_in_dollars,
-                'items_count' => $cart->items_count,
+                'total_without_taxes_in_dollars' => $cart->fresh()->total_without_taxes_in_dollars,
+                'total_with_taxes_in_dollars' => $cart->fresh()->total_with_taxes_in_dollars,
+                'total_computed_taxes_in_dollars' => $cart->fresh()->total_computed_taxes_in_dollars,
+                'total_in_dollars' => $cart->fresh()->total_amount_in_dollars,
+                'items_count' => $cart->fresh()->items_count,
             ],
         ]);
 });

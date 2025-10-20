@@ -56,7 +56,7 @@ const quantity = ref(item.value.quantity);
 const changeQuantity = (value: number) => {
     quantity.value = value;
 
-    const type = item.value.purchasable_type === 'App\Models\Product' ? 'product' : 'product-variant';
+    const type = item.value.purchasable_type === 'App\\Models\\Product' ? 'product' : 'product-variant';
 
     cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,

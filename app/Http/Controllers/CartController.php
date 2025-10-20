@@ -36,7 +36,7 @@ class CartController extends Controller
             'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
             'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
             'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
-            'total_in_dollars' => $cart->total_in_dollars,
+            'total_in_dollars' => $cart->total_amount_in_dollars,
             'items_count' => $cart->items_count,
         ]];
     }
