@@ -115,7 +115,6 @@ test('getting totals', function () {
     $itemBTotalWithTaxes = 40 * (1 + 0.15); // 46// comp 6
     $itemCTotalWithTaxes = 100; // 100
 
-    $total = 296;
 
     $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
         [
@@ -193,11 +192,14 @@ it('is empty', function () {
     expect($cart->fresh()->items_count)->toBe(0);
 });
 
-test('a cart can have an order', function () {
+test('a cart can have an unpaid order', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
     $order = Order::placeFor(User::factory()->create(), $cart);
     expect($cart->order->id)->toBe($order->id);
+    expect($cart->hasUnpaidOrder())->toBeTrue();
 });
+
+
 
 test('a cart is paid', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([

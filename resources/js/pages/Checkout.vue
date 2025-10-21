@@ -15,7 +15,7 @@
                                 size="icon"
                                 class="z-10 shrink-0 rounded-full"
                                 :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
-                                :disabled="state !== 'completed' && !user.has_billing_info"
+                                :disabled="state !== 'completed' && !user.has_billing_info && !user.has_shipping_info"
                             >
                                 <Check v-if="state === 'completed'" class="size-5" />
                                 <Circle v-if="state === 'active'" />

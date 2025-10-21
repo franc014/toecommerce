@@ -94,8 +94,11 @@ class Cart extends Model
         $item->total = $item->price * $item->quantity;
         $item->total_with_taxes = $quantity * $item->price * (1 + $totalTaxes / 100);
         $item->computed_taxes = $item->total_with_taxes - $item->total;
-
         $item->save();
+
+        if ($this->hasUnpaidOrder()) {
+            $this->order->updateItem($item, $quantity);
+        }
 
     }
 
@@ -144,33 +147,6 @@ class Cart extends Model
         }
     }
 
-    /* protected function totalWithTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                $itemsWithTaxes = $this->items->filter(function ($item) {
-                    return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
-                });
-
-                return $itemsWithTaxes->sum('total') * 100;
-            }
-        );
-    } */
-
-    /* protected function totalWithoutTaxes(): Attribute
-    {
-
-        return Attribute::make(
-            get: function () {
-                $itemsWithoutTaxes = $this->items->filter(function ($item) {
-                    return $item->taxes === null || count(json_decode($item->taxes)) === 0;
-                });
-
-                return $itemsWithoutTaxes->sum('total') * 100;
-            }
-        );
-    } */
-
     protected function totalWithoutTaxesInDollars(): Attribute
     {
 
@@ -185,15 +161,6 @@ class Cart extends Model
             get: fn () => $this->toDollars($this->total_with_taxes)
         );
     }
-
-    /* protected function totalComputedTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->items ? $this->items->sum('computed_taxes') * 100 : 0
-        );
-    } */
-
-
 
     protected function totalComputedTaxesInDollars(): Attribute
     {
@@ -236,6 +203,11 @@ class Cart extends Model
     {
         $this->paid_at = now();
         $this->save();
+    }
+
+    public function hasUnpaidOrder(): bool
+    {
+        return $this->order()->whereNull('paid_at')->exists();
     }
 
     public function isPaid(): bool

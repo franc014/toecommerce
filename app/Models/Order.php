@@ -57,6 +57,8 @@ class Order extends Model
             return $order;
         }
 
+        //ray($cart->fresh()->total_amount);
+
         $order = self::create([
             'user_id' => $user->id,
             'cart_id' => $cart->id,
@@ -73,6 +75,7 @@ class Order extends Model
             $order->orderItems()->create([
                 'purchasable_id' => $item->purchasable_id,
                 'purchasable_type' => $item->purchasable_type,
+                'cart_item_id' => $item->id,
                 'title' => $item->title,
                 'slug' => $item->slug,
                 'quantity' => $item->quantity,
@@ -85,6 +88,64 @@ class Order extends Model
         }
 
         return $order;
+    }
+
+    public function addItem(CartItem $item)
+    {
+        $this->orderItems()->create([
+            'purchasable_id' => $item->purchasable_id,
+            'purchasable_type' => $item->purchasable_type,
+            'cart_item_id' => $item->id,
+            'title' => $item->title,
+            'slug' => $item->slug,
+            'quantity' => $item->quantity,
+            'price' => $item->price,
+            'taxes' => $item->taxes,
+            'total' => $item->total,
+            'total_with_taxes' => $item->total_with_taxes,
+            'computed_taxes' => $item->computed_taxes,
+        ]);
+    }
+
+
+    public function updateItem(CartItem $cartItem): void
+    {
+        $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
+        $item->quantity = $cartItem->quantity;
+        $item->total = $cartItem->total;
+        $item->total_with_taxes = $cartItem->total_with_taxes;
+        $item->computed_taxes = $cartItem->computed_taxes;
+        $item->save();
+    }
+
+    public function removeItem(CartItem $cartItem): void
+    {
+        //ray($this->orderItems);
+        $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
+        $item->delete();
+    }
+
+
+    public function updateOrderTally(): void
+    {
+        $itemsWithoutTaxes = $this->orderItems->filter(function ($item) {
+            return $item->taxes === null || count(json_decode($item->taxes)) === 0;
+        });
+
+        $itemsWithTaxes = $this->orderItems->filter(function ($item) {
+            return $item->taxes !== null && count(json_decode($item->taxes)) > 0;
+        });
+
+        $totalWithoutTaxes = $itemsWithoutTaxes->sum('total');
+        $totalWithTaxes = $itemsWithTaxes->sum('total');
+        $totalComputedTaxes = $this->orderItems->sum('computed_taxes');
+
+        $this->update([
+            'total_without_taxes' => $totalWithoutTaxes,
+            'total_with_taxes' => $totalWithTaxes,
+            'total_computed_taxes' => $totalComputedTaxes,
+            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes
+        ]);
     }
 
     public function isConfirmed(): bool

@@ -2,10 +2,10 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\User;
 
 test('can remove an item from the cart', function () {
-
-    $this->withoutExceptionHandling();
 
     $uiCartId = fake()->uuid();
     $cart = Cart::factory()->create([
@@ -47,8 +47,6 @@ test('can remove an item from the cart', function () {
     expect($cart->fresh()->total_computed_taxes)->toBe(12.0);
 
 
-    $itemToRemove = $cart->items->first();
-
     $this->post(route('cart.items.remove', [
         'ui_cart_id' => $uiCartId,
         'item_id' => $cartItemB->id,
@@ -60,9 +58,78 @@ test('can remove an item from the cart', function () {
     expect($cart->fresh()->total_without_taxes)->toBe(0.0);
     expect($cart->fresh()->total_computed_taxes)->toBe(3.0);
 
+});
+
+it('removes an item from order if it is removed from cart', function () {
+    $user = User::factory()->create();
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+        'user_id' => $user->id
+    ]);
+
+    $cartItemA = CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 10,
+        'quantity' => 2,
+        'total' => 20,
+        'taxes' => json_encode([
+            [
+            'name' => 'IVA',
+            'percentage' => 15
+            ]
+        ]),
+        'total_with_taxes' => 2 * 10 * (1 + 0.15), // 23
+        'computed_taxes' => 2 * 10 * 0.15, // 3
+    ]);
+
+    $cartItemB = CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 20,
+        'quantity' => 3,
+        'total' => 60,
+        'taxes' => json_encode([[
+            'name' => 'IVA',
+            'percentage' => 15
+        ]]),
+        'total_with_taxes' => 3 * 20 * (1 + 0.15), // 69
+        'computed_taxes' => 3 * 20 * 0.15, // 9
+    ]);
+
+    $order = Order::placeFor($user, $cart);
+
+    expect($order->orderItems)->toHaveCount(2);
+
+    expect($order->orderItems[0]->id)->toBe($order->orderItems[0]->cart_item_id);
+    expect($order->orderItems[1]->id)->toBe($order->orderItems[1]->cart_item_id);
+
+    expect($order->fresh()->total_amount)->toBe(92.0);
+    expect($order->fresh()->total_with_taxes)->toBe(80.0);
+    expect($order->fresh()->total_without_taxes)->toBe(0.0);
+    expect($order->fresh()->total_computed_taxes)->toBe(12.0);
+
+    $this->post(route('cart.items.remove', [
+        'ui_cart_id' => $uiCartId,
+        'item_id' => $cartItemB->id,
+    ]))->assertStatus(200);
+
+    expect($order->fresh()->orderItems)->toHaveCount(1);
+    expect($order->fresh()->total_amount)->toBe(23.0);
+    expect($order->fresh()->total_with_taxes)->toBe(20.0);
+    expect($order->fresh()->total_without_taxes)->toBe(0.0);
+    expect($order->fresh()->total_computed_taxes)->toBe(3.0);
 
 
+    //expect($order->fresh()->total_amount)->toBe(23);
+    //expect($order->fresh()->orderItems)->toHaveCount(1);
 
+    //expect($order->fresh()->total_amount)->toBe(23);
+
+    /* expect($order->fresh()->orderItems)->toHaveCount(1);
+    expect($order->fresh()->total_amount)->toBe(23.0);
+    expect($order->fresh()->total_with_taxes)->toBe(20.0);
+    expect($order->fresh()->total_without_taxes)->toBe(0.0);
+    expect($order->fresh()->total_computed_taxes)->toBe(3.0); */
 });
 
 test('can not remove an item from the cart if the cart does not exist', function () {

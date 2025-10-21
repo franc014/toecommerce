@@ -25,7 +25,9 @@ test('can create an order', function () {
         return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
     });
     $user = User::factory()->create();
-    $cart = Cart::factory()->create();
+    $cart = Cart::factory()->create([
+        'user_id' => $user->id,
+    ]);
 
     CartItem::factory()->create([
         'cart_id' => $cart->id,
@@ -81,6 +83,7 @@ test('can create order items', function () {
     expect($order->orderItems[0]->order_id)->toBe($order->id);
     expect($order->orderItems[0]->purchasable_id)->toBe($cart->items[0]->purchasable_id);
     expect($order->orderItems[0]->purchasable_type)->toBe($cart->items[0]->purchasable_type);
+    expect($order->orderItems[0]->cart_item_id)->toBe($cart->items[0]->id);
     expect($order->orderItems[0]->title)->toBe($cart->items[0]->title);
     expect($order->orderItems[0]->slug)->toBe($cart->items[0]->slug);
     expect($order->orderItems[0]->taxes)->toBe($cart->items[0]->taxes);
@@ -93,6 +96,7 @@ test('can create order items', function () {
     expect($order->orderItems[1]->order_id)->toBe($order->id);
     expect($order->orderItems[1]->purchasable_id)->toBe($cart->items[1]->purchasable_id);
     expect($order->orderItems[1]->purchasable_type)->toBe($cart->items[1]->purchasable_type);
+    expect($order->orderItems[1]->cart_item_id)->toBe($cart->items[1]->id);
     expect($order->orderItems[1]->title)->toBe($cart->items[1]->title);
     expect($order->orderItems[1]->slug)->toBe($cart->items[1]->slug);
     expect($order->orderItems[1]->taxes)->toBe($cart->items[1]->taxes);
@@ -101,6 +105,102 @@ test('can create order items', function () {
     expect($order->orderItems[1]->computed_taxes)->toBe($cart->items[1]->computed_taxes);
     expect($order->orderItems[1]->price)->toBe($cart->items[1]->price);
     expect($order->orderItems[1]->quantity)->toBe($cart->items[1]->quantity);
+
+});
+
+
+test('can add a new order item', function () {
+
+    $user = User::factory()->create();
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'user_id' => $user->id,
+    ]);
+
+    $order = Order::placeFor($user, $cart->fresh());
+
+
+    $newItem = CartItem::factory()->create([
+        'cart_id' => $cart->id,
+    ]);
+
+    expect($order->orderItems)->toHaveCount(3);
+
+    expect($order->orderItems[2]->order_id)->toBe($order->id);
+    expect($order->orderItems[2]->purchasable_id)->toBe($newItem->purchasable_id);
+    expect($order->orderItems[2]->purchasable_type)->toBe($newItem->purchasable_type);
+    expect($order->orderItems[2]->cart_item_id)->toBe($newItem->id);
+    expect($order->orderItems[2]->title)->toBe($newItem->title);
+    expect($order->orderItems[2]->slug)->toBe($newItem->slug);
+    expect($order->orderItems[2]->taxes)->toBe($newItem->taxes);
+    expect($order->orderItems[2]->total)->toBe($newItem->total);
+    expect($order->orderItems[2]->total_with_taxes)->toBe($newItem->total_with_taxes);
+    expect($order->orderItems[2]->computed_taxes)->toBe($newItem->computed_taxes);
+    expect($order->orderItems[2]->price)->toBe($newItem->price);
+    expect($order->orderItems[2]->quantity)->toBe($newItem->quantity);
+
+    expect($order->fresh()->total_amount)->toBe($cart->fresh()->total_amount);
+    expect($order->fresh()->total_with_taxes)->toBe($cart->fresh()->total_with_taxes);
+    expect($order->fresh()->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
+    expect($order->fresh()->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
+    expect($order->fresh()->paid_at)->toBeNull();
+
+});
+
+test('can update an order item', function () {
+
+    $user = User::factory()->create();
+    $cart = Cart::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $item = CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'price' => 100,
+        'quantity' => 2,
+        'taxes' => json_encode(
+            [
+                [
+                    'name' => 'IVA',
+                    'percentage' => 15
+                ]
+            ],
+        ),
+        'total' => 200,
+        'total_with_taxes' => 200 * (1 + 0.15),
+        'computed_taxes' => 200 * 0.15
+
+    ]);
+
+    $order = Order::placeFor($user, $cart->fresh());
+
+    $newQuantity = 3;
+
+    $item->quantity = $newQuantity;
+    $item->total = $newQuantity * $item->price;
+    $item->total_with_taxes = $newQuantity * $item->price * (1 + 0.15);
+    $item->computed_taxes = $item->total_with_taxes - $item->total;
+    $item->save();
+
+    expect($order->orderItems)->toHaveCount(1);
+
+    expect($order->orderItems[0]->order_id)->toBe($order->id);
+    expect($order->orderItems[0]->purchasable_id)->toBe($item->purchasable_id);
+    expect($order->orderItems[0]->purchasable_type)->toBe($item->purchasable_type);
+    expect($order->orderItems[0]->cart_item_id)->toBe($item->id);
+    expect($order->orderItems[0]->title)->toBe($item->title);
+    expect($order->orderItems[0]->slug)->toBe($item->slug);
+    expect($order->orderItems[0]->taxes)->toBe($item->taxes);
+    expect($order->orderItems[0]->total)->toBe($item->total);
+    expect($order->orderItems[0]->total_with_taxes)->toBe($item->total_with_taxes);
+    expect($order->orderItems[0]->computed_taxes)->toBe($item->computed_taxes);
+    expect($order->orderItems[0]->price)->toBe($item->price);
+    expect($order->orderItems[0]->quantity)->toBe($newQuantity);
+
+    expect($order->fresh()->total_amount)->toBe($item->total_with_taxes);
+    expect($order->fresh()->total_with_taxes)->toBe($item->total);
+    expect($order->fresh()->total_without_taxes)->toBe(0.0);
+    expect($order->fresh()->paid_at)->toBeNull();
+
 
 });
 

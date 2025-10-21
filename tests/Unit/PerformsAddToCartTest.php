@@ -4,9 +4,11 @@ use App\Enums\StockControlModes;
 use App\Exceptions\ProductOutOfStockException;
 use App\Models\AppSettings;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
+use App\Models\User;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -30,10 +32,10 @@ test('a product can be added to the cart', function () {
         'price' => 50,
     ]);
 
+    $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
+
     expect($product)->toBeInstanceOf(Product::class);
     expect($cart->items)->toHaveCount(0);
-
-    $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), 4);
 
@@ -61,6 +63,35 @@ test('a product can be added to the cart', function () {
     expect($cart->fresh()->items[0]->total_with_taxes)->toBe(4 * $product->priceWithTaxes());
     // expect($cart->fresh()->items[0]->image)->toBe('product.jpg');
 });
+
+test('a product added to the cart is also added to an existing unpaid order', function () {
+
+    $user = User::factory()->create();
+
+    [$product, $cart] = createCartWithItem([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 50,
+        'user_id' => $user->id,
+    ]);
+
+    expect($cart->items)->toHaveCount(1);
+
+    $order = Order::placeFor($user, $cart);
+
+    expect($order->orderItems)->toHaveCount(1);
+
+    $productToAdd = Product::factory()->published()->create();
+
+    $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($productToAdd->id, 'product'), 2);
+
+    $addsToCart->handle();
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($order->fresh()->orderItems)->toHaveCount(2);
+
+});
+
 
 test('a product variant can be added to the cart', function () {
 
@@ -151,6 +182,47 @@ test('can update quantity of a cart item', function () {
     expect($cart->fresh()->items[0]->computed_taxes)->toBe($newQuantity * $product->price * $product->taxes->sum('percentage') / 100);
 
 });
+
+
+it('updates order item quantity after updating quantity of a cart item', function () {
+
+    $user = User::factory()->create();
+
+
+    [$product, $cart] = createCartWithItem([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 50,
+    ]);
+
+    $cart->user_id = $user->id;
+    $cart->save();
+
+    $order = Order::placeFor($user, $cart);
+
+    expect($cart->items)->toHaveCount(1);
+    expect($order->orderItems)->toHaveCount(1);
+
+    $newQuantity = 5;
+
+    $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), $newQuantity);
+
+    $cartItem = $addsToCart->handle();
+
+    expect($order->fresh()->orderItems)->toHaveCount(1);
+    expect($order->fresh()->orderItems[0]->quantity)->toBe($newQuantity);
+    expect($order->fresh()->orderItems[0]->total)->toBe($cartItem->total);
+    expect($order->fresh()->orderItems[0]->total_with_taxes)->toBe($cartItem->total_with_taxes);
+
+    expect($order->fresh()->total_amount)->toBe($cart->fresh()->total_amount);
+    expect($order->fresh()->total_with_taxes)->toBe($cart->fresh()->total_with_taxes);
+    expect($order->fresh()->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
+    expect($order->fresh()->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
+    expect($order->fresh()->paid_at)->toBeNull();
+
+});
+
+
 
 test('in strict mode, trying to add a product that is out of stock according
 to the quantity in the cart throws an exception', function () {

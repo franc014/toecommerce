@@ -36,14 +36,31 @@ class CartItem extends Model
 
     protected static function booted():void
     {
+
+        static::created(function (CartItem $cartItem) {
+            if ($cartItem->cart->hasUnpaidOrder()) {
+                $cartItem->cart->order->addItem($cartItem);
+            }
+        });
+
+        static::updated(function (CartItem $cartItem) {
+            if ($cartItem->cart->hasUnpaidOrder()) {
+                $cartItem->cart->order->updateItem($cartItem);
+            }
+        });
+
         static::saved(function (CartItem $cartItem) {
             $cartItem->cart->updateCartTally();
-
         });
 
         static::deleted(function (CartItem $cartItem) {
             $cartItem->cart->updateCartTally();
+            if ($cartItem->cart->hasUnpaidOrder()) {
+                $cartItem->cart->order->updateOrderTally();
+            }
         });
+
+
     }
 
 

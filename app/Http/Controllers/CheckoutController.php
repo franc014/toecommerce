@@ -25,6 +25,8 @@ class CheckoutController extends Controller
             $cart->assingUser(auth()->user());
             $order = Order::placeFor(auth()->user(), $cart);
 
+            ray($order->getRawOriginal('total_amount'));
+
             return Inertia::render(
                 'Checkout',
                 [
@@ -35,12 +37,12 @@ class CheckoutController extends Controller
                         // 'payphoneAPIURL' => config('app.payphone_app_url'),
                         'storeId' => config('app.payphone.store_id'),
                         'token' => config('app.payphone.token'),
-                        /* 'payment' => [
-                            'amount' => $order->total_amount * 100,
-                            'amountWithTax' => $order->total_with_taxes * 100,
-                            'amountWithoutTax' => $order->total_without_taxes * 100,
-                            'tax' => $order->total_computed_taxes * 100,
-                        ], */
+                        'payment' => [
+                            'amount' => $order->getRawOriginal('total_amount'),
+                            'amountWithTax' =>  $order->getRawOriginal('total_with_taxes'),
+                            'amountWithoutTax' =>  $order->getRawOriginal('total_without_taxes'),
+                            'tax' =>  $order->getRawOriginal('total_computed_taxes'),
+                        ],
 
                     ],
                 ]

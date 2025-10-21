@@ -16,7 +16,9 @@ class PerformsAddsToCart
     /**
      * Create a new class instance.
      */
-    public function __construct(private Cart $cart, private ResolvesPurchasable $resolver, private int $quantity) {}
+    public function __construct(private Cart $cart, private ResolvesPurchasable $resolver, private int $quantity)
+    {
+    }
 
     private function setNumbersData(): void
     {
@@ -44,7 +46,6 @@ class PerformsAddsToCart
             $this->model = $this->resolver->resolve();
             $this->setPurchasableData();
             $this->setNumbersData();
-
             return $this->cart->addOrUpdateItem($this->getData());
         } catch (BindingResolutionException $e) {
             throw $e;
