@@ -39,6 +39,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function hasItems(): bool
+    {
+        return $this->orderItems()->count() > 0;
+    }
+
     public static function placeFor(User $user, Cart $cart)
     {
         if ($cart->isEmpty()) {
@@ -57,8 +62,6 @@ class Order extends Model
             return $order;
         }
 
-        //ray($cart->fresh()->total_amount);
-
         $order = self::create([
             'user_id' => $user->id,
             'cart_id' => $cart->id,
@@ -68,8 +71,6 @@ class Order extends Model
             'total_without_taxes' => $cart->total_without_taxes,
             'total_computed_taxes' => $cart->total_computed_taxes,
         ]);
-
-        // $order->orderItems()->createMany($cart->items->toArray());
 
         foreach ($cart->items as $item) {
             $order->orderItems()->create([
@@ -107,7 +108,6 @@ class Order extends Model
         ]);
     }
 
-
     public function updateItem(CartItem $cartItem): void
     {
         $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
@@ -120,11 +120,10 @@ class Order extends Model
 
     public function removeItem(CartItem $cartItem): void
     {
-        //ray($this->orderItems);
+        // ray($this->orderItems);
         $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
         $item->delete();
     }
-
 
     public function updateOrderTally(): void
     {
@@ -144,8 +143,13 @@ class Order extends Model
             'total_without_taxes' => $totalWithoutTaxes,
             'total_with_taxes' => $totalWithTaxes,
             'total_computed_taxes' => $totalComputedTaxes,
-            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes
+            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes,
         ]);
+    }
+
+    public function cancel(): void
+    {
+        $this->delete();
     }
 
     public function isConfirmed(): bool

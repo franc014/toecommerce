@@ -35,13 +35,13 @@ test('can create an order', function () {
         'quantity' => 2,
         'taxes' => json_encode([
             ['name' => 'IVA',
-            'percentage' => 15],
+                'percentage' => 15],
             ['name' => 'ISD',
-            'percentage' => 10]
+                'percentage' => 10],
         ]),
         'total' => 200,
         'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
-        'computed_taxes' => 2 * 100 * (0.15 + 0.10), //50
+        'computed_taxes' => 2 * 100 * (0.15 + 0.10), // 50
     ]);
 
     CartItem::factory()->create([
@@ -50,13 +50,12 @@ test('can create an order', function () {
         'quantity' => 3,
         'taxes' => json_encode([
             ['name' => 'IVA',
-            'percentage' => 15],
+                'percentage' => 15],
         ]),
         'total' => 90,
         'total_with_taxes' => 3 * 30 * (1 + 0.15),
         'computed_taxes' => 3 * 30 * (0.15),
     ]);
-
 
     $order = Order::placeFor($user, $cart->fresh());
 
@@ -108,7 +107,6 @@ test('can create order items', function () {
 
 });
 
-
 test('can add a new order item', function () {
 
     $user = User::factory()->create();
@@ -117,7 +115,6 @@ test('can add a new order item', function () {
     ]);
 
     $order = Order::placeFor($user, $cart->fresh());
-
 
     $newItem = CartItem::factory()->create([
         'cart_id' => $cart->id,
@@ -161,13 +158,13 @@ test('can update an order item', function () {
             [
                 [
                     'name' => 'IVA',
-                    'percentage' => 15
-                ]
+                    'percentage' => 15,
+                ],
             ],
         ),
         'total' => 200,
         'total_with_taxes' => 200 * (1 + 0.15),
-        'computed_taxes' => 200 * 0.15
+        'computed_taxes' => 200 * 0.15,
 
     ]);
 
@@ -200,7 +197,6 @@ test('can update an order item', function () {
     expect($order->fresh()->total_with_taxes)->toBe($item->total);
     expect($order->fresh()->total_without_taxes)->toBe(0.0);
     expect($order->fresh()->paid_at)->toBeNull();
-
 
 });
 

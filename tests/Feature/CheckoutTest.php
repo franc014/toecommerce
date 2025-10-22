@@ -1,6 +1,5 @@
 <?php
 
-use App\Facades\PayphoneClientTransactionIdGenerator;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -53,7 +52,6 @@ test('an order is created when visiting the checkout page for the first time', f
     expect($gatewayInfo['storeId'])->toBe(config('app.payphone.store_id'));
     expect($gatewayInfo['token'])->toBe(config('app.payphone.token'));
 
-
     expect($cart->fresh()->total_amount)->toBe($order['total_amount']);
     expect((int) $cart->fresh()->total_with_taxes)->toBe($order['total_with_taxes']);
     expect($cart->fresh()->total_without_taxes)->toBe($order['total_without_taxes']);
@@ -98,7 +96,6 @@ test('an order is created when visiting the checkout page for the first time', f
         'computed_taxes' => $cart->items->last()->computed_taxes * 100,
     ]);
 
-
 });
 
 test('can not create order if cart is empty', function () {
@@ -122,7 +119,6 @@ test('can not create order if cart is empty', function () {
 });
 
 test('can not create order if cart has already been paid', function () {
-
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
         'paid_at' => now()->subDay(),
@@ -188,10 +184,7 @@ test('guest users should login to access the checkout page', function () {
         ->assertRedirect(route('login'));
 });
 
-
-
 test('can show the customer information for invoice and shipping', function () {
-
 
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
 
@@ -236,9 +229,6 @@ test('can show the customer information for invoice and shipping', function () {
     expect($response->inertiaProps('shippingInfo')['id'])->toBe($shippingInfo->id);
 
 });
-
-
-
 
 test('shows billing information form if user has no billing info', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();

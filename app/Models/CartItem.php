@@ -21,7 +21,6 @@ class CartItem extends Model
 
     protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation'];
 
-
     protected function casts(): array
     {
         return [
@@ -34,7 +33,7 @@ class CartItem extends Model
         ];
     }
 
-    protected static function booted():void
+    protected static function booted(): void
     {
 
         static::created(function (CartItem $cartItem) {
@@ -57,12 +56,13 @@ class CartItem extends Model
             $cartItem->cart->updateCartTally();
             if ($cartItem->cart->hasUnpaidOrder()) {
                 $cartItem->cart->order->updateOrderTally();
+                if (! $cartItem->cart->order->hasItems()) {
+                    $cartItem->cart->order->cancel();
+                }
             }
         });
 
-
     }
-
 
     public function cart(): BelongsTo
     {

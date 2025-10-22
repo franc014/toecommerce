@@ -7,14 +7,10 @@ use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
 
@@ -24,8 +20,6 @@ class CheckoutController extends Controller
             $shippingInfo = auth()->user()->mainShippingInfoEntry();
             $cart->assingUser(auth()->user());
             $order = Order::placeFor(auth()->user(), $cart);
-
-            ray($order->getRawOriginal('total_amount'));
 
             return Inertia::render(
                 'Checkout',
@@ -39,9 +33,9 @@ class CheckoutController extends Controller
                         'token' => config('app.payphone.token'),
                         'payment' => [
                             'amount' => $order->getRawOriginal('total_amount'),
-                            'amountWithTax' =>  $order->getRawOriginal('total_with_taxes'),
-                            'amountWithoutTax' =>  $order->getRawOriginal('total_without_taxes'),
-                            'tax' =>  $order->getRawOriginal('total_computed_taxes'),
+                            'amountWithTax' => $order->getRawOriginal('total_with_taxes'),
+                            'amountWithoutTax' => $order->getRawOriginal('total_without_taxes'),
+                            'tax' => $order->getRawOriginal('total_computed_taxes'),
                         ],
 
                     ],

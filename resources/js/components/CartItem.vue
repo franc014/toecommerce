@@ -49,8 +49,6 @@ const props = defineProps<{
 
 const item = ref(props.item);
 
-console.log(item);
-
 const quantity = ref(item.value.quantity);
 
 const changeQuantity = (value: number) => {

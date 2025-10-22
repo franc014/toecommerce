@@ -28,13 +28,11 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    protected static function booted():void
+    protected static function booted(): void
     {
         static::saved(function (OrderItem $orderItem) {
             $orderItem->order->updateOrderTally();
         });
 
     }
-
-
 }

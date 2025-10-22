@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class Cart extends Model
 {
@@ -126,7 +127,17 @@ class Cart extends Model
             'total_without_taxes' => $totalWithoutTaxes,
             'total_with_taxes' => $totalWithTaxes,
             'total_computed_taxes' => $totalComputedTaxes,
-            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes
+            'total_amount' => $totalWithoutTaxes + $totalWithTaxes + $totalComputedTaxes,
+        ]);
+    }
+
+    public function resetTally(): void
+    {
+        $this->update([
+            'total_without_taxes' => 0,
+            'total_with_taxes' => 0,
+            'total_computed_taxes' => 0,
+            'total_amount' => 0,
         ]);
     }
 
@@ -183,9 +194,15 @@ class Cart extends Model
         );
     }
 
-    public function empty(): int
+    public function empty()
     {
-        return $this->items()->delete();
+        DB::transaction(function () {
+            $this->items()->delete();
+            $this->resetTally();
+            if ($this->hasUnpaidOrder()) {
+                $this->order->cancel();
+            }
+        });
     }
 
     public function assingUser(User $user): void
@@ -208,6 +225,11 @@ class Cart extends Model
     public function hasUnpaidOrder(): bool
     {
         return $this->order()->whereNull('paid_at')->exists();
+    }
+
+    public function hasOrder(): bool
+    {
+        return $this->order()->exists();
     }
 
     public function isPaid(): bool

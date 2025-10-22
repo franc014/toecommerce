@@ -92,7 +92,6 @@ test('a product added to the cart is also added to an existing unpaid order', fu
 
 });
 
-
 test('a product variant can be added to the cart', function () {
 
     $taxIVA = Tax::factory()->create([
@@ -183,11 +182,9 @@ test('can update quantity of a cart item', function () {
 
 });
 
-
 it('updates order item quantity after updating quantity of a cart item', function () {
 
     $user = User::factory()->create();
-
 
     [$product, $cart] = createCartWithItem([
         'title' => 'Product 1',
@@ -221,8 +218,6 @@ it('updates order item quantity after updating quantity of a cart item', functio
     expect($order->fresh()->paid_at)->toBeNull();
 
 });
-
-
 
 test('in strict mode, trying to add a product that is out of stock according
 to the quantity in the cart throws an exception', function () {

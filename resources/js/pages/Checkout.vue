@@ -44,7 +44,7 @@
 import PayphoneButton from '@/components/PayphoneButton.vue';
 import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { checkout } from '@/routes/storefront/';
+import { checkout, products } from '@/routes/storefront/';
 import { useCartStore } from '@/stores/cartStore';
 import { PayphoneInfo, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
@@ -78,6 +78,19 @@ cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'removeItem') {
         after((result) => {
             router.visit(checkout().url);
+        });
+        onError((error: any) => {
+            if (error.response.data.message) {
+                console.error(error.response.data.message);
+            } else {
+                console.error(error.response.data.error.message);
+            }
+        });
+    }
+
+    if (name === 'emptyCart') {
+        after((result) => {
+            router.visit(products().url);
         });
         onError((error: any) => {
             if (error.response.data.message) {

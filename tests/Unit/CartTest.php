@@ -107,14 +107,11 @@ test('getting a cart item by id', function () {
     expect($cart->itemById($product->id)->id)->toBe($cart->items->first()->id);
 });
 
-
-
 test('getting totals', function () {
 
-    $itemATotalWithTaxes = 120 * (1 + 0.15 + 0.10); //150 // comp: 30
+    $itemATotalWithTaxes = 120 * (1 + 0.15 + 0.10); // 150 // comp: 30
     $itemBTotalWithTaxes = 40 * (1 + 0.15); // 46// comp 6
     $itemCTotalWithTaxes = 100; // 100
-
 
     $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
         [
@@ -168,8 +165,6 @@ test('getting totals', function () {
 
 });
 
-
-
 test('getting the total count of items in the cart', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
         'price' => 40.00,
@@ -198,8 +193,6 @@ test('a cart can have an unpaid order', function () {
     expect($cart->order->id)->toBe($order->id);
     expect($cart->hasUnpaidOrder())->toBeTrue();
 });
-
-
 
 test('a cart is paid', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
