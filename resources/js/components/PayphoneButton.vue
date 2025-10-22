@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-4 pt-10">
+    <div class="my-5 space-y-4">
         <h2>Payphone Checkout</h2>
         <div id="pp-button" ref="payphone-holder"></div>
     </div>
@@ -15,8 +15,6 @@ const payphoneHolder = useTemplateRef('payphone-holder');
 onMounted(() => {
     const storeId = props.gatewayInfo.storeId;
     const token = props.gatewayInfo.token;
-
-    console.log(payphoneHolder.value);
 
     new PPaymentButtonBox({
         token,

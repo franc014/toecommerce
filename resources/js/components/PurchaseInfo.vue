@@ -1,7 +1,7 @@
 <template>
-    <h2 class="mt-10">{{ title }}</h2>
+    <h2 class="my-5">{{ title }}</h2>
 
-    <ul v-if="isSetup" class="pb-72">
+    <ul v-if="isSetup" class="pb-5">
         <li><span class="font-bold">Nombres:</span> {{ info.first_name }}</li>
         <li><span class="font-bold">Apellidos:</span> {{ info.last_name }}</li>
         <li><span class="font-bold">Email:</span> {{ info.email }}</li>

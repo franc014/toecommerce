@@ -104,22 +104,18 @@ export interface CartItem {
     purchasable: Product | ProductVariant;
 }
 
+export interface Order {
+    total_amount: number;
+    total_amount_without_tax: number;
+    total_amount_with_tax: number;
+    total_computed_taxes: number;
+}
+
 export interface PayphoneInfo {
-    clientTransactionId: string;
     storeId: string;
     token: string;
-    payment: PayphonePayment;
 }
 
-
-
-interface PayphonePayment {
-    id: string;
-    amount: number;
-    amountWithoutTax: number;
-    amountWithTax: number;
-    tax: number;
-}
 
 export interface DataForCart {
     ui_cart_id: string;
