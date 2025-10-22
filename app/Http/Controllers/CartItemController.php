@@ -6,19 +6,33 @@ use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
+use Closure;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
+
+
     public function addOrUpdate(Request $request)
     {
+
 
         $request->validate([
             'ui_cart_id' => 'required | uuid',
             'product_id' => 'required | integer',
-            'quantity' => 'required | integer',
             'purchasable_type' => 'required | string',
+            'quantity' => ['required', 'integer', 'min:1', function (string $attribute, mixed $value, Closure $fail) use ($request) {
+                $purchasableId = $request->input('product_id');
+                $purchasableType = $request->input('purchasable_type');
+
+                $resolver = new ResolvesPurchasable($purchasableId, $purchasableType);
+                $purchasable = $resolver->resolve();
+
+                if ($value > $purchasable->stock) {
+                    $fail("The {$attribute} should be less than or equal to {$purchasable->stock}");
+                }
+            }],
         ]);
 
         try {

@@ -605,6 +605,57 @@ test('quantity should be integer', function () {
         'quantity' => 'four',
         'purchasable_type' => 'product',
     ]))->assertInvalid(['quantity']);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => 2.2,
+        'purchasable_type' => 'product',
+    ]))->assertInvalid(['quantity']);
+});
+
+test('quantity should not be less than 1', function () {
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+        'stock' => 5,
+    ]);
+
+    $uiCartId = fake()->uuid();
+    Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => 0,
+        'purchasable_type' => 'product',
+    ]))->assertInvalid(['quantity']);
+
+});
+
+test('quantity should not be greater than stock', function () {
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+        'stock' => 5,
+    ]);
+
+    $uiCartId = fake()->uuid();
+    Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => 7,
+        'purchasable_type' => 'product',
+    ]))->assertInvalid(['quantity']);
+
 });
 
 test('purchasable type is required', function () {
