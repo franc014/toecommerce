@@ -63,9 +63,11 @@ class Cart extends Model
         return ! $this->hasItems();
     }
 
-    public function getItemByPurchasableId(int $purchasableId): ?CartItem
+    public function getItemByPurchasable(int $purchasableId, string $purchasableType): ?CartItem
     {
-        return $this->items->where('purchasable_id', $purchasableId)->first();
+        return $this->items->where('purchasable_id', $purchasableId)
+        ->where('purchasable_type', $purchasableType)
+        ->first();
     }
 
     public function addOrUpdateItem(array $data): CartItem
@@ -73,12 +75,14 @@ class Cart extends Model
 
         $this->productOutOfStockCheck($data);
 
-        $cartItem = $this->getItemByPurchasableId($data['purchasable_id']);
+        $cartItem = $this->getItemByPurchasable($data['purchasable_id'], $data['purchasable_type']);
 
         if ($cartItem) {
             $this->updateItem($cartItem->id, $data['quantity']);
         } else {
-            $cartItem = $this->items()->create($data);
+            $cartItem = DB::transaction(function () use ($data) {
+                return $this->items()->create($data);
+            });
         }
 
         return $cartItem;

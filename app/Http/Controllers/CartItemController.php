@@ -23,6 +23,11 @@ class CartItemController extends Controller
             'product_id' => 'required | integer',
             'purchasable_type' => 'required | string',
             'quantity' => ['required', 'integer', 'min:1', function (string $attribute, mixed $value, Closure $fail) use ($request) {
+                $request->validate([
+                    'purchasable_type' => 'required | string',
+                    'product_id' => 'required | integer',
+                ]);
+
                 $purchasableId = $request->input('product_id');
                 $purchasableType = $request->input('purchasable_type');
 
@@ -35,11 +40,18 @@ class CartItemController extends Controller
             }],
         ]);
 
+
+
         try {
             $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
 
             $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($request->input('product_id'), $request->input('purchasable_type')), $request->input('quantity'));
+
+            //ray($addsToCart);
+
             $item = $addsToCart->handle();
+
+
 
             return ['item' => $item];
 
@@ -52,7 +64,7 @@ class CartItemController extends Controller
                 ],
             ], 404);
 
-        } catch (ProductOutOfStockException $e) {
+        } /* catch (ProductOutOfStockException $e) {
 
             return response()->json([
                 'error' => [
@@ -60,7 +72,7 @@ class CartItemController extends Controller
                     'message' => 'Product is out of stock',
                 ],
             ], 422);
-        }
+        } */
     }
 
     public function remove(Request $request)

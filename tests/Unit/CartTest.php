@@ -76,14 +76,14 @@ function createCartWithItem(array $data, $isVariant = false)
     return [$purchasable, $cart];
 }
 
-test('can get a cart item by purchasable_id', function () {
+test('can get a cart item by purchasable', function () {
     [$purchasable, $cart] = createCartWithItem([
         'price' => 50,
         'title' => 'Product 1',
         'slug' => 'product-1',
     ]);
 
-    $item = $cart->getItemByPurchasableId($purchasable->id);
+    $item = $cart->getItemByPurchasable($purchasable->id, $purchasable->getMorphClass());
 
     expect($item)->toBeInstanceOf(CartItem::class);
 

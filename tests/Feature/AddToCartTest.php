@@ -185,6 +185,494 @@ test('can add a published product variant to the cart', function () {
 
 });
 
+test('can add a product to the cart after a product has been added', function () {
+
+    $productA = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $productB = Product::factory()->published()->create([
+        'title' => 'Product B',
+        'slug' => 'product-b',
+        'price' => 30.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $productA->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $productB->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $productA->title,
+        'slug' => $productA->slug,
+        'image' => $productA->main_image,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class,
+        'price' => $productA->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($productA->taxes->toArray()),
+        'total' => $productA->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($productA->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $productA->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $productB->title,
+        'slug' => $productB->slug,
+        'image' => $productB->main_image,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class,
+        'price' => $productB->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($productB->taxes->toArray()),
+        'total' => $productB->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($productB->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $productB->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can add a variant to the cart after a product has been added', function () {
+
+    $this->withoutExceptionHandling();
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $variant = ProductVariant::factory()->published()->create([
+        'price' => 10.00,
+        'title' => 'Variant A',
+        'slug' => 'variant-a',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $variant->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+
+
+
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'image' => $product->main_image,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'total' => $product->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variant->title,
+        'slug' => $variant->slug,
+        'image' => $variant->main_image,
+        'purchasable_id' => $variant->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variant->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variant->taxes->toArray()),
+        'total' => $variant->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can add a product to the cart after a variant has been added', function () {
+
+    $this->withoutExceptionHandling();
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $variant = ProductVariant::factory()->published()->create([
+        'price' => 10.00,
+        'title' => 'Variant A',
+        'slug' => 'variant-a',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $variant->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
+
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+         'ui_cart_id' => $uiCartId,
+         'product_id' => $product->id,
+         'quantity' => $quantityToAdd,
+         'purchasable_type' => 'product',
+     ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'image' => $product->main_image,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'total' => $product->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variant->title,
+        'slug' => $variant->slug,
+        'image' => $variant->main_image,
+        'purchasable_id' => $variant->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variant->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variant->taxes->toArray()),
+        'total' => $variant->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can add a variant to the cart after a variant has been added', function () {
+
+    $this->withoutExceptionHandling();
+
+    $variantA = ProductVariant::factory()->published()->create([
+        'price' => 10.00,
+        'title' => 'Variant A',
+        'slug' => 'variant-a',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $variantB = ProductVariant::factory()->published()->create([
+        'price' => 10.00,
+        'title' => 'Variant B',
+        'slug' => 'variant-b',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $variantA->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
+
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+         'ui_cart_id' => $uiCartId,
+         'product_id' => $variantB->id,
+         'quantity' => $quantityToAdd,
+         'purchasable_type' => 'product-variant',
+     ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variantA->title,
+        'slug' => $variantA->slug,
+        'image' => $variantA->main_image,
+        'purchasable_id' => $variantA->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variantA->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variantA->taxes->toArray()),
+        'total' => $variantA->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variantA->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variantA->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variantB->title,
+        'slug' => $variantB->slug,
+        'image' => $variantB->main_image,
+        'purchasable_id' => $variantB->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variantB->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variantB->taxes->toArray()),
+        'total' => $variantB->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variantB->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variantB->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can add a variant to the cart after its product has been added', function () {
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $variant = ProductVariant::factory()->published()->create([
+        'product_id' => $product->id,
+        'price' => 10.00,
+        'title' => 'Variant B',
+        'slug' => 'variant-b',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $product->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+         'ui_cart_id' => $uiCartId,
+         'product_id' => $variant->id,
+         'quantity' => $quantityToAdd,
+         'purchasable_type' => 'product-variant',
+     ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'image' => $product->main_image,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'total' => $product->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variant->title,
+        'slug' => $variant->slug,
+        'image' => $variant->main_image,
+        'purchasable_id' => $variant->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variant->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variant->taxes->toArray()),
+        'total' => $variant->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can add a product to the cart after its variant has been added', function () {
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $variant = ProductVariant::factory()->published()->create([
+        'product_id' => $product->id,
+        'price' => 10.00,
+        'title' => 'Variant B',
+        'slug' => 'variant-b',
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $quantityToAdd = 2;
+
+    expect($cart->hasItems())->toBeFalse();
+
+    $this->post(route('cart.items.addOrUpdate', [
+         'ui_cart_id' => $uiCartId,
+         'product_id' => $variant->id,
+         'quantity' => $quantityToAdd,
+         'purchasable_type' => 'product-variant',
+     ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(1);
+    expect($cart->fresh()->items_count)->toBe(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+    'ui_cart_id' => $uiCartId,
+    'product_id' => $product->id,
+    'quantity' => $quantityToAdd,
+    'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(2);
+    expect($cart->fresh()->items_count)->toBe(4);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'image' => $product->main_image,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'total' => $product->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $variant->title,
+        'slug' => $variant->slug,
+        'image' => $variant->main_image,
+        'purchasable_id' => $variant->id,
+        'purchasable_type' => ProductVariant::class,
+        'price' => $variant->price * 100,
+        'quantity' => $quantityToAdd,
+        'taxes' => json_encode($variant->taxes->toArray()),
+        'total' => $variant->price * 100 * $quantityToAdd,
+        'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
+        'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+
+
+
+
+
 test('can not add an unpublished product to the cart', function () {
     $product = Product::factory()->draft()->create([
         'title' => 'Product 1',
@@ -296,173 +784,6 @@ test('can update an existing cart item quantity', function () {
 
 });
 
-test('if out of stock, a product in the cart can not be added', function () {
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
-
-    $product = Product::factory()->published()->create([
-        'title' => 'Product 1',
-        'slug' => 'product-1',
-        'price' => 20.00,
-        'stock' => 0,
-    ]);
-
-    $uiCartId = fake()->uuid();
-    Cart::factory()->create([
-        'ui_cart_id' => $uiCartId,
-    ]);
-
-    $this->post(route('cart.items.addOrUpdate', [
-        'ui_cart_id' => $uiCartId,
-        'product_id' => $product->id,
-        'quantity' => 2,
-        'purchasable_type' => 'product',
-    ]))->assertStatus(422)
-        ->assertJson([
-            'error' => [
-                'code' => 422,
-                'message' => 'Product is out of stock',
-            ],
-        ]);
-});
-
-test('if out of stock, a variant in the cart can not be added', function () {
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
-
-    $product = Product::factory()->published()->create([
-        'title' => 'Product 1',
-        'slug' => 'product-1',
-        'price' => 20.00,
-        'stock' => 10,
-    ]);
-
-    $variant = ProductVariant::factory()->published()->create([
-        'product_id' => $product->id,
-        'stock' => 0,
-    ]);
-
-    $uiCartId = fake()->uuid();
-    Cart::factory()->create([
-        'ui_cart_id' => $uiCartId,
-    ]);
-
-    $this->post(route('cart.items.addOrUpdate', [
-        'ui_cart_id' => $uiCartId,
-        'product_id' => $variant->id,
-        'quantity' => 2,
-        'purchasable_type' => 'product-variant',
-    ]))->assertStatus(422)
-        ->assertJson([
-            'error' => [
-                'code' => 422,
-                'message' => 'Product is out of stock',
-            ],
-        ]);
-});
-
-test('if out of stock, a product in the cart can not be updated', function () {
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
-
-    $product = Product::factory()->published()->create([
-        'title' => 'Product 1',
-        'slug' => 'product-1',
-        'price' => 20.00,
-        'stock' => 5,
-    ]);
-
-    $uiCartId = fake()->uuid();
-    $cart = Cart::factory()->create([
-        'ui_cart_id' => $uiCartId,
-    ]);
-
-    CartItem::factory()->create([
-        'cart_id' => $cart->id,
-        'purchasable_id' => $product->id,
-        'purchasable_type' => Product::class,
-        'title' => $product->title,
-        'slug' => $product->slug,
-        'price' => $product->price,
-        'quantity' => 4,
-        'total' => 4 * $product->price,
-    ]);
-
-    expect($cart->items)->toHaveCount(1);
-
-    $newQuantity = 6;
-
-    $this->post(route('cart.items.addOrUpdate', [
-        'ui_cart_id' => $uiCartId,
-        'product_id' => $product->id,
-        'quantity' => $newQuantity,
-        'purchasable_type' => 'product',
-    ]))->assertStatus(422)
-        ->assertJson([
-            'error' => [
-                'code' => 422,
-                'message' => 'Product is out of stock',
-            ],
-        ]);
-});
-
-test('if out of stock, a variant in the cart can not be updated', function () {
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
-
-    $product = Product::factory()->published()->create([
-        'title' => 'Product 1',
-        'slug' => 'product-1',
-        'price' => 20.00,
-        'stock' => 7,
-    ]);
-
-    $variant = ProductVariant::factory()->published()->create([
-        'product_id' => $product->id,
-        'stock' => 5,
-    ]);
-
-    $uiCartId = fake()->uuid();
-    $cart = Cart::factory()->create([
-        'ui_cart_id' => $uiCartId,
-    ]);
-
-    CartItem::factory()->create([
-        'cart_id' => $cart->id,
-        'purchasable_id' => $variant->id,
-        'purchasable_type' => ProductVariant::class,
-        'title' => $variant->title,
-        'slug' => $variant->slug,
-        'price' => $variant->price,
-        'quantity' => 4,
-        'total' => 4 * $variant->price,
-    ]);
-
-    expect($cart->items)->toHaveCount(1);
-
-    $newQuantity = 6;
-
-    $this->post(route('cart.items.addOrUpdate', [
-        'ui_cart_id' => $uiCartId,
-        'product_id' => $variant->id,
-        'quantity' => $newQuantity,
-        'purchasable_type' => 'product-variant',
-    ]))->assertStatus(422)
-        ->assertJson([
-            'error' => [
-                'code' => 422,
-                'message' => 'Product is out of stock',
-            ],
-        ]);
-});
 
 // no cart validation: ui_cart_id, required, exists in carts table
 test('can not add or update a cart item if the cart does not exist', function () {
