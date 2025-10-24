@@ -190,4 +190,8 @@
     @apply h-96;
 }
 
+.form-input {
+    @apply border border-zinc-400 tracking-wider;
+}
+
 

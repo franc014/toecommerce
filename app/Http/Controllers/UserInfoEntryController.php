@@ -38,4 +38,59 @@ class UserInfoEntryController extends Controller
 
         return redirect()->intended(route('storefront.checkout', absolute: false));
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'type' => 'required|in:billing,shipping',
+            'email' => 'required|email',
+            'first_name' => 'required|min:2|max:16',
+            'last_name' => 'required|min:2|max:16',
+            'country' => 'max:24',
+            'city' => 'required|min:2|max:24',
+            'address' => 'required|min:2|max:128',
+            'state' => 'max:24',
+            'phone' => 'max:24',
+            'zipcode' => 'required|min:4|max:6',
+        ]);
+
+        auth()->user()->userInfoEntries()->where('id', $id)->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'type' => $request->type,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'zipcode' => $request->zipcode,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->intended(route('storefront.checkout', absolute: false));
+    }
+
+    public function useBillingAsShipping()
+    {
+        $billingInfo = auth()->user()->mainBillingInfoEntry();
+
+
+        auth()->user()->userInfoEntries()->create([
+            'first_name' => $billingInfo->first_name,
+            'last_name' => $billingInfo->last_name,
+            'type' => 'shipping',
+            'country' => $billingInfo->country,
+            'state' => $billingInfo->state,
+            'city' => $billingInfo->city,
+            'address' => $billingInfo->address,
+            'phone' => $billingInfo->phone,
+            'zipcode' => $billingInfo->zipcode,
+            'email' => $billingInfo->email,
+            'is_main' => true,
+        ]);
+
+        return redirect()->intended(route('storefront.checkout', absolute: false));
+    }
+
+
 }

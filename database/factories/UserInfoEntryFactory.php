@@ -21,13 +21,12 @@ class UserInfoEntryFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->email,
-            'country' => $this->faker->country,
+            'country' => 'USA',
             'state' => $this->faker->state,
             'city' => $this->faker->city,
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
-            'zipcode' => $this->faker->postcode,
-
+            'zipcode' => '12345',
         ];
     }
 }

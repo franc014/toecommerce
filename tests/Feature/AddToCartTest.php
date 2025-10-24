@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\StockControlModes;
-use App\Models\AppSettings;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
@@ -667,11 +665,6 @@ test('can add a product to the cart after its variant has been added', function 
     ]);
 
 });
-
-
-
-
-
 
 test('can not add an unpublished product to the cart', function () {
     $product = Product::factory()->draft()->create([

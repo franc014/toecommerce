@@ -11,20 +11,52 @@
         <li><span class="font-bold">Código postal:</span> {{ info.zipcode }}</li>
         <li><span class="font-bold">Teléfono:</span> {{ info.phone }}</li>
     </ul>
+
+    <Dialog v-if="isSetup">
+        <DialogTrigger as-child>
+            <Button class="text-base tracking-wide">
+                <FilePenLine />
+                Editar información {{ type === 'billing' ? 'de facturación' : 'de envío' }}
+            </Button>
+        </DialogTrigger>
+        <DialogContent class="min-w-[700px] sm:max-w-[425px]">
+            <DialogHeader>
+                <DialogTitle>Editar información {{ type === 'billing' ? 'de facturación' : 'de envío' }}</DialogTitle>
+                <DialogDescription>
+                    <p class="text-base font-bold tracking-wide">Haz cambios en la información de facturación. Click Guardar cuando estés listo.</p>
+                </DialogDescription>
+            </DialogHeader>
+            <UserInfoFormEdit :info="info" :type="type" />
+        </DialogContent>
+    </Dialog>
+
     <div v-if="!isSetup" class="space-y-8 font-bold">
         <h3>{{ formTitle }}</h3>
-        <UserInfoForm :type="type" />
+        <CloneBillingInfo @accept-cloning="handleAccpetCloning" />
+        <UserInfoForm :type="type" v-if="!acceptsCloningBilling" />
     </div>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { FilePenLine } from 'lucide-vue-next';
+import { ref } from 'vue';
+import CloneBillingInfo from './CloneBillingInfo.vue';
 import UserInfoForm from './UserInfoForm.vue';
+import UserInfoFormEdit from './UserInfoFormEdit.vue';
 
 const props = defineProps({
     data: Object,
 });
 
 const { info, isSetup, type, title, formTitle } = props.data as any;
+
+const acceptsCloningBilling = ref(false);
+
+function handleAccpetCloning(value: boolean) {
+    acceptsCloningBilling.value = value;
+}
 </script>
 
 <style scoped></style>

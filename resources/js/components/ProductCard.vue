@@ -19,12 +19,6 @@
                 <div>
                     <div class="flex items-center gap-4">
                         <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
-
-                        <!-- <Button v-if="product.has_variants" class="cursor-pointer bg-indigo-500 tracking-wider text-zinc-100 hover:bg-indigo-400">
-                            <SwatchBook />
-                            Variants
-                        </Button> -->
-
                         <ProductVariants :variants="product.variants" v-if="product.has_variants" />
                     </div>
                 </div>

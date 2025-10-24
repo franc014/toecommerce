@@ -342,6 +342,37 @@ test('guests can not send customer info', function () {
     ]);
 });
 
+// use billing info as shipping info
+
+test('can clone existing main billing info into shipping info', function () {
+    $billingInfo = UserInfoEntry::factory()->create([
+        'user_id' => $this->user->id,
+        'is_main' => true,
+        'type' => 'billing',
+    ]);
+
+    $this->actingAs($this->user)
+    ->post(route('storefront.user-info-entry.use-billing-as-shipping'))
+    ->assertRedirect(route('storefront.checkout'));
+
+    $this->assertDatabaseHas('user_info_entries', [
+        'first_name' => $billingInfo->first_name,
+        'last_name' => $billingInfo->last_name,
+        'type' => 'shipping',
+        'country' => $billingInfo->country,
+        'state' => $billingInfo->state,
+        'city' => $billingInfo->city,
+        'address' => $billingInfo->address,
+        'phone' => $billingInfo->phone,
+        'zipcode' => $billingInfo->zipcode,
+        'email' => $billingInfo->email,
+        'is_main' => true,
+    ]);
+
+});
+
+
+
 // validation user info
 
 function sendUserInfo($data)
