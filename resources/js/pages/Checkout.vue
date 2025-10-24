@@ -6,8 +6,8 @@
             </h1>
             <div class="checkout-grid">
                 <div>
-                    <Accordion collapsible>
-                        <AccordionItem value="item-1">
+                    <Accordion :collapsible="true" default-value="item-1">
+                        <AccordionItem value="item-1" key="item-1">
                             <AccordionTrigger>Información para facturación</AccordionTrigger>
                             <AccordionContent>
                                 <PurchaseInfo
@@ -21,7 +21,7 @@
                                 />
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2" v-if="user.has_billing_info">
+                        <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
                             <AccordionTrigger>Información para envío</AccordionTrigger>
                             <AccordionContent>
                                 <PurchaseInfo
@@ -68,7 +68,6 @@ const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
 
-//todo: liten cart changes and reload page
 const cartStore = useCartStore();
 
 cartStore.$onAction(({ name, onError, after }) => {

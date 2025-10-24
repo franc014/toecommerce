@@ -3,7 +3,7 @@
     <main class="bg-zinc-100">
         <slot />
     </main>
-    <Toaster richColors />
+    <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" :expand="true" />
 </template>
 
 <script lang="ts" setup>

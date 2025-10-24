@@ -9,27 +9,41 @@
                 <p class="text-sm text-muted-foreground">Los datos de facturación serán utilizados para los datos de envío.</p>
             </div>
         </div>
-
-        <Button v-if="accepts" class="cursor-pointer">
-            <Copy />
-            Utilizar información de facturación para envío
-        </Button>
+        <Form :action="useBillingAsShipping()" method="post" v-slot="{ errors, processing }" @success="handleSuccess">
+            <Button v-if="accepts" class="cursor-pointer">
+                <Copy />
+                Utilizar información de facturación para envío
+            </Button>
+        </Form>
+        <Toaster richColors :duration="3000" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Toaster } from '@/components/ui/sonner';
+import { checkout } from '@/routes/storefront';
+import { useBillingAsShipping } from '@/routes/storefront/user-info-entry';
+import { Form, router } from '@inertiajs/vue3';
 import { Copy } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { toast } from 'vue-sonner';
 
 const emits = defineEmits<{ acceptCloning: [clone: boolean] }>();
 
 const accepts = ref(false);
 
-function handleAccept(clone: boolean) {
+function handleAccept(clone: boolean | any): void {
     accepts.value = clone;
     emits('acceptCloning', clone);
+}
+
+function handleSuccess(): void {
+    toast.success('Información guardada!');
+    setTimeout(() => {
+        router.visit(checkout().url);
+    }, 2000);
 }
 </script>
 

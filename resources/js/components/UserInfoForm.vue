@@ -69,15 +69,12 @@
             </div>
         </div>
     </Form>
-
-    <Toaster richColors :duration="3000" />
 </template>
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Toaster } from '@/components/ui/sonner';
 import { checkout } from '@/routes/storefront';
 import { store } from '@/routes/storefront/user-info-entry';
 import { Form, router } from '@inertiajs/vue3';
@@ -94,7 +91,7 @@ function handleSuccess() {
     toast.success('Información guardada!');
     setTimeout(() => {
         router.visit(checkout().url);
-    }, 3000);
+    }, 1000);
 }
 </script>
 

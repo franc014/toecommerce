@@ -1,5 +1,5 @@
 <template>
-    <Form class="space-y-4" :action="update(parseInt(info.id))" method="put" v-slot="{ errors, processing }" @success="onSuccess">
+    <Form class="space-y-4" :action="update(parseInt(info.id))" method="put" v-slot="{ errors, processing }" @success="onSuccessEdit">
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="email" class="tracking-wide">Email <IsRequiredSign /></Label>
@@ -158,21 +158,20 @@
             </div>
         </div>
     </Form>
-    <Toaster richColors :duration="3000" />
 </template>
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Toaster } from '@/components/ui/sonner';
 import { update } from '@/routes/storefront/user-info-entry';
-import { Form } from '@inertiajs/vue3';
+import { Form, router } from '@inertiajs/vue3';
 import { LoaderCircle, Save } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import IsRequiredSign from './IsRequiredSign.vue';
 import ValidationError from './ValidationError.vue';
 
+import { checkout } from '@/routes/storefront';
 import type { UserInfoEntry } from '@/types';
 import { onMounted, ref } from 'vue';
 
@@ -184,14 +183,15 @@ const props = defineProps({
 const info = ref({} as UserInfoEntry);
 
 onMounted(() => {
-    info.value = props.info;
+    const infoForEdit = { ...props.info };
+    info.value = infoForEdit;
 });
 
-function onSuccess() {
+function onSuccessEdit() {
     toast.success('Información actualizada!');
-    /* setTimeout(() => {
+    setTimeout(() => {
         router.visit(checkout().url);
-    }, 1000); */
+    }, 1000);
 }
 </script>
 
