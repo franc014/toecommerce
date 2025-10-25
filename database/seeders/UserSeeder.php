@@ -20,6 +20,6 @@ class UserSeeder extends Seeder
         ]);
 
         // making super admin with filament shield command
-        // Artisan::call('shield:super-admin', ['--user' => $user->id]);
+        //Artisan::call('shield:super-admin', ['--user' => $user->id]);
     }
 }

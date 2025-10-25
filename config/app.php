@@ -129,4 +129,8 @@ return [
         'confirm_url' => env('PAYPHONE_CONFIRM_URL', 'https://pay.payphonetodoesposible.com/api/button/V2/Confirm'),
     ],
 
+    'dashboard' => [
+        'allowed-admin-email' => env('allowed-admin-email', 'jfandtec@gmail.com'),
+    ]
+
 ];
