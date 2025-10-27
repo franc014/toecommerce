@@ -45,7 +45,7 @@ function confirmation()
         'clientTransactionId' => $order->code,
     ]));
 
-    return $response;
+    return [$response, $order];
 
 }
 
@@ -53,9 +53,9 @@ test('can confirm payphone payment', function () {
 
     $this->withoutExceptionHandling();
 
-    $response = confirmation();
+    [$response, $order] = confirmation();
     expect($response->status())->toBe(302);
-    expect($response->assertRedirect(route('storefront.products')));
+    $response->assertRedirect(route('filament.customer.resources.orders.view', ['record' => $order->code]));
 
     expect($this->order->fresh()->paid_at)->not()->toBeNull();
     expect($this->cart->fresh()->paid_at)->not()->toBeNull();
@@ -203,7 +203,9 @@ test('can not confirm if order is already paid', function () {
     $this->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => 'tx12345',
         'clientTransactionId' => 'cltx12345',
-    ]))->assertRedirect(route('storefront.products'));
+    ]))
+    ->assertSessionHas('order-confirmation-error', 'La orden ya ha sido confirmada.')
+    ->assertRedirect(route('storefront.products'));
 
 });
 
@@ -231,7 +233,10 @@ test('can not confirm if payphone transaction response has errors', function () 
     $this->withCookie('cart', $cart->ui_cart_id)->get(route('payments.confirm', [
         'id' => 'tx12345',
         'clientTransactionId' => 'cltx12345',
-    ]))->assertRedirect(route('storefront.products'));
+    ]))
+    ->assertRedirect(route('storefront.products'))
+    ->assertSessionHas('order-confirmation-error', 'La transacción ha fallado. Inténtalo de nuevo o contacta con el administrador.');
+
 });
 
 it('sends a confirmation email with link to order page', function () {

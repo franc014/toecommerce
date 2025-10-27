@@ -24,7 +24,7 @@ Route::get('/login', function () {
     return Inertia::location('/customer/login'); // redirect()->route('filament.customer.auth.login');
 })->name('login');
 
-Route::get('/payments/response', [PaymentController::class, 'confirm'])->name('payments.confirm');
+Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
 
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'smpt'),
 
     /*
     |--------------------------------------------------------------------------
@@ -94,6 +94,10 @@ return [
                 'postmark',
             ],
         ],
+
+        'mailgun' => [
+            'transport' => 'mailgun',
+        ]
 
     ],
 
