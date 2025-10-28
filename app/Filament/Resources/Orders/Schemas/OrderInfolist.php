@@ -2,8 +2,12 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\RepeatableEntry\TableColumn;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 
 class OrderInfolist
 {
@@ -11,28 +15,72 @@ class OrderInfolist
     {
         return $schema
             ->components([
+
+
+            Section::make('Resumen')
+                ->columns(2)
+                ->columnSpanFull()
+                ->schema([
+                    TextEntry::make('code')
+                    ->label('Código'),
                 TextEntry::make('user.name')
-                    ->label('User'),
-                TextEntry::make('cart_id')
-                    ->numeric(),
-                TextEntry::make('code'),
-                TextEntry::make('total_amount')
-                    ->numeric(),
+                    ->label('Cliente'),
                 TextEntry::make('total_with_taxes')
-                    ->numeric(),
+                    ->label('Total, productos con impuestos')
+                    ->numeric()
+                    ->money('USD'),
                 TextEntry::make('total_without_taxes')
-                    ->numeric(),
+                    ->label('Total, productos sin impuestos')
+                    ->numeric()
+                    ->money('USD'),
                 TextEntry::make('total_computed_taxes')
-                    ->numeric(),
-                TextEntry::make('paid_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                    ->label('Impuestos calculados')
+                    ->numeric()
+                    ->money('USD'),
+                TextEntry::make('total_amount')
+                    ->label('Monto total')
+                    ->numeric()
+                    ->money('USD'),
                 TextEntry::make('created_at')
+                    ->label('Fecha de creación')
                     ->dateTime()
                     ->placeholder('-'),
-                TextEntry::make('updated_at')
+                TextEntry::make('paid_at')
+                    ->label('Fecha de pago')
                     ->dateTime()
                     ->placeholder('-'),
+                ]),
+                 Section::make('Productos')
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                    RepeatableEntry::make('orderItems')
+                    ->label('Productos')
+                    ->columnSpanFull()
+                    ->table([
+                        TableColumn::make('Título'),
+                        TableColumn::make('Precio'),
+                        TableColumn::make('Cantidad'),
+                        TableColumn::make('Subtotal'),
+                        TableColumn::make('Impuestos calculados'),
+                        TableColumn::make('Total con impuestos'),
+
+                    ])
+                    ->schema([
+                        TextEntry::make('title'),
+                        TextEntry::make('price')->money('USD'),
+                        TextEntry::make('quantity'),
+                        TextEntry::make('total')->money('USD'),
+                        TextEntry::make('computed_taxes')->money('USD'),
+                        TextEntry::make('total_with_taxes')->money('USD'),
+                    ])
+                ]),
+
+
+
+
+
+
             ]);
     }
 }

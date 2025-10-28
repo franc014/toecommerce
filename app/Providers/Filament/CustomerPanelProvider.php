@@ -29,6 +29,7 @@ class CustomerPanelProvider extends PanelProvider
             ->login()
             ->registration()
             ->databaseTransactions()
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::Amber,
             ])

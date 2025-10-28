@@ -55,9 +55,11 @@ import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
+import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { PayphoneInfo, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 defineOptions({ layout: StorefrontLayout });
 
@@ -69,6 +71,11 @@ const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
 
 const cartStore = useCartStore();
+const cartDrawerStore = useCartDrawerStore();
+
+onMounted(() => {
+    cartDrawerStore.toggle();
+});
 
 cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {
