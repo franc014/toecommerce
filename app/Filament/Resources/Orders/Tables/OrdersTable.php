@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Orders\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -40,6 +41,9 @@ class OrdersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make()->hidden(function ($record) {
+                    return $record->paid_at !== null;
+                }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

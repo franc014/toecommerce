@@ -74,7 +74,7 @@ const cartStore = useCartStore();
 const cartDrawerStore = useCartDrawerStore();
 
 onMounted(() => {
-    cartDrawerStore.toggle();
+    cartDrawerStore.close();
 });
 
 cartStore.$onAction(({ name, onError, after }) => {

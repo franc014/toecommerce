@@ -5,6 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\ProductsPageController;
 use App\Http\Controllers\UserInfoEntryController;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -13,6 +14,7 @@ use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('storefront.home');
 Route::get('/products', ProductsPageController::class)->name('storefront.products');
+Route::get('/products/{product:slug}', ProductPageController::class)->name('storefront.product');
 
 Route::post('/cart/create', [CartController::class, 'create'])->name('cart.create');
 Route::post('/cart/show', [CartController::class, 'show'])->name('cart.show');

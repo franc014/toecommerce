@@ -53,6 +53,7 @@ export interface Product {
     id: number;
     title: string;
     slug: string;
+    description: string;
     price_in_dollars: string;
     has_variants: boolean;
     variants: Array<ProductVariant>;

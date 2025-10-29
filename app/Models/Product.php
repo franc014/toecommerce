@@ -29,6 +29,8 @@ class Product extends Model implements HasMedia, Purchasable
         'variant_options' => 'array',
     ];
 
+    protected $appends = ['price_in_dollars','price_with_taxes_in_dollars'];
+
     /* protected static function booted(): void
     {
         static::saved(function (Product $product) {

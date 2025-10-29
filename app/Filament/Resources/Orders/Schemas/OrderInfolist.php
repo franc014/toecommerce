@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
+use Filament\Support\Icons\Heroicon;
 
 class OrderInfolist
 {
@@ -15,11 +17,10 @@ class OrderInfolist
     {
         return $schema
             ->components([
-
-
             Section::make('Resumen')
                 ->columns(2)
                 ->columnSpanFull()
+                ->collapsible()
                 ->schema([
                     TextEntry::make('code')
                     ->label('Código'),
@@ -47,12 +48,15 @@ class OrderInfolist
                     ->placeholder('-'),
                 TextEntry::make('paid_at')
                     ->label('Fecha de pago')
+                    ->badge()
                     ->dateTime()
-                    ->placeholder('-'),
+                    ->placeholder('No pagada.'),
                 ]),
-                 Section::make('Productos')
+                Section::make('Productos')
                     ->columns(2)
                     ->columnSpanFull()
+                    ->collapsible()
+
                     ->schema([
                     RepeatableEntry::make('orderItems')
                     ->label('Productos')
@@ -73,14 +77,21 @@ class OrderInfolist
                         TextEntry::make('total')->money('USD'),
                         TextEntry::make('computed_taxes')->money('USD'),
                         TextEntry::make('total_with_taxes')->money('USD'),
-                    ])
+                    ]),
+                ])->footer([
+                    Action::make('pay')
+                    ->label('Realizar pago.')
+                    ->icon(Heroicon::Banknotes)
+                    ->url(fn () => route('storefront.checkout'))
+                    ->hidden(function ($record) {
+                        return $record->paid_at !== null;
+                    }),
+                    Action::make('purchase-more')
+                    ->icon(Heroicon::BuildingStorefront)
+                    ->label('Volver a la tienda')
+                    ->color('secondary')
+                    ->url(fn () => route('storefront.products')),
                 ]),
-
-
-
-
-
-
             ]);
     }
 }

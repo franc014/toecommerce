@@ -31,7 +31,7 @@
                         <li class="header__item"><Link href="/products">Productos</Link></li>
                         <li class="header__item header__item--divider" aria-hidden="true"></li>
                         <li class="header__item">
-                            <Button class="relative cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="toggle">
+                            <Button class="relative cursor-pointer bg-indigo-800 px-4 py-2 hover:bg-indigo-600" v-on:click="open">
                                 <ShoppingCartIcon class="h-6 w-6" />
                                 <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 -right-2 bg-fuchsia-300 text-black">{{
                                     cartStore.aggregation.items_count
@@ -59,8 +59,8 @@ const cartDrawer = useCartDrawerStore();
 
 const cartStore = useCartStore();
 
-function toggle() {
-    cartDrawer.toggle();
+function open() {
+    cartDrawer.open();
 }
 </script>
 

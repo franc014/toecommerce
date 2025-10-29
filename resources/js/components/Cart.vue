@@ -73,7 +73,7 @@ const cartDrawerStore = useCartDrawerStore();
 const cartStore = useCartStore();
 
 function closeCart() {
-    cartDrawerStore.toggle();
+    cartDrawerStore.close();
 }
 
 function emptyCart() {

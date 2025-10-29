@@ -2,6 +2,7 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
 use App\Models\User;
 
 it('gives successful response for home page', function () {
@@ -11,6 +12,12 @@ it('gives successful response for home page', function () {
 
 it('gives successful response for products page', function () {
     $response = $this->get(route('storefront.products'));
+    $response->assertStatus(200);
+});
+
+it('gives successful response for product page', function () {
+    $product = Product::factory()->published()->create();
+    $response = $this->get(route('storefront.product', ['product' => $product->slug]));
     $response->assertStatus(200);
 });
 
