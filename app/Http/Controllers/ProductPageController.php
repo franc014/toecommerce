@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,7 +19,7 @@ class ProductPageController extends Controller
             'id' => $product->id,
             'title' => $product->title,
             'slug' => $product->slug,
-            'description' => $product->description,
+            'description' => RichContentRenderer::make($product->description)->toHtml(),
             'price_in_dollars' => $product->price_in_dollars,
             'taxes' => $product->taxes, //todo: formatted taxes
             'price_with_taxes_in_dollars' => $product->price_with_taxes_in_dollars,

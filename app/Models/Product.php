@@ -27,16 +27,10 @@ class Product extends Model implements HasMedia, Purchasable
         'status' => ProductStatus::class,
         'price' => Money::class,
         'variant_options' => 'array',
+        'description' => 'array',
     ];
 
     protected $appends = ['price_in_dollars','price_with_taxes_in_dollars'];
-
-    /* protected static function booted(): void
-    {
-        static::saved(function (Product $product) {
-            $product->generateVariants();
-        });
-    } */
 
     public function dataforCart(): array
     {

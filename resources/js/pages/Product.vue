@@ -2,7 +2,9 @@
     <section>
         <div class="wrapper space-y-6 py-10">
             <h1>{{ product.title }}</h1>
-            <p>{{ product.description }}</p>
+            <div>
+                <div v-html="product.description" class="prose text-xl"></div>
+            </div>
         </div>
     </section>
 </template>

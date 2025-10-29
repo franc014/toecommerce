@@ -9,6 +9,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
@@ -46,8 +47,9 @@ class ProductForm
                                         ->default(ProductStatus::DRAFT)
                                         ->enum(ProductStatus::class)
                                         ->options(ProductStatus::class),
-                                    Textarea::make('description')
+                                    RichEditor::make('description')
                                         ->required()
+                                        ->json()
                                         ->columnSpanFull(),
                                     TextInput::make('sku')->label('SKU'),
                                 ]

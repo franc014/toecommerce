@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class UserInfoEntryPolicy
 {
     use HandlesAuthorization;
-
+    
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:UserInfoEntry');
@@ -19,7 +19,7 @@ class UserInfoEntryPolicy
 
     public function view(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('View:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('View:UserInfoEntry');
     }
 
     public function create(AuthUser $authUser): bool
@@ -29,22 +29,22 @@ class UserInfoEntryPolicy
 
     public function update(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('Update:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('Update:UserInfoEntry');
     }
 
     public function delete(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('Delete:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('Delete:UserInfoEntry');
     }
 
     public function restore(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('Restore:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('Restore:UserInfoEntry');
     }
 
     public function forceDelete(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('ForceDelete:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('ForceDelete:UserInfoEntry');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
@@ -59,7 +59,7 @@ class UserInfoEntryPolicy
 
     public function replicate(AuthUser $authUser, UserInfoEntry $userInfoEntry): bool
     {
-        return $authUser->can('Replicate:UserInfoEntry') && $authUser->id === $userInfoEntry->user_id;
+        return $authUser->can('Replicate:UserInfoEntry');
     }
 
     public function reorder(AuthUser $authUser): bool
