@@ -7,6 +7,7 @@ use App\Models\Product;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class ProductPageController extends Controller
 {
@@ -29,7 +30,8 @@ class ProductPageController extends Controller
             'price_with_taxes_in_dollars' => $product->price_with_taxes_in_dollars,
             'images' => $product->productImagesForList,
             'has_variants' => $product->hasVariants(),
-            'variants' => $product->variants
+            'variants' => $product->variants,
+            'main_image' => Storage::url($product->main_image),
         ];
 
         return Inertia::render('Product', [

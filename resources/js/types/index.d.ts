@@ -60,6 +60,8 @@ export interface Product {
     images: Array<string>;
     has_taxes: boolean;
     taxes: string;
+    main_image: string;
+
 }
 
 export interface ProductVariant {

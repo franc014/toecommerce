@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
+//import { Util } from './composables/useCarousel';
 import { createPinia } from 'pinia';
 import { useCartStore } from './stores/cartStore';
 
@@ -30,3 +31,6 @@ createInertiaApp({
 
 // This will set light / dark mode on page load...
 //initializeTheme();
+
+//console.log(Util);
+

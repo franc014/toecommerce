@@ -2,7 +2,9 @@
     <section class="py-30">
         <div class="wrapper space-y-6">
             <div class="product-grid">
-                <div>images part</div>
+                <div>
+                    <ProductGallery :images="{ main: product.main_image, for_gallery: product.images }" />
+                </div>
                 <div class="space-y-10">
                     <h1>{{ product.title }}</h1>
                     <p class="flex items-baseline gap-4">
@@ -34,6 +36,7 @@
 
 <script setup lang="ts">
 import AddToCart from '@/components/AddToCart.vue';
+import ProductGallery from '@/components/ProductGallery.vue';
 import ProductVariants from '@/components/ProductVariants.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
