@@ -9,7 +9,7 @@ import path from 'path';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/js/app.ts'],
+            input: ['resources/js/app.ts','resources/css/filament/admin/theme.css'],
             refresh: [
                 ...refreshPaths,
                 "app/Filament/**",

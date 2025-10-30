@@ -33,9 +33,9 @@ class ProductsTable
                     ->limit(20)
                     ->sortable()
                     ->searchable()
-                    ->description(function (Product $record) {
+                   /*  ->description(function (Product $record) {
                         return str()->limit($record->description, 40);
-                    })->wrap(),
+                    })->wrap() */,
                 TextColumn::make('status')
                     ->label('Estado')
                     ->badge()

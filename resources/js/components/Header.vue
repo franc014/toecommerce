@@ -1,5 +1,5 @@
 <template>
-    <header class="header js-header relative">
+    <header class="header js-header relative py-10">
         <div class="header__container wrapper">
             <div class="header__logo">
                 <Link href="/">

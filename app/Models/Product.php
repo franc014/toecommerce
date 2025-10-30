@@ -6,6 +6,9 @@ use App\Casts\Money;
 use App\Enums\ProductStatus;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
+use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
+use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
+use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,25 +21,27 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 
-class Product extends Model implements HasMedia, Purchasable
+class Product extends Model implements HasMedia, Purchasable, HasRichContent
 {
-    use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable;
+    use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable, InteractsWithRichContent;
 
     protected $casts = [
         'published_at' => 'datetime',
         'status' => ProductStatus::class,
         'price' => Money::class,
         'variant_options' => 'array',
+        'description' => 'array',
     ];
 
-    protected $appends = ['price_in_dollars','price_with_taxes_in_dollars'];
+    protected $appends = ['price_in_dollars','price_with_taxes_in_dollars', 'formatted_taxes'];
 
-    /* protected static function booted(): void
+
+    public function setUpRichContent(): void
     {
-        static::saved(function (Product $product) {
-            $product->generateVariants();
-        });
-    } */
+        $this->registerRichContent('description');
+        //to use the media library provideer, it should be set up as nullable
+        //->fileAttachmentProvider(SpatieMediaLibraryFileAttachmentProvider::make());
+    }
 
     public function dataforCart(): array
     {
@@ -186,12 +191,24 @@ class Product extends Model implements HasMedia, Purchasable
                 'title' => $title,
                 'slug' => $slug,
                 'variation' => $combination,
-                'price' => 0,
+                'price' => $this->price,
                 'stock' => 0,
                 'status' => ProductStatus::DRAFT,
                 'sku' => '',
             ]);
         }
+    }
 
+    public function formattedTaxes(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $taxes = $this->taxes->map(function ($tax) {
+                    return $tax->name.' ('.$tax->percentage.'%)';
+                });
+
+                return $taxes->implode(', ');
+            }
+        );
     }
 }

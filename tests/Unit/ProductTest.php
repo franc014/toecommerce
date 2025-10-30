@@ -110,6 +110,17 @@ test('get archived products', function () {
     expect(Product::archived()->get()->count())->toBe(2);
 });
 
+test('can get formatted taxes', function () {
+    $taxA = Tax::factory()->create(['percentage' => 15, 'description' => 'IVA 15%', 'name' => 'IVA']);
+    $taxB = Tax::factory()->create(['percentage' => 10, 'description' => 'ISD 10%', 'name' => 'ISD']);
+
+    $product = Product::factory()->create();
+
+    $product->taxes()->attach([$taxA->id, $taxB->id]);
+
+    expect($product->formatted_taxes)->toBe('IVA (15%), ISD (10%)');
+});
+
 // variants
 
 test('a product can define variant options', function () {
@@ -199,6 +210,9 @@ test('can generate as many variants as variant options permutations', function (
     $product->generateVariants();
 
     expect($product->variants()->count())->toBe(27);
+
+    expect($product->variants[0]->price)->toBe($product->price);
+
     expect($product->variants[0]->variation)->toBe([
         'size' => 'small',
         'color' => 'red',
