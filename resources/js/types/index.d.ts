@@ -58,6 +58,8 @@ export interface Product {
     has_variants: boolean;
     variants: Array<ProductVariant>;
     images: Array<string>;
+    has_taxes: boolean;
+    taxes: string;
 }
 
 export interface ProductVariant {

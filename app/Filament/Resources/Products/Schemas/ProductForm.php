@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use App\Enums\ProductStatus;
+use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
 use App\Filament\Forms\Components\SharedFields;
 use App\Models\Tax;
 use Filament\Actions\Action;
@@ -48,6 +49,17 @@ class ProductForm
                                         ->enum(ProductStatus::class)
                                         ->options(ProductStatus::class),
                                     RichEditor::make('description')
+                                        ->toolbarButtons([
+                                            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link','textColor'],
+                                            ['h1','h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                            ['blockquote', 'bulletList', 'orderedList','details'],
+                                            ['table','grid','gridDelete', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
+                                            ['undo', 'redo','clearFormatting'],
+                                            ['customBlocks'],
+                                        ])
+                                        ->customBlocks([
+                                            HeroBlock::class
+                                        ])
                                         ->required()
                                         ->json()
                                         ->columnSpanFull(),
