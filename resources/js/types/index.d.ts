@@ -111,10 +111,16 @@ export interface CartItem {
 }
 
 export interface Order {
+    id: number;
     total_amount: number;
     total_amount_without_tax: number;
     total_amount_with_tax: number;
     total_computed_taxes: number;
+    total_with_taxes_in_dollars: string;
+    total_without_taxes_in_dollars: string;
+    total_computed_taxes_in_dollars: string;
+    total_amount_in_dollars: string;
+    order_items: Array<OrderItem>;
 }
 
 export interface PayphoneInfo {

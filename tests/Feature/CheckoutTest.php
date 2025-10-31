@@ -3,6 +3,7 @@
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\UserInfoEntry;
 use Illuminate\Support\Str;
@@ -147,6 +148,26 @@ test('order is not created when visiting the checkout after the first time', fun
         ->get(route('storefront.checkout'));
 
     expect($this->user->orders)->toHaveCount(1);
+});
+
+test('can cancel order', function () {
+    $cart = Cart::factory()->create();
+    CartItem::factory()->count(2)->create([
+        'cart_id' => $cart->id,
+    ]);
+    $order = Order::placeFor($this->user, $cart);
+
+    expect($this->user->orders)->toHaveCount(1);
+
+    $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->post(route('storefront.orders.cancel', ['order' => $order->id]))
+        ->assertRedirect(route('storefront.products'));
+
+    expect($this->user->fresh()->orders)->toHaveCount(0);
+    expect(Order::all())->toHaveCount(0);
+    expect(OrderItem::all())->toHaveCount(0);
+
 });
 
 test('user is redirected to products page if cart is empty', function () {

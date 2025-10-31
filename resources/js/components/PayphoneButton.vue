@@ -1,5 +1,5 @@
 <template>
-    <div class="my-5 space-y-4">
+    <div class="my-5 space-y-4" id="payphone-box">
         <h2>Payphone Checkout</h2>
         <div id="pp-button" ref="payphone-holder"></div>
     </div>

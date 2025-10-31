@@ -38,9 +38,9 @@
                         </AccordionItem>
                     </Accordion>
                 </div>
-
                 <div>
-                    <div>
+                    <div class="space-y-10">
+                        <OrderSummary :order="order" :user="user" />
                         <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
                     </div>
                 </div>
@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import OrderSummary from '@/components/OrderSummary.vue';
 import PayphoneButton from '@/components/PayphoneButton.vue';
 import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -57,7 +58,7 @@ import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { PayphoneInfo, UserInfoEntry } from '@/types';
+import { Order, PayphoneInfo, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
@@ -69,6 +70,7 @@ const user = page.props.auth.user;
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
+const order = page.props.order as Order;
 
 const cartStore = useCartStore();
 const cartDrawerStore = useCartDrawerStore();
@@ -119,10 +121,4 @@ cartStore.$onAction(({ name, onError, after }) => {
 });
 </script>
 
-<style scoped>
-.checkout-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 4rem;
-}
-</style>
+<style scoped></style>

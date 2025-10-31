@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\ProductsPageController;
@@ -32,6 +33,7 @@ Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('pa
 
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
+    Route::post('/orders/cancel', [OrderController::class, 'cancelOrder'])->name('storefront.orders.cancel');
     Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('storefront.user-info-entry.store');
     Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->name('storefront.user-info-entry.update');
     Route::post('/shipping-info/use-billing', [UserInfoEntryController::class, 'useBillingAsShipping'])->name('storefront.user-info-entry.use-billing-as-shipping');

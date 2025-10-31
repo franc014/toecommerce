@@ -7,6 +7,8 @@ use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\OrderAlreadyConfirmedException;
 use App\Exceptions\PayphoneTransactionErrorException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
+use App\Traits\MoneyFormat;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +19,10 @@ use Illuminate\Support\Str;
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
-    use HasFactory;
+    use HasFactory, MoneyFormat;
+
+    protected $appends = ['total_without_taxes_in_dollars', 'total_with_taxes_in_dollars', 'total_computed_taxes_in_dollars', 'total_amount_in_dollars'];
+
 
     protected function casts(): array
     {
@@ -56,13 +61,14 @@ class Order extends Model
 
         $order = self::where('cart_id', $cart->id)
             ->where('user_id', $user->id)
+            ->with('orderItems')
             ->first();
 
         if ($order) {
             return $order;
         }
 
-        $order = self::create([
+        $newOrder = self::create([
             'user_id' => $user->id,
             'cart_id' => $cart->id,
             'code' => (string) Str::ulid(),
@@ -73,7 +79,7 @@ class Order extends Model
         ]);
 
         foreach ($cart->items as $item) {
-            $order->orderItems()->create([
+            $newOrder->orderItems()->create([
                 'purchasable_id' => $item->purchasable_id,
                 'purchasable_type' => $item->purchasable_type,
                 'cart_item_id' => $item->id,
@@ -88,7 +94,7 @@ class Order extends Model
             ]);
         }
 
-        return $order;
+        return $newOrder->load('orderItems');
     }
 
     public function addItem(CartItem $item)
@@ -174,5 +180,33 @@ class Order extends Model
             'paid_at' => now(),
             'payphone_metadata' => $payphoneConfirmation,
         ]);
+    }
+
+    protected function totalWithoutTaxesInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->total_without_taxes)
+        );
+    }
+
+    protected function totalWithTaxesInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->total_with_taxes)
+        );
+    }
+
+    protected function totalComputedTaxesInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->total_computed_taxes)
+        );
+    }
+
+    protected function totalAmountInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->total_amount)
+        );
     }
 }
