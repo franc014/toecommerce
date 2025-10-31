@@ -1,7 +1,7 @@
 <template>
     <h2>Resumen de la orden</h2>
     <div class="flex flex-col gap-4">
-        <Table>
+        <Table class="rounded-md border border-zinc-300">
             <TableHeader>
                 <TableRow>
                     <TableHead class="w-[100px]"> Producto </TableHead>
@@ -11,10 +11,10 @@
                     <TableHead class="text-right"> Total con impuestos </TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody class="tracking-wide">
                 <TableRow v-for="item in order.order_items" :key="item.id">
                     <TableCell class="font-medium"> {{ item.title }} </TableCell>
-                    <TableCell>{{ item.price_ }}</TableCell>
+                    <TableCell>{{ item.price_in_dollars }}</TableCell>
                     <TableCell>{{ item.quantity }}</TableCell>
                     <TableCell class="text-right"> {{ item.total_in_dollars }} </TableCell>
                     <TableCell class="text-right"> {{ item.computed_taxes_in_dollars }} </TableCell>
