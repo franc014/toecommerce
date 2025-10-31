@@ -1,6 +1,6 @@
 import { show, create, empty } from '@/routes/cart';
 import { addOrUpdate, remove } from '@/routes/cart/items';
-import { DataForCart } from '@/types';
+import { CartItem, DataForCart } from '@/types';
 
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
@@ -24,9 +24,6 @@ async function getCartFromDB(cartId: string, store: any) {
     store.aggregation['total_computed_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_computed_taxes_in_dollars;
     store.aggregation['total_in_dollars'] = cartDB.data.cart_aggregation.total_in_dollars;
     store.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
-
-
-
 
     return cartDB;
 }
@@ -92,6 +89,16 @@ export async function emptyCart(data: object){
 
     await axios.post(empty().url, data);
     await getCartFromDB(this.id, this);
+}
+
+export  function productInItem(productSlug : string) {
+   const items = this.items;
+
+   const item = items.find(function(item: CartItem){
+       return item.slug === productSlug
+   });
+
+   return item?.quantity;
 }
 
 

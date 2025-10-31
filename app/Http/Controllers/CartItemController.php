@@ -12,12 +12,8 @@ use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
-
-
     public function addOrUpdate(Request $request)
     {
-
-
         $request->validate([
             'ui_cart_id' => 'required | uuid',
             'product_id' => 'required | integer',
@@ -85,4 +81,6 @@ class CartItemController extends Controller
         $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
         $cart->removeItem($request->input('item_id'));
     }
+
+
 }

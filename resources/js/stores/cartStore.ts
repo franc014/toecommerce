@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { CartAggregation, CartItem } from "../types/index";
 
 
-import {init, addOrUpdateItem, removeItem, emptyCart} from './cartStoreActions';
+import {init, addOrUpdateItem, removeItem, emptyCart, productInItem} from './cartStoreActions';
 
 
 
@@ -18,7 +18,8 @@ export const useCartStore = defineStore('cart', {
         init,
         addOrUpdateItem,
         removeItem,
-        emptyCart
+        emptyCart,
+        productInItem
     },
     getters: {
         cartItems: (state) => state.items.sort(function(a,b){

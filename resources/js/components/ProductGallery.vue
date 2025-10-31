@@ -1,11 +1,11 @@
 <template>
-    <div class="thumbslide js-thumbslide" ref="carousel">
+    <div class="thumbslide thumbslide--vertical thumbslide--left js-thumbslide" ref="carousel">
         <div class="slideshow slideshow--transition-slide">
             <p class="sr-only">Slideshow Items</p>
 
             <ul class="slideshow__content">
                 <li
-                    v-for="(image, index) in images.for_gallery"
+                    v-for="(image, index) in images"
                     class="slideshow__item js-slideshow__item bg-white"
                     :class="[index == 0 ? 'slideshow__item--selected' : '']"
                     :style="{ backgroundImage: 'url(' + image + ')' }"
@@ -26,20 +26,17 @@
 </template>
 
 <script setup lang="ts">
-const { images } = defineProps<{ images: { main: string; for_gallery: string[] } }>();
+// @ts-nocheck
+const { images } = defineProps<{ images: string[] }>();
 
-import { ThumbSlideshow } from '@/composables/useCarousel';
+import { ThumbSlideshow } from '@/lib/codyhouse/carousel';
 import { onMounted, useTemplateRef } from 'vue';
 
 const carousel = useTemplateRef('carousel');
 
 onMounted(() => {
-    const thumbslide = new ThumbSlideshow(carousel.value);
+    new ThumbSlideshow(carousel.value);
 });
-
-//console.log(images.main, images.for_gallery[0]);
 </script>
 
-<style scoped>
-@reference '../../css/app.css';
-</style>
+<style scoped></style>

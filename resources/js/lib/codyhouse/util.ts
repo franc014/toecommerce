@@ -1,3 +1,4 @@
+// @ts-nocheck
 function Util () {};
 
 Util.hasClass = function(el: HTMLElement, className: string) {

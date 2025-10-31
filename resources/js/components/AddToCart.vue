@@ -1,19 +1,16 @@
 <template>
-    <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
+    <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" :quantity="qty" />
 </template>
 
 <script setup lang="ts">
+import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
 import { useCartStore } from '@/stores/cartStore';
 import { Product } from '@/types';
-import { ref } from 'vue';
 import QuantityHandler from './QuantityHandler.vue';
 
 const { product } = defineProps<{ product: Product }>();
 const cartStore = useCartStore();
-const qty = ref(1);
-function setQuantity(quantity: number) {
-    qty.value = quantity;
-}
+const { qty, setQuantity } = useCartItemQuantity(product.slug);
 
 function updateCart() {
     cartStore.addOrUpdateItem({

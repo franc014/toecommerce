@@ -13,24 +13,20 @@
             Precio: <span class="font-bold">{{ variant.price_in_dollars }} </span>
         </p>
         <p>{{ variant.formatted_variation }}</p>
-        <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
+        <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" :quantity="qty" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
 import { useCartStore } from '@/stores/cartStore';
 import { ProductVariant } from '@/types';
-import { ref } from 'vue';
 import QuantityHandler from './QuantityHandler.vue';
 const cartStore = useCartStore();
-const qty = ref(1);
 
 const { variant } = defineProps<{ variant: ProductVariant }>();
-
-function setQuantity(quantity: number) {
-    qty.value = quantity;
-}
+const { qty, setQuantity } = useCartItemQuantity(variant.slug);
 
 function updateCart() {
     cartStore.addOrUpdateItem({

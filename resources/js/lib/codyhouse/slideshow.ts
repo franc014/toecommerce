@@ -1,11 +1,11 @@
-
+// @ts-nocheck
 import Util from './util';
 import SwipeContent from './swipe';
 
 // File#: _2_slideshow
 // Usage: codyhouse.co/license
 
-	export const Slideshow = function(opts: any) {
+	 const Slideshow = function(opts: any) {
 		this.options = Util.extend(Slideshow.defaults, opts);
 		this.element = this.options.element;
 		this.items = this.element.getElementsByClassName('js-slideshow__item');
@@ -332,5 +332,8 @@ import SwipeContent from './swipe';
     navigationClass: 'slideshow__navigation',
     swipe: false
   };
+
+  export default Slideshow;
+
 
 

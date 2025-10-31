@@ -1,6 +1,7 @@
-import Util from './lib/util';
-import SwipeContent from './lib/swipe';
-import { Slideshow } from './lib/slideshow';
+// @ts-nocheck
+import Util from './util';
+import SwipeContent from './swipe';
+import Slideshow from './slideshow';
 
 
 	export const ThumbSlideshow = function(element: HTMLElement) {

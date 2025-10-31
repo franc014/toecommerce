@@ -3,6 +3,8 @@
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\User;
 
 test('can create a new cart from pinia', function () {

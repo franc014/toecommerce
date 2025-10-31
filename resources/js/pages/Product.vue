@@ -3,10 +3,14 @@
         <div class="wrapper space-y-6">
             <div class="product-grid">
                 <div>
-                    <ProductGallery :images="{ main: product.main_image, for_gallery: product.images }" />
+                    <ProductGallery :images="product.images" />
                 </div>
                 <div class="space-y-10">
                     <h1>{{ product.title }}</h1>
+                    <div class="border-b border-zinc-200 pb-8 text-xl tracking-wide">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis quae blanditiis adipisci, id illum culpa iste tempore veniam
+                        vero et ullam voluptates reiciendis quos, sapiente ratione quisquam hic deleniti omnis!
+                    </div>
                     <p class="flex items-baseline gap-4">
                         <span class="text-3xl font-bold tracking-widest">{{ product.price_in_dollars }}</span>
                         <span class="text-2xl">Impuestos: </span>

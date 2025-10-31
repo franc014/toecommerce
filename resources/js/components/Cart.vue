@@ -44,10 +44,14 @@
 
                 <div class="flex items-center justify-between gap-4" v-if="!cartStore.isEmpty">
                     <Button>
+                        <CreditCard />
                         <Link href="/checkout" class="w-full">Checkout</Link>
                     </Button>
 
-                    <Button variant="secondary" @click="emptyCart" class="cursor-pointer">Vaciar</Button>
+                    <Button variant="secondary" @click="emptyCart" class="cursor-pointer">
+                        <Trash />
+                        Vaciar
+                    </Button>
                 </div>
             </footer>
 
@@ -65,7 +69,7 @@ import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
-import { CircleX as CloseIcon, ShoppingCart } from 'lucide-vue-next';
+import { CircleX as CloseIcon, CreditCard, ShoppingCart, Trash2 as Trash } from 'lucide-vue-next';
 import { nextTick, ref, watch } from 'vue';
 
 const cartEl = ref<HTMLElement | null>(null);

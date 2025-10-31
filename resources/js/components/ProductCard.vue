@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-4">
-                        <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" />
+                        <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" :quantity="qty" />
                         <ProductVariants :variants="product.variants" v-if="product.has_variants" />
                     </div>
                 </div>
@@ -29,7 +29,8 @@
 
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/cartStore';
-import { ref } from 'vue';
+//import { ref, watchEffect } from 'vue';
+import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
 import { Product } from '../types';
 import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';
@@ -40,15 +41,15 @@ const { images } = product;
 const mainImage = images[0];
 const featureImage = images[1];
 
-const qty = ref(1);
+const { qty, setQuantity } = useCartItemQuantity(product.slug);
 
 const cartStore = useCartStore();
 
 const productUrl = `/products/${slug}`;
 
-function setQuantity(quantity: number) {
+/* function setQuantity(quantity: number) {
     qty.value = quantity;
-}
+} */
 
 function updateCart() {
     cartStore.addOrUpdateItem({
@@ -58,6 +59,13 @@ function updateCart() {
         purchasable_type: 'product',
     });
 }
+
+/* watchEffect(() => {
+    const currentQuantity = cartStore.productInItem(product.slug);
+    if (currentQuantity) {
+        qty.value = currentQuantity;
+    }
+}); */
 </script>
 
 <style scoped>

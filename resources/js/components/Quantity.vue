@@ -10,8 +10,6 @@
 
 <script setup lang="ts">
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field';
-/* import { ref } from 'vue';
-const quantity = ref(1); */
 </script>
 
 <style scoped></style>
