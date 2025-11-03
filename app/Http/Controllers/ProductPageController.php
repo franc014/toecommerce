@@ -32,6 +32,7 @@ class ProductPageController extends Controller
             'has_variants' => $product->hasVariants(),
             'variants' => $product->variants,
             'main_image' => Storage::url($product->main_image),
+            'dropping_stock' => $product->isDroppingStock(),
         ];
 
         return Inertia::render('Product', [

@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->integer('price');
             $table->decimal('discount', 8, 2)->nullable();
             $table->integer('stock')->nullable();
+            $table->integer('stock_threshold_for_customers')->default(10);
             $table->json('tags')->nullable();
             $table->json('variant_options')->nullable();
             $table->dateTime('published_at')->nullable();

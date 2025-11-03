@@ -120,6 +120,8 @@ test('can add a new order item', function () {
         'cart_id' => $cart->id,
     ]);
 
+    $order = $order->fresh();
+
     expect($order->orderItems)->toHaveCount(3);
 
     expect($order->orderItems[2]->order_id)->toBe($order->id);
@@ -177,6 +179,8 @@ test('can update an order item', function () {
     $item->total_with_taxes = $newQuantity * $item->price * (1 + 0.15);
     $item->computed_taxes = $item->total_with_taxes - $item->total;
     $item->save();
+
+    $order = $order->fresh();
 
     expect($order->orderItems)->toHaveCount(1);
 

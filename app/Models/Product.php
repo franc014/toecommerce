@@ -62,6 +62,14 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
         return $query->where('stock', '>', 0);
     }
 
+    public function isDroppingStock(): bool
+    {
+        if (AppSettings::isStockControlStrict()) {
+            return $this->stock <= $this->stock_threshold_for_customers;
+        }
+        return false;
+    }
+
     public function priceWithTaxesInDollars(): Attribute
     {
         return Attribute::make(

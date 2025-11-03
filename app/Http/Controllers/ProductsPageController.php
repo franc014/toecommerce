@@ -24,6 +24,7 @@ class ProductsPageController extends Controller
                     'images' => $product->productImagesForList,
                     'has_variants' => $product->hasPublishedVariants(),
                     'variants' => $product->variants,
+                    'dropping_stock' => $product->isDroppingStock(),
                 ];
             }),
         ]);

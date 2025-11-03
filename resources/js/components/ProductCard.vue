@@ -13,9 +13,13 @@
                     <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
                 </h1>
 
-                <div class="my-1 lg:my-1.5">
-                    <span class="prod-card-v2__price">{{ product.price_in_dollars }}</span>
+                <div class="my-1 space-y-2 lg:my-1.5">
+                    <p class="prod-card-v2__price">{{ product.price_in_dollars }}</p>
+                    <Badge variant="secondary" class="border border-zinc-400 bg-orange-200" v-if="product.dropping_stock">
+                        <span class="tracking-wider">Se está agotando</span>
+                    </Badge>
                 </div>
+
                 <div>
                     <div class="flex items-center gap-4">
                         <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" :quantity="qty" />
@@ -28,9 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCartStore } from '@/stores/cartStore';
-//import { ref, watchEffect } from 'vue';
+import { Badge } from '@/components/ui/badge';
 import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
+import { useCartStore } from '@/stores/cartStore';
 import { Product } from '../types';
 import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';
@@ -47,10 +51,6 @@ const cartStore = useCartStore();
 
 const productUrl = `/products/${slug}`;
 
-/* function setQuantity(quantity: number) {
-    qty.value = quantity;
-} */
-
 function updateCart() {
     cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
@@ -59,13 +59,6 @@ function updateCart() {
         purchasable_type: 'product',
     });
 }
-
-/* watchEffect(() => {
-    const currentQuantity = cartStore.productInItem(product.slug);
-    if (currentQuantity) {
-        qty.value = currentQuantity;
-    }
-}); */
 </script>
 
 <style scoped>

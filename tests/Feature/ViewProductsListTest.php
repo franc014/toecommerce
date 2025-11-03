@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\StockControlModes;
+use App\Models\AppSettings;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -7,7 +9,9 @@ use Inertia\Testing\AssertableInertia as Assert;
 test('can show a list of published products', function () {
 
     $totalProducts = 3;
-    $publishedProducts = Product::factory($totalProducts)->published()->create();
+    $publishedProducts = Product::factory($totalProducts)->published()->create([
+        'price' => 10,
+    ]);
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
@@ -18,11 +22,12 @@ test('can show a list of published products', function () {
                     $page->where('id', $publishedProducts[0]->id)
                         ->where('title', $publishedProducts[0]->title)
                         ->where('slug', $publishedProducts[0]->slug)
-                        ->where('price', $publishedProducts[0]->price)
+                        ->where('price', 10)
                         ->where('price_in_dollars', $publishedProducts[0]->price_in_dollars)
                         ->where('images', $publishedProducts[0]->productImagesForList)
                         ->where('has_variants', $publishedProducts[0]->hasPublishedVariants())
-                        ->where('variants', $publishedProducts[0]->variants);
+                        ->where('variants', $publishedProducts[0]->variants)
+                        ->where('dropping_stock', false);
                 }
             )
     );
@@ -52,7 +57,8 @@ test('can show a list of published products with variants', function () {
                         ->where('price_in_dollars', $publishedProducts[2]->price_in_dollars)
                         ->where('images', $publishedProducts[2]->productImagesForList)
                         ->where('has_variants', $publishedProducts[2]->hasPublishedVariants())
-                        ->where('variants', $publishedProducts[2]->variants);
+                        ->where('variants', $publishedProducts[2]->variants)
+                        ->where('dropping_stock', false);
                 }
             )
     );
@@ -65,4 +71,113 @@ test('can not show a list of unpublished products', function () {
             ->missing('products.0')
             ->missing('products.1')
     );
+});
+
+it('shows warning text if product stock is dropping below threshold, in strict mode', function () {
+
+    $this->withoutExceptionHandling();
+
+    AppSettings::factory()->create([
+        'stock_control_mode' => StockControlModes::STRICT->value,
+    ]);
+
+    Product::factory()->published()->create();
+    $productDropping = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'price' => 20,
+        'stock_threshold_for_customers' => 10,
+        'stock' => 8,
+    ]);
+
+    $this->get(route('storefront.products'))->assertInertia(
+        fn (Assert $page) => $page
+            ->has('products', 2)
+            ->has(
+                'products.1',
+                function (Assert $page) use ($productDropping) {
+                    $page->where('id', $productDropping->id)
+                        ->where('title', $productDropping->title)
+                        ->where('slug', $productDropping->slug)
+                        ->where('price', 20)
+                        ->where('price_in_dollars', $productDropping->price_in_dollars)
+                        ->where('images', $productDropping->productImagesForList)
+                        ->where('has_variants', $productDropping->hasPublishedVariants())
+                        ->where('variants', $productDropping->variants)
+                        ->where('dropping_stock', true);
+                }
+            )
+    );
+
+});
+
+it('does not show warning text if product stock is not dropping below threshold, in strict mode', function () {
+
+    $this->withoutExceptionHandling();
+
+    AppSettings::factory()->create([
+        'stock_control_mode' => StockControlModes::STRICT->value,
+    ]);
+
+    Product::factory()->published()->create();
+    $productDropping = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'stock_threshold_for_customers' => 10,
+        'stock' => 12,
+    ]);
+
+    $this->get(route('storefront.products'))->assertInertia(
+        fn (Assert $page) => $page
+            ->has('products', 2)
+            ->has(
+                'products.1',
+                function (Assert $page) use ($productDropping) {
+                    $page->where('id', $productDropping->id)
+                        ->where('title', $productDropping->title)
+                        ->where('slug', $productDropping->slug)
+                        ->where('price', $productDropping->price)
+                        ->where('price_in_dollars', $productDropping->price_in_dollars)
+                        ->where('images', $productDropping->productImagesForList)
+                        ->where('has_variants', $productDropping->hasPublishedVariants())
+                        ->where('variants', $productDropping->variants)
+                        ->where('dropping_stock', false);
+                }
+            )
+    );
+
+});
+
+it('does not show warning text if product stock is dropping below threshold, in nonstrict mode', function () {
+
+    $this->withoutExceptionHandling();
+
+    AppSettings::factory()->create([
+        'stock_control_mode' => StockControlModes::NONE->value,
+    ]);
+
+    Product::factory()->published()->create();
+    $productDropping = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'stock_threshold_for_customers' => 10,
+        'stock' => 8,
+    ]);
+
+    $this->get(route('storefront.products'))->assertInertia(
+        fn (Assert $page) => $page
+            ->has('products', 2)
+            ->has(
+                'products.1',
+                function (Assert $page) use ($productDropping) {
+                    $page->where('id', $productDropping->id)
+                        ->where('title', $productDropping->title)
+                        ->where('slug', $productDropping->slug)
+                        ->where('price', $productDropping->price)
+                        ->where('price_in_dollars', $productDropping->price_in_dollars)
+                        ->where('images', $productDropping->productImagesForList)
+                        ->where('has_variants', $productDropping->hasPublishedVariants())
+                        ->where('variants', $productDropping->variants)
+                        ->where('dropping_stock', false);
+                }
+            )
+    );
+
 });

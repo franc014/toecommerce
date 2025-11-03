@@ -61,6 +61,7 @@ export interface Product {
     has_taxes: boolean;
     taxes: string;
     main_image: string;
+    dropping_stock: boolean;
 
 }
 

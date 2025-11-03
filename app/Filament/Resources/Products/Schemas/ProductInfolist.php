@@ -41,12 +41,15 @@ class ProductInfolist
                             ]),
                         Tab::make('Precios, stock e impuestos')
                             ->icon(Heroicon::OutlinedCurrencyDollar)
+                            ->columns(2)
                             ->schema([
                                     TextEntry::make('price')->money('USD'),
                                     TextEntry::make('taxes.name')
                                         ->placeholder('No hay impuestos asignados todavía')
                                         ->label('Impuestos asignados')->badge()->color('primary'),
                                     TextEntry::make('stock'),
+                                    TextEntry::make('stock_threshold_for_customers')
+                                    ->label('Umbral de stock en descenso para clientes'),
                                     TextEntry::make('sku'),
                             ]),
                         Tab::make('Imágenes')
