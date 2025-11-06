@@ -4,6 +4,8 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\Tax;
 use App\Models\User;
 use App\Models\UserInfoEntry;
 use Illuminate\Support\Str;
@@ -27,15 +29,140 @@ test('signed in user can access the checkout page', function () {
         ->assertStatus(200);
 });
 
-test('an order is created when visiting the checkout page for the first time', function () {
 
+test('cart items are reserved', function () {
+
+    $productA = Product::factory()->create([
+        'stock' => 10,
+    ]);
+    $productB = Product::factory()->create(
+        [
+            'stock' => 12,
+        ]
+    );
+
+    $cart = Cart::factory()->create();
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class,
+        'quantity' => 2,
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class,
+        'quantity' => 3,
+    ]);
+
+    $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->get(route('storefront.checkout'));
+
+    expect($productA->fresh()->reservations)->toHaveCount(1);
+
+    expect($productA->fresh()->reservations[0]->allowed_quantity)->toBe(2);
+    expect($productA->fresh()->reservations[0]->cart_id)->toBe($cart->id);
+    expect($productA->fresh()->reservations[0]->user_id)->toBe($this->user->id);
+    expect($productA->fresh()->remaining)->toBe(8);
+
+    expect($productB->fresh()->reservations)->toHaveCount(1);
+    expect($productB->fresh()->reservations[0]->allowed_quantity)->toBe(3);
+    expect($productB->fresh()->reservations[0]->cart_id)->toBe($cart->id);
+    expect($productB->fresh()->reservations[0]->user_id)->toBe($this->user->id);
+    expect($productB->fresh()->remaining)->toBe(9);
+
+    $this->assertDatabaseHas('carts', [
+       'id' => $cart->id,
+       'user_id' => $this->user->id,
+    ]);
+
+    $this->assertDatabaseHas('reservations', [
+        'cart_id' => $cart->id,
+        'allowed_quantity' => 2,
+        'unavailable_quantity' => 0,
+        'user_id' => $this->user->id,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class
+    ]);
+
+    $this->assertDatabaseHas('reservations', [
+        'cart_id' => $cart->id,
+        'allowed_quantity' => 3,
+        'unavailable_quantity' => 0,
+        'user_id' => $this->user->id,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class
+    ]);
+
+});
+
+
+test('an order is created considering the items reserved', function () {
+
+    $this->withoutExceptionHandling();
     Str::createUlidsUsing(function () {
         return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
     });
 
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-        'user_id' => $this->user->id,
+    $tax = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15,
     ]);
+
+    $productA = Product::factory()->create([
+            'stock' => 10,
+            'price' => 100,
+            'title' => 'Product A',
+            'slug' => 'product-a',
+        ]);
+    $productB = Product::factory()->create(
+        [
+            'stock' => 12,
+            'price' => 80,
+            'title' => 'Product B',
+            'slug' => 'product-b',
+        ]
+    );
+
+    $productA->taxes()->attach($tax->id);
+    $productB->taxes()->attach($tax->id);
+
+    $cart = Cart::factory()->create([
+        'user_id' => $this->user->id
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class,
+        'quantity' => 2,
+        'price' => $productA->price,
+        'total' => $productA->price * 2,
+        'total_with_taxes' => $productA->priceWithTaxes() * 2,
+        'computed_taxes' => $productA->computedTaxes() * 2,
+        'taxes' => $productA->taxesToJson(),
+        'title' => $productA->title,
+        'slug' => $productA->slug
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class,
+        'quantity' => 2,
+        'price' => $productB->price,
+        'total' => $productB->price * 2,
+        'total_with_taxes' => $productB->priceWithTaxes() * 2,
+        'computed_taxes' => $productB->computedTaxes() * 2,
+        'taxes' => $productA->taxesToJson(),
+        'title' => $productB->title,
+        'slug' => $productB->slug
+    ]);
+
+
 
     $response = $this->actingAs($this->user)
         ->withCookie('cart', $cart->ui_cart_id)
@@ -46,17 +173,33 @@ test('an order is created when visiting the checkout page for the first time', f
     $gatewayInfo = $response->inertiaProps('gatewayInfo');
 
     expect($this->user->orders)->toHaveCount(1);
-    expect($order['id'])->toBe($this->user->orders->first()->id);
+
+    expect($order['id'])->toBe($this->user->latestOrder->id);
     expect($order['cart_id'])->toBe($cart->id);
     expect($order['user_id'])->toBe($this->user->id);
+
+    $reservations = $this->user->reservations;
+
+    expect($order['order_items'][0]['cart_quantity'])->toBe(2);
+    expect($order['order_items'][0]['allowed_quantity'])->toBe($reservations[0]->allowed_quantity);
+    expect($order['order_items'][0]['unavailable_quantity'])->toBe($reservations[0]->unavailable_quantity);
+    expect($order['order_items'][0]['purchasable_id'])->toBe($reservations[0]->purchasable_id);
+    expect($order['order_items'][0]['purchasable_type'])->toBe($reservations[0]->purchasable_type);
+
+    /*  expect($order['order_items'][1]['quantity'])->toBe($reservations[1]->quantity);
+     expect($order['order_items'][1]['purchasable_id'])->toBe($reservations[1]->purchasable_id); */
 
     expect($gatewayInfo['storeId'])->toBe(config('app.payphone.store_id'));
     expect($gatewayInfo['token'])->toBe(config('app.payphone.token'));
 
-    expect($cart->fresh()->total_amount)->toBe($order['total_amount']);
+    ray($cart->fresh(), $order);
+
+    expect((int) $cart->fresh()->total_amount)->toBe($order['total_amount']);
     expect((int) $cart->fresh()->total_with_taxes)->toBe($order['total_with_taxes']);
-    expect($cart->fresh()->total_without_taxes)->toBe($order['total_without_taxes']);
+    expect((int) $cart->fresh()->total_without_taxes)->toBe($order['total_without_taxes']);
     expect((int) $cart->fresh()->total_computed_taxes)->toBe($order['total_computed_taxes']);
+
+    //test totals
 
     $this->assertDatabaseHas('orders', [
         'cart_id' => $cart->id,
@@ -71,31 +214,35 @@ test('an order is created when visiting the checkout page for the first time', f
 
     $this->assertDatabaseHas('order_items', [
         'order_id' => $this->user->orders->first()->id,
-        'purchasable_id' => $cart->items->first()->purchasable_id,
-        'purchasable_type' => $cart->items->first()->purchasable_type,
-        'title' => $cart->items->first()->title,
-        'slug' => $cart->items->first()->slug,
-        'quantity' => $cart->items->first()->quantity,
-        'price' => $cart->items->first()->price * 100,
-        'taxes' => $cart->items->first()->taxes,
-        'total' => $cart->items->first()->total * 100,
-        'total_with_taxes' => $cart->items->first()->total_with_taxes * 100,
-        'computed_taxes' => $cart->items->first()->computed_taxes * 100,
+        'purchasable_id' => $reservations[0]->purchasable_id,
+        'purchasable_type' => $reservations[0]->purchasable_type,
+        'title' => $productA->title,
+        'slug' => $productA->slug,
+        'allowed_quantity' => $reservations[0]->allowed_quantity,
+        'unavailable_quantity' => $reservations[0]->unavailable_quantity,
+        'price' => $productA->price * 100,
+        'taxes' => $productA->taxesToJson(),
+        'total' => $productA->price * $reservations[0]->allowed_quantity * 100,
+        'total_with_taxes' => $reservations[0]->allowed_quantity * $productA->priceWithTaxes() * 100,
+        'computed_taxes' => $reservations[0]->allowed_quantity * $productA->computedTaxes() * 100,
     ]);
 
     $this->assertDatabaseHas('order_items', [
-        'order_id' => $this->user->orders->first()->id,
-        'purchasable_id' => $cart->items->last()->purchasable_id,
-        'purchasable_type' => $cart->items->last()->purchasable_type,
-        'title' => $cart->items->last()->title,
-        'slug' => $cart->items->last()->slug,
-        'quantity' => $cart->items->last()->quantity,
-        'price' => $cart->items->last()->price * 100,
-        'taxes' => $cart->items->last()->taxes,
-        'total' => $cart->items->last()->total * 100,
-        'total_with_taxes' => $cart->items->last()->total_with_taxes * 100,
-        'computed_taxes' => $cart->items->last()->computed_taxes * 100,
+       'order_id' => $this->user->orders->first()->id,
+       'purchasable_id' => $reservations[1]->purchasable_id,
+       'purchasable_type' => $reservations[1]->purchasable_type,
+       'title' => $productB->title,
+       'slug' => $productB->slug,
+       'allowed_quantity' => $reservations[1]->allowed_quantity,
+       'unavailable_quantity' => $reservations[1]->unavailable_quantity,
+       'price' => $productB->price * 100,
+       'taxes' => $productB->taxesToJson(),
+       'total' => $productB->price * $reservations[1]->allowed_quantity * 100,
+       'total_with_taxes' => $reservations[1]->allowed_quantity * $productB->priceWithTaxes() * 100,
+       'computed_taxes' => $reservations[1]->allowed_quantity * $productB->computedTaxes() * 100,
     ]);
+
+
 
 });
 
@@ -183,22 +330,7 @@ test('user is redirected to products page if cart is empty', function () {
     expect($this->user->orders)->toHaveCount(0);
 });
 
-test('cart is updated with user id when visiting the checkout page', function () {
 
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-        'user_id' => null,
-    ]);
-
-    $this->actingAs($this->user)
-        ->withCookie('cart', $cart->ui_cart_id)
-        ->get(route('storefront.checkout'));
-
-    $this->assertDatabaseHas('carts', [
-        'id' => $cart->id,
-        'user_id' => $this->user->id,
-    ]);
-
-});
 
 test('guest users should login to access the checkout page', function () {
     $this->get(route('storefront.checkout'))

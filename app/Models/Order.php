@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -49,6 +50,7 @@ class Order extends Model
         return $this->orderItems()->count() > 0;
     }
 
+
     public static function placeFor(User $user, Cart $cart)
     {
         if ($cart->isEmpty()) {
@@ -58,6 +60,13 @@ class Order extends Model
         if ($cart->isPaid()) {
             throw new CartAlreadyPaidException;
         }
+
+        $reservations = $user->reservations()->where('cart_id', $cart->id)
+        ->where('user_id', $user->id)
+        ->with('purchasable')
+        ->get();
+
+        //ray('res', $reservations->load('purchasable')->first()->purchasable->title);
 
         $order = self::where('cart_id', $cart->id)
             ->where('user_id', $user->id)
@@ -72,57 +81,32 @@ class Order extends Model
             'user_id' => $user->id,
             'cart_id' => $cart->id,
             'code' => (string) Str::ulid(),
-            'total_amount' => $cart->total_amount,
-            'total_with_taxes' => $cart->total_with_taxes,
-            'total_without_taxes' => $cart->total_without_taxes,
-            'total_computed_taxes' => $cart->total_computed_taxes,
         ]);
 
-        foreach ($cart->items as $item) {
+        foreach ($reservations as $key => $reservation) {
+
+            ray($reservation->purchasable->taxes);
+
             $newOrder->orderItems()->create([
-                'purchasable_id' => $item->purchasable_id,
-                'purchasable_type' => $item->purchasable_type,
-                'cart_item_id' => $item->id,
-                'title' => $item->title,
-                'slug' => $item->slug,
-                'quantity' => $item->quantity,
-                'price' => $item->price,
-                'taxes' => $item->taxes,
-                'total' => $item->total,
-                'total_with_taxes' => $item->total_with_taxes,
-                'computed_taxes' => $item->computed_taxes,
+                'purchasable_id' => $reservation->purchasable_id,
+                'purchasable_type' => $reservation->purchasable_type,
+                'cart_item_id' => $reservation->id,
+                'title' => $reservation->purchasable->title,
+                'slug' =>  $reservation->purchasable->slug,
+                'cart_quantity' => $cart->items[$key]->quantity,
+                'allowed_quantity' => $reservation->allowed_quantity,
+                'unavailable_quantity' => $reservation->unavailable_quantity,
+                'price' => $reservation->purchasable->price,
+                'taxes' => $reservation->purchasable->taxesToJson(),
+                'total' => $reservation->allowed_quantity * $reservation->purchasable->price,
+                'total_with_taxes' => $reservation->allowed_quantity * $reservation->purchasable->priceWithTaxes(),
+                'computed_taxes' => $reservation->allowed_quantity * $reservation->purchasable->computedTaxes() ,
             ]);
         }
 
-        return $newOrder->load('orderItems');
+        return $newOrder->fresh()->load('orderItems');
     }
 
-    public function addItem(CartItem $item)
-    {
-        $this->orderItems()->create([
-            'purchasable_id' => $item->purchasable_id,
-            'purchasable_type' => $item->purchasable_type,
-            'cart_item_id' => $item->id,
-            'title' => $item->title,
-            'slug' => $item->slug,
-            'quantity' => $item->quantity,
-            'price' => $item->price,
-            'taxes' => $item->taxes,
-            'total' => $item->total,
-            'total_with_taxes' => $item->total_with_taxes,
-            'computed_taxes' => $item->computed_taxes,
-        ]);
-    }
-
-    public function updateItem(CartItem $cartItem): void
-    {
-        $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
-        $item->quantity = $cartItem->quantity;
-        $item->total = $cartItem->total;
-        $item->total_with_taxes = $cartItem->total_with_taxes;
-        $item->computed_taxes = $cartItem->computed_taxes;
-        $item->save();
-    }
 
     public function removeItem(CartItem $cartItem): void
     {

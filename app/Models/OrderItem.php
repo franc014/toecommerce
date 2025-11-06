@@ -34,6 +34,7 @@ class OrderItem extends Model
     protected static function booted(): void
     {
         static::saved(function (OrderItem $orderItem) {
+            ray($orderItem->order);
             $orderItem->order->updateOrderTally();
         });
     }

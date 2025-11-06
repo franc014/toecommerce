@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +37,11 @@ class Cart extends Model
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeByUICartId($query, $UICartId): Builder
@@ -215,6 +221,14 @@ class Cart extends Model
         $this->save();
     }
 
+    public function reserveItemsFor(User $user): void
+    {
+        $this->items->map(function (CartItem $item) use ($user) {
+            ray($item->purchasable->title, $item->title);
+            return $item->purchasable->reserve($user, $item->cart, $item->quantity);
+        });
+    }
+
     public function order(): HasOne
     {
         return $this->hasOne(Order::class);
@@ -240,4 +254,6 @@ class Cart extends Model
     {
         return $this->paid_at !== null;
     }
+
+
 }

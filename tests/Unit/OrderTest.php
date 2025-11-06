@@ -5,6 +5,8 @@ use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Tax;
 use App\Models\User;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
@@ -24,38 +26,58 @@ test('can create an order', function () {
     Str::createUlidsUsing(function () {
         return new Ulid('01HRDBNHHCKNW2AK4Z29SN82T9');
     });
+
+    $taxA = Tax::factory()->create(['percentage' => 15, 'description' => 'IVA 15%', 'name' => 'IVA']);
+    $taxB = Tax::factory()->create(['percentage' => 10, 'description' => 'ISD 10%', 'name' => 'ISD']);
+
+    $productA = Product::factory()->create([
+       'title' => 'Product A',
+       'slug' => 'product-a',
+       'price' => 100,
+
+    ]);
+    $productB = Product::factory()->create([
+        'title' => 'Product B',
+        'slug' => 'product-b',
+        'price' => 30,
+
+    ]);
+
+    $productA->taxes()->attach([$taxA->id, $taxB->id]);
+    $productB->taxes()->attach([$taxA->id, $taxB->id]);
+
     $user = User::factory()->create();
     $cart = Cart::factory()->create([
         'user_id' => $user->id,
     ]);
 
-    CartItem::factory()->create([
+    $ciA = CartItem::factory()->create([
         'cart_id' => $cart->id,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class,
         'price' => 100,
         'quantity' => 2,
-        'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
-            ['name' => 'ISD',
-                'percentage' => 10],
-        ]),
+        'taxes' => $productA->taxesToJson(),
         'total' => 200,
         'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
         'computed_taxes' => 2 * 100 * (0.15 + 0.10), // 50
     ]);
 
-    CartItem::factory()->create([
+    $ciB = CartItem::factory()->create([
         'cart_id' => $cart->id,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class,
         'price' => 30,
         'quantity' => 3,
-        'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
-        ]),
+        'taxes' => $productB->taxesToJson(),
         'total' => 90,
-        'total_with_taxes' => 3 * 30 * (1 + 0.15),
-        'computed_taxes' => 3 * 30 * (0.15),
+        'total_with_taxes' => 3 * 30 * (1 + 0.15 + 0.10),
+        'computed_taxes' => 3 * 30 * (0.15 + 0.10),
     ]);
+
+
+    $productA->reserve($user, $cart, $ciA->quantity);
+    $productB->reserve($user, $cart, $ciB->quantity);
 
     $order = Order::placeFor($user, $cart->fresh());
 
@@ -73,136 +95,104 @@ test('can create an order', function () {
 });
 
 test('can create order items', function () {
-    $user = User::factory()->create();
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+    $productA = Product::factory()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+        'price' => 100,
 
-    $order = Order::placeFor($user, $cart);
+    ]);
+    $productB = Product::factory()->create([
+        'title' => 'Product B',
+        'slug' => 'product-b',
+        'price' => 30,
 
-    expect($order->orderItems)->toHaveCount(2);
-    expect($order->orderItems[0]->order_id)->toBe($order->id);
-    expect($order->orderItems[0]->purchasable_id)->toBe($cart->items[0]->purchasable_id);
-    expect($order->orderItems[0]->purchasable_type)->toBe($cart->items[0]->purchasable_type);
-    expect($order->orderItems[0]->cart_item_id)->toBe($cart->items[0]->id);
-    expect($order->orderItems[0]->title)->toBe($cart->items[0]->title);
-    expect($order->orderItems[0]->slug)->toBe($cart->items[0]->slug);
-    expect($order->orderItems[0]->taxes)->toBe($cart->items[0]->taxes);
-    expect($order->orderItems[0]->total)->toBe($cart->items[0]->total);
-    expect($order->orderItems[0]->total_with_taxes)->toBe($cart->items[0]->total_with_taxes);
-    expect($order->orderItems[0]->computed_taxes)->toBe($cart->items[0]->computed_taxes);
-    expect($order->orderItems[0]->price)->toBe($cart->items[0]->price);
-    expect($order->orderItems[0]->quantity)->toBe($cart->items[0]->quantity);
-
-    expect($order->orderItems[1]->order_id)->toBe($order->id);
-    expect($order->orderItems[1]->purchasable_id)->toBe($cart->items[1]->purchasable_id);
-    expect($order->orderItems[1]->purchasable_type)->toBe($cart->items[1]->purchasable_type);
-    expect($order->orderItems[1]->cart_item_id)->toBe($cart->items[1]->id);
-    expect($order->orderItems[1]->title)->toBe($cart->items[1]->title);
-    expect($order->orderItems[1]->slug)->toBe($cart->items[1]->slug);
-    expect($order->orderItems[1]->taxes)->toBe($cart->items[1]->taxes);
-    expect($order->orderItems[1]->total)->toBe($cart->items[1]->total);
-    expect($order->orderItems[1]->total_with_taxes)->toBe($cart->items[1]->total_with_taxes);
-    expect($order->orderItems[1]->computed_taxes)->toBe($cart->items[1]->computed_taxes);
-    expect($order->orderItems[1]->price)->toBe($cart->items[1]->price);
-    expect($order->orderItems[1]->quantity)->toBe($cart->items[1]->quantity);
-
-});
-
-test('can add a new order item', function () {
-
-    $user = User::factory()->create();
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
-        'user_id' => $user->id,
     ]);
 
-    $order = Order::placeFor($user, $cart->fresh());
-
-    $newItem = CartItem::factory()->create([
-        'cart_id' => $cart->id,
+    $tax = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15
     ]);
 
-    $order = $order->fresh();
-
-    expect($order->orderItems)->toHaveCount(3);
-
-    expect($order->orderItems[2]->order_id)->toBe($order->id);
-    expect($order->orderItems[2]->purchasable_id)->toBe($newItem->purchasable_id);
-    expect($order->orderItems[2]->purchasable_type)->toBe($newItem->purchasable_type);
-    expect($order->orderItems[2]->cart_item_id)->toBe($newItem->id);
-    expect($order->orderItems[2]->title)->toBe($newItem->title);
-    expect($order->orderItems[2]->slug)->toBe($newItem->slug);
-    expect($order->orderItems[2]->taxes)->toBe($newItem->taxes);
-    expect($order->orderItems[2]->total)->toBe($newItem->total);
-    expect($order->orderItems[2]->total_with_taxes)->toBe($newItem->total_with_taxes);
-    expect($order->orderItems[2]->computed_taxes)->toBe($newItem->computed_taxes);
-    expect($order->orderItems[2]->price)->toBe($newItem->price);
-    expect($order->orderItems[2]->quantity)->toBe($newItem->quantity);
-
-    expect($order->fresh()->total_amount)->toBe($cart->fresh()->total_amount);
-    expect($order->fresh()->total_with_taxes)->toBe($cart->fresh()->total_with_taxes);
-    expect($order->fresh()->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
-    expect($order->fresh()->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
-    expect($order->fresh()->paid_at)->toBeNull();
-
-});
-
-test('can update an order item', function () {
+    $productA->taxes()->attach($tax->id);
+    $productB->taxes()->attach($tax->id);
 
     $user = User::factory()->create();
     $cart = Cart::factory()->create([
         'user_id' => $user->id,
     ]);
-
-    $item = CartItem::factory()->create([
+    $ciA = CartItem::factory()->create([
         'cart_id' => $cart->id,
+        'purchasable_id' => $productA->id,
+        'purchasable_type' => Product::class,
+        'title' => $productA->title,
+        'slug' => $productA->slug,
         'price' => 100,
         'quantity' => 2,
-        'taxes' => json_encode(
-            [
-                [
-                    'name' => 'IVA',
-                    'percentage' => 15,
-                ],
-            ],
-        ),
         'total' => 200,
-        'total_with_taxes' => 200 * (1 + 0.15),
-        'computed_taxes' => 200 * 0.15,
 
     ]);
 
-    $order = Order::placeFor($user, $cart->fresh());
+    $ciB = CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $productB->id,
+        'purchasable_type' => Product::class,
+        'title' => $productB->title,
+        'slug' => $productB->slug,
+        'price' => 30,
+        'quantity' => 3,
+        'total' => 90,
 
-    $newQuantity = 3;
 
-    $item->quantity = $newQuantity;
-    $item->total = $newQuantity * $item->price;
-    $item->total_with_taxes = $newQuantity * $item->price * (1 + 0.15);
-    $item->computed_taxes = $item->total_with_taxes - $item->total;
-    $item->save();
+    ]);
 
-    $order = $order->fresh();
+    $reservationA = $productA->reserve($user, $cart, $ciA->quantity);
+    $reservationB = $productB->reserve($user, $cart, $ciB->quantity);
 
-    expect($order->orderItems)->toHaveCount(1);
+    expect($ciA->purchasable->id)->toBe($reservationA->purchasable->id);
+    expect($ciA->purchasable->title)->toBe($reservationA->purchasable->title);
+
+    expect($ciB->purchasable->id)->toBe($reservationB->purchasable->id);
+    expect($ciB->purchasable->title)->toBe($reservationB->purchasable->title);
+
+
+    $order = Order::placeFor($user, $cart);
+
+    expect($order->orderItems)->toHaveCount(2);
 
     expect($order->orderItems[0]->order_id)->toBe($order->id);
-    expect($order->orderItems[0]->purchasable_id)->toBe($item->purchasable_id);
-    expect($order->orderItems[0]->purchasable_type)->toBe($item->purchasable_type);
-    expect($order->orderItems[0]->cart_item_id)->toBe($item->id);
-    expect($order->orderItems[0]->title)->toBe($item->title);
-    expect($order->orderItems[0]->slug)->toBe($item->slug);
-    expect($order->orderItems[0]->taxes)->toBe($item->taxes);
-    expect($order->orderItems[0]->total)->toBe($item->total);
-    expect($order->orderItems[0]->total_with_taxes)->toBe($item->total_with_taxes);
-    expect($order->orderItems[0]->computed_taxes)->toBe($item->computed_taxes);
-    expect($order->orderItems[0]->price)->toBe($item->price);
-    expect($order->orderItems[0]->quantity)->toBe($newQuantity);
+    expect($order->orderItems[0]->purchasable_id)->toBe($productA->id);
+    expect($order->orderItems[0]->purchasable_type)->toBe(Product::class);
+    expect($order->orderItems[0]->cart_item_id)->toBe($cart->items[0]->id);
+    expect($order->orderItems[0]->title)->toBe($productA->title);
+    expect($order->orderItems[0]->slug)->toBe($productA->slug);
+    expect($order->orderItems[0]->taxes)->toBe($productA->taxesToJson());
+    expect($order->orderItems[0]->price)->toBe($productA->price);
+    expect($order->orderItems[0]->cart_quantity)->toBe($cart->items[0]->quantity);
+    expect($order->orderItems[0]->allowed_quantity)->toBe($cart->items[0]->quantity);
+    expect($order->orderItems[0]->unavailable_quantity)->toBe(0);
+    expect($order->orderItems[0]->total)->toBe($productA->price * $cart->items[0]->quantity);
+    expect($order->orderItems[0]->total_with_taxes)->toBe($productA->priceWithTaxes() * $cart->items[0]->quantity);
+    expect($order->orderItems[0]->computed_taxes)->toBe($productA->computedTaxes() * $cart->items[0]->quantity);
 
-    expect($order->fresh()->total_amount)->toBe($item->total_with_taxes);
-    expect($order->fresh()->total_with_taxes)->toBe($item->total);
-    expect($order->fresh()->total_without_taxes)->toBe(0.0);
-    expect($order->fresh()->paid_at)->toBeNull();
+    expect($order->orderItems[1]->order_id)->toBe($order->id);
+    expect($order->orderItems[1]->purchasable_id)->toBe($productB->id);
+    expect($order->orderItems[1]->purchasable_type)->toBe(Product::class);
+    expect($order->orderItems[1]->cart_item_id)->toBe($cart->items[1]->id);
+    expect($order->orderItems[1]->title)->toBe($productB->title);
+    expect($order->orderItems[1]->slug)->toBe($productB->slug);
+    expect($order->orderItems[1]->taxes)->toBe($productB->taxesToJson());
+    expect($order->orderItems[1]->price)->toBe($productB->price);
+    expect($order->orderItems[1]->cart_quantity)->toBe($cart->items[1]->quantity);
+    expect($order->orderItems[1]->allowed_quantity)->toBe($cart->items[1]->quantity);
+    expect($order->orderItems[1]->unavailable_quantity)->toBe(0);
+    expect($order->orderItems[1]->total)->toBe($productB->price * $cart->items[1]->quantity);
+    expect($order->orderItems[1]->total_with_taxes)->toBe($productB->priceWithTaxes() * $cart->items[1]->quantity);
+    expect($order->orderItems[1]->computed_taxes)->toBe($productB->computedTaxes() * $cart->items[1]->quantity);
+
+
 
 });
+
 
 test('trying to place an order for a cart with no items throws an exception', function () {
 

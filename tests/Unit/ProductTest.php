@@ -1,9 +1,12 @@
 <?php
 
 use App\Enums\ProductStatus;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -464,5 +467,34 @@ test('can get product images as URLs for products list component', function () {
 
     expect($product->productImagesForList)->toHaveCount(2);
     expect($product->productImagesForList->toArray())->toEqual([$imageA->getFullUrl(), $imageB->getFullUrl()]);
+
+});
+
+test('a product can be reserved', function () {
+    $cart = Cart::factory()->create();
+
+    $user = User::factory()->create();
+    $product = Product::factory()->create(
+        ['stock' => 6]
+    );
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'quantity' => 2,
+    ]);
+
+    $product->reserve($user, $cart, 2);
+    expect($product->reservations)->toHaveCount(1);
+    expect($product->reservations[0]->user_id)->toBe($user->id);
+    expect($product->reservations[0]->cart_id)->toBe($cart->id);
+
+    expect($product->reservations[0]->allowed_quantity)->toBe(2);
+    expect($product->reservations[0]->unavailable_quantity)->toBe(0);
+    expect($product->reservations[0]->purchasable_id)->toBe($product->id);
+    expect($product->reservations[0]->purchasable_type)->toBe(Product::class);
+
+    expect($user->reservations)->toHaveCount(1);
+    expect($product->remaining)->toBe(4);
 
 });

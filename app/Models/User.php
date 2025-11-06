@@ -9,6 +9,7 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -75,9 +76,19 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(UserInfoEntry::class);
     }
 
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function latestOrder(): HasOne
+    {
+        return $this->orders()->one()->latestOfMany();
     }
 
     public function billingInfoEntry(): HasMany

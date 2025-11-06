@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -23,7 +22,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('purchasable_type');
             $table->integer('price');
-            $table->integer('quantity');
+            $table->integer('cart_quantity');
+            $table->integer('allowed_quantity');
+            $table->integer('unavailable_quantity');
             $table->json('taxes')->nullable();
             $table->integer('total');
             $table->integer('total_with_taxes');

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -52,10 +53,16 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
             'price' => $this->price,
             'slug' => $this->slug,
             'image' => $this->main_image,
-            'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
+            'taxes' => $this->taxesToJson(),
             'purchasable_type' => Product::class,
         ];
     }
+
+    public function taxesToJson(): string
+    {
+        return json_encode($this->taxes->select(['name', 'percentage']));
+    }
+
 
     public function scopeWithStock($query)
     {
@@ -100,6 +107,16 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function cartItems(): MorphMany
+    {
+        return $this->morphMany(CartItem::class, 'purchasable');
+    }
+
+    public function reservations(): MorphMany
+    {
+        return $this->morphMany(Reservation::class, 'purchasable');
     }
 
     public function hasVariants(): bool
@@ -217,6 +234,28 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
 
                 return $taxes->implode(', ');
             }
+        );
+    }
+
+    public function reserve(User $user, Cart $cart, int $quantity): Reservation
+    {
+        $alllowedQuantity = $this->remaining - $quantity > 0 ? $quantity : $this->remaining;
+        $unavailableQuantity = $quantity - $this->remaining > 0 ? $quantity - $this->remaining : 0;
+
+        return $this->reservations()->create([
+            'user_id' => $user->id,
+            'cart_id' => $cart->id,
+            'allowed_quantity' => $alllowedQuantity,
+            'unavailable_quantity' => $unavailableQuantity,
+            'purchasable_id' => $this->id,
+            'purchasable_type' => Product::class,
+        ]);
+    }
+
+    public function remaining(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->stock - $this->reservations()->sum('allowed_quantity')
         );
     }
 }
