@@ -3,9 +3,6 @@
 namespace App\Listeners;
 
 use Filament\Auth\Events\Registered;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-
 use Filament\Facades\Filament;
 use Spatie\Permission\Models\Role;
 

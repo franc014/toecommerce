@@ -23,9 +23,9 @@ enum ProductStatus: string implements HasColor, HasLabel
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::DRAFT => 'BORRADOR',
-            self::ACTIVE => 'PUBLICADO',
-            self::ARCHIVED => 'ARCHIVADO',
+            self::DRAFT => strtoupper(__('firesources.draft')),
+            self::ACTIVE => strtoupper(__('firesources.published')),
+            self::ARCHIVED => strtoupper(__('firesources.archived')),
         };
     }
 }

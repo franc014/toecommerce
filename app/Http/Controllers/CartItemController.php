@@ -36,18 +36,14 @@ class CartItemController extends Controller
             }],
         ]);
 
-
-
         try {
             $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
 
             $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($request->input('product_id'), $request->input('purchasable_type')), $request->input('quantity'));
 
-            //ray($addsToCart);
+            // ray($addsToCart);
 
             $item = $addsToCart->handle();
-
-
 
             return ['item' => $item];
 
@@ -81,6 +77,4 @@ class CartItemController extends Controller
         $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
         $cart->removeItem($request->input('item_id'));
     }
-
-
 }

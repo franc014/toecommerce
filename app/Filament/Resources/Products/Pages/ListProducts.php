@@ -15,32 +15,32 @@ class ListProducts extends ListRecords
 
     public function getTitle(): string|Htmlable
     {
-        return 'Productos';
+        return __('firesources.products');
     }
 
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Nuevo producto')->icon(Heroicon::OutlinedPlus),
+            CreateAction::make()->label(__('firesources.add').' '.__('firesources.product'))->icon(Heroicon::OutlinedPlus),
         ];
     }
 
     public function getBreadcrumb(): ?string
     {
-        return 'Lista';
+        return __('firesources.list');
     }
 
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('Todos'),
-            'active' => Tab::make('Publicados')->modifyQueryUsing(function ($query) {
+            'all' => Tab::make(__('firesources.all')),
+            'active' => Tab::make(__('firesources.published'))->modifyQueryUsing(function ($query) {
                 return $query->published();
             }),
-            'draft' => Tab::make('Borradores')->modifyQueryUsing(function ($query) {
+            'draft' => Tab::make(__('firesources.draft'))->modifyQueryUsing(function ($query) {
                 return $query->draft();
             }),
-            'archived' => Tab::make('Archivados')->modifyQueryUsing(function ($query) {
+            'archived' => Tab::make(__('firesources.archived'))->modifyQueryUsing(function ($query) {
                 return $query->archived();
             }),
         ];

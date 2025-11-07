@@ -12,6 +12,7 @@ trait SharedFields
     {
         return [
             TextInput::make('title')
+                ->label(__('firesources.title'))
                 ->required()
                 ->maxLength(100)
                 ->live(debounce: 500)

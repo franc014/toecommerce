@@ -131,6 +131,6 @@ return [
 
     'dashboard' => [
         'allowed-admin-email' => env('allowed-admin-email', 'jfandtec@gmail.com'),
-    ]
+    ],
 
 ];

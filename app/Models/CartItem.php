@@ -74,7 +74,6 @@ class CartItem extends Model
         return $this->morphTo();
     }
 
-
     public function scopeAllByProductInOpenCarts($query, $purchasable_id, $purchasable_type)
     {
         return $query->where('purchasable_id', $purchasable_id)

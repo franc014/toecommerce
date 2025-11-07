@@ -12,10 +12,9 @@ class ConfirmsPayment
     public function __construct(
         public string $uiCartId,
         public array $payphoneConfirmation
-    ) {
-    }
+    ) {}
 
-    public function handle():Order
+    public function handle(): Order
     {
         $payphoneConfirmation = PayphonePaymentGateway::confirm(...$this->payphoneConfirmation);
 

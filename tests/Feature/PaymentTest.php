@@ -204,8 +204,8 @@ test('can not confirm if order is already paid', function () {
         'id' => 'tx12345',
         'clientTransactionId' => 'cltx12345',
     ]))
-    ->assertSessionHas('order-confirmation-error', 'La orden ya ha sido confirmada.')
-    ->assertRedirect(route('storefront.products'));
+        ->assertSessionHas('order-confirmation-error', 'La orden ya ha sido confirmada.')
+        ->assertRedirect(route('storefront.products'));
 
 });
 
@@ -234,8 +234,8 @@ test('can not confirm if payphone transaction response has errors', function () 
         'id' => 'tx12345',
         'clientTransactionId' => 'cltx12345',
     ]))
-    ->assertRedirect(route('storefront.products'))
-    ->assertSessionHas('order-confirmation-error', 'La transacción ha fallado. Inténtalo de nuevo o contacta con el administrador.');
+        ->assertRedirect(route('storefront.products'))
+        ->assertSessionHas('order-confirmation-error', 'La transacción ha fallado. Inténtalo de nuevo o contacta con el administrador.');
 
 });
 

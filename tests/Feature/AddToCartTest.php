@@ -204,7 +204,6 @@ test('can add a product to the cart after a product has been added', function ()
         'ui_cart_id' => $uiCartId,
     ]);
 
-
     $quantityToAdd = 2;
 
     expect($cart->hasItems())->toBeFalse();
@@ -220,10 +219,10 @@ test('can add a product to the cart after a product has been added', function ()
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $productB->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $productB->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
     ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
@@ -284,7 +283,6 @@ test('can add a variant to the cart after a product has been added', function ()
         'ui_cart_id' => $uiCartId,
     ]);
 
-
     $quantityToAdd = 2;
 
     expect($cart->hasItems())->toBeFalse();
@@ -300,18 +298,14 @@ test('can add a variant to the cart after a product has been added', function ()
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $variant->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product-variant',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variant->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
     ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
     expect($cart->fresh()->items_count)->toBe(4);
-
-
-
-
 
     $this->assertDatabaseHas('cart_items', [
         'cart_id' => $cart->id,
@@ -368,32 +362,29 @@ test('can add a product to the cart after a variant has been added', function ()
         'ui_cart_id' => $uiCartId,
     ]);
 
-
     $quantityToAdd = 2;
 
     expect($cart->hasItems())->toBeFalse();
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $variant->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product-variant',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variant->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
     ]))->assertStatus(200);
-
 
     expect($cart->fresh()->items)->toHaveCount(1);
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-         'ui_cart_id' => $uiCartId,
-         'product_id' => $product->id,
-         'quantity' => $quantityToAdd,
-         'purchasable_type' => 'product',
-     ]))->assertStatus(200);
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
+    ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
     expect($cart->fresh()->items_count)->toBe(4);
-
 
     $this->assertDatabaseHas('cart_items', [
         'cart_id' => $cart->id,
@@ -455,26 +446,24 @@ test('can add a variant to the cart after a variant has been added', function ()
     expect($cart->hasItems())->toBeFalse();
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $variantA->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product-variant',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variantA->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
     ]))->assertStatus(200);
-
 
     expect($cart->fresh()->items)->toHaveCount(1);
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-         'ui_cart_id' => $uiCartId,
-         'product_id' => $variantB->id,
-         'quantity' => $quantityToAdd,
-         'purchasable_type' => 'product-variant',
-     ]))->assertStatus(200);
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variantB->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
     expect($cart->fresh()->items_count)->toBe(4);
-
 
     $this->assertDatabaseHas('cart_items', [
         'cart_id' => $cart->id,
@@ -535,26 +524,24 @@ test('can add a variant to the cart after its product has been added', function 
     expect($cart->hasItems())->toBeFalse();
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $product->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
     ]))->assertStatus(200);
-
 
     expect($cart->fresh()->items)->toHaveCount(1);
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-         'ui_cart_id' => $uiCartId,
-         'product_id' => $variant->id,
-         'quantity' => $quantityToAdd,
-         'purchasable_type' => 'product-variant',
-     ]))->assertStatus(200);
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variant->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
     expect($cart->fresh()->items_count)->toBe(4);
-
 
     $this->assertDatabaseHas('cart_items', [
         'cart_id' => $cart->id,
@@ -615,20 +602,20 @@ test('can add a product to the cart after its variant has been added', function 
     expect($cart->hasItems())->toBeFalse();
 
     $this->post(route('cart.items.addOrUpdate', [
-         'ui_cart_id' => $uiCartId,
-         'product_id' => $variant->id,
-         'quantity' => $quantityToAdd,
-         'purchasable_type' => 'product-variant',
-     ]))->assertStatus(200);
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $variant->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product-variant',
+    ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(1);
     expect($cart->fresh()->items_count)->toBe(2);
 
     $this->post(route('cart.items.addOrUpdate', [
-    'ui_cart_id' => $uiCartId,
-    'product_id' => $product->id,
-    'quantity' => $quantityToAdd,
-    'purchasable_type' => 'product',
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
     ]))->assertStatus(200);
 
     expect($cart->fresh()->items)->toHaveCount(2);
@@ -776,7 +763,6 @@ test('can update an existing cart item quantity', function () {
     ]);
 
 });
-
 
 // no cart validation: ui_cart_id, required, exists in carts table
 test('can not add or update a cart item if the cart does not exist', function () {

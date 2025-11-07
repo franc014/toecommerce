@@ -19,8 +19,8 @@ class ProductVariantsTable
             ->columns([
                 TextColumn::make('product.title')->limit(30)->sortable()->searchable()->label('Producto'),
                 TextColumn::make('title')->limit(30)->sortable()->searchable()->label('Variante'),
-                TextColumn::make('status')->badge()->sortable(),
-                TextColumn::make('price')->sortable()->searchable()->money('USD'),
+                TextColumn::make('status')->label('Estado')->badge()->sortable(),
+                TextColumn::make('price')->label('Precio')->sortable()->searchable()->money('USD'),
             ])
             ->filters([
                 //

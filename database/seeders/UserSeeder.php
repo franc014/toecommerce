@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Artisan;
 
 class UserSeeder extends Seeder
 {
@@ -20,6 +19,6 @@ class UserSeeder extends Seeder
         ]);
 
         // making super admin with filament shield command
-        //Artisan::call('shield:super-admin', ['--user' => $user->id]);
+        // Artisan::call('shield:super-admin', ['--user' => $user->id]);
     }
 }

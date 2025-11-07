@@ -66,8 +66,8 @@ class Cart extends Model
     public function getItemByPurchasable(int $purchasableId, string $purchasableType): ?CartItem
     {
         return $this->items->where('purchasable_id', $purchasableId)
-        ->where('purchasable_type', $purchasableType)
-        ->first();
+            ->where('purchasable_type', $purchasableType)
+            ->first();
     }
 
     public function addOrUpdateItem(array $data): CartItem

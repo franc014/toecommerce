@@ -7,12 +7,16 @@ use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
+
+    public function getBreadcrumb(): string
+    {
+        return __('firesources.edit');
+    }
 
     public function hasCombinedRelationManagerTabsWithContent(): bool
     {
@@ -29,7 +33,7 @@ class EditProduct extends EditRecord
 
     public function getContentTabLabel(): ?string
     {
-        return 'Producto';
+        return __('firesources.product');
     }
 
     public function getContentTabIcon(): BackedEnum|string|null
@@ -37,8 +41,8 @@ class EditProduct extends EditRecord
         return 'icon-box';
     }
 
-    public static function getTabComponent(): Tab
+    public function getTitle(): string|Htmlable
     {
-        return Tab::make('Produit')->icon(Heroicon::OutlinedCube);
+        return __('firesources.edit').' '.$this->record->title;
     }
 }

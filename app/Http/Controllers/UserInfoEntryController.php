@@ -74,7 +74,6 @@ class UserInfoEntryController extends Controller
     {
         $billingInfo = auth()->user()->mainBillingInfoEntry();
 
-
         auth()->user()->userInfoEntries()->create([
             'first_name' => $billingInfo->first_name,
             'last_name' => $billingInfo->last_name,
@@ -91,6 +90,4 @@ class UserInfoEntryController extends Controller
 
         return redirect()->intended(route('storefront.checkout', absolute: false));
     }
-
-
 }

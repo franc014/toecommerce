@@ -11,7 +11,6 @@ class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
-
     protected function getHeaderActions(): array
     {
         return [
@@ -19,8 +18,8 @@ class ViewOrder extends ViewRecord
         ];
     }
 
-    public function getTitle(): string | Htmlable
+    public function getTitle(): string|Htmlable
     {
-        return 'Orden: ' . $this->record->code;
+        return 'Orden: '.$this->record->code;
     }
 }

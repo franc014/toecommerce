@@ -373,8 +373,8 @@ test('can clone existing main billing info into shipping info', function () {
     ]);
 
     $this->actingAs($this->user)
-    ->post(route('storefront.user-info-entry.use-billing-as-shipping'))
-    ->assertRedirect(route('storefront.checkout'));
+        ->post(route('storefront.user-info-entry.use-billing-as-shipping'))
+        ->assertRedirect(route('storefront.checkout'));
 
     $this->assertDatabaseHas('user_info_entries', [
         'first_name' => $billingInfo->first_name,
@@ -391,8 +391,6 @@ test('can clone existing main billing info into shipping info', function () {
     ]);
 
 });
-
-
 
 // validation user info
 

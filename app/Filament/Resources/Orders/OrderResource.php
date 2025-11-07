@@ -10,22 +10,42 @@ use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Schemas\OrderInfolist;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
 use App\Models\Order;
+use App\Traits\PurchasesNavigationGroup;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 
 class OrderResource extends Resource
 {
+    use PurchasesNavigationGroup;
+
     protected static ?string $model = Order::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'code';
+
     protected static ?string $recordRouteKeyName = 'code';
+
+    public static function getModelLabel(): string
+    {
+        return 'Orden';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Órdenes';
+    }
+
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
+    {
+        return 'icon-clipboard-list';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -55,6 +75,7 @@ class OrderResource extends Resource
         if (Filament::getCurrentPanel()->getId() === 'customer') {
             $query = parent::getEloquentQuery()->where('user_id', auth()->user()->id);
         }
+
         return $query;
     }
 
@@ -64,7 +85,7 @@ class OrderResource extends Resource
             'index' => ListOrders::route('/'),
             'create' => CreateOrder::route('/create'),
             'view' => ViewOrder::route('/{record:code}'),
-            //'edit' => EditOrder::route('/{record}/edit'),
+            // 'edit' => EditOrder::route('/{record}/edit'),
         ];
     }
 }

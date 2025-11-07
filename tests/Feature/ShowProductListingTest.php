@@ -5,8 +5,8 @@ use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
 use App\Models\AppSettings;
 use App\Models\Product;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
-use Inertia\Testing\AssertableInertia as Assert;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Testing\AssertableInertia as Assert;
 
 it('shows a listing of a published product', function () {
     $this->withoutExceptionHandling();
@@ -22,7 +22,7 @@ it('shows a listing of a published product', function () {
                     ->where('id', $product->id)
                     ->where('title', $product->title)
                     ->where('description', RichContentRenderer::make($product->description)->customBlocks([
-                        HeroBlock::class
+                        HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
                     ->where('price_in_dollars', $product->price_in_dollars)
@@ -60,7 +60,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                     ->where('id', $product->id)
                     ->where('title', $product->title)
                     ->where('description', RichContentRenderer::make($product->description)->customBlocks([
-                        HeroBlock::class
+                        HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
                     ->where('price_in_dollars', $product->price_in_dollars)
@@ -74,7 +74,6 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                     ->where('dropping_stock', true);
             });
         });
-
 
 });
 
@@ -93,26 +92,26 @@ it('does not show warning text if product stock is not dropping below threshold,
     ]);
 
     $this->get(route('storefront.product', ['product' => $product->slug]))
-       ->assertInertia(function (Assert $page) use ($product) {
-           return $page->has('product', function (Assert $page) use ($product) {
-               return $page
-                   ->where('id', $product->id)
-                   ->where('title', $product->title)
-                   ->where('description', RichContentRenderer::make($product->description)->customBlocks([
-                       HeroBlock::class
-                   ])->toHtml())
-                   ->where('slug', $product->slug)
-                   ->where('price_in_dollars', $product->price_in_dollars)
-                   ->where('has_taxes', $product->hasTaxes())
-                   ->where('taxes', $product->formatted_taxes)
-                   ->where('price_with_taxes_in_dollars', $product->price_with_taxes_in_dollars)
-                   ->where('has_variants', $product->hasVariants())
-                   ->where('variants', $product->variants)
-                   ->where('main_image', Storage::url($product->main_image))
-                   ->where('images', $product->productImagesForList)
-                   ->where('dropping_stock', false);
-           });
-       });
+        ->assertInertia(function (Assert $page) use ($product) {
+            return $page->has('product', function (Assert $page) use ($product) {
+                return $page
+                    ->where('id', $product->id)
+                    ->where('title', $product->title)
+                    ->where('description', RichContentRenderer::make($product->description)->customBlocks([
+                        HeroBlock::class,
+                    ])->toHtml())
+                    ->where('slug', $product->slug)
+                    ->where('price_in_dollars', $product->price_in_dollars)
+                    ->where('has_taxes', $product->hasTaxes())
+                    ->where('taxes', $product->formatted_taxes)
+                    ->where('price_with_taxes_in_dollars', $product->price_with_taxes_in_dollars)
+                    ->where('has_variants', $product->hasVariants())
+                    ->where('variants', $product->variants)
+                    ->where('main_image', Storage::url($product->main_image))
+                    ->where('images', $product->productImagesForList)
+                    ->where('dropping_stock', false);
+            });
+        });
 
 });
 
@@ -137,7 +136,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
                     ->where('id', $product->id)
                     ->where('title', $product->title)
                     ->where('description', RichContentRenderer::make($product->description)->customBlocks([
-                        HeroBlock::class
+                        HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
                     ->where('price_in_dollars', $product->price_in_dollars)

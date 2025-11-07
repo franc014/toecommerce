@@ -43,14 +43,14 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        //todo: create another panel for customer users, then we can allow the customer users to access their own panel
+        // todo: create another panel for customer users, then we can allow the customer users to access their own panel
         if ($panel->getId() === 'admin') {
-            //ray($this->hasRole('customer')); //false
+            // ray($this->hasRole('customer')); //false
             return $this->email === config('app.dashboard.allowed-admin-email') && $this->hasVerifiedEmail();
 
         }
 
-        //ray($this->hasRole('customer')); //true...
+        // ray($this->hasRole('customer')); //true...
 
         return true;
     }

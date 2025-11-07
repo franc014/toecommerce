@@ -14,7 +14,6 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -38,27 +37,29 @@ class ProductForm
                     ->id('product-tabs')
                     ->columns(2)
                     ->tabs([
-                        Tab::make('Información general')
+                        Tab::make(__('firesources.general_info'))
                             ->icon(Heroicon::OutlinedCube)
                             ->schema(
                                 [
                                     ...self::titleAndSlugFields(),
                                     Select::make('status')
+                                        ->label(__('firesources.status'))
                                         ->required()
                                         ->default(ProductStatus::DRAFT)
                                         ->enum(ProductStatus::class)
                                         ->options(ProductStatus::class),
                                     RichEditor::make('description')
+                                        ->label(__('firesources.description'))
                                         ->toolbarButtons([
-                                            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link','textColor'],
-                                            ['h1','h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                            ['blockquote', 'bulletList', 'orderedList','details'],
-                                            ['table','grid','gridDelete', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
-                                            ['undo', 'redo','clearFormatting'],
+                                            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link', 'textColor'],
+                                            ['h1', 'h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                            ['blockquote', 'bulletList', 'orderedList', 'details'],
+                                            ['table', 'grid', 'gridDelete', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
+                                            ['undo', 'redo', 'clearFormatting'],
                                             ['customBlocks'],
                                         ])
                                         ->customBlocks([
-                                            HeroBlock::class
+                                            HeroBlock::class,
                                         ])
                                         ->required()
                                         ->json()
@@ -66,23 +67,24 @@ class ProductForm
                                     TextInput::make('sku')->label('SKU'),
                                 ]
                             ),
-                        Tab::make('Colecciones, Categorias y Etiquetas')
+                        Tab::make(__('firesources.taxonomies'))
                             ->icon(Heroicon::OutlinedTag)->schema([
-                                SpatieTagsInput::make('tags')->label('Etiquetas'),
+                                SpatieTagsInput::make('tags')
+                                    ->label(__('firesources.tags')),
                                 Select::make('product_collections')
-                                    ->label('Colecciones')
+                                    ->label(__('firesources.collections'))
                                     ->multiple()
                                     ->relationship('productCollections', 'title'),
 
                                 Select::make('category_id')
-                                    ->label('Categorias')
+                                    ->label(__('firesources.categories'))
                                     ->multiple()
                                     ->relationship('categories', 'title'),
                             ]),
-                        Tab::make('Precio, stock e impuestos')
+                        Tab::make(__('firesources.price_stock_taxes'))
                             ->icon(Heroicon::OutlinedCurrencyDollar)->schema([
                                 TextInput::make('price')
-                                    ->label('Precio')
+                                    ->label(__('firesources.price'))
                                     ->required()
                                     ->numeric()
                                     ->minValue(0)
@@ -91,7 +93,7 @@ class ProductForm
                                     ->prefix('$'),
 
                                 TextInput::make('discount')
-                                    ->label('Descuento')
+                                    ->label(__('firesources.discount'))
                                     ->numeric()
                                     ->minValue(0.01)
                                     ->maxValue(100)
@@ -99,7 +101,7 @@ class ProductForm
                                     ->prefix('%'),
 
                                 CheckboxList::make('taxes')
-                                    ->label('Impuestos')
+                                    ->label(__('firesources.taxes'))
                                     ->getOptionLabelFromRecordUsing(fn (Tax $record) => "{$record->name} [{$record->percentage} %]")
                                     ->relationship('taxes', 'name'),
 
@@ -109,15 +111,16 @@ class ProductForm
                                     ->numeric()
                                     ->step(1),
                             ]),
-                        Tab::make('Opciones de variantes')
+                        Tab::make(__('firesources.variant_options'))
                             ->icon(Heroicon::OutlinedSwatch)
                             ->schema([
                                 Repeater::make('variant_options')
-                                    ->label('Opciones')
+                                    ->label(__('firesources.variant_options'))
                                     ->collapsible()
                                     ->collapsed()
                                     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
                                     ->addActionAlignment(Alignment::Start)
+                                    ->addActionLabel(__('firesources.add_variant_option'))
                                     ->schema([
                                         TextInput::make('name')
                                             ->label('Opción')
@@ -128,17 +131,18 @@ class ProductForm
                                             ->collapsed()
                                             ->itemLabel(fn (array $state): ?string => $state['value'] ?? null)
                                             ->addActionAlignment(Alignment::Start)
-                                            ->label('Valores de la opción')
+                                            ->label(__('firesources.variant_option_values'))
+                                            ->addActionLabel(__('firesources.add_value_variant_option'))
                                             ->schema([
                                                 TextInput::make('value')
                                                     ->live(debounce: 500)
-                                                    ->label('Valor')
+                                                    ->label(__('firesources.value'))
                                                     ->required(),
                                             ]),
 
                                     ]),
                                 Action::make('generate_variants')
-                                    ->label('Generar variantes')
+                                    ->label(__('firesources.generate_variants'))
                                     ->button()
                                     ->color('primary')
                                     ->icon(Heroicon::OutlinedSwatch)
@@ -146,12 +150,10 @@ class ProductForm
                                         $record->generateVariants();
                                     }),
                             ]),
-                        Tab::make('images')
-                            ->label('Imágenes')
-
+                        Tab::make(__('firesources.images'))
                             ->icon(Heroicon::OutlinedPhoto)->schema([
                                 FileUpload::make('main_image')
-                                    ->label('Imagen principal')
+                                    ->label(__('firesources.main_image'))
                                     ->image()
                                     ->required()
                                     ->maxSize(1024 * 3)
@@ -160,7 +162,7 @@ class ProductForm
                                     ->imageEditor(),
 
                                 SpatieMediaLibraryFileUpload::make('product_images')
-                                    ->label('Imágenes')
+                                    ->label(__('firesources.gallery_images'))
                                     ->image()
                                     ->required()
                                     ->maxSize(1024 * 3)

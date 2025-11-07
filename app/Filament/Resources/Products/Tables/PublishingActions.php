@@ -20,43 +20,46 @@ class PublishingActions
     {
         return ActionGroup::make([
             ReplicateAction::make()
-                ->label('Duplicar')
+                ->label(__('firesources.duplicate'))
                 ->successNotificationTitle('Producto duplicado')->size('xs'),
 
-            Action::make('publish')->action(function (Model $product) {
-                $product->publish();
-            })->icon(Heroicon::OutlinedArrowUpOnSquare)
+            Action::make('publish')
+                ->label(__('firesources.publish'))
+                ->action(function (Model $product) {
+                    $product->publish();
+                })->icon(Heroicon::OutlinedArrowUpOnSquare)
                 ->visible(function (Model $product) {
                     return $product->status === ProductStatus::DRAFT || $product->status === ProductStatus::ARCHIVED;
                 })
-                ->label('Publicar')
                 ->color('success')
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Producto publicado')->send();
+                        ->title(__('firesources.published_product'))->send();
                 }),
 
-            Action::make('unpublish')->action(function (Model $product) {
-                $product->unpublish();
-            })->icon(Heroicon::OutlinedArrowDownOnSquare)
+            Action::make('unpublish')
+                ->label(__('firesources.unpublish'))
+                ->action(function (Model $product) {
+                    $product->unpublish();
+                })->icon(Heroicon::OutlinedArrowDownOnSquare)
                 ->visible(function (Model $product) {
                     return $product->status === ProductStatus::ACTIVE;
                 })
                 ->slideover(false)
                 ->modalWidth('xl')
-                ->label('Borrador')
+
                 ->color('warning')
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Producto despublicado')->send();
+                        ->title(__('firesources.unpublished_product'))->send();
                 })->requiresConfirmation(),
 
             Action::make('archive')->action(function (Model $product) {
                 $product->archive();
             })->icon(Heroicon::OutlinedArchiveBoxArrowDown)
-                ->label('Archivar')
+                ->label(__('firesources.archive'))
                 ->slideover(false)
                 ->modalWidth('xl')
                 ->color('gray')
@@ -66,10 +69,10 @@ class PublishingActions
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Producto archivado')->send();
+                        ->title(__('firesources.archived_product'))->send();
                 })
                 ->requiresConfirmation(),
-            DeleteAction::make()->label('Eliminar')->color('danger')->size('xs'),
+            DeleteAction::make()->label(__('firesources.delete'))->color('danger')->size('xs'),
         ]);
     }
 
@@ -77,17 +80,18 @@ class PublishingActions
     {
         return BulkActionGroup::make([
 
-            BulkAction::make('publish')->action(function (Collection $records) {
-                foreach ($records as $record) {
-                    $record->publish();
-                }
-            })->icon(Heroicon::OutlinedArrowUpOnSquare)
+            BulkAction::make('publish')
+                ->label(__('firesources.publish'))
+                ->action(function (Collection $records) {
+                    foreach ($records as $record) {
+                        $record->publish();
+                    }
+                })->icon(Heroicon::OutlinedArrowUpOnSquare)
                 ->color('success')
-                ->label('Publicar')
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Productos publicados')->send();
+                        ->title(__('firesources.published_products'))->send();
                 }),
 
             BulkAction::make('unpublish')->action(function (Collection $records) {
@@ -96,14 +100,14 @@ class PublishingActions
                 }
             })->icon(Heroicon::OutlinedArrowDownOnSquare)
                 ->color('warning')
-                ->label('Borrador')
+                ->label(__('firesources.unpublish'))
                 ->requiresConfirmation()
                 ->slideover(false)
                 ->modalWidth('xl')
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Productos despublicados')->send();
+                        ->title(__('firesources.unpublished_products'))->send();
                 }),
             BulkAction::make('archive')->action(function (Collection $records) {
                 foreach ($records as $record) {
@@ -111,14 +115,14 @@ class PublishingActions
                 }
             })->icon(Heroicon::OutlinedArchiveBoxArrowDown)
                 ->color('gray')
-                ->label('Archivar')
+                ->label(__('firesources.archive'))
                 ->requiresConfirmation()
                 ->slideover(false)
                 ->modalWidth('xl')
                 ->after(function () {
                     return Notification::make()
                         ->success()
-                        ->title('Productos archivados')->send();
+                        ->title(__('firesources.archived_products'))->send();
                 }),
         ])->label('More actions');
     }

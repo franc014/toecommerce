@@ -21,9 +21,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 
-class Product extends Model implements HasMedia, Purchasable, HasRichContent
+class Product extends Model implements HasMedia, HasRichContent, Purchasable
 {
-    use HasFactory, HasTags, InteractsWithMedia, MoneyFormat, Publishable, InteractsWithRichContent;
+    use HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable;
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -33,14 +33,13 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
         'description' => 'array',
     ];
 
-    protected $appends = ['price_in_dollars','price_with_taxes_in_dollars', 'formatted_taxes'];
-
+    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes'];
 
     public function setUpRichContent(): void
     {
         $this->registerRichContent('description');
-        //to use the media library provideer, it should be set up as nullable
-        //->fileAttachmentProvider(SpatieMediaLibraryFileAttachmentProvider::make());
+        // to use the media library provideer, it should be set up as nullable
+        // ->fileAttachmentProvider(SpatieMediaLibraryFileAttachmentProvider::make());
     }
 
     public function dataforCart(): array
@@ -67,6 +66,7 @@ class Product extends Model implements HasMedia, Purchasable, HasRichContent
         if (AppSettings::isStockControlStrict()) {
             return $this->stock <= $this->stock_threshold_for_customers;
         }
+
         return false;
     }
 

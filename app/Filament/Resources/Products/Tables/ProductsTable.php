@@ -24,40 +24,40 @@ class ProductsTable
         return $table
             ->persistFiltersInSession()
             ->filtersTriggerAction(function ($action) {
-                return $action->button()->label('Filtros');
+                return $action->button()->label(__('firesources.filters'));
             })
             ->emptyStateHeading('No hay productos en este listado')
             ->columns([
                 TextColumn::make('title')
-                    ->label('Título')
+                    ->label(__('firesources.title'))
                     ->limit(20)
                     ->sortable()
                     ->searchable()
-                   /*  ->description(function (Product $record) {
+                /*  ->description(function (Product $record) {
                         return str()->limit($record->description, 40);
                     })->wrap() */,
                 TextColumn::make('status')
-                    ->label('Estado')
+                    ->label(__('firesources.status'))
                     ->badge()
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('price')
-                    ->label('Precio')
+                    ->label(__('firesources.price'))
                     ->money()
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label('Fecha de creación')
+                    ->label(__('firesources.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label('Fecha de actualización')
+                    ->label(__('firesources.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('archived_at')
-                    ->label('Fecha de archivo')
+                    ->label(__('firesources.archived_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -65,12 +65,12 @@ class ProductsTable
             ->filters([
                 Filter::make('has_variants')->query(function ($query) {
                     return $query->has('productVariants');
-                })->label('Con variantes')->toggle(),
+                })->label(__('firesources.with_variants'))->toggle(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 Action::make('variants')
-                    ->label('Variantes')
+                    ->label(__('firesources.variants'))
                     ->visible(function (Product $product) {
                         return $product->hasPublishedVariants();
                     })
@@ -78,12 +78,13 @@ class ProductsTable
                         // return "#";
                         return route('filament.admin.resources.products.variants', ['record' => $product]);
                     })->icon(Heroicon::OutlinedSwatch),
-                Action::make('taxes')->label('Impuestos')
+                Action::make('taxes')
+                    ->label(__('firesources.taxes'))
                     ->icon(Heroicon::OutlinedReceiptPercent)
                     ->color('info')
                     ->schema([
                         CheckboxList::make('taxes')
-                            ->label('Impuestos')
+                            ->label(__('firesources.taxes'))
                             ->options(function () {
                                 return Tax::all()->pluck('name', 'id');
                             }),
@@ -109,16 +110,17 @@ class ProductsTable
             ->toolbarActions([
 
                 BulkAction::make('assignTaxes')
+                    ->label(__('firesources.assign_taxes'))
                     ->schema([
                         CheckboxList::make('taxes')->options(Tax::query()->pluck('name', 'id'))
-                            ->label('Impuestos')
+                            ->label(__('firesources.taxes'))
                             ->default([]),
                     ])
                     ->action(function (array $data, Collection $records) {
                         foreach ($records as $record) {
                             $record->taxes()->sync($data['taxes']);
                         }
-                    })->label('Asignar impuestos')->after(function () {
+                    })->after(function () {
                         return Notification::make()
                             ->success()
                             ->title('Impuestos asignados')->send();

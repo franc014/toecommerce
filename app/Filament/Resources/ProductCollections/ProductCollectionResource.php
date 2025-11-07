@@ -24,6 +24,16 @@ class ProductCollectionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    public static function getModelLabel(): string
+    {
+        return 'Colección';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Colecciones';
+    }
+
     public static function getNavigationGroup(): UnitEnum|string|null
     {
         return NavigationGroup::TAXONOMIES;

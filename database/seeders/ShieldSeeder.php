@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use BezhanSalleh\FilamentShield\Support\Utils;
+use Illuminate\Database\Seeder;
 use Spatie\Permission\PermissionRegistrar;
 
 class ShieldSeeder extends Seeder
@@ -12,8 +12,35 @@ class ShieldSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $rolesWithPermissions = '[{"name":"super_admin","guard_name":"web","permissions":["ViewAny:Role","View:Role","Create:Role","Update:Role","Delete:Role","Restore:Role","ForceDelete:Role","ForceDeleteAny:Role","RestoreAny:Role","Replicate:Role","Reorder:Role","ViewAny:Category","View:Category","Create:Category","Update:Category","Delete:Category","Restore:Category","ForceDelete:Category","ForceDeleteAny:Category","RestoreAny:Category","Replicate:Category","Reorder:Category","ViewAny:ProductCollection","View:ProductCollection","Create:ProductCollection","Update:ProductCollection","Delete:ProductCollection","Restore:ProductCollection","ForceDelete:ProductCollection","ForceDeleteAny:ProductCollection","RestoreAny:ProductCollection","Replicate:ProductCollection","Reorder:ProductCollection","ViewAny:ProductVariant","View:ProductVariant","Create:ProductVariant","Update:ProductVariant","Delete:ProductVariant","Restore:ProductVariant","ForceDelete:ProductVariant","ForceDeleteAny:ProductVariant","RestoreAny:ProductVariant","Replicate:ProductVariant","Reorder:ProductVariant","ViewAny:Product","View:Product","Create:Product","Update:Product","Delete:Product","Restore:Product","ForceDelete:Product","ForceDeleteAny:Product","RestoreAny:Product","Replicate:Product","Reorder:Product"]},{"name":"customer","guard_name":"web","permissions":["ViewAny:Order","View:Order"]}]';
+        $rolesWithPermissions = [
+            ['name' => 'super_admin',
+                'guard_name' => 'web',
+                'permissions' => ['ViewAny:Role', 'View:Role', 'Create:Role', 'Update:Role',
+                    'Delete:Role', 'Restore:Role', 'ForceDelete:Role', 'ForceDeleteAny:Role',
+                    'RestoreAny:Role', 'Replicate:Role', 'Reorder:Role', 'ViewAny:Category',
+                    'View:Category', 'Create:Category', 'Update:Category', 'Delete:Category',
+                    'Restore:Category', 'ForceDelete:Category', 'ForceDeleteAny:Category', 'RestoreAny:Category',
+                    'Replicate:Category', 'Reorder:Category', 'ViewAny:ProductCollection', 'View:ProductCollection',
+                    'Create:ProductCollection', 'Update:ProductCollection', 'Delete:ProductCollection', 'Restore:ProductCollection',
+                    'ForceDelete:ProductCollection', 'ForceDeleteAny:ProductCollection', 'RestoreAny:ProductCollection', 'Replicate:ProductCollection',
+                    'Reorder:ProductCollection', 'ViewAny:ProductVariant', 'View:ProductVariant', 'Create:ProductVariant',
+                    'Update:ProductVariant', 'Delete:ProductVariant', 'Restore:ProductVariant', 'ForceDelete:ProductVariant',
+                    'ForceDeleteAny:ProductVariant', 'RestoreAny:ProductVariant', 'Replicate:ProductVariant', 'Reorder:ProductVariant',
+                    'ViewAny:Product', 'View:Product', 'Create:Product', 'Update:Product', 'Delete:Product', 'Restore:Product',
+                    'ForceDelete:Product', 'ForceDeleteAny:Product', 'RestoreAny:Product', 'Replicate:Product', 'Reorder:Product',
+                    'ViewAny:Order', 'View:Order', 'ViewAny:UserInfoEntry', 'View:UserInfoEntry',
+                    'Create:UserInfoEntry', 'Update:UserInfoEntry',
+                    'Delete:UserInfoEntry', 'Replicate:UserInfoEntry',
+                ]], ['name' => 'customer', 'guard_name' => 'web',
+                    'permissions' => [
+                        'ViewAny:Order', 'View:Order',
+                        'ViewAny:UserInfoEntry', 'View:UserInfoEntry',
+                        'Create:UserInfoEntry', 'Update:UserInfoEntry',
+                        'Delete:UserInfoEntry', 'Replicate:UserInfoEntry']]];
+
         $directPermissions = '[]';
+
+        $rolesWithPermissions = json_encode($rolesWithPermissions); // preg_replace('/\s+/', '', $rolesWithPermissions);
 
         static::makeRolesWithPermissions($rolesWithPermissions);
         static::makeDirectPermissions($directPermissions);

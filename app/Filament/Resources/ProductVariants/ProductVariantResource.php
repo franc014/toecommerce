@@ -29,6 +29,16 @@ class ProductVariantResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getModelLabel(): string
+    {
+        return 'Variante';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Variantes';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProductVariantForm::configure($schema);

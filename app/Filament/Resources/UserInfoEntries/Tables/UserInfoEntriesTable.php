@@ -8,7 +8,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ReplicateAction;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -22,9 +21,9 @@ class UserInfoEntriesTable
             ->columns([
 
                 TextColumn::make('name')
-                ->state(function ($record): string {
-                    return $record->first_name . ' ' . $record->last_name;
-                }),
+                    ->state(function ($record): string {
+                        return $record->first_name.' '.$record->last_name;
+                    }),
 
                 TextColumn::make('type')->label('Tipo')->sortable()->searchable()->badge()->color(function ($state) {
                     return match ($state) {
@@ -40,7 +39,6 @@ class UserInfoEntriesTable
                 TextColumn::make('phone')
                     ->searchable(),
 
-
                 ToggleColumn::make('is_main')->label('Principal')
                     ->sortable()
                     ->searchable()
@@ -55,7 +53,7 @@ class UserInfoEntriesTable
                             }
                         } else {
 
-                            if (!$others->contains('is_main', true)) {
+                            if (! $others->contains('is_main', true)) {
                                 Notification::make()
                                     ->title('No se puede desmarcar la información principal sin marcar otra')
                                     ->body('Por favor, seleccione o registra otra información como principal antes de desmarcar esta.')

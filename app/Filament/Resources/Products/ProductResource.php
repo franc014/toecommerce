@@ -31,6 +31,16 @@ class ProductResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getModelLabel(): string
+    {
+        return __('firesources.product');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('firesources.products');
+    }
+
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return 'icon-box';

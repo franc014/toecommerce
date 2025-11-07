@@ -24,6 +24,16 @@ class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getModelLabel(): string
+    {
+        return 'Categoría';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Categorías';
+    }
+
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return 'icon-category';

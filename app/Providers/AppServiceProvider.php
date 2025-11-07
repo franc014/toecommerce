@@ -7,6 +7,8 @@ use App\Utils\PayphonePayment;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Vite;
@@ -43,11 +45,30 @@ class AppServiceProvider extends ServiceProvider
         });
 
         CreateAction::configureUsing(function (CreateAction $action) {
-            return $action->icon(Heroicon::OutlinedPlus);
+            return $action->icon(Heroicon::OutlinedPlus)->label(__('firesources.add'));
+        });
+
+        EditAction::configureUsing(function (EditAction $action) {
+            return $action->icon(Heroicon::PencilSquare)->label(__('firesources.edit'))->modalIcon(Heroicon::PencilSquare);
+        });
+
+        ViewAction::configureUsing(function (ViewAction $action) {
+            return $action->icon(Heroicon::Eye)
+                ->modalIcon(Heroicon::Eye)
+                ->label(__('firesources.view'));
         });
 
         DeleteAction::configureUsing(function (DeleteAction $action) {
-            return $action->modalWidth('xl')->slideOver(false);
+            return $action->modalWidth('xl')
+                ->modalHeading(function () use ($action) {
+                    return __('firesources.delete').($action->getRecordTitle() ? ' '.$action->getRecordTitle() : '');
+                })
+                ->modalDescription(__('firesources.delete_warning'))
+                ->modalCancelActionLabel(__('firesources.cancel'))
+                ->modalSubmitActionLabel(__('firesources.delete'))
+                ->slideOver(false)
+                ->icon(Heroicon::Trash)
+                ->label(__('firesources.delete'));
         });
     }
 }

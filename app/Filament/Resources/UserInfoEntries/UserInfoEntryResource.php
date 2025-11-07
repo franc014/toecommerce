@@ -8,21 +8,40 @@ use App\Filament\Resources\UserInfoEntries\Pages\ListUserInfoEntries;
 use App\Filament\Resources\UserInfoEntries\Schemas\UserInfoEntryForm;
 use App\Filament\Resources\UserInfoEntries\Tables\UserInfoEntriesTable;
 use App\Models\UserInfoEntry;
+use App\Traits\PurchasesNavigationGroup;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserInfoEntryResource extends Resource
 {
+    use PurchasesNavigationGroup;
+
     protected static ?string $model = UserInfoEntry::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'first_name';
+
+    public static function getModelLabel(): string
+    {
+        return 'Información de Cliente';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Información de Clientes';
+    }
+
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
+    {
+        return 'icon-user-pen';
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -30,6 +49,7 @@ class UserInfoEntryResource extends Resource
         if (Filament::getCurrentPanel()->getId() === 'customer') {
             $query = parent::getEloquentQuery()->where('user_id', auth()->user()->id);
         }
+
         return $query;
     }
 
@@ -49,7 +69,6 @@ class UserInfoEntryResource extends Resource
             //
         ];
     }
-
 
     public static function getPages(): array
     {

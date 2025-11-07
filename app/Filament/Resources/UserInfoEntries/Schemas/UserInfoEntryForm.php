@@ -4,7 +4,6 @@ namespace App\Filament\Resources\UserInfoEntries\Schemas;
 
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class UserInfoEntryForm
@@ -14,19 +13,19 @@ class UserInfoEntryForm
         return $schema
             ->components([
                 Radio::make('type')
-                ->columnSpanFull()
-                ->label('Tipo')
-                ->options([
-                    'billing' => 'Facturación',
-                    'shipping' => 'Envío',
-                ])
-                ->descriptions([
-                    'billing' => 'Información para facturación',
-                    'shipping' => 'Información para envío del producto',
-                ])
-                ->inline()
-                ->inlineLabel(false)
-                ->required(),
+                    ->columnSpanFull()
+                    ->label('Tipo')
+                    ->options([
+                        'billing' => 'Facturación',
+                        'shipping' => 'Envío',
+                    ])
+                    ->descriptions([
+                        'billing' => 'Información para facturación',
+                        'shipping' => 'Información para envío del producto',
+                    ])
+                    ->inline()
+                    ->inlineLabel(false)
+                    ->required(),
                 TextInput::make('first_name')
                     ->required(),
                 TextInput::make('last_name')
@@ -49,7 +48,6 @@ class UserInfoEntryForm
                     ->required(),
                 TextInput::make('zipcode')
                     ->required(),
-
 
             ]);
     }

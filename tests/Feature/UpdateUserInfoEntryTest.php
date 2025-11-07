@@ -18,7 +18,7 @@ test('customer can update use info entry', function () {
     ]);
 
     $response = $this->actingAs($user)->put(route('storefront.user-info-entry.update', [
-        'id' => $userInfoEntry->id
+        'id' => $userInfoEntry->id,
     ]), [
         'first_name' => 'Jane',
         'last_name' => 'Soulivan',
