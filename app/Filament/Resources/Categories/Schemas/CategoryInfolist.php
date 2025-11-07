@@ -11,9 +11,10 @@ class CategoryInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('title'),
+                TextEntry::make('title')->label(__('firesources.title')),
                 TextEntry::make('slug'),
                 TextEntry::make('description')
+                    ->label(__('firesources.description'))
                     ->columnSpanFull(),
 
             ]);

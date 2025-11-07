@@ -34,12 +34,12 @@ class OrderResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Orden';
+        return __('firesources.order');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Órdenes';
+        return __('firesources.orders');
     }
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null

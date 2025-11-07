@@ -26,12 +26,12 @@ class CategoryResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Categoría';
+        return __('firesources.category');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Categorías';
+        return __('firesources.categories');
     }
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null

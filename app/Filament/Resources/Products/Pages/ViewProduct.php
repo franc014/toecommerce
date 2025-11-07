@@ -30,7 +30,7 @@ class ViewProduct extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return "Producto: {$this->record->title}";
+        return __('firesources.product').': '.$this->record->title;
     }
 
     public function getBreadcrumb(): string

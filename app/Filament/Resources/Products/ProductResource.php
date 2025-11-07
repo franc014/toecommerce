@@ -79,8 +79,5 @@ class ProductResource extends Resource
         ];
     }
 
-    public static function getTabComponent(): Tab
-    {
-        return Tab::make('Produit')->icon(Heroicon::OutlinedCube);
-    }
+
 }

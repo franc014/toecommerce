@@ -17,20 +17,27 @@ class OrdersTable
         return $table
             ->columns([
                 TextColumn::make('code')
+                    ->label(__('firesources.code'))
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('user.name')
+                    ->label(__('firesources.customer'))
                     ->searchable(),
                 TextColumn::make('total_amount')
+                    ->label(__('firesources.total_amount'))
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('paid_at')
+                    ->label(__('firesources.paid_at'))
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label(__('firesources.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('firesources.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

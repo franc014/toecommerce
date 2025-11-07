@@ -43,6 +43,6 @@ class EditProduct extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('firesources.edit').' '.$this->record->title;
+        return __('firesources.edit').' '.__('firesources.product').': '.$this->record->title;
     }
 }

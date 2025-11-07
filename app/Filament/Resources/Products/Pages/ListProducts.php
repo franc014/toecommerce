@@ -21,7 +21,7 @@ class ListProducts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label(__('firesources.add').' '.__('firesources.product'))->icon(Heroicon::OutlinedPlus),
+            CreateAction::make(),
         ];
     }
 

@@ -10,23 +10,26 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Route;
 
 class ProductVariantsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+
             ->columns([
-                TextColumn::make('product.title')->limit(30)->sortable()->searchable()->label('Producto'),
-                TextColumn::make('title')->limit(30)->sortable()->searchable()->label('Variante'),
-                TextColumn::make('status')->label('Estado')->badge()->sortable(),
-                TextColumn::make('price')->label('Precio')->sortable()->searchable()->money('USD'),
+                TextColumn::make('product.title')->label(__('firesources.product'))->limit(30)->sortable()->searchable(),
+                TextColumn::make('title')->label(__('firesources.variant'))->limit(30)->sortable()->searchable(),
+                TextColumn::make('status')->label(__('firesources.status'))->badge()->sortable(),
+                TextColumn::make('price')->label(__('firesources.price'))->sortable()->searchable()->money('USD'),
             ])
             ->filters([
                 //
             ])
+
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
             ])
             ->recordActions([
                 ViewAction::make(),

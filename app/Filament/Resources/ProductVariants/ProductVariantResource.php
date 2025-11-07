@@ -31,12 +31,12 @@ class ProductVariantResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Variante';
+        return __('firesources.variant');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Variantes';
+        return  __('firesources.variants');
     }
 
     public static function form(Schema $schema): Schema

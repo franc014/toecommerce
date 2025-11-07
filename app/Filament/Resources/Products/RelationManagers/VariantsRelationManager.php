@@ -33,6 +33,11 @@ class VariantsRelationManager extends RelationManager
 
     public static function getTabComponent(Model $ownerRecord, string $pageClass): Tab
     {
-        return Tab::make('Variantes')->icon(Heroicon::OutlinedSwatch);
+        return Tab::make(__('firesources.variants'))->icon(Heroicon::OutlinedSwatch);
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('firesources.variants');
     }
 }

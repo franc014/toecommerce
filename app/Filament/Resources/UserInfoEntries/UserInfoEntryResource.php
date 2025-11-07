@@ -30,12 +30,12 @@ class UserInfoEntryResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Información de Cliente';
+        return __('firesources.user_info_entry');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Información de Clientes';
+        return __('firesources.user_info_entries');
     }
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Tabs;
@@ -17,50 +18,74 @@ class ProductInfolist
             ->components([
                 Tabs::make('Tabs')
                     ->columnSpanFull()
+                    ->persistTab()
                     ->tabs([
-                        Tab::make('Información general')
+                        Tab::make(__('firesources.general_info'))
                             ->columns(2)
                             ->icon(Heroicon::OutlinedCube)
                             ->schema([
-                                TextEntry::make('title'),
+                                TextEntry::make('title')
+                                          ->label(__('firesources.title')),
                                 TextEntry::make('slug'),
-                                TextEntry::make('description'),
+                                TextEntry::make('description')
+                                          ->label(__('firesources.description')),
                                 TextEntry::make('status')
-                                    ->label('')
+                                    ->label(__('firesources.status'))
                                     ->badge(),
                             ]),
-                        Tab::make('Colecciones, categorías y etiquetas')
+                        Tab::make(__('firesources.taxonomies'))
                             ->icon(Heroicon::OutlinedTag)
                             ->schema([
                                 TextEntry::make('tags.name')
-                                    ->label('Etiquetas')
-                                    ->placeholder('No hay etiquetas todavía')->badge()->color('primary'),
-                                TextEntry::make('categories.title')->label('Categorías')->badge(),
-                                TextEntry::make('productCollections.title')->label('Colecciones')->badge(),
+                                    ->label(__('firesources.tags'))
+                                    ->placeholder(__('firesources.no_tags_message'))->badge()->color('primary'),
+                                TextEntry::make('categories.title')->label(__('firesources.categories'))->badge()->placeholder(__('firesources.no_categories_message'))->color('primary'),
+                                TextEntry::make('productCollections.title')->label(__('firesources.collections'))->placeholder(__('firesources.no_collections_message'))->badge(),
                             ]),
-                        Tab::make('Precios, stock e impuestos')
+                        Tab::make(__('firesources.price_stock_taxes'))
                             ->icon(Heroicon::OutlinedCurrencyDollar)
                             ->columns(2)
                             ->schema([
-                                TextEntry::make('price')->money('USD'),
+                                TextEntry::make('price')->label(__('firesources.price'))->money('USD'),
                                 TextEntry::make('taxes.name')
-                                    ->placeholder('No hay impuestos asignados todavía')
-                                    ->label('Impuestos asignados')->badge()->color('primary'),
+                                    ->placeholder(__('firesources.no_taxes_message'))
+                                    ->label(__('firesources.taxes'))->badge()->color('primary'),
                                 TextEntry::make('stock'),
                                 TextEntry::make('stock_threshold_for_customers')
-                                    ->label('Umbral de stock en descenso para clientes'),
+                                    ->label(__('firesources.stock_threshold_for_customers')),
                                 TextEntry::make('sku'),
                             ]),
-                        Tab::make('Imágenes')
+
+                         Tab::make(__('firesources.variant_options'))
+                            ->icon(Heroicon::OutlinedSwatch)
+
+                            ->schema([
+                                RepeatableEntry::make('variant_options')
+                                    ->label(__('firesources.variant_options'))
+                                    ->grid(2)
+                                    ->schema([
+                                        TextEntry::make('name')->label(__('firesources.name')),
+                                        RepeatableEntry::make('values')
+                                        ->grid(2)
+                                        ->label(__('firesources.variant_option_values'))
+                                        ->schema([
+                                            TextEntry::make('value')->label(__('firesources.value')),
+                                        ])
+                                ])
+                            ]),
+
+
+
+                        Tab::make(__('firesources.images'))
                             ->icon(Heroicon::OutlinedPhoto)
                             ->schema([
                                 SpatieMediaLibraryImageEntry::make('product_images')->label('')
-                                    ->label('Fotos')
-                                    ->placeholder('No hay fotos todavía')
+                                    ->label(__('firesources.images'))
+                                    ->placeholder(__('firesources.no_photos_message'))
                                     ->conversion('thumb')
                                     ->collection('product-images'),
                             ]),
-                    ]),
+                        ]),
 
             ]);
     }

@@ -21,11 +21,12 @@ class UserInfoEntriesTable
             ->columns([
 
                 TextColumn::make('name')
+                    ->label(__('firesources.name'))
                     ->state(function ($record): string {
                         return $record->first_name.' '.$record->last_name;
                     }),
 
-                TextColumn::make('type')->label('Tipo')->sortable()->searchable()->badge()->color(function ($state) {
+                TextColumn::make('type')->label(__('firesources.type'))->sortable()->searchable()->badge()->color(function ($state) {
                     return match ($state) {
                         'billing' => 'info',
                         'shipping' => 'gray',
@@ -33,13 +34,14 @@ class UserInfoEntriesTable
                     };
                 }),
                 TextColumn::make('email')
-                    ->label('Email address')
                     ->searchable(),
 
                 TextColumn::make('phone')
+                    ->label(__('firesources.phone'))
                     ->searchable(),
 
-                ToggleColumn::make('is_main')->label('Principal')
+                ToggleColumn::make('is_main')
+                    ->label(__('firesources.is_main'))
                     ->sortable()
                     ->searchable()
                     ->afterStateUpdated(function ($state, $record) {
@@ -68,10 +70,12 @@ class UserInfoEntriesTable
                         }
                     }),
                 TextColumn::make('created_at')
+                    ->label(__('firesources.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('firesources.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -82,13 +86,12 @@ class UserInfoEntriesTable
             ->recordActions([
                 EditAction::make(),
                 ReplicateAction::make()
-                    ->label('Duplicar')
                     ->slideOver(false)
-                    ->modalHeading(function ($record) {
+                    /* ->modalHeading(function ($record) {
                         return 'Duplicar '.$record->first_name;
                     })
                     ->modalSubmitActionLabel('Duplicar')
-                    ->modalCancelActionLabel('Cancelar')
+                    ->modalCancelActionLabel('Cancelar') */
                     ->modalWidth('xl'),
             ])
             ->toolbarActions([

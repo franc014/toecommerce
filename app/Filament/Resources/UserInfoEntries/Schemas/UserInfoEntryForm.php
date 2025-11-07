@@ -13,22 +13,24 @@ class UserInfoEntryForm
         return $schema
             ->components([
                 Radio::make('type')
+                    ->label(__('firesources.type'))
                     ->columnSpanFull()
-                    ->label('Tipo')
                     ->options([
-                        'billing' => 'Facturación',
-                        'shipping' => 'Envío',
+                        'billing' => __('firesources.billing'),
+                        'shipping' => __('firesources.shipping'),
                     ])
                     ->descriptions([
-                        'billing' => 'Información para facturación',
-                        'shipping' => 'Información para envío del producto',
+                        'billing' => __('firesources.billing_info'),
+                        'shipping' => __('firesources.shipping_info'),
                     ])
                     ->inline()
                     ->inlineLabel(false)
                     ->required(),
                 TextInput::make('first_name')
+                    ->label(__('firesources.first_name'))
                     ->required(),
                 TextInput::make('last_name')
+                    ->label(__('firesources.last_name'))
                     ->required(),
 
                 TextInput::make('email')
@@ -36,6 +38,7 @@ class UserInfoEntryForm
                     ->email()
                     ->required(),
                 TextInput::make('country')
+                    ->label(__('firesources.country'))
                     ->required(),
                 TextInput::make('state')
                     ->required(),

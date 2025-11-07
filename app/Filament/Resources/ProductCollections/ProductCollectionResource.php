@@ -26,12 +26,12 @@ class ProductCollectionResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Colección';
+        return __('firesources.collection');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Colecciones';
+        return __('firesources.collections');
     }
 
     public static function getNavigationGroup(): UnitEnum|string|null

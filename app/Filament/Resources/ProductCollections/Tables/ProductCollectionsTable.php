@@ -19,6 +19,8 @@ class ProductCollectionsTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->sortable()
+                    ->label(__('firesources.title'))
                     ->description(function (ProductCollection $collection) {
                         return Str::limit($collection->description, 50, '...');
                     })
@@ -26,10 +28,12 @@ class ProductCollectionsTable
                 TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('created_at')
+                    ->label(__('firesources.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('firesources.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

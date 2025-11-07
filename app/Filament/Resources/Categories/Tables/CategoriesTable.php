@@ -19,6 +19,7 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->label(__('firesources.title'))
                     ->description(function (Category $category) {
                         return Str::limit($category->description, 50, '...');
                     })
@@ -26,10 +27,12 @@ class CategoriesTable
                 TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('created_at')
+                    ->label(__('firesources.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('firesources.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

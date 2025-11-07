@@ -16,6 +16,7 @@ class CategoryForm
             ->components([
                 ...self::titleAndSlugFields(),
                 Textarea::make('description')
+                    ->label(__('firesources.description'))
                     ->required()
                     ->columnSpanFull(),
             ]);

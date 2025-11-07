@@ -16,57 +16,57 @@ class OrderInfolist
     {
         return $schema
             ->components([
-                Section::make('Resumen')
+                Section::make(__('firesources.summary'))
                     ->columns(2)
                     ->columnSpanFull()
                     ->collapsible()
                     ->schema([
                         TextEntry::make('code')
-                            ->label('Código'),
+                            ->label(__('firesources.code')),
                         TextEntry::make('user.name')
-                            ->label('Cliente'),
+                            ->label(__('firesources.customer')),
                         TextEntry::make('total_with_taxes')
-                            ->label('Total, productos con impuestos')
+                            ->label(__('firesources.total_with_taxes'))
                             ->numeric()
                             ->money('USD'),
                         TextEntry::make('total_without_taxes')
-                            ->label('Total, productos sin impuestos')
+                            ->label(__('firesources.total_without_taxes'))
                             ->numeric()
                             ->money('USD'),
                         TextEntry::make('total_computed_taxes')
-                            ->label('Impuestos calculados')
+                            ->label(__('firesources.total_computed_taxes'))
                             ->numeric()
                             ->money('USD'),
                         TextEntry::make('total_amount')
-                            ->label('Monto total')
+                            ->label(__('firesources.total_amount'))
                             ->numeric()
                             ->money('USD'),
                         TextEntry::make('created_at')
-                            ->label('Fecha de creación')
+                            ->label(__('firesources.created_at'))
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('paid_at')
-                            ->label('Fecha de pago')
+                            ->label(__('firesources.paid_at'))
                             ->badge()
                             ->dateTime()
-                            ->placeholder('No pagada.'),
+                            ->placeholder(__('firesources.not_paid_yet')),
                     ]),
-                Section::make('Productos')
+                Section::make(__('firesources.products'))
                     ->columns(2)
                     ->columnSpanFull()
                     ->collapsible()
 
                     ->schema([
                         RepeatableEntry::make('orderItems')
-                            ->label('Productos')
+                            ->label(__('firesources.products'))
                             ->columnSpanFull()
                             ->table([
-                                TableColumn::make('Título'),
-                                TableColumn::make('Precio'),
-                                TableColumn::make('Cantidad'),
-                                TableColumn::make('Subtotal'),
-                                TableColumn::make('Impuestos calculados'),
-                                TableColumn::make('Total con impuestos'),
+                                TableColumn::make(__('firesources.title')),
+                                TableColumn::make(__('firesources.price')),
+                                TableColumn::make(__('firesources.quantity')),
+                                TableColumn::make(__('firesources.total_amount')),
+                                TableColumn::make(__('firesources.total_computed_taxes')),
+                                TableColumn::make(__('firesources.total_with_taxes')),
 
                             ])
                             ->schema([
@@ -79,7 +79,7 @@ class OrderInfolist
                             ]),
                     ])->footer([
                         Action::make('pay')
-                            ->label('Realizar pago.')
+                            ->label(__('firesources.pay'))
                             ->icon(Heroicon::Banknotes)
                             ->url(fn () => route('storefront.checkout'))
                             ->hidden(function ($record) {
@@ -87,7 +87,7 @@ class OrderInfolist
                             }),
                         Action::make('purchase-more')
                             ->icon(Heroicon::BuildingStorefront)
-                            ->label('Volver a la tienda')
+                            ->label(__('firesources.purchase_more'))
                             ->color('secondary')
                             ->url(fn () => route('storefront.products')),
                     ]),
