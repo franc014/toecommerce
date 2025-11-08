@@ -74,8 +74,8 @@ class UserInfoEntryResource extends Resource
     {
         return [
             'index' => ListUserInfoEntries::route('/'),
-            'create' => CreateUserInfoEntry::route('/create'),
-            'edit' => EditUserInfoEntry::route('/{record}/edit'),
+            /* 'create' => CreateUserInfoEntry::route('/create'),
+            'edit' => EditUserInfoEntry::route('/{record}/edit'), */
         ];
     }
 }

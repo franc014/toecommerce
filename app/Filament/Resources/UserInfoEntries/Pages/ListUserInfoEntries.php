@@ -10,6 +10,11 @@ class ListUserInfoEntries extends ListRecords
 {
     protected static string $resource = UserInfoEntryResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return __('firesources.info_for_billing_and_shipping');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

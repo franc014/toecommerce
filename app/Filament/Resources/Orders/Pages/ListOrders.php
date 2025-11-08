@@ -10,6 +10,11 @@ class ListOrders extends ListRecords
 {
     protected static string $resource = OrderResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return __('firesources.orders_list_subheading');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

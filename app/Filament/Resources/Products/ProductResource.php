@@ -15,7 +15,6 @@ use App\Models\Product;
 use App\Traits\StoreNavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;

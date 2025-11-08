@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ReplicateAction;
+use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -57,15 +58,19 @@ class UserInfoEntriesTable
 
                             if (! $others->contains('is_main', true)) {
                                 Notification::make()
-                                    ->title('No se puede desmarcar la información principal sin marcar otra')
-                                    ->body('Por favor, seleccione o registra otra información como principal antes de desmarcar esta.')
+                                    ->title(__('firesources.couldnt_execute_action'))
+                                    ->body(__('firesources.check_another_as_main_entry'))
                                     ->danger()
                                     ->send();
                                 $record->update([
                                     'is_main' => true,
                                 ]);
 
-                                return Redirect::route('filament.customer.resources.user-info-entries.index');
+                                if (Filament::getCurrentPanel()->getId() === 'customer') {
+                                    return Redirect::route('filament.customer.resources.user-info-entries.index');
+                                }
+
+                                return Redirect::route('filament.admin.resources.user-info-entries.index');
                             }
                         }
                     }),

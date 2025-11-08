@@ -95,6 +95,20 @@ return [
     'shipping_info' => 'Shipping Information',
     'billing' => 'Billing',
     'shipping' => 'Shipping',
+    'store' => 'Store',
+    'purchases' => 'Purchases',
+    'access_control' => 'Access Control',
+    'user' => 'User',
+    'users' => 'Users',
+    'email_verified_at' => 'Email Verified At',
+    'password' => 'Password',
+    'roles' => 'Roles',
+    'role' => 'Role',
+    'couldnt_execute_action' => 'Couldn\'t execute this action',
+    'check_another_as_main_entry' => 'Check another record as main entry',
+    'info_for_billing_and_shipping' => 'Info for billing and shipping',
+    'orders_list_subheading' => 'Customers orders',
+
 
 
 ];
