@@ -32,20 +32,34 @@
                 <Button class="block" v-if="user.has_billing_info && user.has_shipping_info">
                     <a href="#payphone-box"> Pagar </a>
                 </Button>
-                <form @submit.prevent="cancelOrder()">
-                    <Button variant="secondary" type="submit">Cancelar</Button>
-                </form>
+
+                <Confirm
+                    v-if="user.has_billing_info && user.has_shipping_info"
+                    :handleAction="cancelOrder"
+                    buttonLabel="Anular Orden"
+                    cancelLabelAction="Cancelar"
+                    acceptLabelAction="Continuar"
+                    title="¿Confirmas Anular tu Orden?"
+                    description="Volverás a la tienda donde podrás seguir comprando."
+                >
+                    <template v-slot:icon>
+                        <Ban />
+                    </template>
+                </Confirm>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { cancel } from '@/routes/storefront/orders';
 import { Order, User } from '@/types';
 import { useForm } from '@inertiajs/vue3';
+import Confirm from './Confirm.vue';
+
+import { Button } from '@/components/ui/button';
+import { cancel } from '@/routes/storefront/orders';
+import { Ban } from 'lucide-vue-next';
 
 const { order } = defineProps<{
     order: Order;
@@ -57,6 +71,9 @@ const form = useForm({
 });
 
 function cancelOrder() {
+    //confirm
+    console.log('hey');
+
     form.post(cancel().url, {
         preserveScroll: true,
         onSuccess: () => {

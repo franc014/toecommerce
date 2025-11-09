@@ -83,7 +83,7 @@ return [
     'type' => 'Type',
     'country' => 'Country',
     'phone' => 'Phone',
-    'is_main' => 'Is Main',
+    'is_main' => 'Main Info',
     'first_name' => 'First Name',
     'last_name' => 'Last Name',
     'country' => 'Country',

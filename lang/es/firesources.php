@@ -82,7 +82,7 @@ return [
     'user_info_entries' => 'Información de Clientes',
     'type' => 'Tipo',
     'phone' => 'Teléfono',
-    'is_main' => 'Es Principal',
+    'is_main' => 'Info Principal',
     'first_name' => 'Nombres',
     'last_name' => 'Apellidos',
     'country' => 'País',
@@ -105,7 +105,6 @@ return [
     'role' => 'Rol',
     'couldnt_execute_action' => 'No se pudo ejecutar la accion',
     'check_another_as_main_entry' => 'Defina otra entrada como principal',
-    'info_for_billing_and_shipping' => 'Información para facturación y envío',
+    'info_for_billing_and_shipping' => 'Información para facturación y entrega de productos',
     'orders_list_subheading' => 'Listado de órdenes',
-
 ];

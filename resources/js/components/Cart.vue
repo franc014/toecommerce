@@ -6,7 +6,7 @@
             tabindex="0"
             @keyup.esc="closeCart"
             ref="cartEl"
-            class="cart-grid fixed top-0 right-0 z-[9999] h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
+            class="cart-grid fixed top-0 right-0 z-5 h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
         >
             <header class="flex items-center gap-2 px-4">
                 <h2 class="flex items-center gap-2">
@@ -48,10 +48,22 @@
                         <Link href="/checkout" class="w-full">Checkout</Link>
                     </Button>
 
-                    <Button variant="secondary" @click="emptyCart" class="cursor-pointer">
+                    <!-- <Button variant="secondary" @click="emptyCart" class="cursor-pointer">
                         <Trash />
                         Vaciar
-                    </Button>
+                    </Button> -->
+                    <Confirm
+                        :handleAction="emptyCart"
+                        buttonLabel="Vaciar Carrito"
+                        cancelLabelAction="Cancelar"
+                        acceptLabelAction="Continuar"
+                        title="¿Confirmas Vaciar tu Carrito?"
+                        description="Todos tus productos serán eliminados del carrito y cualquier orden pendiente será cancelada."
+                    >
+                        <template v-slot:icon>
+                            <Trash2 />
+                        </template>
+                    </Confirm>
                 </div>
             </footer>
 
@@ -69,8 +81,9 @@ import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
-import { CircleX as CloseIcon, CreditCard, ShoppingCart, Trash2 as Trash } from 'lucide-vue-next';
+import { CircleX as CloseIcon, CreditCard, ShoppingCart, Trash2 } from 'lucide-vue-next';
 import { nextTick, ref, watch } from 'vue';
+import Confirm from './Confirm.vue';
 
 const cartEl = ref<HTMLElement | null>(null);
 const cartDrawerStore = useCartDrawerStore();

@@ -41,25 +41,10 @@ export async function init(cookieCart:string) {
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
                 console.error('Sorry. Could not get cart: ', e.message);
-
                 const uuid = uuidv4();
-
                 const cartDB = await createCartInDB(uuid);
-
                 this.id = cartDB.data.ui_cart_id;
 
-                //console.info('Trying to restore cart in DB with cart...');
-
-                 // todo: restore cart with items function
-                /* try {
-
-                     const cartDB = await restorCartToDB(cart.id, cart.items);
-                     this.id = cartDB.data.ui_cart_id;
-                     this.items = cartDB.data.items;
-
-                 } catch (e: any) {
-                     console.error('nope, sorry. could not restore the cart', e.message);
-                 } */
             }
 
             }else {
