@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\StockControlModes;
-use App\Models\AppSettings;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -75,11 +74,8 @@ test('can not show a list of unpublished products', function () {
 
 it('shows warning text if product stock is dropping below threshold, in strict mode', function () {
 
-    $this->withoutExceptionHandling();
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([
@@ -112,11 +108,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
 
 it('does not show warning text if product stock is not dropping below threshold, in strict mode', function () {
 
-    $this->withoutExceptionHandling();
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([
@@ -148,11 +140,7 @@ it('does not show warning text if product stock is not dropping below threshold,
 
 it('does not show warning text if product stock is dropping below threshold, in nonstrict mode', function () {
 
-    $this->withoutExceptionHandling();
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::NONE->value,
-    ]);
+    setStrictMode(StockControlModes::NONE);
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([

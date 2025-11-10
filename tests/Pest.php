@@ -11,6 +11,9 @@
 |
 */
 
+use App\Enums\StockControlModes;
+use App\Settings\StorefrontSettings;
+
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature', 'Unit');
@@ -41,7 +44,9 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function setStrictMode(StockControlModes $mode = StockControlModes::STRICT)
 {
-    // ..
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->stock_control_mode = $mode->value;
+    $sfSettings->save();
 }

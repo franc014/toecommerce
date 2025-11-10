@@ -107,4 +107,7 @@ return [
     'check_another_as_main_entry' => 'Defina otra entrada como principal',
     'info_for_billing_and_shipping' => 'Información para facturación y entrega de productos',
     'orders_list_subheading' => 'Listado de órdenes',
+    'products_per_page' => 'Productos por página',
+    'stock_control_mode' => 'Modo de Control de Stock',
+    'storefront_settings' => 'Configuraciones de Tienda Generales',
 ];

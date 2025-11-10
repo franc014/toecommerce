@@ -2,7 +2,6 @@
 
 use App\Enums\StockControlModes;
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
-use App\Models\AppSettings;
 use App\Models\Product;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Support\Facades\Storage;
@@ -41,11 +40,7 @@ it('shows a listing of a published product', function () {
 
 it('shows warning text if product stock is dropping below threshold, in strict mode', function () {
 
-    $this->withoutExceptionHandling();
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $product = Product::factory()->published()->create([
         'main_image' => 'product.jpg',
@@ -79,11 +74,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
 
 it('does not show warning text if product stock is not dropping below threshold, in strict mode', function () {
 
-    $this->withoutExceptionHandling();
-
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $product = Product::factory()->published()->create([
         'title' => 'Product 1',
@@ -119,9 +110,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
 
     $this->withoutExceptionHandling();
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::NONE->value,
-    ]);
+    setStrictMode(StockControlModes::NONE);
 
     $product = Product::factory()->published()->create([
         'title' => 'Product 1',

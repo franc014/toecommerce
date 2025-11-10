@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Enums\StockControlModes;
+use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
 use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
@@ -63,7 +65,8 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 
     public function isDroppingStock(): bool
     {
-        if (AppSettings::isStockControlStrict()) {
+        $storefrontSettings = app(StorefrontSettings::class);
+        if ($storefrontSettings->isAppInStrictMode()) {
             return $this->stock <= $this->stock_threshold_for_customers;
         }
 

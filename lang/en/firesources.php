@@ -108,6 +108,9 @@ return [
     'check_another_as_main_entry' => 'Check another record as main entry',
     'info_for_billing_and_shipping' => 'Info for billing and shipping',
     'orders_list_subheading' => 'Customers orders',
+    'products_per_page' => 'Products per page',
+    'stock_control_mode' => 'Stock control mode',
+    'storefront_settings' => 'Storefront Settings',
 
 
 

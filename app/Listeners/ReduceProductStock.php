@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Enums\StockControlModes;
 use App\Events\OrderConfirmed;
-use App\Models\AppSettings;
+use App\Settings\StorefrontSettings;
 use Illuminate\Support\Facades\DB;
 
 class ReduceProductStock
@@ -21,8 +22,9 @@ class ReduceProductStock
      */
     public function handle(OrderConfirmed $event): void
     {
+        $storefrontSettings = app(StorefrontSettings::class);
 
-        if (AppSettings::isStockControlStrict()) {
+        if ($storefrontSettings->isAppInStrictMode()) {
             DB::transaction(function () use ($event) {
 
                 foreach ($event->order->orderItems as $item) {

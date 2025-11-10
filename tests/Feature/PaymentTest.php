@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\StockControlModes;
 use App\Events\OrderConfirmed;
 use App\Facades\PayphonePaymentGateway;
 use App\Mail\OrderConfirmed as OrderConfirmedMailable;
-use App\Models\AppSettings;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -136,9 +136,7 @@ function assertForStockTracking()
 
 test('for every product in order its stock is reduced after payment is confirmed in strick mode', function () {
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => 'strict',
-    ]);
+    setStrictMode();
 
     [$productA, $productB] = assertForStockTracking();
 
@@ -155,9 +153,7 @@ test('for every product in order its stock is reduced after payment is confirmed
 
 test('for every product in order its stock is not reduced after payment is confirmed in non strick mode', function () {
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => 'none',
-    ]);
+    setStrictMode(StockControlModes::NONE);
 
     [$productA, $productB] = assertForStockTracking();
 

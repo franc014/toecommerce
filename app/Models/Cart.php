@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Casts\Money;
+use App\Enums\StockControlModes;
 use App\Exceptions\ProductOutOfStockException;
+use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -147,8 +149,8 @@ class Cart extends Model
 
     private function productOutOfStockCheck(array $data): void
     {
-
-        if (AppSettings::isStockControlStrict()) {
+        $storefrontSettings = app(StorefrontSettings::class);
+        if ($storefrontSettings->isAppInStrictMode()) {
 
             $items = CartItem::allByProductInOpenCarts($data['purchasable_id'], $data['purchasable_type']);
 

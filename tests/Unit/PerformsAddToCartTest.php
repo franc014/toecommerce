@@ -1,8 +1,6 @@
 <?php
 
-use App\Enums\StockControlModes;
 use App\Exceptions\ProductOutOfStockException;
-use App\Models\AppSettings;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
@@ -229,9 +227,7 @@ to the quantity in the cart throws an exception', function () {
         'stock' => 0,
     ]);
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), 1);
 
@@ -252,9 +248,7 @@ to the quantity in the cart throws an exception', function () {
         'stock' => 0,
     ], true);
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($variant->id, 'product_variant'), 1);
 
@@ -277,9 +271,7 @@ to the quantity in the cart throws an exception', function () {
 
     $newQuantity = 6;
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($product->id, 'product'), $newQuantity);
 
@@ -302,9 +294,7 @@ to the quantity in the cart throws an exception', function () {
 
     $newQuantity = 6;
 
-    AppSettings::factory()->create([
-        'stock_control_mode' => StockControlModes::STRICT->value,
-    ]);
+    setStrictMode();
 
     $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($variant->id, 'product_variant'), $newQuantity);
 
