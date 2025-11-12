@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->databaseTransactions()
             ->sidebarCollapsibleOnDesktop()
+            ->brandName('ToEcommerce')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Indigo,
