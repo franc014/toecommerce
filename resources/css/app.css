@@ -6,6 +6,8 @@
 @import './hero.css';
 @import './slideshow.css';
 @import './payphone-button.css';
+@import './product-card.css';
+@import './video-feature.css';
 
 /* @plugin "@tailwindcss/typography"; */
 
@@ -14,11 +16,17 @@
 @source '../**/*.blade.php';
 @source '../**/*.ts';
 
+
+
 /* @custom-variant dark (&:is(.dark *)); */
 
-@theme inline {
-    --font-sans: Instrument Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
+
+@theme inline {
+    --font-sans: "Raleway", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: "Berkshire Swash", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --radius: 0.5rem;
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
@@ -106,7 +114,7 @@
     }
 
     h1 {
-        @apply text-4xl font-semibold;
+        @apply text-5xl font-semibold;
     }
 
     h2 {
@@ -121,7 +129,12 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2.75rem;
+}
+.latest-products-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     gap: 2.75rem;
 }
 .checkout-grid {

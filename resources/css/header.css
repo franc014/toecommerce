@@ -70,7 +70,7 @@ Usage: codyhouse.co/license
     -webkit-overflow-scrolling: touch;
 
     overscroll-behavior: contain;
-    @apply px-0 pt-0 pb-5 lg:pb-8;
+    @apply px-0 pt-0 pb-5 lg:pb-8 font-sans;
     @apply bg-white;
     @apply shadow-md;
     z-index: 1;
@@ -154,7 +154,7 @@ Usage: codyhouse.co/license
 .f-header__dropdown-control[aria-current='page'],
 .f-header__dropdown-link:hover,
 .f-header__dropdown-link[aria-current='page'] {
-    @apply text-indigo-700;
+    @apply text-orange-700;
 }
 
 .f-header__btn,
