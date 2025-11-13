@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <main class="bg-zinc-100">
+    <main>
         <slot />
     </main>
     <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" :expand="true" />
