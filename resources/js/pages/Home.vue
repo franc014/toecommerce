@@ -1,9 +1,11 @@
 <template>
     <Hero :heroImage="heroImage" />
     <LatestProducts :latestProducts="latestProducts" />
+    <Collections />
 </template>
 
 <script setup lang="ts">
+import Collections from '@/components/home/Collections.vue';
 import Hero from '@/components/home/Hero.vue';
 import LatestProducts from '@/components/home/LatestProducts.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
