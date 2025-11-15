@@ -33,50 +33,36 @@
                 </div>
 
                 <ul class="f-header__list grow basis-0 lg:justify-center">
-                    <li class="f-header__item"><a href="#0" class="f-header__link">About</a></li>
-                    <li class="f-header__item">
-                        <a href="#0" class="f-header__link">
-                            <span>Solutions</span>
-                            <svg
-                                class="f-header__dropdown-icon icon inline-block h-[12px] w-[12px] shrink-0 fill-current leading-none text-inherit"
-                                aria-hidden="true"
-                                viewBox="0 0 12 12"
-                            >
-                                <path d="M9.943,4.269A.5.5,0,0,0,9.5,4h-7a.5.5,0,0,0-.41.787l3.5,5a.5.5,0,0,0,.82,0l3.5-5A.5.5,0,0,0,9.943,4.269Z" />
-                            </svg>
-                        </a>
-
-                        <ul class="f-header__dropdown">
-                            <li><a href="#0" class="f-header__dropdown-link">Sub Nav Item One</a></li>
-                            <li><a href="#0" class="f-header__dropdown-link">Sub Nav Item Two</a></li>
-                            <li><a href="#0" class="f-header__dropdown-link">Sub Nav Item Three</a></li>
-                            <li><a href="#0" class="f-header__dropdown-link">Sub Nav Item Four</a></li>
-                            <li><a href="#0" class="f-header__dropdown-link">Sub Nav Item Five</a></li>
-                        </ul>
-                    </li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link" aria-current="page">Resources</a></li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Pricing</a></li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Contact</a></li>
+                    <li class="f-header__item"><a href="#0" class="f-header__link">Productos</a></li>
+                    <li class="f-header__item"><a href="#0" class="f-header__link" aria-current="page">Colecciones</a></li>
+                    <li class="f-header__item"><a href="#0" class="f-header__link">Nosotros</a></li>
+                    <li class="f-header__item"><a href="#0" class="f-header__link">Contacto</a></li>
                 </ul>
 
                 <ul class="f-header__list grow basis-0 lg:justify-end">
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Login</a></li>
+                    <!-- <li class="f-header__item"><a href="#0" class="f-header__link">Login</a></li> -->
                     <li class="f-header__item">
-                        <a
-                            href="#0"
-                            class="f-header__btn relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-[1em] leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"
-                            >Button</a
-                        >
+                        <Button class="relative cursor-pointer bg-orange-300 px-4 py-2 hover:bg-orange-600" v-on:click="open">
+                            <ShoppingCartIcon class="h-6 w-6" />
+                            <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 -right-2 bg-sky-600 text-zinc-50">{{
+                                cartStore.aggregation.items_count
+                            }}</Badge>
+                        </Button>
                     </li>
                 </ul>
             </div>
         </div>
+        <Cart />
     </header>
 </template>
 
 <script setup lang="ts">
+import Cart from '@/components/Cart.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
+import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
 const cartDrawer = useCartDrawerStore();
 

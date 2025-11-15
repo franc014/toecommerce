@@ -1,9 +1,9 @@
 <template>
-    <footer class="footer-v6 section-spacing bg-zinc-50/10">
+    <footer class="footer-v6 section-spacing border-t border-zinc-300 bg-zinc-50/10">
         <div class="wrapper">
-            <div class="mb-8 border-b border-zinc-900/10 py-8 lg:mb-20">
+            <div class="mb-8 border-b border-dashed border-zinc-900/40 py-8 lg:mb-20">
                 <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-3">
-                    <div><h2 class="font-serif5">Qué tu mascota se sienta en casa.</h2></div>
+                    <div><h2 class="font-serif2">Logo</h2></div>
                     <!-- <div>
                         <a
                             class="relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-[1em] leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"

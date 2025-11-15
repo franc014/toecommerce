@@ -31,10 +31,7 @@
 @theme inline {
     --font-sans: "Raleway", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif: "Berkshire Swash", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif2: "Boogaloo", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif3: "Rammetto One", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif4: "Croissant One", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif5: "Elsie", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif2: "Original Surfer", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius: 0.5rem;
     --radius-lg: var(--radius);
@@ -124,11 +121,11 @@
     }
 
     h1 {
-        @apply text-5xl font-semibold;
+        @apply text-6xl font-semibold;
     }
 
     h2 {
-        @apply text-4xl font-semibold tracking-wide;
+        @apply text-5xl font-semibold ;
     }
 }
 
@@ -198,7 +195,7 @@
 }
 
 .section-spacing {
-    @apply py-18;
+    @apply py-20;
 }
 
 

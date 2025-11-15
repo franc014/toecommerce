@@ -11,11 +11,10 @@
     <!--  <link rel="stylesheet" href="https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.css"> -->
     <script type="module" src="https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.js"></script>
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Boogaloo&family=Croissant+One&family=Elsie:wght@400;900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rammetto+One&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Bubblegum+Sans&family=Elsie:wght@400;900&family=Original+Surfer&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 
 
@@ -23,7 +22,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased bg-white">
+<body class="font-sans antialiased bg-zinc-50">
     @inertia
 </body>
 

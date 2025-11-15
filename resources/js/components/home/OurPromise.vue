@@ -1,7 +1,9 @@
 <template>
     <section class="section-spacing bg-orange-50">
         <div class="wrapper flex flex-col items-center space-y-16">
-            <h2 class="pb-2 text-center font-serif5">Algo más que "lindo": <span class="mt-4 block">Comfort, Calidad y Cuidado</span></h2>
+            <h2 class="pb-2 text-center font-serif2">
+                Algo más que "lindo": <span class="mt-4 block text-2xl font-normal text-black/80">Comfort, Calidad y Cuidado</span>
+            </h2>
             <ul class="hiw-v2__grid">
                 <li class="hiw-v2__item">
                     <figure class="hiw-v2__figure mb-5 lg:mb-8">

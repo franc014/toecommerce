@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <div v-if="cartDrawerStore.isOpen" class="fixed inset-0 z-0 bg-black/5" @click="closeCart" />
+        <div v-if="cartDrawerStore.isOpen" class="fixed inset-0 z-20 bg-black/5" @click="closeCart" />
         <section
             v-if="cartDrawerStore.isOpen"
             tabindex="0"
@@ -9,7 +9,7 @@
             class="cart-grid fixed top-0 right-0 z-5 h-full w-1/2 border border-zinc-100 bg-zinc-100 p-10 shadow-lg shadow-zinc-500 dark:border-zinc-500"
         >
             <header class="flex items-center gap-2 px-4">
-                <h2 class="flex items-center gap-2">
+                <h2 class="flex items-center gap-2 text-2xl">
                     <ShoppingCart />
                     <span>{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span>
                     en tu carrito de compras
