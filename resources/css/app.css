@@ -10,6 +10,8 @@
 @import './video-feature.css';
 @import './collections-grid.css';
 @import './collection-card.css';
+@import './ourpromise.css';
+@import './footer.css';
 
 
 
@@ -29,6 +31,10 @@
 @theme inline {
     --font-sans: "Raleway", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif: "Berkshire Swash", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif2: "Boogaloo", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif3: "Rammetto One", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif4: "Croissant One", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif5: "Elsie", ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius: 0.5rem;
     --radius-lg: var(--radius);
@@ -192,7 +198,7 @@
 }
 
 .section-spacing {
-    @apply py-16;
+    @apply py-18;
 }
 
 

@@ -4,12 +4,14 @@
         <slot />
     </main>
     <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" :expand="true" />
+    <Footer />
 </template>
 
 <script lang="ts" setup>
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'vue-sonner';
 import 'vue-sonner/style.css';
+import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
 import { useCartStore } from '../stores/cartStore';
 const cartStore = useCartStore();

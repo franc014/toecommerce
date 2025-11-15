@@ -2,12 +2,14 @@
     <Hero :heroImage="heroImage" />
     <LatestProducts :latestProducts="latestProducts" />
     <Collections />
+    <OurPromise />
 </template>
 
 <script setup lang="ts">
 import Collections from '@/components/home/Collections.vue';
 import Hero from '@/components/home/Hero.vue';
 import LatestProducts from '@/components/home/LatestProducts.vue';
+import OurPromise from '@/components/home/OurPromise.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { Product } from '@/types';
 
