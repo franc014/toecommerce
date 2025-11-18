@@ -14,7 +14,6 @@ abstract class TestCase extends BaseTestCase
 
         // Custom assertions using Macros
         Collection::macro('assertContains', function ($value) {
-
             Assert::assertTrue($this->contains($value), 'Failed asserting that the collection contains the specified value.');
         });
         Collection::macro('assertNotContains', function ($value) {
