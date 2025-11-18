@@ -10,16 +10,15 @@ use App\Filament\Resources\ProductVariants\Schemas\ProductVariantForm;
 use App\Filament\Resources\ProductVariants\Schemas\ProductVariantInfolist;
 use App\Filament\Resources\ProductVariants\Tables\ProductVariantsTable;
 use App\Models\ProductVariant;
-use App\Traits\StoreNavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ProductVariantResource extends Resource
 {
-    use StoreNavigationGroup;
 
     protected static ?string $model = ProductVariant::class;
 
@@ -37,6 +36,11 @@ class ProductVariantResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return  __('firesources.variants');
+    }
+
+    public static function getNavigationGroup(): UnitEnum|string|null
+    {
+        return __('firesources.store');
     }
 
     public static function form(Schema $schema): Schema

@@ -29,8 +29,12 @@ class ShieldSeeder extends Seeder
                     'ViewAny:Product', 'View:Product', 'Create:Product', 'Update:Product', 'Delete:Product', 'Restore:Product',
                     'ForceDelete:Product', 'ForceDeleteAny:Product', 'RestoreAny:Product', 'Replicate:Product', 'Reorder:Product',
                     'ViewAny:Order', 'View:Order', 'ViewAny:UserInfoEntry', 'View:UserInfoEntry',
-                    'Create:UserInfoEntry', 'Update:UserInfoEntry',
-                    'Delete:UserInfoEntry', 'Replicate:UserInfoEntry',
+                    'Create:UserInfoEntry', 'Update:UserInfoEntry','Delete:UserInfoEntry', 'Replicate:UserInfoEntry',
+                    'ViewAny:Page', 'View:Page', 'Create:Page', 'Update:Page', 'Delete:Page', 'Restore:Page',
+                    'ForceDelete:Page', 'ForceDeleteAny:Page', 'RestoreAny:Page', 'Replicate:Page', 'Reorder:Page',
+                    'ViewAny:Section', 'View:Section', 'Create:Section', 'Update:Section', 'Delete:Section', 'Restore:Section',
+                    'ForceDelete:Section', 'ForceDeleteAny:Section', 'RestoreAny:Section', 'Replicate:Section', 'Reorder:Section',
+
                 ]], ['name' => 'customer', 'guard_name' => 'web',
                     'permissions' => [
                         'ViewAny:Order', 'View:Order',

@@ -10,12 +10,18 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use UnitEnum;
 
 class ManageStorefront extends SettingsPage
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static string $settings = StorefrontSettings::class;
+
+    public static function getNavigationGroup(): UnitEnum|string|null
+    {
+        return __('firesources.settings');
+    }
 
     public function form(Schema $schema): Schema
     {

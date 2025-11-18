@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Filament\Resources\Sections\Schemas;
+
+use App\Filament\Forms\Components\SharedFields;
+use App\Filament\Forms\ContentBuilder;
+
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
+class SectionForm
+{
+    use SharedFields;
+
+    public static function globalInfoFields(): array
+    {
+        return [
+
+            ...self::titleAndSlugFields(),
+            Textarea::make('description')
+                ->label(__('firesources.description'))
+                ->required()
+                ->minLength(10)
+                ->maxLength(1280),
+            SpatieMediaLibraryFileUpload::make('section_images')
+                ->label(__('firesources.images'))
+                ->image()
+                ->maxSize(1024 * 3)
+                ->reorderable()
+                ->maxFiles(5)
+                ->multiple()
+                ->imageEditor()
+                ->panelLayout('grid')
+                ->uploadingMessage(__('firesources.uploading_message'))
+                ->responsiveImages()
+                ->conversion('thumb')
+                ->collection('section-images')
+                ->visibility('public'),
+        ];
+    }
+
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+           ->columns(8)
+           ->components([
+               Section::make(__('firesources.general_info'))
+                   ->secondary()
+                   ->columnSpan(3)
+                   ->schema(
+                       self::globalInfoFields(),
+                   ),
+               Section::make(__('firesources.section_content'))
+                   ->secondary()
+                   ->columnSpan(5)
+                   ->schema([
+                       ContentBuilder::make(),
+                   ]),
+
+           ]);
+    }
+}

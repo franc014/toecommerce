@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ProductCollections;
 
-use App\Enums\NavigationGroup;
 use App\Filament\Resources\ProductCollections\Pages\CreateProductCollection;
 use App\Filament\Resources\ProductCollections\Pages\EditProductCollection;
 use App\Filament\Resources\ProductCollections\Pages\ListProductCollections;
@@ -24,6 +23,8 @@ class ProductCollectionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+
+
     public static function getModelLabel(): string
     {
         return __('firesources.collection');
@@ -36,7 +37,7 @@ class ProductCollectionResource extends Resource
 
     public static function getNavigationGroup(): UnitEnum|string|null
     {
-        return NavigationGroup::TAXONOMIES;
+        return __('firesources.taxonomies');
     }
 
     protected static ?string $recordTitleAttribute = 'title';

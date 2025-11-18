@@ -12,17 +12,17 @@ use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Schemas\ProductInfolist;
 use App\Filament\Resources\Products\Tables\ProductsTable;
 use App\Models\Product;
-use App\Traits\StoreNavigationGroup;
+
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use UnitEnum;
 
 class ProductResource extends Resource
 {
-    use StoreNavigationGroup;
 
     protected static ?string $model = Product::class;
 
@@ -38,6 +38,11 @@ class ProductResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('firesources.products');
+    }
+
+    public static function getNavigationGroup(): UnitEnum|string|null
+    {
+        return __('firesources.store');
     }
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
