@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Pages;
 use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Filament\Resources\Pages\Pages\ListPages;
+use App\Filament\Resources\Pages\Pages\ManagePageSections;
 use App\Filament\Resources\Pages\Schemas\PageForm;
 use App\Filament\Resources\Pages\Tables\PagesTable;
 use App\Models\Page;
@@ -64,6 +65,7 @@ class PageResource extends Resource
     {
         return [
             'index' => ListPages::route('/'),
+            'manageSections' => ManagePageSections::route('/{record}/sections'),
            /*  'create' => CreatePage::route('/create'),
             'edit' => EditPage::route('/{record}/edit'), */
         ];
