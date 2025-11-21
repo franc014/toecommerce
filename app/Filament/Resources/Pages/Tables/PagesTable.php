@@ -14,7 +14,6 @@ use Filament\Tables\Table;
 
 class PagesTable
 {
-
     public static function customActions(): array
     {
         return [
@@ -37,65 +36,64 @@ class PagesTable
                     return $record->status->value === 'draft';
                 }),
             Action::make('manageSections')
-                    ->label('Manage Sections')
-                    ->icon(Heroicon::OutlinedRectangleGroup)
-                    ->color('accent')
-                    ->visible(function (Page $record) {
-                        return $record->hasSections();
-                    })
-                    ->url(fn (Page $record): string => PageResource::getUrl('manageSections', ['record' => $record])),
+                ->label('Manage Sections')
+                ->icon(Heroicon::OutlinedRectangleGroup)
+                ->color('accent')
+                ->visible(function (Page $record) {
+                    return $record->hasSections();
+                })
+                ->url(fn (Page $record): string => PageResource::getUrl('manageSections', ['record' => $record])),
         ];
     }
-
 
     public static function configure(Table $table): Table
     {
         return $table
-             ->columns([
-                 TextColumn::make('title')
-                     ->searchable()
-                     ->sortable()
-                     ->label(__('firesources.title'))
-                     ->description(function ($record) {
-                         return str()->limit($record->description, 80, '...');
-                     })
-                     ->wrap()
-                     ->searchable(),
-                 TextColumn::make('status')
-                     ->label(__('firesources.status'))
-                     ->badge()
-                     ->searchable(),
-                 TextColumn::make('sections.title')
-                     ->label(__('firesources.sections'))
-                     ->badge()
-                     ->color('info')
-                     ->searchable(),
-                 TextColumn::make('published_at')
-                     ->label(__('firesources.published_at'))
-                     ->dateTime()
-                     ->toggleable(isToggledHiddenByDefault: true)
-                     ->sortable(),
-                 TextColumn::make('created_at')
-                     ->label(__('firesources.created_at'))
-                     ->dateTime()
-                     ->sortable()
-                     ->toggleable(isToggledHiddenByDefault: true),
-                 TextColumn::make('updated_at')
-                     ->label(__('firesources.updated_at'))
-                     ->dateTime()
-                     ->sortable()
-                     ->toggleable(isToggledHiddenByDefault: true),
-             ])
-             ->filters([
+            ->columns([
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable()
+                    ->label(__('firesources.title'))
+                    ->description(function ($record) {
+                        return str()->limit($record->description, 80, '...');
+                    })
+                    ->wrap()
+                    ->searchable(),
+                TextColumn::make('status')
+                    ->label(__('firesources.status'))
+                    ->badge()
+                    ->searchable(),
+                TextColumn::make('sections.title')
+                    ->label(__('firesources.sections'))
+                    ->badge()
+                    ->color('info')
+                    ->searchable(),
+                TextColumn::make('published_at')
+                    ->label(__('firesources.published_at'))
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->label(__('firesources.created_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->label(__('firesources.updated_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
                 //
             ])
-             ->recordActions([
+            ->recordActions([
                 ...self::customActions(),
                 EditAction::make(),
             ])
-             ->toolbarActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
-                     //DeleteBulkAction::make(),
+                    // DeleteBulkAction::make(),
                 ]),
             ]);
     }

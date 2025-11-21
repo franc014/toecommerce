@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Enums\StockControlModes;
 use App\Events\OrderConfirmed;
 use App\Settings\StorefrontSettings;
 use Illuminate\Support\Facades\DB;

@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Sections\Schemas;
 
 use App\Filament\Forms\Components\SharedFields;
 use App\Filament\Forms\ContentBuilder;
-
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
@@ -44,21 +43,21 @@ class SectionForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
-           ->columns(8)
-           ->components([
-               Section::make(__('firesources.general_info'))
-                   ->secondary()
-                   ->columnSpan(3)
-                   ->schema(
-                       self::globalInfoFields(),
-                   ),
-               Section::make(__('firesources.section_content'))
-                   ->secondary()
-                   ->columnSpan(5)
-                   ->schema([
-                       ContentBuilder::make(),
-                   ]),
+            ->columns(8)
+            ->components([
+                Section::make(__('firesources.general_info'))
+                    ->secondary()
+                    ->columnSpan(3)
+                    ->schema(
+                        self::globalInfoFields(),
+                    ),
+                Section::make(__('firesources.section_content'))
+                    ->secondary()
+                    ->columnSpan(5)
+                    ->schema([
+                        ContentBuilder::make(),
+                    ]),
 
-           ]);
+            ]);
     }
 }

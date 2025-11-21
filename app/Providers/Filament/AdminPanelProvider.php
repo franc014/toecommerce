@@ -25,7 +25,6 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
 
-
         return $panel
             ->default()
             ->id('admin')
@@ -70,7 +69,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                ->navigationGroup(__('firesources.access_control'))
+                    ->navigationGroup(__('firesources.access_control')),
 
             ])
             ->authMiddleware([

@@ -40,8 +40,8 @@ test('can resolve content', function () {
 
     $section = Section::factory()->create(
         [
-             'content' => $this->content,
-         ]
+            'content' => $this->content,
+        ]
     );
 
     $resolved = $section->resolveContent();
@@ -67,7 +67,6 @@ test('can include images in resolved content', function () {
 
     $section->addMediaFromUrl('https://picsum.photos/400')->toMediaCollection('gallery-A', 'local');
     $section->addMediaFromUrl('https://picsum.photos/500')->toMediaCollection('gallery-B', 'local');
-
 
     $images = $section->resolveContent()['images'];
 

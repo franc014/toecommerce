@@ -6,7 +6,6 @@ use App\Filament\Resources\Products\ProductResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ListProducts extends ListRecords

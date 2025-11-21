@@ -20,7 +20,6 @@ use UnitEnum;
 
 class UserInfoEntryResource extends Resource
 {
-
     protected static ?string $model = UserInfoEntry::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

@@ -74,7 +74,6 @@ test('can not show a list of unpublished products', function () {
 
 it('shows warning text if product stock is dropping below threshold, in strict mode', function () {
 
-
     setStrictMode();
 
     Product::factory()->published()->create();

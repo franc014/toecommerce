@@ -28,13 +28,13 @@ class ManageStorefront extends SettingsPage
         return $schema
             ->components([
                 TextInput::make('products_per_page')
-                ->label(__('firesources.products_per_page'))
-                ->numeric()
-                ->required(),
+                    ->label(__('firesources.products_per_page'))
+                    ->numeric()
+                    ->required(),
                 Select::make('stock_control_mode')
-                ->label(__('firesources.stock_control_mode'))
-                ->options(StockControlModes::class)
-                ->required(),
+                    ->label(__('firesources.stock_control_mode'))
+                    ->options(StockControlModes::class)
+                    ->required(),
             ]);
     }
 

@@ -22,7 +22,6 @@ use UnitEnum;
 
 class OrderResource extends Resource
 {
-
     protected static ?string $model = Order::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -30,7 +29,6 @@ class OrderResource extends Resource
     protected static ?string $recordTitleAttribute = 'code';
 
     protected static ?string $recordRouteKeyName = 'code';
-
 
     public static function getModelLabel(): string
     {
@@ -46,8 +44,6 @@ class OrderResource extends Resource
     {
         return __('firesources.purchases');
     }
-
-
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {

@@ -25,10 +25,10 @@ class ProductInfolist
                             ->icon(Heroicon::OutlinedCube)
                             ->schema([
                                 TextEntry::make('title')
-                                          ->label(__('firesources.title')),
+                                    ->label(__('firesources.title')),
                                 TextEntry::make('slug'),
                                 TextEntry::make('description')
-                                          ->label(__('firesources.description')),
+                                    ->label(__('firesources.description')),
                                 TextEntry::make('status')
                                     ->label(__('firesources.status'))
                                     ->badge(),
@@ -56,9 +56,8 @@ class ProductInfolist
                                 TextEntry::make('sku'),
                             ]),
 
-                         Tab::make(__('firesources.variant_options'))
+                        Tab::make(__('firesources.variant_options'))
                             ->icon(Heroicon::OutlinedSwatch)
-
                             ->schema([
                                 RepeatableEntry::make('variant_options')
                                     ->label(__('firesources.variant_options'))
@@ -66,15 +65,13 @@ class ProductInfolist
                                     ->schema([
                                         TextEntry::make('name')->label(__('firesources.name')),
                                         RepeatableEntry::make('values')
-                                        ->grid(2)
-                                        ->label(__('firesources.variant_option_values'))
-                                        ->schema([
-                                            TextEntry::make('value')->label(__('firesources.value')),
-                                        ])
-                                ])
+                                            ->grid(2)
+                                            ->label(__('firesources.variant_option_values'))
+                                            ->schema([
+                                                TextEntry::make('value')->label(__('firesources.value')),
+                                            ]),
+                                    ]),
                             ]),
-
-
 
                         Tab::make(__('firesources.images'))
                             ->icon(Heroicon::OutlinedPhoto)
@@ -85,7 +82,7 @@ class ProductInfolist
                                     ->conversion('thumb')
                                     ->collection('product-images'),
                             ]),
-                        ]),
+                    ]),
 
             ]);
     }

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\PageStatus;
 use App\CMS\ContentResolver;
+use App\CMS\ImageTransformable;
+use App\Enums\PageStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -73,18 +74,18 @@ class Page extends Model
 
     }
 
-    public function sectionsForUI(): ?array
+    public function sectionsForUI(array $transformables = []): ?array
     {
         $sectionsKeyed = $this->sections->keyBy('slug');
 
-        $sectionsMapped = $sectionsKeyed->map(function ($section, $key) {
+        $sectionsMapped = $sectionsKeyed->map(function ($section, $key) use ($transformables) {
 
             $contentResolver = new ContentResolver($section);
 
             return [
                 'title' => $section->title,
                 'slug' => $section->slug,
-                'content' => $contentResolver->resolve(),
+                'content' => $contentResolver->resolve($transformables),
             ];
 
         });

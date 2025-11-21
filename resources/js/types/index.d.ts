@@ -169,7 +169,8 @@ export interface PageComponentContent {
     heading: Array<Heading>;
     paragraph: Array<Paragraph>;
     cta: Array<CTA>;
-    image: Array<string>;
+    image: Array;
+    "new-products": Array;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

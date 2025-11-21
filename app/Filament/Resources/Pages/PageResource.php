@@ -18,14 +18,11 @@ use UnitEnum;
 
 class PageResource extends Resource
 {
-
-
     protected static ?string $model = Page::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocument;
 
     protected static ?string $recordTitleAttribute = 'title';
-
 
     public static function getModelLabel(): string
     {
@@ -66,7 +63,7 @@ class PageResource extends Resource
         return [
             'index' => ListPages::route('/'),
             'manageSections' => ManagePageSections::route('/{record}/sections'),
-           /*  'create' => CreatePage::route('/create'),
+            /*  'create' => CreatePage::route('/create'),
             'edit' => EditPage::route('/{record}/edit'), */
         ];
     }

@@ -60,5 +60,4 @@ class Section extends Model implements HasMedia
 
         return array_merge($content->toArray(), ['images' => $this->getImages()]);
     }
-
 }

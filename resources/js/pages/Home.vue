@@ -1,7 +1,7 @@
 <template>
     <div>
         <Hero :content="heroContent" />
-        <RecentProducts />
+        <RecentProducts :content="recentProductsContent" />
     </div>
     <!--    <LatestProducts />
     <Collections />
@@ -27,6 +27,10 @@ const components = page.props.components as PageComponents;
 
 const heroContent = computed(() => {
     return components['Hero'].content as PageComponentContent;
+});
+
+const recentProductsContent = computed(() => {
+    return components['RecentProducts'].content as PageComponentContent;
 });
 
 console.log(components);

@@ -150,6 +150,4 @@ return [
     'new_products' => 'New Products',
     'new_products_choice' => 'New Products Choice',
 
-
-
 ];

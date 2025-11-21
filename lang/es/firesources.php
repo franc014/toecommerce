@@ -77,7 +77,7 @@ return [
     'total_computed_taxes' => 'Total, Impuestos Calculados',
     'not_paid_yet' => 'No pagado todavia',
     'pay' => 'Pagar',
-    'purchase_more' => "Seguir comprando",
+    'purchase_more' => 'Seguir comprando',
     'user_info_entry' => 'Información de Clientes',
     'user_info_entries' => 'Información de Clientes',
     'type' => 'Tipo',

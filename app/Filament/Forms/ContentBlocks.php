@@ -177,7 +177,7 @@ class ContentBlocks
                 CheckboxList::make('products')
                     ->label(__('firesources.new_products'))
                     ->options(Product::query()->published()->latest()->take(10)->get()->pluck('title', 'id')->toArray())
-                    ->searchable()
+                    ->searchable(),
             ])
             ->maxItems(1)
             ->label(__('firesources.new_products_choice'))

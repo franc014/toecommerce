@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
-use App\Enums\StockControlModes;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;

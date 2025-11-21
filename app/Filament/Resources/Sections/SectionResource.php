@@ -17,13 +17,11 @@ use UnitEnum;
 
 class SectionResource extends Resource
 {
-
     protected static ?string $model = Section::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleGroup;
 
     protected static ?string $recordTitleAttribute = 'title';
-
 
     public static function getModelLabel(): string
     {
@@ -63,8 +61,8 @@ class SectionResource extends Resource
     {
         return [
             'index' => ListSections::route('/'),
-            //'create' => CreateSection::route('/create'),
-            //'edit' => EditSection::route('/{record}/edit'),
+            // 'create' => CreateSection::route('/create'),
+            // 'edit' => EditSection::route('/{record}/edit'),
         ];
     }
 }

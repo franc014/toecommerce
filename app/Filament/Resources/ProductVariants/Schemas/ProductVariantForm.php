@@ -43,14 +43,14 @@ class ProductVariantForm
                 TextInput::make('sku')
                     ->required(),
                 TextInput::make('stock')
-                ->label(__('firesources.stock'))
-                ->numeric()
-                ->minValue(0),
+                    ->label(__('firesources.stock'))
+                    ->numeric()
+                    ->minValue(0),
                 Select::make('product_id')
-                ->label(__('firesources.product'))
-                ->hidden(function () use ($productId) {
-                    return $productId !== null;
-                })->relationship('product', 'title')->required(),
+                    ->label(__('firesources.product'))
+                    ->hidden(function () use ($productId) {
+                        return $productId !== null;
+                    })->relationship('product', 'title')->required(),
                 SpatieMediaLibraryFileUpload::make('product_variant_images')
                     ->label(__('firesources.images'))
                     ->multiple()

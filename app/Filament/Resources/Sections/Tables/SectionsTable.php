@@ -40,6 +40,7 @@ class SectionsTable
                 }),
         ];
     }
+
     public static function configure(Table $table): Table
     {
         return $table
@@ -71,7 +72,7 @@ class SectionsTable
                 //
             ])
             ->recordActions([
-                 ...self::customActions(),
+                ...self::customActions(),
                 ReplicateAction::make()
                     ->beforeReplicaSaved(function (Model $replica): void {
                         $replica->title = $replica->title.'-Copy';

@@ -10,7 +10,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Route;
 
 class ProductVariantsTable
 {
@@ -29,7 +28,7 @@ class ProductVariantsTable
             ])
 
             ->headerActions([
-                CreateAction::make()
+                CreateAction::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

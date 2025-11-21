@@ -25,5 +25,4 @@ enum SectionStatus: string implements HasColor, HasLabel
             self::ACTIVE => 'ACTIVE',
         };
     }
-
 }

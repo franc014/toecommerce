@@ -17,12 +17,12 @@ class SectionFactory extends Factory
     public function definition(): array
     {
         $content = [
-              'type' => 'heading',
-              'data' => [
-                  'content' => fake()->sentence(4),
-                  'level' => 'h1',
-              ],
-          ];
+            'type' => 'heading',
+            'data' => [
+                'content' => fake()->sentence(4),
+                'level' => 'h1',
+            ],
+        ];
 
         return [
             'title' => fake()->sentence(4),

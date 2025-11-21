@@ -19,7 +19,6 @@ use UnitEnum;
 
 class ProductVariantResource extends Resource
 {
-
     protected static ?string $model = ProductVariant::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSwatch;
@@ -35,7 +34,7 @@ class ProductVariantResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return  __('firesources.variants');
+        return __('firesources.variants');
     }
 
     public static function getNavigationGroup(): UnitEnum|string|null
