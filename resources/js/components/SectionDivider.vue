@@ -17,8 +17,6 @@ const { backgroundColor } = defineProps<{ backgroundColor?: string }>();
 const fillColor = computed(() => {
     return `${backgroundColor}`;
 });
-
-console.log({ fillColor });
 </script>
 
 <style scoped>

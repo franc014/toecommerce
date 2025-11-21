@@ -3,7 +3,10 @@
 namespace App\Filament\Forms;
 
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\CTABlock;
+use App\Models\Product;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Filament\Forms\Components\Select;
@@ -130,6 +133,54 @@ class ContentBlocks
                 return self::setBlockLabelRich($state, __('firesources.rich_editor'));
             })
             ->icon(Heroicon::Bars4);
+    }
 
+    public static function cta(): Block
+    {
+        return Block::make('cta')
+            ->schema([
+                TextInput::make('content')
+                    ->label(__('firesources.cta'))
+                    ->maxLength(32)
+                    ->required(),
+                TextInput::make('link')
+                    ->label(__('firesources.link'))
+                    ->maxLength(2048)
+                    ->required(),
+            ])
+            ->label(function (?array $state): string {
+                return self::setBlockLabel($state, __('firesources.cta'));
+            })
+            ->icon(Heroicon::Link);
+    }
+
+    public static function image(): Block
+    {
+        return Block::make('image')
+            ->schema([
+                FileUpload::make('image')
+                    ->label(__('firesources.image'))
+                    ->directory('images')
+                    ->maxSize(1024 * 3)
+                    ->visibility('public')
+                    ->image(),
+            ])
+            ->label(__('firesources.image'))
+            ->icon(Heroicon::Photo);
+
+    }
+
+    public static function newProductsChoice(): Block
+    {
+        return Block::make('new-products')
+            ->schema([
+                CheckboxList::make('products')
+                    ->label(__('firesources.new_products'))
+                    ->options(Product::query()->published()->latest()->take(10)->get()->pluck('title', 'id')->toArray())
+                    ->searchable()
+            ])
+            ->maxItems(1)
+            ->label(__('firesources.new_products_choice'))
+            ->icon(Heroicon::ViewfinderCircle);
     }
 }

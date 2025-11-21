@@ -28,7 +28,7 @@
 
                 <div class="col-span-12 lg:col-span-7">
                     <figure>
-                        <!--  <img class="block h-[650px] w-full object-cover" :src="heroImage" alt="Image description" /> -->
+                        <img class="block h-[650px] w-full object-cover" :src="heroImage" alt="Image description" />
                     </figure>
                 </div>
             </div>
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import SectionDivider from '../SectionDivider.vue';
-const { content } = defineProps<{
-    content: object;
+const { heroImage } = defineProps<{
+    heroImage: string;
 }>();
 </script>

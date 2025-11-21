@@ -5,9 +5,10 @@
 
             <div class="latest-products-grid">
                 <div class="products-grid">
-                    <ul v-for="product in latestProducts">
+                    recent products
+                    <!--  <ul v-for="product in latestProducts">
                         <ProductCard :product="product" />
-                    </ul>
+                    </ul> -->
                 </div>
                 <div class="feature-product-video">
                     <FeatureProductVideo />
@@ -19,10 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import ProductCard from '@/components/ProductCard.vue';
 import SectionDivider from '@/components/SectionDivider.vue';
 import FeatureProductVideo from '@/components/home/FeatureProductVideo.vue';
-import { Product } from '@/types';
-
-const { latestProducts } = defineProps<{ latestProducts: Product[] }>();
 </script>

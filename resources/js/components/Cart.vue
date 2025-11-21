@@ -11,7 +11,10 @@
             <header class="flex items-center gap-2 px-4">
                 <h2 class="flex items-center gap-2 text-2xl">
                     <ShoppingCart />
-                    <span>{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span>
+                    <span v-if="cartStore.aggregation.items_count > 0"
+                        >{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span
+                    >
+                    <span v-else>Ningún ítem</span>
                     en tu carrito de compras
                 </h2>
                 <button @click="closeCart" class="ml-auto cursor-pointer">

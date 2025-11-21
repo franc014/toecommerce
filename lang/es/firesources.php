@@ -142,5 +142,10 @@ return [
     'meta_tags' => 'Etiquetas',
     'search_for_sections' => 'Buscar Secciones',
     'settings' => 'Configuraciones',
+    'cta' => 'Llamada a Acción',
+    'link' => 'Enlace',
+    'image' => 'Imagen',
+    'new_products' => 'Productos Nuevos',
+    'new_products_choice' => 'Elegir entre Productos Nuevos',
 
 ];

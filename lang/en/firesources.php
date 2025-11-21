@@ -144,6 +144,12 @@ return [
     'meta_tags' => 'Meta Tags',
     'search_for_sections' => 'Search for sections',
     'settings' => 'Settings',
+    'cta' => 'Call To Action',
+    'link' => 'Link',
+    'image' => 'Image',
+    'new_products' => 'New Products',
+    'new_products_choice' => 'New Products Choice',
+
 
 
 ];

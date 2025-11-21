@@ -141,4 +141,35 @@ export interface CartDrawer {
     open: boolean;
 }
 
+export interface PageComponents {
+    [key: string]: PageComponent;
+}
+
+export interface PageComponent {
+    class: string;
+    content: Object;
+}
+
+export interface Heading {
+    content: string,
+    level: number
+}
+
+export interface Paragraph {
+    content: string
+}
+
+export interface CTA {
+    content: string,
+    link: string
+}
+
+
+export interface PageComponentContent {
+    heading: Array<Heading>;
+    paragraph: Array<Paragraph>;
+    cta: Array<CTA>;
+    image: Array<string>;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

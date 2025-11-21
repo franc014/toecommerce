@@ -23,6 +23,9 @@ class ContentBuilder
                  ContentBlocks::heading(),
                  ContentBlocks::paragraph(),
                  ContentBlocks::richEditor(),
+                 ContentBlocks::cta(),
+                 ContentBlocks::image(),
+                 ContentBlocks::newProductsChoice(),
 
              ]);
 
