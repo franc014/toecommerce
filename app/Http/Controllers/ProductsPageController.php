@@ -22,6 +22,7 @@ class ProductsPageController extends Controller
                     'price' => $product->price,
                     'price_in_dollars' => $product->price_in_dollars,
                     'images' => $product->productImagesForList,
+                    'video' => $product->video,
                     'has_variants' => $product->hasPublishedVariants(),
                     'variants' => $product->variants,
                     'dropping_stock' => $product->isDroppingStock(),

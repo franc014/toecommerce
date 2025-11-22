@@ -151,5 +151,9 @@ return [
     'message' => 'Mensaje',
     'cta_label' => 'Etiqueta de Llamada a Acción',
     'cta_link' => 'Enlace de Llamada a Acción',
+    'export' => 'Exportar',
+    'import' => 'Importar',
+    'media' => 'Multimedia',
+    'video_url' => 'URL de Video',
 
 ];

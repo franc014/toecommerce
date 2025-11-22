@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->databaseTransactions()
+            ->databaseNotifications()
             ->sidebarCollapsibleOnDesktop()
             ->brandName('ToEcommerce')
             ->viteTheme('resources/css/filament/admin/theme.css')

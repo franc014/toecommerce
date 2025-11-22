@@ -21,6 +21,7 @@ class FeaturedProductTransformable implements ContentTransformable
                 'price_in_dollars' => $product->price_in_dollars,
                 'images' => $product->productImagesForList,
                 'main_image' => $product->main_image ? Storage::url($product->main_image) : '',
+                'video' => $product->video,
                 'has_variants' => $product->hasPublishedVariants(),
                 'variants' => $product->variants,
                 'dropping_stock' => $product->isDroppingStock(),

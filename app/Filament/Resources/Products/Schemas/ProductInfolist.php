@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Models\Product;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -73,9 +75,13 @@ class ProductInfolist
                                     ]),
                             ]),
 
-                        Tab::make(__('firesources.images'))
+                        Tab::make(__('firesources.media'))
                             ->icon(Heroicon::OutlinedPhoto)
                             ->schema([
+                                TextEntry::make('video')->label(__('firesources.video_url'))->url(function (Product $record) {
+                                    return $record->video;
+                                })->openUrlInNewTab(),
+                                ImageEntry::make('main_image')->label(__('firesources.main_image')),
                                 SpatieMediaLibraryImageEntry::make('product_images')->label('')
                                     ->label(__('firesources.images'))
                                     ->placeholder(__('firesources.no_photos_message'))

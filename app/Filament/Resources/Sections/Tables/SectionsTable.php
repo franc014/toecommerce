@@ -2,11 +2,16 @@
 
 namespace App\Filament\Resources\Sections\Tables;
 
+use App\Filament\Exports\SectionExporter;
+use App\Filament\Imports\SectionImporter;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
+use Filament\Actions\Imports\Models\Import;
 use Filament\Actions\ReplicateAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -80,6 +85,13 @@ class SectionsTable
                     }),
                 EditAction::make(),
                 DeleteAction::make(),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                ->exporter(SectionExporter::class)
+                ->columnMappingColumns(3),
+                ImportAction::make()
+                ->importer(SectionImporter::class),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

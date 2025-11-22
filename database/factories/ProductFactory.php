@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'slug' => $slug,
             'main_image' => fake()->imageUrl(),
+            'video' => fake()->url(),
             'status' => fake()->randomElement(ProductStatus::cases()),
             'price' => fake()->randomFloat(2, 50, 300),
             'stock' => fake()->numberBetween(0, 200),

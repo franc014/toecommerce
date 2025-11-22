@@ -153,5 +153,10 @@ return [
     'message' => 'Message',
     'cta_label' => 'Call To Action Label',
     'cta_link' => 'Call To Action Link',
+    'export' => 'Export',
+    'import' => 'Import',
+    'media' => 'Media',
+    'video_url' => 'Video URL',
+
 
 ];

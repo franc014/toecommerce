@@ -150,8 +150,10 @@ class ProductForm
                                         $record->generateVariants();
                                     }),
                             ]),
-                        Tab::make(__('firesources.images'))
+                        Tab::make(__('firesources.media'))
                             ->icon(Heroicon::OutlinedPhoto)->schema([
+                                TextInput::make('video')
+                                    ->label(__('firesources.video_url')),
                                 FileUpload::make('main_image')
                                     ->label(__('firesources.main_image'))
                                     ->image()

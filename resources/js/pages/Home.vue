@@ -2,6 +2,7 @@
     <div>
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
+        <Collections />
     </div>
     <!--    <LatestProducts />
     <Collections />
@@ -11,7 +12,7 @@
 <script setup lang="ts">
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 
-//import Collections from '@/components/home/Collections.vue';
+import Collections from '@/components/home/Collections.vue';
 import Hero from '@/components/home/Hero.vue';
 import RecentProducts from '@/components/home/RecentProducts.vue';
 //import LatestProducts from '@/components/home/LatestProducts.vue';

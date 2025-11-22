@@ -24,6 +24,7 @@ test('can show a list of published products', function () {
                         ->where('price', 10)
                         ->where('price_in_dollars', $publishedProducts[0]->price_in_dollars)
                         ->where('images', $publishedProducts[0]->productImagesForList)
+                        ->where('video', $publishedProducts[0]->video)
                         ->where('has_variants', $publishedProducts[0]->hasPublishedVariants())
                         ->where('variants', $publishedProducts[0]->variants)
                         ->where('dropping_stock', false);
@@ -55,6 +56,7 @@ test('can show a list of published products with variants', function () {
                         ->where('price', $publishedProducts[2]->price)
                         ->where('price_in_dollars', $publishedProducts[2]->price_in_dollars)
                         ->where('images', $publishedProducts[2]->productImagesForList)
+                        ->where('video', $publishedProducts[2]->video)
                         ->where('has_variants', $publishedProducts[2]->hasPublishedVariants())
                         ->where('variants', $publishedProducts[2]->variants)
                         ->where('dropping_stock', false);

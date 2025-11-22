@@ -10,13 +10,7 @@
                     </ul>
                 </div>
                 <div class="feature-product-video">
-                    <FeatureProductVideo
-                        :title="title"
-                        :message="message"
-                        video="https://res.cloudinary.com/dfpkdo5tf/video/upload/v1552520427/samples/sea-turtle.mp4"
-                        :image="product.images[0] || ''"
-                        :cta="cta"
-                    />
+                    <FeatureProductVideo :title="title" :message="message" :video="product.video || ''" :image="product.images[0] || ''" :cta="cta" />
                 </div>
             </div>
         </div>
