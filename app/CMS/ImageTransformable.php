@@ -9,7 +9,7 @@ class ImageTransformable implements ContentTransformable
 {
     public function transform(array $item): array
     {
-        if (isset($item['data']['image'])) {
+        if (isset($item['type']) && $item['type'] === 'image') {
             $item['data']['image'] = Storage::url($item['data']['image']);
         }
 

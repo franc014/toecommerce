@@ -10,7 +10,13 @@
                     </ul>
                 </div>
                 <div class="feature-product-video">
-                    <FeatureProductVideo />
+                    <FeatureProductVideo
+                        :title="title"
+                        :message="message"
+                        video="https://res.cloudinary.com/dfpkdo5tf/video/upload/v1552520427/samples/sea-turtle.mp4"
+                        :image="product.images[0] || ''"
+                        :cta="cta"
+                    />
                 </div>
             </div>
         </div>
@@ -29,4 +35,13 @@ const { content } = defineProps<{
 }>();
 
 const products = content['new-products'][0].products;
+const product = content['featured-product'][0].product;
+const title = content['featured-product'][0].title;
+const message = content['featured-product'][0].message;
+const label = content['featured-product'][0].cta_label;
+const cta = {
+    label,
+    link: `/products/${product.slug}`,
+};
+console.log(product);
 </script>

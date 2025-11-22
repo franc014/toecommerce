@@ -3,12 +3,12 @@
         <div class="video-feature__box-wrapper flex md:justify-end">
             <div class="video-feature__box max-w-full basis-full rounded">
                 <div class="p-5 lg:p-8">
-                    <h3 class="mb-2 text-2xl font-bold">Un perrito feliz hace a un dueño feliz</h3>
-                    <p class="text-base opacity-60">Prueba el look de este video en tu mascota</p>
+                    <h3 class="mb-2 text-2xl font-bold">{{ title }}</h3>
+                    <p class="text-base opacity-60">{{ message }}</p>
                 </div>
 
-                <a class="video-feature__link p-5 leading-tight lg:p-8" href="#0">
-                    <span>Learn More</span>
+                <a class="video-feature__link p-5 leading-tight lg:p-8" :href="cta.link">
+                    <span>{{ cta.label }}</span>
 
                     <svg
                         class="video-feature__link-icon icon inline-block h-[16px] w-[16px] shrink-0 fill-current leading-none text-inherit"
@@ -28,15 +28,20 @@
         </div>
 
         <figure class="video-feature__video-wrapper" aria-hidden="true">
-            <img
-                src="https://images.unsplash.com/photo-1534235261404-7625cd79bdb9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Video Preview"
-            />
-            <video autoplay loop muted playsInline src="https://res.cloudinary.com/dfpkdo5tf/video/upload/v1552520427/samples/sea-turtle.mp4"></video>
+            <img :src="image" :alt="title" />
+            <video autoplay loop muted playsInline :src="video"></video>
         </figure>
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { title, message, image, video } = defineProps<{
+    title: string;
+    message: string;
+    image: string;
+    video: string;
+    cta: object | any;
+}>();
+</script>
 
 <style scoped></style>

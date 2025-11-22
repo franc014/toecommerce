@@ -65,7 +65,7 @@ Usage: codyhouse.co/license
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @apply bg-gray-900/[.07];
+  @apply bg-zinc-900/20;
   border-radius: inherit;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -86,7 +86,7 @@ Usage: codyhouse.co/license
   left: -5%;
   width: 110%;
   height: 140%;
-  @apply bg-gray-900/90;
+  @apply bg-orange-700;
   will-change: transform;
   -webkit-transform: scaleY(0) skewY(10deg);transform: scaleY(0) skewY(10deg);
           transform-origin: center bottom;

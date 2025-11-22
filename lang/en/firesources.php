@@ -149,5 +149,9 @@ return [
     'image' => 'Image',
     'new_products' => 'New Products',
     'new_products_choice' => 'New Products Choice',
+    'featured_product' => 'Featured Product',
+    'message' => 'Message',
+    'cta_label' => 'Call To Action Label',
+    'cta_link' => 'Call To Action Link',
 
 ];

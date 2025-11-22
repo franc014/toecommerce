@@ -171,6 +171,7 @@ export interface PageComponentContent {
     cta: Array<CTA>;
     image: Array;
     "new-products": Array;
+    "featured-product": Array;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

@@ -147,5 +147,9 @@ return [
     'image' => 'Imagen',
     'new_products' => 'Productos Nuevos',
     'new_products_choice' => 'Elegir entre Productos Nuevos',
+    'featured_product' => 'Producto Destacado',
+    'message' => 'Mensaje',
+    'cta_label' => 'Etiqueta de Llamada a Acción',
+    'cta_link' => 'Enlace de Llamada a Acción',
 
 ];

@@ -183,4 +183,32 @@ class ContentBlocks
             ->label(__('firesources.new_products_choice'))
             ->icon(Heroicon::ViewfinderCircle);
     }
+
+    public static function featuredProduct():Block
+    {
+        return Block::make('featured-product')
+            ->schema([
+                TextInput::make('title')
+                    ->label(__('firesources.title'))
+                    ->required()
+                    ->maxLength(128),
+                Textarea::make('message')
+                    ->label(__('firesources.message'))
+                    ->maxLength(256),
+
+                TextInput::make('cta_label')
+                    ->label(__('firesources.cta_label'))
+                    ->required()
+                    ->maxLength(24),
+
+                Select::make('product')
+                    ->label(__('firesources.featured_product'))
+                    ->required()
+                    ->options(Product::query()->published()->get()->pluck('title', 'id')->toArray())
+                    ->searchable(),
+            ])
+            ->maxItems(1)
+            ->label(__('firesources.featured_product'))
+            ->icon(Heroicon::Star);
+    }
 }
