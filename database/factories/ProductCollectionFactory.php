@@ -24,6 +24,7 @@ class ProductCollectionFactory extends Factory
             'title' => $title,
             'description' => fake()->text(),
             'slug' => $slug,
+
         ];
     }
 }

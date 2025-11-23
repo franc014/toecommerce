@@ -165,6 +165,14 @@ export interface CTA {
 }
 
 
+export interface Collection {
+    id: number;
+    title: string;
+    slug: string;
+    featured_image: string;
+    products_count: number;
+}
+
 export interface PageComponentContent {
     heading: Array<Heading>;
     paragraph: Array<Paragraph>;
@@ -172,6 +180,7 @@ export interface PageComponentContent {
     image: Array;
     "new-products": Array;
     "featured-product": Array;
+    collections: Array;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

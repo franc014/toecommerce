@@ -155,5 +155,7 @@ return [
     'import' => 'Importar',
     'media' => 'Multimedia',
     'video_url' => 'URL de Video',
+    'featured_image' => 'Imagen Destacada',
+
 
 ];

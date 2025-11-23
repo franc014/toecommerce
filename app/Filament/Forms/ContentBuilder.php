@@ -27,6 +27,7 @@ class ContentBuilder
                 ContentBlocks::image(),
                 ContentBlocks::newProductsChoice(),
                 ContentBlocks::featuredProduct(),
+                ContentBlocks::collections(),
             ]);
 
     }

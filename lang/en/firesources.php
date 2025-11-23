@@ -157,6 +157,7 @@ return [
     'import' => 'Import',
     'media' => 'Media',
     'video_url' => 'Video URL',
+    'featured_image' => 'Featured Image',
 
 
 ];

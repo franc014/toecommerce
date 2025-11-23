@@ -1,7 +1,7 @@
 <template>
     <section class="section-spacing has-section-divider-bottom relative bg-orange-100">
         <div class="wrapper space-y-20">
-            <h2 class="text-center font-serif2">Productos recientes</h2>
+            <h2 class="text-center font-serif2">{{ sectionTitle }}</h2>
 
             <div class="latest-products-grid">
                 <div class="products-grid">
@@ -28,6 +28,7 @@ const { content } = defineProps<{
     content: PageComponentContent;
 }>();
 
+const sectionTitle = content.heading[0].content;
 const products = content['new-products'][0].products;
 const product = content['featured-product'][0].product;
 const title = content['featured-product'][0].title;

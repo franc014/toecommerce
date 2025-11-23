@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ProductCollections\Schemas;
 
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
@@ -15,6 +16,7 @@ class ProductCollectionInfolist
                 TextEntry::make('slug'),
                 TextEntry::make('description')->label(__('firesources.description'))
                     ->columnSpanFull(),
+                ImageEntry::make('featured_image')->label(__('firesources.featured_image'))
 
             ]);
     }

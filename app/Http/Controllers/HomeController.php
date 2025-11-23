@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CMS\CollectionsTransformable;
 use App\CMS\FeaturedProductTransformable;
 use App\CMS\ImageTransformable;
 use App\CMS\ProductsTransformable;
@@ -22,7 +23,7 @@ class HomeController extends Controller
         $components = [];
         $page = Page::bySlug($this->slug);
 
-        foreach ($page->sectionsForUI([new ImageTransformable, new ProductsTransformable, new FeaturedProductTransformable]) as $section) {
+        foreach ($page->sectionsForUI([new ImageTransformable, new ProductsTransformable, new FeaturedProductTransformable, new CollectionsTransformable]) as $section) {
             $component = Str::studly($section['slug']);
             $components[] = [
                 'class' => $component,

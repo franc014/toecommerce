@@ -4,6 +4,7 @@ namespace App\Filament\Forms;
 
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\CTABlock;
 use App\Models\Product;
+use App\Models\ProductCollection;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
@@ -210,5 +211,18 @@ class ContentBlocks
             ->maxItems(1)
             ->label(__('firesources.featured_product'))
             ->icon(Heroicon::Star);
+    }
+
+    public static function collections(): Block
+    {
+        return Block::make('collections')
+            ->schema([
+                CheckboxList::make('collections')
+                    ->label(__('firesources.collections'))
+                    ->options(ProductCollection::whereHas('products')->get()->pluck('title', 'id')->toArray())
+            ])
+            ->maxItems(1)
+            ->label(__('firesources.collections'))
+            ->icon(Heroicon::OutlinedRectangleStack);
     }
 }

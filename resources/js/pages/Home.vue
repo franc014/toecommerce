@@ -2,11 +2,9 @@
     <div>
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
-        <Collections />
+        <Collections :content="collectionsContent" />
+        <OurPromise />
     </div>
-    <!--    <LatestProducts />
-    <Collections />
-    <OurPromise /> -->
 </template>
 
 <script setup lang="ts">
@@ -15,8 +13,8 @@ import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import Collections from '@/components/home/Collections.vue';
 import Hero from '@/components/home/Hero.vue';
 import RecentProducts from '@/components/home/RecentProducts.vue';
-//import LatestProducts from '@/components/home/LatestProducts.vue';
-//import OurPromise from '@/components/home/OurPromise.vue';
+
+import OurPromise from '@/components/home/OurPromise.vue';
 
 import { PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
@@ -32,6 +30,10 @@ const heroContent = computed(() => {
 
 const recentProductsContent = computed(() => {
     return components['RecentProducts'].content as PageComponentContent;
+});
+
+const collectionsContent = computed(() => {
+    return components['Collections'].content as PageComponentContent;
 });
 
 console.log(components);
