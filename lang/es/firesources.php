@@ -109,7 +109,7 @@ return [
     'orders_list_subheading' => 'Listado de órdenes',
     'products_per_page' => 'Productos por página',
     'stock_control_mode' => 'Modo de Control de Stock',
-    'storefront_settings' => 'Configuraciones de Tienda Generales',
+    'storefront_settings' => 'Configuraciones de la Tienda',
     'uploading_message' => 'Subiendo Archivos...',
     'section_content' => 'Contenido de Sección',
     'section' => 'Sección',
@@ -158,6 +158,19 @@ return [
     'featured_image' => 'Imagen Destacada',
     'feature' => 'Característica',
     'company_settings' => 'Configuraciones de la Empresa',
+    'social_media' => 'Redes Sociales',
+    'social_media_name' => 'Nombre de Red Social',
+    'social_media_link' => 'URL (link) de Red Social',
+    'working_days' => 'Días Laborales',
+    'working_hours' => 'Horarios Laborales',
+    'day' => 'Día',
+    'hours' => 'Horas',
+    'monday' => 'Lunes',
+    'menu' => 'Menu',
+    'menus' => 'Menús',
+    'label' => 'Etiqueta',
+    'menu_items' => 'Elementos de Menu',
+    'sub_menu_items' => 'Elementos de Sub-Menú',
 
 
 ];

@@ -160,6 +160,18 @@ return [
     'featured_image' => 'Featured Image',
     'feature' => 'Feature',
     'company_settings' => 'Company Settings',
-
+    'social_media' => 'Social Media',
+    'social_media_name' => 'Social Media Name',
+    'social_media_link' => 'Social Media URL (link)',
+    'working_days' => 'Working Days',
+    'working_hours' => 'Working Hours',
+    'day' => 'Day',
+    'hours' => 'Hours',
+    'monday' => 'Monday',
+    'menu' => 'Menu',
+    'menus' => 'Menus',
+    'label' => 'Label',
+    'menu_items' => 'Menu Items',
+    'sub_menu_items' => 'Sub Menu Items',
 
 ];
