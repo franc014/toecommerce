@@ -3,7 +3,7 @@
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
         <Collections :content="collectionsContent" />
-        <OurPromise />
+        <OurPromise :content="ourPromiseContent" />
     </div>
 </template>
 
@@ -34,6 +34,10 @@ const recentProductsContent = computed(() => {
 
 const collectionsContent = computed(() => {
     return components['Collections'].content as PageComponentContent;
+});
+
+const ourPromiseContent = computed(() => {
+    return components['OurPromise'].content as PageComponentContent;
 });
 
 console.log(components);

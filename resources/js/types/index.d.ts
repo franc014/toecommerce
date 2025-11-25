@@ -181,6 +181,7 @@ export interface PageComponentContent {
     "new-products": Array;
     "featured-product": Array;
     collections: Array;
+    feature: Array;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

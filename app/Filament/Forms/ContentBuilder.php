@@ -28,6 +28,7 @@ class ContentBuilder
                 ContentBlocks::newProductsChoice(),
                 ContentBlocks::featuredProduct(),
                 ContentBlocks::collections(),
+                ContentBlocks::feature(),
             ]);
 
     }

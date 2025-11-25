@@ -1,5 +1,5 @@
 <template>
-    <section class="section-spacing has-section-divider-bottom relative bg-orange-100">
+    <section class="section-spacing has-section-divider-bottom relative bg-orange-100" id="recent-products">
         <div class="wrapper space-y-20">
             <h2 class="text-center font-serif2">{{ sectionTitle }}</h2>
 

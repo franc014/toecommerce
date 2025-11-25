@@ -156,6 +156,7 @@ return [
     'media' => 'Multimedia',
     'video_url' => 'URL de Video',
     'featured_image' => 'Imagen Destacada',
+    'feature' => 'Característica',
 
 
 ];

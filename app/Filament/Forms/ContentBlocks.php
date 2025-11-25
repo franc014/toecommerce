@@ -161,7 +161,7 @@ class ContentBlocks
             ->schema([
                 FileUpload::make('image')
                     ->label(__('firesources.image'))
-                    ->directory('images')
+                    ->directory('block_images')
                     ->maxSize(1024 * 3)
                     ->visibility('public')
                     ->image(),
@@ -225,4 +225,35 @@ class ContentBlocks
             ->label(__('firesources.collections'))
             ->icon(Heroicon::OutlinedRectangleStack);
     }
+
+    public static function feature(): Block
+    {
+        return Block::make('feature')
+            ->schema([
+                TextInput::make('title')
+                    ->label(__('firesources.title'))
+                    ->maxLength(32)
+                    ->required(),
+                Textarea::make('message')
+                    ->label(__('firesources.message'))
+                    ->maxLength(256)
+                    ->required(),
+                FileUpload::make('image')
+                    ->label(__('firesources.image'))
+                    ->directory('block_images')
+                    ->maxSize(1024 * 3)
+                    ->visibility('public')
+                    ->image(),
+            ])
+            ->label(function (?array $state): string {
+                if ($state === null) {
+                    return ucfirst('feature');
+                }
+
+                return 'feature-'.Str::limit($state['title'], 50, '...');
+            })
+            ->icon(Heroicon::Link);
+    }
+
+
 }
