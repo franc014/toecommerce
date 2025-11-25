@@ -157,6 +157,7 @@ return [
     'video_url' => 'URL de Video',
     'featured_image' => 'Imagen Destacada',
     'feature' => 'Característica',
+    'company_settings' => 'Configuraciones de la Empresa',
 
 
 ];

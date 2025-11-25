@@ -159,6 +159,7 @@ return [
     'video_url' => 'Video URL',
     'featured_image' => 'Featured Image',
     'feature' => 'Feature',
+    'company_settings' => 'Company Settings',
 
 
 ];
