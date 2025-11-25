@@ -1,7 +1,7 @@
 <template>
     <header class="f-header js-f-header relative">
         <div class="f-header__mobile-content mx-auto w-[calc(100%_-_2.5rem)] max-w-7xl lg:w-[calc(100%_-_4rem)]">
-            <a href="#0" class="f-header__logo">
+            <Link href="/" class="f-header__logo">
                 <svg width="104" height="30" viewBox="0 0 104 30">
                     <title>Go to homepage</title>
                     <path
@@ -10,8 +10,7 @@
                     />
                     <circle cx="15" cy="15" r="15" class="fill-orange-700" />
                 </svg>
-            </a>
-
+            </Link>
             <button class="anim-menu-btn js-anim-menu-btn f-header__nav-control js-tab-focus" aria-label="Toggle menu">
                 <i class="anim-menu-btn__icon anim-menu-btn__icon--close" aria-hidden="true"></i>
             </button>
@@ -20,7 +19,7 @@
         <div class="f-header__nav" role="navigation">
             <div class="f-header__nav-grid wrapper">
                 <div class="f-header__nav-logo-wrapper grow basis-0">
-                    <a href="#0" class="f-header__logo">
+                    <Link href="/" class="f-header__logo" view-transition>
                         <svg width="104" height="30" viewBox="0 0 104 30">
                             <title>Go to homepage</title>
                             <path
@@ -29,14 +28,15 @@
                             />
                             <circle cx="15" cy="15" r="15" class="fill-orange-700" />
                         </svg>
-                    </a>
+                    </Link>
                 </div>
 
                 <ul class="f-header__list grow basis-0 lg:justify-center">
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Productos</a></li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link" aria-current="page">Colecciones</a></li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Nosotros</a></li>
-                    <li class="f-header__item"><a href="#0" class="f-header__link">Contacto</a></li>
+                    <li class="f-header__item" v-for="item in menu.items" :key="item.id">
+                        <Link :href="item.url" class="f-header__link" :aria-current="item.url === $page.url ? 'page' : ''" view-transition>{{
+                            item.label
+                        }}</Link>
+                    </li>
                 </ul>
 
                 <ul class="f-header__list grow basis-0 lg:justify-end">
@@ -64,6 +64,12 @@ import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
+import { Link } from '@inertiajs/vue3';
+
+defineProps<{
+    menu: any;
+}>();
+
 const cartDrawer = useCartDrawerStore();
 
 const cartStore = useCartStore();
@@ -71,6 +77,10 @@ const cartStore = useCartStore();
 function open() {
     cartDrawer.open();
 }
+
+/* const isCurrentPage = $page.url;
+
+console.log(isCurrentPage); */
 </script>
 
 <style scoped></style>

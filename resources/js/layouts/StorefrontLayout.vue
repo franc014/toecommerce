@@ -1,5 +1,5 @@
 <template>
-    <Header />
+    <Header :menu="mainMenu" />
     <main>
         <slot />
     </main>
@@ -9,12 +9,15 @@
 
 <script lang="ts" setup>
 import { Toaster } from '@/components/ui/sonner';
+import { usePage } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
 import 'vue-sonner/style.css';
 import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
 import { useCartStore } from '../stores/cartStore';
 const cartStore = useCartStore();
+const page = usePage();
+const { mainMenu } = page.props as any;
 
 cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {
