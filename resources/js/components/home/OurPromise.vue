@@ -49,8 +49,6 @@ const title = content.heading[0].content;
 const message = content.paragraph[0].content;
 const cta = content.cta[0];
 const features = content.feature;
-
-console.log(features);
 </script>
 
 <style scoped></style>

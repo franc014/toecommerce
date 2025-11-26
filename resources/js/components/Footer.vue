@@ -20,17 +20,18 @@
                         <div class="mb-8 lg:mb-12">
                             <h4 class="mb-2 lg:mb-3 lg:text-xl">Menu</h4>
                             <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
-                                <li class="col-span-12"><a class="footer-v6__link" href="#0">Todos los productos</a></li>
-                                <li class="col-span-12"><a class="footer-v6__link" href="#0">Busca por colecciones</a></li>
-                                <li class="col-span-12"><a class="footer-v6__link" href="#0">Nuevas prendas</a></li>
+                                <li class="col-span-12" v-for="item in footerMenu.items" :key="item.id">
+                                    <Link class="footer-v6__link" :href="item.url">{{ item.label }}</Link>
+                                </li>
                             </ul>
                         </div>
 
                         <div>
                             <h4 class="mb-2 lg:mb-3 lg:text-xl">Legal</h4>
                             <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
-                                <li class="col-span-12"><a class="footer-v6__link" href="#0">Términos y condiciones</a></li>
-                                <li class="col-span-12"><a class="footer-v6__link" href="#0">Politica de privacidad</a></li>
+                                <li class="col-span-12" v-for="item in legalMenu.items" :key="item.id">
+                                    <Link class="footer-v6__link" :href="item.url">{{ item.label }}</Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -38,39 +39,9 @@
                     <div class="col-span-12 sm:col-span-6 lg:col-span-3">
                         <h4 class="mb-2 lg:mb-3 lg:text-xl">Horarios de atención</h4>
                         <dl class="grid max-w-xs grid-cols-12 gap-2 text-zinc-500 lg:gap-3 lg:text-base xl:w-[70%]">
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Lunes</dt>
-                                <dd class="ml-1.5 lg:ml-2">06 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Martes</dt>
-                                <dd class="ml-1.5 lg:ml-2">06 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Miércoles</dt>
-                                <dd class="ml-1.5 lg:ml-2">09 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Jueves</dt>
-                                <dd class="ml-1.5 lg:ml-2">06 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Viernes</dt>
-                                <dd class="ml-1.5 lg:ml-2">06 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Sábado</dt>
-                                <dd class="ml-1.5 lg:ml-2">09 AM - 08 PM</dd>
-                            </div>
-
-                            <div class="col-span-12 flex items-baseline justify-between">
-                                <dt>Domingo</dt>
-                                <dd class="ml-1.5 lg:ml-2">09 AM - 12 PM</dd>
+                            <div class="col-span-12 flex items-baseline justify-between" v-for="(value, day) in company.workingDays" :key="day">
+                                <dt>{{ day }}</dt>
+                                <dd class="ml-1.5 lg:ml-2">{{ value }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -79,7 +50,7 @@
                         <h4 class="mb-2 lg:mb-3 lg:text-xl">Conéctate</h4>
                         <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
                             <li class="col-span-12">
-                                <a class="footer-v6__link inline-flex items-center" href="#0">
+                                <a class="footer-v6__link inline-flex items-center" :href="instagram">
                                     <span class="footer-v6__link-icon" aria-hidden="true">
                                         <svg
                                             class="icon inline-block h-[1em] w-[1em] shrink-0 fill-current leading-none text-inherit"
@@ -101,7 +72,7 @@
                             </li>
 
                             <li class="col-span-12">
-                                <a class="footer-v6__link inline-flex items-center" href="#0">
+                                <a class="footer-v6__link inline-flex items-center" :href="twitter">
                                     <span class="footer-v6__link-icon" aria-hidden="true">
                                         <svg
                                             class="icon inline-block h-[1em] w-[1em] shrink-0 fill-current leading-none text-inherit"
@@ -119,7 +90,7 @@
                             </li>
 
                             <li class="col-span-12">
-                                <a class="footer-v6__link inline-flex items-center" href="#0">
+                                <a class="footer-v6__link inline-flex items-center" :href="youtube">
                                     <span class="footer-v6__link-icon" aria-hidden="true">
                                         <svg
                                             class="icon inline-block h-[1em] w-[1em] shrink-0 fill-current leading-none text-inherit"
@@ -137,7 +108,7 @@
                             </li>
 
                             <li class="col-span-12">
-                                <a class="footer-v6__link inline-flex items-center" href="#0">
+                                <a class="footer-v6__link inline-flex items-center" :href="facebook">
                                     <span class="footer-v6__link-icon" aria-hidden="true">
                                         <svg
                                             class="icon inline-block h-[1em] w-[1em] shrink-0 fill-current leading-none text-inherit"
@@ -163,14 +134,14 @@
                                 <li class="col-span-12">
                                     <a class="footer-v6__link inline-flex items-center" href="#0">
                                         <span class="footer-v6__link-icon" aria-hidden="true"> Whatsapp icon </span>
-                                        <span class="ml-1 tracking-wider lg:ml-1.5">+51 999 999 999</span>
+                                        <span class="ml-1 tracking-wider lg:ml-1.5">{{ company.phone }}</span>
                                     </a>
                                 </li>
 
                                 <li class="col-span-12">
                                     <a class="footer-v6__link inline-flex items-center" href="#0">
                                         <Mail />
-                                        <span class="ml-1 tracking-wider lg:ml-1.5">info@dogstyles.com</span>
+                                        <span class="ml-1 tracking-wider lg:ml-1.5">{{ company.email }}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -180,14 +151,30 @@
             </div>
 
             <div class="border-t border-zinc-900/10 py-3 lg:py-5">
-                <p class="text-xs text-zinc-500">&copy; {{ new Date().getFullYear() }} All rights reserved Dogstyles</p>
+                <p class="text-xs text-zinc-500">&copy; {{ new Date().getFullYear() }} Dogstyles - Todos los derechos reservados</p>
             </div>
         </div>
     </footer>
 </template>
 
 <script setup lang="ts">
+import { Company, Menu } from '@/types';
 import { Mail } from 'lucide-vue-next';
+
+import { Link } from '@inertiajs/vue3';
+
+const { company } = defineProps<{
+    company: Company;
+    footerMenu: Menu;
+    legalMenu: Menu;
+}>();
+
+const { socialMedia } = company;
+
+const facebook = socialMedia.facebook || '';
+const instagram = socialMedia.instagram || '';
+const twitter = socialMedia.twitter || '';
+const youtube = socialMedia.youtube || '';
 </script>
 
 <style scoped></style>

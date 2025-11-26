@@ -27,8 +27,6 @@ import CollectionCard from './CollectionCard.vue';
 const { collections } = defineProps<{
     collections: Array<Collection>;
 }>();
-
-console.log(collections);
 </script>
 
 <style scoped></style>

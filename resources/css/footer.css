@@ -1,0 +1,41 @@
+/* --------------------------------
+
+File#: _1_main-footer-v6
+Title: Main Footer v6
+Descr: Footer navigation template
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.footer-v6 {
+  position: relative;
+  z-index: 1;
+}
+
+.footer-v6__link {
+  @apply text-gray-500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-v6__link:hover {
+  @apply text-orange-700;
+  text-decoration: underline;
+}
+
+.footer-v6__link-icon {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  @apply text-gray-500;
+  @apply bg-gray-900/10;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.footer-v6__link-icon .icon {
+  font-size: 16px;
+  margin: auto;
+}
+.footer-v6__link:hover .footer-v6__link-icon {
+  @apply bg-gray-900/100;
+  @apply text-white;
+}
+/* --------------------------------

@@ -184,4 +184,45 @@ export interface PageComponentContent {
     feature: Array;
 }
 
+export interface Menu {
+    title: string;
+    slug: string;
+    items: Array<MenuItem>;
+}
+
+export interface MenuItem {
+    id: number;
+    label: string;
+    slug: string;
+    url: string;
+}
+
+export interface Company {
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+    socialMedia: SocialMedia;
+    workingDays: WorkingDays;
+}
+
+export interface SocialMedia {
+    facebook: string;
+    instagram: string;
+    twitter: string;
+    youtube: string;
+}
+
+export interface WorkingDays {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+}
+
+
+
 export type BreadcrumbItemType = BreadcrumbItem;

@@ -30,8 +30,6 @@ import { Collection } from '@/types';
 const { collection } = defineProps<{
     collection: Collection;
 }>();
-
-console.log(collection);
 </script>
 
 <style scoped></style>

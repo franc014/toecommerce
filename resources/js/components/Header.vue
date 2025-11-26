@@ -64,10 +64,11 @@ import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
+import { Menu } from '@/types';
 import { Link } from '@inertiajs/vue3';
 
 defineProps<{
-    menu: any;
+    menu: Menu;
 }>();
 
 const cartDrawer = useCartDrawerStore();
@@ -77,10 +78,6 @@ const cartStore = useCartStore();
 function open() {
     cartDrawer.open();
 }
-
-/* const isCurrentPage = $page.url;
-
-console.log(isCurrentPage); */
 </script>
 
 <style scoped></style>

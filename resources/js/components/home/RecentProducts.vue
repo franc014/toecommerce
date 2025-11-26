@@ -38,5 +38,4 @@ const cta = {
     label,
     link: `/products/${product.slug}`,
 };
-console.log(product);
 </script>

@@ -4,11 +4,12 @@
         <slot />
     </main>
     <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" :expand="true" />
-    <Footer />
+    <Footer :company="company" :footerMenu="footerMenu" :legalMenu="legalMenu" />
 </template>
 
 <script lang="ts" setup>
 import { Toaster } from '@/components/ui/sonner';
+import { Company, Menu } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
 import 'vue-sonner/style.css';
@@ -17,7 +18,10 @@ import Header from '../components/Header.vue';
 import { useCartStore } from '../stores/cartStore';
 const cartStore = useCartStore();
 const page = usePage();
-const { mainMenu } = page.props as any;
+const mainMenu = page.props.mainMenu as Menu;
+const footerMenu = page.props.footerMenu as Menu;
+const legalMenu = page.props.legalMenu as Menu;
+const company = page.props.company as Company;
 
 cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {

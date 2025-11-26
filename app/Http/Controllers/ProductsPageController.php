@@ -13,7 +13,7 @@ class ProductsPageController extends Controller
      */
     public function __invoke()
     {
-        sleep(4);
+
         return Inertia::render('Products', [
             'products' => Product::published()->with('variants')->get()->map(function ($product) {
                 return [

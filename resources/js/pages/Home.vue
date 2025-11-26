@@ -40,8 +40,6 @@ const ourPromiseContent = computed(() => {
     return components['OurPromise'].content as PageComponentContent;
 });
 
-console.log(components);
-
 defineOptions({ layout: StorefrontLayout });
 </script>
 
