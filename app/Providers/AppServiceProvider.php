@@ -7,6 +7,7 @@ use App\Utils\PayphonePayment;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ImportAction;
@@ -83,6 +84,12 @@ class AppServiceProvider extends ServiceProvider
             return $action
                 ->icon(Heroicon::ArrowDownLeft)
                 ->label(__('firesources.import'));
+        });
+
+        DeleteBulkAction::configureUsing(function (DeleteBulkAction $action) {
+            return $action
+               ->modalWidth('xl')
+               ->slideOver(false);
         });
 
 

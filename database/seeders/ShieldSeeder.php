@@ -34,6 +34,10 @@ class ShieldSeeder extends Seeder
                     'ForceDelete:Page', 'ForceDeleteAny:Page', 'RestoreAny:Page', 'Replicate:Page', 'Reorder:Page',
                     'ViewAny:Section', 'View:Section', 'Create:Section', 'Update:Section', 'Delete:Section', 'Restore:Section',
                     'ForceDelete:Section', 'ForceDeleteAny:Section', 'RestoreAny:Section', 'Replicate:Section', 'Reorder:Section',
+                    'ViewAny:Menu', 'View:Menu', 'Create:Menu', 'Update:Menu', 'Delete:Menu', 'Restore:Menu',
+                    'ForceDelete:Menu', 'ForceDeleteAny:Menu', 'RestoreAny:Menu', 'Replicate:Menu', 'Reorder:Menu',
+                    'ViewAny:Menu', 'View:Menu', 'Create:Menu', 'Update:Menu', 'Delete:Menu', 'Restore:Menu',
+                    'ForceDelete:Menu', 'ForceDeleteAny:Menu', 'RestoreAny:Menu', 'Replicate:Menu', 'Reorder:Menu',
 
                 ]], ['name' => 'customer', 'guard_name' => 'web',
                     'permissions' => [

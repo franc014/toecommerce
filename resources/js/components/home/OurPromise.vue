@@ -3,7 +3,7 @@
         <div class="wrapper flex flex-col items-center space-y-4">
             <h2 class="pb-2 text-center font-serif2">{{ title }}</h2>
             <p class="mb-16 font-serif2 text-2xl font-normal text-black/80">{{ message }}</p>
-            <ul class="hiw-v2__grid">
+            <ul class="hiw-v2__grid mb-12">
                 <li class="hiw-v2__item" v-for="feature in features" :key="feature.title">
                     <figure class="hiw-v2__figure mb-5 lg:mb-8">
                         <img class="block w-full rounded-lg shadow-md" :src="feature.image" :alt="feature.title" />

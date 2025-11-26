@@ -11,12 +11,17 @@ class ProductCollectionInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(2)
             ->components([
                 TextEntry::make('title')->label(__('firesources.title')),
                 TextEntry::make('slug'),
                 TextEntry::make('description')->label(__('firesources.description'))
                     ->columnSpanFull(),
-                ImageEntry::make('featured_image')->label(__('firesources.featured_image'))
+                ImageEntry::make('featured_image')
+                ->imageWidth(500)
+                ->imageHeight(300)
+                ->columnSpanFull()
+                ->label(__('firesources.featured_image'))
 
             ]);
     }

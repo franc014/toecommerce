@@ -38,7 +38,7 @@ return [
     'list' => 'Listado',
     'all' => 'Todos',
     'published' => 'Publicado',
-    'draft' => 'Borradores',
+    'draft' => 'Borrador',
     'archived' => 'Archivados',
     'filters' => 'Filtros',
     'search' => 'Buscar',
@@ -171,6 +171,7 @@ return [
     'label' => 'Etiqueta',
     'menu_items' => 'Elementos de Menu',
     'sub_menu_items' => 'Elementos de Sub-Menú',
+    'more_bulk_actions' => 'Más Acciones de Lote',
 
 
 ];
