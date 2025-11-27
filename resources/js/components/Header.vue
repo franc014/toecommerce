@@ -42,7 +42,7 @@
                 <ul class="f-header__list grow basis-0 lg:justify-end">
                     <!-- <li class="f-header__item"><a href="#0" class="f-header__link">Login</a></li> -->
                     <li class="f-header__item">
-                        <CartTwo />
+                        <Cart />
                     </li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import CartTwo from '@/components/CartTwo.vue';
+import Cart from '@/components/Cart.vue';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
 
