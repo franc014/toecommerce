@@ -42,27 +42,18 @@
                 <ul class="f-header__list grow basis-0 lg:justify-end">
                     <!-- <li class="f-header__item"><a href="#0" class="f-header__link">Login</a></li> -->
                     <li class="f-header__item">
-                        <Button class="relative cursor-pointer bg-orange-300 px-4 py-2 hover:bg-orange-600" v-on:click="open">
-                            <ShoppingCartIcon class="h-6 w-6" />
-                            <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 -right-2 bg-sky-600 text-zinc-50">{{
-                                cartStore.aggregation.items_count
-                            }}</Badge>
-                        </Button>
+                        <CartTwo />
                     </li>
                 </ul>
             </div>
         </div>
-        <Cart />
     </header>
 </template>
 
 <script setup lang="ts">
-import Cart from '@/components/Cart.vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import CartTwo from '@/components/CartTwo.vue';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { ShoppingCart as ShoppingCartIcon } from 'lucide-vue-next';
 
 import { Menu } from '@/types';
 import { Link } from '@inertiajs/vue3';

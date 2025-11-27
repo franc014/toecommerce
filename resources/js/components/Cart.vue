@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <div v-if="cartDrawerStore.isOpen" class="fixed inset-0 z-20 bg-black/5" @click="closeCart" />
+        <div v-if="cartDrawerStore.isOpen" class="fixed inset-0 z-0 bg-black/5" @click="closeCart" />
         <section
             v-if="cartDrawerStore.isOpen"
             tabindex="0"
@@ -22,7 +22,7 @@
                 </button>
             </header>
 
-            <ul class="space-y-8 overflow-scroll border-t border-zinc-200 py-8">
+            <ul class="space-y-8 overflow-scroll border-t border-zinc-200 px-4 py-8">
                 <li v-for="item in cartStore.cartItems" :key="item.id">
                     <CartItem :item="item" />
                 </li>

@@ -3,13 +3,13 @@ import vue from '@vitejs/plugin-vue';
 import laravel, { refreshPaths } from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 import { wayfinder } from "@laravel/vite-plugin-wayfinder";
-import { resolve } from 'node:path';
 import path from 'path';
 
 export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/js/app.ts','resources/css/filament/admin/theme.css'],
+            ssr: 'resources/js/ssr.ts',
             refresh: [
                 ...refreshPaths,
                 "app/Filament/**",
@@ -19,7 +19,9 @@ export default defineConfig({
             ],
         }),
         tailwindcss(),
-        wayfinder(),
+        wayfinder({
+            formVariants: true,
+        }),
         vue({
             template: {
                 transformAssetUrls: {

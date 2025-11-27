@@ -6,6 +6,8 @@ import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 async function createCartInDB(cartId: string) {
 
+    console.info('creating cart url', create().url);
+
     const cartDB = await axios.post(create().url,{
          id: cartId,
     });
@@ -14,6 +16,7 @@ async function createCartInDB(cartId: string) {
 }
 
 async function getCartFromDB(cartId: string, store: any) {
+
     const cartDB = await axios.post(show().url, {
         id: cartId
     });
@@ -29,7 +32,6 @@ async function getCartFromDB(cartId: string, store: any) {
 }
 
 export async function init(cookieCart:string) {
-    //const cartLS = localStorage.getItem('cart');
 
         if (cookieCart) {
 

@@ -18,12 +18,6 @@ defineOptions({ layout: StorefrontLayout });
 
 const page = usePage();
 const products = page.props.products as Product[];
-
-document.addEventListener('inertia:start', (event) => {
-    console.log(`Starting a visit to ${event.detail.visit.url}`);
-});
-
-//usePoll(2000);
 </script>
 
 <style scoped></style>
