@@ -47,6 +47,7 @@ class ManageStorefront extends SettingsPage
                     ->required(),
                 Select::make('stock_control_mode')
                     ->label(__('firesources.stock_control_mode'))
+                    ->enum(StockControlModes::class)
                     ->options(StockControlModes::class)
                     ->required(),
             ]);

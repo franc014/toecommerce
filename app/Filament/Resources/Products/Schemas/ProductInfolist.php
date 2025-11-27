@@ -6,6 +6,7 @@ use App\Models\Product;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\SpatieTagsEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -38,7 +39,7 @@ class ProductInfolist
                         Tab::make(__('firesources.taxonomies'))
                             ->icon(Heroicon::OutlinedTag)
                             ->schema([
-                                TextEntry::make('tags.name')
+                                SpatieTagsEntry::make('tags.name')
                                     ->label(__('firesources.tags'))
                                     ->placeholder(__('firesources.no_tags_message'))->badge()->color('primary'),
                                 TextEntry::make('categories.title')->label(__('firesources.categories'))->badge()->placeholder(__('firesources.no_categories_message'))->color('primary'),

@@ -42,6 +42,11 @@ class ProductVariantResource extends Resource
         return __('firesources.store');
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProductVariantForm::configure($schema);

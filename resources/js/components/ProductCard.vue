@@ -8,13 +8,13 @@
                 </figure>
             </a>
 
-            <div class="flex flex-col items-center space-y-8 p-5 text-center">
-                <h1 class="text-lg lg:text-2xl">
+            <div class="flex flex-col items-center py-6 text-center">
+                <h2 class="text-lg lg:text-xl">
                     <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
-                </h1>
+                </h2>
 
                 <div class="my-1 space-y-2 lg:my-1.5">
-                    <p class="prod-card-v2__price">{{ product.price_in_dollars }}</p>
+                    <p class="prod-card-v2__price pb-4">{{ product.price_in_dollars }}</p>
                     <Badge variant="secondary" class="border border-zinc-400 bg-orange-200" v-if="product.dropping_stock">
                         <span class="tracking-wider">Se está agotando</span>
                     </Badge>

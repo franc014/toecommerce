@@ -110,6 +110,10 @@ class ProductForm
                                     ->required()
                                     ->numeric()
                                     ->step(1),
+                                TextInput::make('stock_threshold_for_customers')
+                                    ->label(__('firesources.stock_threshold_for_customers'))
+                                    ->numeric()
+                                    ->step(1)
                             ]),
                         Tab::make(__('firesources.variant_options'))
                             ->icon(Heroicon::OutlinedSwatch)
@@ -144,6 +148,9 @@ class ProductForm
                                 Action::make('generate_variants')
                                     ->label(__('firesources.generate_variants'))
                                     ->button()
+                                    ->visible(function (Model $record) {
+                                        return count($record->variant_options) > 0;
+                                    })
                                     ->color('primary')
                                     ->icon(Heroicon::OutlinedSwatch)
                                     ->action(function (Model $record) {

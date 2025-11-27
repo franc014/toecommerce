@@ -48,6 +48,11 @@ class ProductResource extends Resource
         return 'icon-box';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProductForm::configure($schema);

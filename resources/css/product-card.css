@@ -59,7 +59,7 @@ Usage: codyhouse.co/license
 }
 
 .product-card-v2__title {
-    @apply text-gray-900;
+    @apply text-gray-900 max-w-min;
     text-decoration: none;
     font-weight: bold;
 }

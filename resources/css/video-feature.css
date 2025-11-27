@@ -10,6 +10,7 @@ Usage: codyhouse.co/license
   position: relative;
   z-index: 1;
   overflow: hidden;
+  @apply shadow-md shadow-zinc-400;
 }
 
 .video-feature__box-wrapper {
@@ -22,7 +23,7 @@ Usage: codyhouse.co/license
 }
 @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
   .video-feature__box {
-    @apply bg-white/80;
+    @apply bg-orange-200/80;
       backdrop-filter: blur(10px);
   }
 }

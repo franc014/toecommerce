@@ -5,10 +5,10 @@
             Variantes
         </DialogTrigger>
 
-        <DialogScrollContent class="dialog-content min-w-[800px] bg-sky-100 sm:max-w-[425px]">
-            <DialogHeader>
-                <DialogTitle>Variantes de producto</DialogTitle>
-                <DialogDescription> Puedes agregar variantes de producto a tu carrito </DialogDescription>
+        <DialogScrollContent class="dialog-content min-w-[800px] bg-zinc-300 sm:max-w-[425px]">
+            <DialogHeader class="mb-4">
+                <DialogTitle class="tracking-wide">Variantes de producto</DialogTitle>
+                <DialogDescription class="tracking-wider">Puedes agregar variantes de producto a tu carrito </DialogDescription>
             </DialogHeader>
 
             <div class="variants-grid overflow-y-auto">
