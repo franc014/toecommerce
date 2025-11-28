@@ -15,7 +15,7 @@ async function createCartInDB(cartId: string) {
 
         return cartDB;
     }catch (e: any) {
-        console.error(e);
+        console.error('hey...', e.message);
     }
 
 }
@@ -48,9 +48,9 @@ export async function init(cookieCart:string) {
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
                 console.error('Sorry. Could not get cart: ', e.message);
-                const uuid = uuidv4();
+                /* const uuid = uuidv4();
                 const cartDB = await createCartInDB(uuid);
-                this.id = cartDB.data.ui_cart_id;
+                this.id = cartDB.data.ui_cart_id; */
 
             }
 
