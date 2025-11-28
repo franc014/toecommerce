@@ -60,10 +60,14 @@ return [
             'report' => false,
         ],
 
-        'backup' => [
-            'driver' => 'local',
-            'root' => storage_path('app/private/backups'),
-            'serve' => true,
+        's3-private' => [
+            'driver' => 's3',
+            'key' => env('AWSPRIVATE_ACCESS_KEY_ID'),
+            'secret' => env('AWSPRIVATE_SECRET_ACCESS_KEY'),
+            'region' => env('AWSPRIVATE_DEFAULT_REGION'),
+            'bucket' => env('AWSPRIVATE_BUCKET'),
+            'endpoint' => env('AWSPRIVATE_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWSPRIVATE_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
         ]
