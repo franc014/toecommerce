@@ -24,7 +24,7 @@ Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
 
 Route::get('/login', function () {
-    return Inertia::location('/customer/login'); // redirect()->route('filament.customer.auth.login');
+    return redirect()->route('filament.customer.auth.login');
 })->name('login');
 
 Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
