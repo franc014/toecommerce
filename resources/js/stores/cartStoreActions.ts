@@ -6,13 +6,18 @@ import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 async function createCartInDB(cartId: string) {
 
-    console.info('creating cart url', create().url);
+    try {
+        console.info('creating cart url', create().url);
 
-    const cartDB = await axios.post(create().url,{
-         id: cartId,
-    });
+        const cartDB = await axios.post(create().url,{
+            id: cartId,
+        });
 
-    return cartDB;
+        return cartDB;
+    }catch (e: any) {
+        console.error(e);
+    }
+
 }
 
 async function getCartFromDB(cartId: string, store: any) {
