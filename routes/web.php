@@ -11,7 +11,6 @@ use App\Http\Controllers\ProductsPageController;
 use App\Http\Controllers\UserInfoEntryController;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('storefront.home');
 Route::get('/products', ProductsPageController::class)->name('storefront.products');
