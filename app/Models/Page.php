@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\CMS\ContentResolver;
-use App\CMS\ImageTransformable;
 use App\Enums\PageStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,20 +57,13 @@ class Page extends Model
 
     public static function bySlug($slug)
     {
-        /* return Cache::remember('page-'.$slug, now()->addDay(), function () use ($slug) {
+        return Cache::remember('page-'.$slug, now()->addDay(), function () use ($slug) {
             return self::where('slug', $slug)->published()
                 ->with('sections', function ($query) {
                     $query->orderBy('order_column');
                 })
                 ->lazy()->firstOrFail();
-        }); */
-
-        return self::where('slug', $slug)->published()
-            ->with('sections', function ($query) {
-                $query->orderBy('order_column');
-            })
-            ->lazy()->firstOrFail();
-
+        });
     }
 
     public function sectionsForUI(array $transformables = []): ?array

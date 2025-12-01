@@ -19,7 +19,7 @@
         <div class="f-header__nav" role="navigation">
             <div class="f-header__nav-grid wrapper">
                 <div class="f-header__nav-logo-wrapper grow basis-0">
-                    <Link href="/" class="f-header__logo" view-transition>
+                    <Link href="/" class="f-header__logo" view-transition prefetch>
                         <svg width="104" height="30" viewBox="0 0 104 30">
                             <title>Go to homepage</title>
                             <path
@@ -33,7 +33,7 @@
 
                 <ul class="f-header__list grow basis-0 lg:justify-center">
                     <li class="f-header__item" v-for="item in menu.items" :key="item.id">
-                        <Link :href="item.url" class="f-header__link" :aria-current="item.url === $page.url ? 'page' : ''" view-transition>{{
+                        <Link prefetch :href="item.url" class="f-header__link" :aria-current="item.url === $page.url ? 'page' : ''" view-transition>{{
                             item.label
                         }}</Link>
                     </li>

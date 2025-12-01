@@ -4,6 +4,7 @@ import { CartItem, DataForCart } from '@/types';
 
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+
 async function createCartInDB(cartId: string) {
 
     try {
