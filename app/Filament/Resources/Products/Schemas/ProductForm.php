@@ -14,6 +14,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -48,6 +49,9 @@ class ProductForm
                                         ->default(ProductStatus::DRAFT)
                                         ->enum(ProductStatus::class)
                                         ->options(ProductStatus::class),
+                                    Textarea::make('summary')
+                                        ->label(__('firesources.summary'))
+                                        ->maxLength(2048),
                                     RichEditor::make('description')
                                         ->label(__('firesources.description'))
                                         ->toolbarButtons([

@@ -88,7 +88,7 @@ Usage: codyhouse.co/license
     top: 0;
     height: var(--f-header-height);
     background-color: inherit;
-    @apply border-b border-gray-300;
+    @apply border-b border-zinc-300;
 }
 
 .f-header__nav--is-visible {
@@ -117,7 +117,7 @@ Usage: codyhouse.co/license
 
 .f-header__item {
     flex-shrink: 0;
-    @apply border-b border-gray-300;
+    @apply border-b border-zinc-300;
 }
 
 .f-header__dropdown-icon {
@@ -144,7 +144,7 @@ Usage: codyhouse.co/license
 .f-header__dropdown-link {
     display: flex;
     align-items: center;
-    @apply text-gray-700;
+    @apply text-zinc-700;
     text-decoration: none;
     @apply px-0 py-2 lg:py-3;
 }
@@ -296,12 +296,12 @@ Usage: codyhouse.co/license
     }
 
     .f-header__dropdown-link {
-        @apply text-gray-700;
+        @apply text-zinc-700;
         @apply px-3 py-2 lg:px-5;
         transition: 0.2s;
     }
     .f-header__dropdown-link:hover {
-        @apply bg-gray-900/[.07];
-        @apply text-gray-900;
+        @apply bg-zinc-900/[.07];
+        @apply text-zinc-900;
     }
 }

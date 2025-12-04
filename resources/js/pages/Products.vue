@@ -1,13 +1,14 @@
 <template>
-    <section>
-        <div class="wrapper space-y-6 py-10">
-            <h1>Productos</h1>
+    <section class="space-y-20">
+        <div class="wrapper space-y-10">
+            <Banner title="Nuestros Productos" pre-header="Compra" />
             <ProductsList :products="products" />
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
+import Banner from '@/components/Banner.vue';
 import ProductsList from '@/components/ProductsList.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 

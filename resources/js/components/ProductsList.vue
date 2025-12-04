@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import ProductCard from './ProductCard.vue';
-//import { products } from '@/routes/storefront';
 import { Product } from '../types';
+import ProductCard from './ProductCard.vue';
 
 const props = defineProps<{
     products: Product[];
@@ -10,7 +9,7 @@ const props = defineProps<{
 const { products } = props;
 </script>
 <template>
-    <ul class="products-grid">
+    <ul class="products-grid pb-20">
         <li v-for="product in products" :key="product.id">
             <ProductCard :product="product" />
         </li>

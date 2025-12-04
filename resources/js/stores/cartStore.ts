@@ -5,8 +5,6 @@ import { CartAggregation, CartItem } from "../types/index";
 import {init, addOrUpdateItem, removeItem, emptyCart, productInItem} from './cartStoreActions';
 
 
-
-
 export const useCartStore = defineStore('cart', {
     state: () => ({
         id: '' as string,

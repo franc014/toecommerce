@@ -6,14 +6,14 @@
                     <ProductGallery :images="product.images" />
                 </div>
                 <div class="space-y-10">
-                    <h1>{{ product.title }}</h1>
-                    <div class="border-b border-zinc-200 pb-8 text-xl tracking-wide">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis quae blanditiis adipisci, id illum culpa iste tempore veniam
-                        vero et ullam voluptates reiciendis quos, sapiente ratione quisquam hic deleniti omnis!
-                    </div>
-                    <p class="flex items-baseline gap-4">
-                        <span class="text-3xl font-bold tracking-widest">{{ product.price_in_dollars }}</span>
-                        <span class="text-2xl">Impuestos: </span>
+                    <h1 class="font-serif2">{{ product.title }}</h1>
+                    <hr class="border-b border-dashed border-zinc-400" />
+                    <div class="border-b border-dashed border-zinc-400 pb-8 text-xl tracking-wide" v-if="product.summary">{{ product.summary }}</div>
+                    <p class="flex items-baseline gap-4 space-x-1">
+                        <span class="border-r border-dashed border-zinc-600 pr-4 text-3xl font-bold tracking-widest">{{
+                            product.price_in_dollars
+                        }}</span>
+                        <span class="text-2xl"> Impuestos: </span>
                         <span class="text-xl" v-if="product.has_taxes">{{ product.taxes }}</span>
                         <span class="text-xl" v-else>Sin impuestos</span>
                     </p>
@@ -24,7 +24,7 @@
 
                     <Accordion :collapsible="true" default-value="item-1">
                         <AccordionItem value="item-1">
-                            <AccordionTrigger class="rounded-md bg-zinc-200/50 px-4 text-2xl">Más detalles</AccordionTrigger>
+                            <AccordionTrigger class="rounded-md bg-zinc-100 px-4 text-2xl">Más detalles</AccordionTrigger>
                             <AccordionContent>
                                 <div v-html="product.description" class="for-prose"></div>
                             </AccordionContent>

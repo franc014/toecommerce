@@ -48,7 +48,7 @@ Usage: codyhouse.co/license
     z-index: 1;
     @apply top-3 lg:top-5;
     @apply right-3 lg:right-5;
-    @apply bg-gray-900/90;
+    @apply bg-zinc-900/90;
     @apply px-3 py-1.5 lg:px-5 lg:py-2;
     @apply rounded;
     pointer-events: none;
@@ -59,7 +59,7 @@ Usage: codyhouse.co/license
 }
 
 .product-card-v2__title {
-    @apply text-gray-900 max-w-min;
+    @apply text-zinc-900 max-w-min;
     text-decoration: none;
     font-weight: bold;
 }
@@ -73,7 +73,7 @@ Usage: codyhouse.co/license
 }
 
 .prod-card-v2__old-price {
-    @apply text-gray-500;
+    @apply text-zinc-500;
     text-decoration: line-through;
 }
 .prod-card-v2__old-price::before {

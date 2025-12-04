@@ -21,6 +21,7 @@ class ProductPageController extends Controller
             'id' => $product->id,
             'title' => $product->title,
             'slug' => $product->slug,
+            'summary' => $product->summary,
             'description' => RichContentRenderer::make($product->description)->customBlocks([
                 HeroBlock::class,
             ])->toHtml(),

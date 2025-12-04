@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('shows a listing of a published product', function () {
-    $this->withoutExceptionHandling();
 
     $product = Product::factory()->published()->create([
         'main_image' => 'product.jpg',
@@ -20,6 +19,7 @@ it('shows a listing of a published product', function () {
                 return $page
                     ->where('id', $product->id)
                     ->where('title', $product->title)
+                    ->where('summary', $product->summary)
                     ->where('description', RichContentRenderer::make($product->description)->customBlocks([
                         HeroBlock::class,
                     ])->toHtml())
