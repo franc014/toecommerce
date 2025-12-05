@@ -1,16 +1,16 @@
 <template>
     <li>
         <div class="prod-card-v2">
-            <a class="prod-card-v2__img-link rounded-lg shadow-md" aria-label="Go to product" :href="productUrl">
+            <Link class="prod-card-v2__img-link rounded-lg shadow-md" aria-label="Ir al producto" :href="productUrl" prefetch view-transition>
                 <figure>
                     <img class="aspect-square object-cover" :src="featureImage" :alt="product.title" />
                     <img class="aspect-square object-cover" :src="mainImage" :alt="product.title" aria-hidden="true" />
                 </figure>
-            </a>
+            </Link>
 
             <div class="flex flex-col items-center py-6 text-center">
                 <h2 class="text-lg lg:text-xl">
-                    <a :href="productUrl" class="product-card-v2__title">{{ product.title }}</a>
+                    <Link :href="productUrl" class="product-card-v2__title" prefetch view-transition>{{ product.title }}</Link>
                 </h2>
 
                 <div class="my-1 space-y-2 lg:my-1.5">
@@ -35,6 +35,7 @@
 import { Badge } from '@/components/ui/badge';
 import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
 import { useCartStore } from '@/stores/cartStore';
+import { Link } from '@inertiajs/vue3';
 import { Product } from '../types';
 import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';

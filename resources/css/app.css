@@ -184,7 +184,7 @@
 
 .for-prose {
 
-    @apply prose md:prose-lg lg:prose-xl max-w-none text-zinc-700;
+    @apply prose md:prose-lg lg:prose-xl max-w-none text-zinc-800 ;
     @apply prose-em:font-bold prose-em:underline;
 
 }
@@ -199,29 +199,7 @@
     @apply py-20;
 }
 
-/* --------------------------------
 
-File#: _1_noise-background
-Title: Noise Background
-Descr: Noise background effect
-Usage: codyhouse.co/license
-
--------------------------------- */
-.noise-bg {
-  pointer-events: none;
-  opacity: 0.35;
-  filter: grayscale(100%);
-}
-.noise-bg::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  -webkit-filter: url(#noise-bg-fx);filter: url(#noise-bg-fx);
-}
 
 
 

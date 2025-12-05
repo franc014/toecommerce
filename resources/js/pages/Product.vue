@@ -10,10 +10,10 @@
                     <hr class="border-b border-dashed border-zinc-400" />
                     <div class="border-b border-dashed border-zinc-400 pb-8 text-xl tracking-wide" v-if="product.summary">{{ product.summary }}</div>
                     <p class="flex items-baseline gap-4 space-x-1">
-                        <span class="border-r border-dashed border-zinc-600 pr-4 text-3xl font-bold tracking-widest">{{
+                        <span class="border-r border-dashed border-zinc-600 pr-4 text-3xl font-bold tracking-wide">{{
                             product.price_in_dollars
                         }}</span>
-                        <span class="text-2xl"> Impuestos: </span>
+                        <span class="text-2xl"> + Impuestos: </span>
                         <span class="text-xl" v-if="product.has_taxes">{{ product.taxes }}</span>
                         <span class="text-xl" v-else>Sin impuestos</span>
                     </p>

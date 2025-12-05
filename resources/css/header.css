@@ -8,7 +8,7 @@ Usage: codyhouse.co/license
 -------------------------------- */
 :root {
     --f-header-height: 50px;
-    --f-header-logo-width: 104px;
+    --f-header-logo-width: 70px;
 }
 @media (min-width: 64rem) {
     :root {
@@ -42,7 +42,7 @@ Usage: codyhouse.co/license
 }
 
 .f-header__logo {
-    display: block;
+
     width: var(--f-header-logo-width);
     flex-shrink: 0;
     text-decoration: none;
