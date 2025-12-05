@@ -3,7 +3,10 @@
         <div class="wrapper">
             <div class="mb-8 border-b border-dashed border-zinc-900/40 py-8 lg:mb-20">
                 <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-3">
-                    <div><h2 class="font-serif2">Logo</h2></div>
+                    <div class="flex w-32 items-center">
+                        <img src="/images/logo3.png" alt="Logo" />
+                        <span class="mt-22 text-lg leading-tight tracking-wide text-zinc-800">Fashion Dogs</span>
+                    </div>
                     <!-- <div>
                         <a
                             class="relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-[1em] leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"
@@ -164,7 +167,7 @@
             </div>
 
             <div class="border-t border-zinc-900/10 py-3 lg:py-5">
-                <p class="text-xs text-zinc-500">&copy; {{ new Date().getFullYear() }} Dogstyles - Todos los derechos reservados</p>
+                <p class="text-xs text-zinc-500">&copy; {{ new Date().getFullYear() }} Fashion Dogs - Todos los derechos reservados</p>
             </div>
         </div>
     </footer>

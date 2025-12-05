@@ -19,9 +19,9 @@
         <div class="f-header__nav" role="navigation">
             <div class="f-header__nav-grid wrapper border-b border-dashed border-zinc-400">
                 <div class="f-header__nav-logo-wrapper grow basis-0">
-                    <Link href="/" class="f-header__logo flex items-center" view-transition prefetch>
-                        <img src="/images/logo2.png" alt="Logo" />
-                        <span class="mt-2 text-lg leading-tight tracking-wide text-zinc-800">Fashion Dogs</span>
+                    <Link href="/" class="f-header__logo flex items-center gap-2" view-transition prefetch>
+                        <img src="/images/logo3.png" alt="Logo" />
+                        <span class="mt-8 text-lg leading-tight tracking-wide text-zinc-800">Fashion Dogs</span>
                     </Link>
                 </div>
 
