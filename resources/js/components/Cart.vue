@@ -86,8 +86,6 @@ function emptyCart() {
         id: cartStore.id,
     });
 }
-
-console.log(cartStore.isEmpty);
 </script>
 
 <style scoped>

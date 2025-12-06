@@ -4,7 +4,7 @@
             <div class="text-md mb-3 tracking-widest text-zinc-800">{{ preHeader }}</div>
             <h1 class="mx-auto flex max-w-fit flex-col gap-2 text-center font-serif2 text-zinc-800">
                 {{ title }}
-                <span class="inline-flex justify-around text-zinc-600"> <Paws /> </span>
+                <span class="inline-flex justify-around text-zinc-800"> <Paws /> </span>
             </h1>
         </div>
         <!--  <div class="section-decoration absolute inset-0 opacity-5"></div> -->
