@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         $user = User::factory()->create([
+        /*  $user = User::factory()->create([
              'name' => 'Admin',
              'email' => 'jfandtec@gmail.com',
              // password=password
@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
          $exitCode = Artisan::call('shield:super-admin', [
              '--user' => $user->id,
              '--panel' => 'admin',
-         ]);
+         ]); */
 
         $this->call([
-            ProductSeeder::class,
+            /* ProductSeeder::class, */
             TaxSeeder::class,
             ShieldSeeder::class,
         ]);
