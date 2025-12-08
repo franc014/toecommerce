@@ -11,6 +11,7 @@ use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibr
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -220,5 +221,18 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                 return $taxes->implode(', ');
             }
         );
+    }
+
+    public function relatedProducts(): EloquentCollection
+    {
+        $collections = $this->productCollections->pluck('id')->toArray();
+
+        if (count($collections) > 0) {
+            return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
+                $query->whereIn('product_collections.id', $collections);
+            })->where('id', '!=', $this->id)->get();
+        }
+
+        return collect([]);
     }
 }

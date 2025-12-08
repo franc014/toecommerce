@@ -1,7 +1,7 @@
 <template>
     <section class="py-30">
         <div class="wrapper space-y-6">
-            <div class="product-grid">
+            <section class="product-grid">
                 <div>
                     <ProductGallery :images="product.images" />
                 </div>
@@ -33,7 +33,10 @@
 
                     <AddToCart :product="product" />
                 </div>
-            </div>
+            </section>
+            <section>
+                <h2 class="font-serif2 text-2xl">Productos relacionados</h2>
+            </section>
         </div>
     </section>
 </template>
@@ -52,6 +55,9 @@ defineOptions({ layout: StorefrontLayout });
 const page = usePage();
 
 const product = page.props.product as Product;
+const relatedProducts = page.props.relatedProducts as Product[];
+
+console.log(relatedProducts);
 </script>
 
 <style scoped></style>

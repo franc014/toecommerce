@@ -2,6 +2,7 @@
 
 use App\Enums\ProductStatus;
 use App\Models\Product;
+use App\Models\ProductCollection;
 use App\Models\ProductVariant;
 use App\Models\Tax;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -464,5 +465,30 @@ test('can get product images as URLs for products list component', function () {
 
     expect($product->productImagesForList)->toHaveCount(2);
     expect($product->productImagesForList->toArray())->toEqual([$imageA->getFullUrl(), $imageB->getFullUrl()]);
+
+});
+
+test('can get a product related products based on collections', function () {
+
+    $productA = Product::factory()->create();
+    $productB = Product::factory()->create();
+    $productC = Product::factory()->create();
+
+    $collectionA = ProductCollection::factory()->create();
+    $collectionB = ProductCollection::factory()->create();
+
+    $productA->productCollections()->attach($collectionA->id);
+    $productB->productCollections()->attach($collectionA->id);
+    $productC->productCollections()->attach($collectionB->id);
+
+    expect($productA->relatedProducts())->toHaveCount(1);
+    expect($productB->relatedProducts())->toHaveCount(1);
+    expect($productC->relatedProducts())->toHaveCount(0);
+
+    expect($productA->relatedProducts()->first()->id)->toBe($productB->id);
+    expect($productB->relatedProducts()->first()->id)->toBe($productA->id);
+    expect($productC->relatedProducts())->toBeEmpty();
+
+
 
 });

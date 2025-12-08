@@ -173,9 +173,9 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
 import { gsap } from 'gsap';
 
-//@ts-nocheck
 let tl;
 
 function beforeEnter() {
@@ -183,8 +183,6 @@ function beforeEnter() {
 }
 function enter(el) {
     const groups = el.querySelectorAll('g.main-paws');
-    //const pawsOne = groups.querySelectorAll('path');
-
     const firstGroup = groups[0];
     const secondGroup = groups[1];
     const thirdGroup = groups[2];
