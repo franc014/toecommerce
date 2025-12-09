@@ -31,7 +31,7 @@
 
                 <div class="col-span-12 lg:col-span-7">
                     <figure>
-                        <img class="block h-[650px] w-full object-cover" :src="image[0]['image']" alt="Image description" />
+                        <img class="block h-[850px] w-full object-cover" :src="image[0]['image']" alt="Image description" />
                     </figure>
                 </div>
             </div>

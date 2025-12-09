@@ -14,8 +14,8 @@
                 <SheetHeader>
                     <header class="flex items-center gap-2 px-4">
                         <SheetTitle>
-                            <h2 class="mt-4 flex items-center gap-2 text-2xl">
-                                <ShoppingCartIcon />
+                            <h2 class="mt-4 flex items-baseline gap-2 text-2xl tracking-wide">
+                                <ShoppingCartIcon class="mr-4 h-10 w-10" />
                                 <span v-if="cartStore.aggregation.items_count > 0"
                                     >{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span
                                 >
@@ -58,9 +58,10 @@
                             </template>
                         </Confirm>
                     </div>
-                    <div class="flex flex-col items-center space-y-4 place-self-center" v-if="cartStore.isEmpty">
-                        <p class="text-2xl">El carrito esta vacío.</p>
-                        <a href="/" class="text-2xl">Volver a la tienda</a>
+                    <div class="my-4 flex flex-col items-center space-y-4 place-self-center tracking-wider" v-if="cartStore.isEmpty">
+                        <p class="text-3xl font-bold">El carrito esta vacío.</p>
+                        <Ban class="h-12 w-12" />
+                        <Link href="/" class="text-2xl text-sky-800 underline hover:text-orange-700">Volver a la tienda</Link>
                     </div>
                 </SheetFooter>
             </SheetContent>
@@ -75,7 +76,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetOverlay, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useCartStore } from '@/stores/cartStore';
 import { Link } from '@inertiajs/vue3';
-import { CreditCard, ShoppingCart as ShoppingCartIcon, Trash2 } from 'lucide-vue-next';
+import { Ban, CreditCard, ShoppingCart as ShoppingCartIcon, Trash2 } from 'lucide-vue-next';
 import CartTally from './CartTally.vue';
 import Confirm from './Confirm.vue';
 
