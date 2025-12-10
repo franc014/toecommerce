@@ -44,9 +44,9 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function setStrictMode($mode = StockControlModes::STRICT)
+function setStrictMode(StockControlModes $mode = StockControlModes::STRICT)
 {
     $sfSettings = app(StorefrontSettings::class);
-    $sfSettings->stock_control_mode = $mode->value;
+    $sfSettings->stock_control_mode = $mode;
     $sfSettings->save();
 }

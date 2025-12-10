@@ -7,6 +7,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 test('can show a list of collections', function () {
 
+    $this->withoutExceptionHandling();
 
     $totalCollections = 6;
     $collections = ProductCollection::factory($totalCollections)->create([

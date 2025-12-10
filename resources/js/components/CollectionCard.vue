@@ -1,5 +1,5 @@
 <template>
-    <a class="card-v12 rounded-lg pt-3 shadow-md lg:pt-5" :href="`/collections/${collection.slug}`" :aria-label="collection.title">
+    <Link class="card-v12 rounded-lg pt-3 shadow-md lg:pt-5" :href="`/collections/${collection.slug}`" :aria-label="collection.title" prefetch>
         <div class="relative">
             <figure class="card-v12__figure rounded-sm">
                 <img class="block w-full" :src="collection.featured_image" :alt="collection.title" />
@@ -21,11 +21,12 @@
 
             <p class="letter-spacing-lg text-xs text-gray-900/50 uppercase">{{ collection.products_count }} productos</p>
         </div>
-    </a>
+    </Link>
 </template>
 
 <script setup lang="ts">
 import { Collection } from '@/types';
+import { Link } from '@inertiajs/vue3';
 
 const { collection } = defineProps<{
     collection: Collection;

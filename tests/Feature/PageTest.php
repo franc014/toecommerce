@@ -5,7 +5,6 @@ use App\Models\Section;
 
 test('can extract all content for a published page', function () {
 
-    $this->withoutExceptionHandling();
     $section1 = Section::factory()->create([
         'slug' => 'hero',
         'content' => [
@@ -50,8 +49,6 @@ test('can extract all content for a published page', function () {
     ]);
 
     $page->sections()->attach([$section1->id, $section2->id]);
-
-    ray($page->sections);
 
     $sections = Page::bySlug('home')->sectionsForUI();
 

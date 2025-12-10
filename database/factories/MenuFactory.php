@@ -17,7 +17,8 @@ class MenuFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->text(10),
+            'slug' => $this->faker->slug,
         ];
     }
 }

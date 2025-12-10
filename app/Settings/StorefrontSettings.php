@@ -18,6 +18,6 @@ class StorefrontSettings extends Settings
 
     public function isAppInStrictMode()
     {
-        return $this->stock_control_mode === StockControlModes::STRICT->value;
+        return $this->stock_control_mode === StockControlModes::STRICT;
     }
 }

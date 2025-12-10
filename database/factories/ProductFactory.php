@@ -28,7 +28,7 @@ class ProductFactory extends Factory
             'main_image' => fake()->imageUrl(),
             'video' => fake()->url(),
             'status' => fake()->randomElement(ProductStatus::cases()),
-            'price' => fake()->randomFloat(2, 50, 300),
+            'price' => 100.25,
             'stock' => fake()->numberBetween(0, 200),
             'sku' => fake()->ean13(),
             'published_at' => null,

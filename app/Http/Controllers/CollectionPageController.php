@@ -30,6 +30,7 @@ class CollectionPageController extends Controller
 
 
         return Inertia::render('Collection', [
+            'collection' => $collection,
             'products' => $products,
         ]);
     }

@@ -59,6 +59,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)
@@ -93,6 +94,7 @@ it('does not show warning text if product stock is not dropping below threshold,
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)
@@ -108,6 +110,8 @@ it('does not show warning text if product stock is not dropping below threshold,
 });
 
 it('does not show warning text if product stock is dropping below threshold, in nonstrict mode', function () {
+
+    $this->withoutExceptionHandling();
 
     setStrictMode(StockControlModes::NONE);
 
@@ -127,6 +131,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)

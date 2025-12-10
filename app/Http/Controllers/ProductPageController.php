@@ -36,7 +36,7 @@ class ProductPageController extends Controller
             'dropping_stock' => $product->isDroppingStock(),
         ];
 
-        $relatedProducts = $product->relatedProducts()->map(function ($product) {
+        $relatedProducts = $product->relatedProducts()?->map(function ($product) {
             return [
                 'id' => $product->id,
                 'title' => $product->title,

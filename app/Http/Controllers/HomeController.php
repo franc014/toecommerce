@@ -42,8 +42,10 @@ class HomeController extends Controller
             ]);
 
         } catch (ModelNotFoundException $e) {
+            ray('the error here: model not found');
             abort(404);
         } catch (ItemNotFoundException $e) {
+            ray('the error here: item not found');
             abort(404);
         }
     }

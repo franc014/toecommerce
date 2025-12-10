@@ -223,7 +223,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         );
     }
 
-    public function relatedProducts(): EloquentCollection
+    public function relatedProducts(): EloquentCollection | null
     {
         $collections = $this->productCollections->pluck('id')->toArray();
 
@@ -231,8 +231,10 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
             return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
                 $query->whereIn('product_collections.id', $collections);
             })->where('id', '!=', $this->id)->get();
+        } else {
+            return null;
         }
 
-        return collect([]);
+
     }
 }

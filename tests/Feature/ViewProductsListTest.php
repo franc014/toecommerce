@@ -3,6 +3,7 @@
 use App\Enums\StockControlModes;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Settings\StorefrontSettings;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('can show a list of published products', function () {
@@ -36,7 +37,9 @@ test('can show a list of published products', function () {
 test('can show a list of published products with variants', function () {
 
     $totalProducts = 3;
-    $publishedProducts = Product::factory($totalProducts)->published()->create();
+    $publishedProducts = Product::factory($totalProducts)->published()->create([
+        'price' => 20.5,
+    ]);
 
     $productWithVariants = $publishedProducts[2];
 
@@ -53,7 +56,7 @@ test('can show a list of published products with variants', function () {
                     $page->where('id', $publishedProducts[2]->id)
                         ->where('title', $publishedProducts[2]->title)
                         ->where('slug', $publishedProducts[2]->slug)
-                        ->where('price', $publishedProducts[2]->price)
+                        ->where('price', 20.5)
                         ->where('price_in_dollars', $publishedProducts[2]->price_in_dollars)
                         ->where('images', $publishedProducts[2]->productImagesForList)
                         ->where('video', $publishedProducts[2]->video)
@@ -84,7 +87,14 @@ it('shows warning text if product stock is dropping below threshold, in strict m
         'price' => 20,
         'stock_threshold_for_customers' => 10,
         'stock' => 8,
+        'video' => 'a video url'
     ]);
+
+    $sfSettings = app(StorefrontSettings::class);
+
+
+
+
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
@@ -98,6 +108,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                         ->where('price', 20)
                         ->where('price_in_dollars', $productDropping->price_in_dollars)
                         ->where('images', $productDropping->productImagesForList)
+                        ->where('video', $productDropping->video)
                         ->where('has_variants', $productDropping->hasPublishedVariants())
                         ->where('variants', $productDropping->variants)
                         ->where('dropping_stock', true);
@@ -130,6 +141,7 @@ it('does not show warning text if product stock is not dropping below threshold,
                         ->where('price', $productDropping->price)
                         ->where('price_in_dollars', $productDropping->price_in_dollars)
                         ->where('images', $productDropping->productImagesForList)
+                        ->where('video', $productDropping->video)
                         ->where('has_variants', $productDropping->hasPublishedVariants())
                         ->where('variants', $productDropping->variants)
                         ->where('dropping_stock', false);
@@ -160,6 +172,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
                         ->where('title', $productDropping->title)
                         ->where('slug', $productDropping->slug)
                         ->where('price', $productDropping->price)
+                        ->where('video', $productDropping->video)
                         ->where('price_in_dollars', $productDropping->price_in_dollars)
                         ->where('images', $productDropping->productImagesForList)
                         ->where('has_variants', $productDropping->hasPublishedVariants())

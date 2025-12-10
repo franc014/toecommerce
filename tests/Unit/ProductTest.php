@@ -470,9 +470,9 @@ test('can get product images as URLs for products list component', function () {
 
 test('can get a product related products based on collections', function () {
 
-    $productA = Product::factory()->create();
-    $productB = Product::factory()->create();
-    $productC = Product::factory()->create();
+    $productA = Product::factory()->published()->create();
+    $productB = Product::factory()->published()->create();
+    $productC = Product::factory()->published()->create();
 
     $collectionA = ProductCollection::factory()->create();
     $collectionB = ProductCollection::factory()->create();

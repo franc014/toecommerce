@@ -2,10 +2,57 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Page;
 use App\Models\Product;
+use App\Models\ProductCollection;
+use App\Models\Section;
 use App\Models\User;
 
 it('gives successful response for home page', function () {
+    $section1 = Section::factory()->create([
+        'slug' => 'hero',
+        'content' => [
+            [
+                'type' => 'heading',
+                'data' => [
+                    'content' => 'Heading 1',
+                    'level' => 'h1',
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'content' => 'Paragraph 1',
+                ],
+            ],
+        ],
+    ]);
+
+    $section2 = Section::factory()->create([
+        'slug' => 'values',
+        'content' => [
+            [
+                'type' => 'heading',
+                'data' => [
+                    'content' => 'Heading 2',
+                    'level' => 'h2',
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'content' => 'Paragraph 2',
+                ],
+            ],
+
+        ],
+    ]);
+
+    $page = Page::factory()->published()->create([
+        'slug' => 'home',
+    ]);
+
+    $page->sections()->attach([$section1->id, $section2->id]);
     $response = $this->get(route('storefront.home'));
     $response->assertStatus(200);
 });
@@ -21,7 +68,7 @@ it('gives successful response for collections page', function () {
 });
 
 it('gives successful response for collection page', function () {
-    $collection = Product::factory()->create();
+    $collection = ProductCollection::factory()->create();
     $response = $this->get(route('storefront.collection', ['collection' => $collection->slug]));
     $response->assertStatus(200);
 });
