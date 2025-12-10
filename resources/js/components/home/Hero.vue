@@ -11,19 +11,20 @@
                         </div>
 
                         <div class="space-y-4">
-                            <h1 class="feature-v4__text-offset@md font-serif2 text-6xl">{{ heading }}</h1>
+                            <h1 class="feature-v4__text-offset@md font-serif2 text-7xl">{{ heading }}</h1>
 
-                            <p class="text-lg tracking-wide">{{ message }}</p>
+                            <p class="text-2xl tracking-wide">{{ message }}</p>
                         </div>
 
-                        <div class="mt-3 lg:mt-5">
+                        <div class="mt-3 lg:mt-8">
                             <div class="flex flex-wrap items-center gap-3 lg:gap-5">
-                                <a
+                                <Link
+                                    prefetch
                                     :href="ctaA.link"
-                                    class="relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-[1em] leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"
-                                    >{{ ctaA.content }}</a
-                                >
-                                <a :href="ctaB.link" class="text-inherit">{{ ctaB.content }}</a>
+                                    class="relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-xl leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"
+                                    >{{ ctaA.content }}
+                                </Link>
+                                <Link prefetch :href="ctaB.link" class="text-inherit">{{ ctaB.content }}</Link>
                             </div>
                         </div>
                     </div>
@@ -43,6 +44,7 @@
 <script setup lang="ts">
 // @ts-nocheck
 import { PageComponentContent } from '@/types';
+import { Link } from '@inertiajs/vue3';
 import SectionDivider from '../SectionDivider.vue';
 
 import { SplitText } from 'gsap/all';

@@ -1,6 +1,6 @@
 <template>
-    <section class="py-30">
-        <div class="wrapper space-y-6">
+    <section class="pt-30 pb-20">
+        <div class="wrapper">
             <section class="product-grid">
                 <div>
                     <ProductGallery :images="product.images" />
@@ -34,21 +34,30 @@
                     <AddToCart :product="product" />
                 </div>
             </section>
-            <section>
-                <h2 class="font-serif2 text-2xl">Productos relacionados</h2>
-            </section>
         </div>
+    </section>
+    <section class="has-section-divider-top relative z-[1] bg-orange-100 pt-30 pb-10">
+        <SectionDivider backgroundColor="fill-zinc-50" />
+        <div class="wrapper relative z-[2]">
+            <h2 class="separator-border mb-20 max-w-fit space-y-20 font-serif2">Productos relacionados</h2>
+            <ProductsList :products="relatedProducts" />
+        </div>
+        <BackgroundDecoration />
     </section>
 </template>
 
 <script setup lang="ts">
 import AddToCart from '@/components/AddToCart.vue';
 import ProductGallery from '@/components/ProductGallery.vue';
+import ProductsList from '@/components/ProductsList.vue';
 import ProductVariants from '@/components/ProductVariants.vue';
+import SectionDivider from '@/components/SectionDivider.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { Product } from '@/types';
 import { usePage } from '@inertiajs/vue3';
+
+import BackgroundDecoration from '@/components/BackgroundDecoration.vue';
 
 defineOptions({ layout: StorefrontLayout });
 
@@ -56,8 +65,6 @@ const page = usePage();
 
 const product = page.props.product as Product;
 const relatedProducts = page.props.relatedProducts as Product[];
-
-console.log(relatedProducts);
 </script>
 
 <style scoped></style>

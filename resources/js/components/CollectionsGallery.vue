@@ -9,14 +9,6 @@
                 </ul>
             </div>
         </div>
-
-        <div class="mx-auto mt-6 w-[calc(100%_-_3rem)] max-w-lg text-right lg:max-w-5xl xl:max-w-7xl">
-            <a
-                class="bg-[linear-gradient(to_right,_hsl(250,84%,54%)_50%,_hsla(250,84%,54%,0.2)_50%)] bg-[length:200%_1px] bg-[100%_100%] bg-no-repeat text-indigo-700 no-underline transition-all duration-200 hover:bg-[0%_100%]"
-                href="/collections"
-                >Ver todas las colecciones →</a
-            >
-        </div>
     </section>
 </template>
 

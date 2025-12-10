@@ -130,14 +130,14 @@
 }
 
 .wrapper {
-    @apply mx-auto w-[calc(100%_-_2.5rem)] max-w-7xl lg:w-[calc(100%_-_4rem)] lg:justify-between;
+    @apply container mx-auto lg:justify-between;
 }
 
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 3rem;
 }
 
 
@@ -191,12 +191,15 @@
 
 .product-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.5fr 2fr;
     gap: 2.75rem;
 }
 
 .section-spacing {
     @apply py-20;
+}
+.separator-border {
+    @apply border-dashed border-b border-zinc-400 pb-10;
 }
 
 

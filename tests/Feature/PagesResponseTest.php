@@ -15,6 +15,17 @@ it('gives successful response for products page', function () {
     $response->assertStatus(200);
 });
 
+it('gives successful response for collections page', function () {
+    $response = $this->get(route('storefront.collections'));
+    $response->assertStatus(200);
+});
+
+it('gives successful response for collection page', function () {
+    $collection = Product::factory()->create();
+    $response = $this->get(route('storefront.collection', ['collection' => $collection->slug]));
+    $response->assertStatus(200);
+});
+
 it('gives successful response for product page', function () {
     $product = Product::factory()->published()->create();
     $response = $this->get(route('storefront.product', ['product' => $product->slug]));
