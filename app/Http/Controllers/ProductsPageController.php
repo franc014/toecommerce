@@ -15,7 +15,7 @@ class ProductsPageController extends Controller
     {
 
         return Inertia::render('Products', [
-            'products' => Product::published()->with('variants')->get()->map(function ($product) {
+            'products' => Product::published()->with('variants')->paginate(2)->through(function ($product) {
                 return [
                     'id' => $product->id,
                     'title' => $product->title,

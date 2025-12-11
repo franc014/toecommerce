@@ -202,6 +202,20 @@
     @apply border-dashed border-b border-zinc-400 pb-10;
 }
 
+a.pagination-link {
+    @apply underline text-xl font-sans tracking-wider leading-2;
+}
+
+span.pagination-link {
+    @apply text-zinc-500  text-xl tracking-wider leading-2;
+}
+
+a.pagination-link:hover {
+    @apply text-orange-600;
+}
+
+
+
 
 
 
