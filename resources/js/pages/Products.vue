@@ -20,8 +20,6 @@ const page = usePage();
 const paginated = page.props.products as { data: any[]; links: string[] };
 const products = paginated.data;
 const paginationLinks = paginated.links;
-
-console.log(paginationLinks);
 </script>
 
 <style scoped></style>

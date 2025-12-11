@@ -6,7 +6,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 it('shows products by collection', function () {
 
-    $this->withoutExceptionHandling();
+    setPaginationNumber(6);
 
     $collection = ProductCollection::factory()->create([
         'title' => 'Collection A',
@@ -22,9 +22,9 @@ it('shows products by collection', function () {
     $this->get(route('storefront.collection', ['collection' => $collection->slug]))
         ->assertInertia(
             fn (Assert $page) => $page
-            ->has('products', 4)
+            ->has('products.data', 4)
             ->has(
-                'products.0',
+                'products.data.0',
                 function (Assert $page) use ($products) {
                     $page->where('id', $products[0]->id)
                         ->where('title', $products[0]->title)

@@ -2,7 +2,7 @@
     <section class="space-y-20">
         <div class="wrapper space-y-10">
             <Banner :title="bannerTitle" pre-header="Colección" />
-            <ProductsList :products="products" />
+            <ProductsList :products="products" :paginationLinks="paginationLinks" />
         </div>
     </section>
 </template>
@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import Banner from '@/components/Banner.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Collection, Product } from '@/types';
+import { Collection } from '@/types';
 
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
@@ -26,7 +26,10 @@ const bannerTitle = computed(() => {
     return `${collection.title}`;
 });
 
-const products = page.props.products as Product[];
+const paginated = page.props.products as { data: any[]; links: string[] };
+
+const products = paginated.data;
+const paginationLinks = paginated.links;
 </script>
 
 <style scoped></style>

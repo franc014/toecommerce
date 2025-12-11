@@ -7,7 +7,7 @@ use App\Settings\StorefrontSettings;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('can show a list of published products', function () {
-
+    setPaginationNumber(4);
     $totalProducts = 3;
     $publishedProducts = Product::factory($totalProducts)->published()->create([
         'price' => 10,
@@ -15,9 +15,9 @@ test('can show a list of published products', function () {
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
-            ->has('products', $totalProducts)
+            ->has('products.data', $totalProducts)
             ->has(
-                'products.0',
+                'products.data.0',
                 function (Assert $page) use ($publishedProducts) {
                     $page->where('id', $publishedProducts[0]->id)
                         ->where('title', $publishedProducts[0]->title)
@@ -35,6 +35,7 @@ test('can show a list of published products', function () {
 });
 
 test('can show a list of published products with variants', function () {
+    setPaginationNumber(4);
 
     $totalProducts = 3;
     $publishedProducts = Product::factory($totalProducts)->published()->create([
@@ -49,9 +50,9 @@ test('can show a list of published products with variants', function () {
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
-            ->has('products', $totalProducts)
+            ->has('products.data', $totalProducts)
             ->has(
-                'products.2',
+                'products.data.2',
                 function (Assert $page) use ($publishedProducts) {
                     $page->where('id', $publishedProducts[2]->id)
                         ->where('title', $publishedProducts[2]->title)
@@ -80,6 +81,7 @@ test('can not show a list of unpublished products', function () {
 it('shows warning text if product stock is dropping below threshold, in strict mode', function () {
 
     setStrictMode();
+    setPaginationNumber(2);
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([
@@ -92,15 +94,11 @@ it('shows warning text if product stock is dropping below threshold, in strict m
 
     $sfSettings = app(StorefrontSettings::class);
 
-
-
-
-
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
-            ->has('products', 2)
+            ->has('products.data', 2)
             ->has(
-                'products.1',
+                'products.data.1',
                 function (Assert $page) use ($productDropping) {
                     $page->where('id', $productDropping->id)
                         ->where('title', $productDropping->title)
@@ -121,6 +119,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
 it('does not show warning text if product stock is not dropping below threshold, in strict mode', function () {
 
     setStrictMode();
+    setPaginationNumber(2);
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([
@@ -131,9 +130,9 @@ it('does not show warning text if product stock is not dropping below threshold,
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
-            ->has('products', 2)
+            ->has('products.data', 2)
             ->has(
-                'products.1',
+                'products.data.1',
                 function (Assert $page) use ($productDropping) {
                     $page->where('id', $productDropping->id)
                         ->where('title', $productDropping->title)
@@ -154,6 +153,7 @@ it('does not show warning text if product stock is not dropping below threshold,
 it('does not show warning text if product stock is dropping below threshold, in nonstrict mode', function () {
 
     setStrictMode(StockControlModes::NONE);
+    setPaginationNumber(2);
 
     Product::factory()->published()->create();
     $productDropping = Product::factory()->published()->create([
@@ -164,9 +164,9 @@ it('does not show warning text if product stock is dropping below threshold, in 
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
-            ->has('products', 2)
+            ->has('products.data', 2)
             ->has(
-                'products.1',
+                'products.data.1',
                 function (Assert $page) use ($productDropping) {
                     $page->where('id', $productDropping->id)
                         ->where('title', $productDropping->title)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCollection;
+use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,9 +12,10 @@ class CollectionPageController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, ProductCollection $collection)
+    public function __invoke(Request $request, ProductCollection $collection, StorefrontSettings $sfSettings)
     {
-        $products = $collection->products()->published()->get()->map(function ($product) {
+
+        $products = $collection->products()->published()->with('variants')->paginate($sfSettings->products_per_page)->through(function ($product) {
             return [
                 'id' => $product->id,
                 'title' => $product->title,

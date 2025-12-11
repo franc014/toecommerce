@@ -50,3 +50,10 @@ function setStrictMode(StockControlModes $mode = StockControlModes::STRICT)
     $sfSettings->stock_control_mode = $mode;
     $sfSettings->save();
 }
+
+function setPaginationNumber(int $paginationNumber = 10)
+{
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->products_per_page = $paginationNumber;
+    $sfSettings->save();
+}
