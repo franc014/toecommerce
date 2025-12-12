@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col gap-2 rounded-md bg-zinc-50 p-6 text-inherit text-zinc-800 no-underline shadow-[0_0_0_1px_hsl(221_39%_11%_/_0.05),_0_0.3px_0.4px_hsl(221_39%_11%_/_0.02),_0_0.9px_1.5px_hsl(221_39%_11%_/_0.045),_0_3.5px_6px_hsl(221_39%_11%_/_0.09)] transition-all duration-300 hover:shadow-[0_0_0_1px_hsl(221_39%_11%_/_0.05),_0_0.9px_1.25px_hsl(221_39%_11%_/_0.025),_0_3px_5px_hsl(221_39%_11%_/_0.05),_0_12px_20px_hsl(221_39%_11%_/_0.09)] dark:bg-zinc-800"
+        class="flex flex-col gap-2 rounded-md bg-zinc-50 p-6 text-inherit text-zinc-800 no-underline shadow-[0_0_0_1px_hsl(221_39%_11%_/_0.05),_0_0.3px_0.4px_hsl(221_39%_11%_/_0.02),_0_0.9px_1.5px_hsl(221_39%_11%_/_0.045),_0_3.5px_6px_hsl(221_39%_11%_/_0.09)] transition-all duration-300 hover:shadow-[0_0_0_1px_hsl(221_39%_11%_/_0.05),_0_0.9px_1.25px_hsl(221_39%_11%_/_0.025),_0_3px_5px_hsl(221_39%_11%_/_0.05),_0_12px_20px_hsl(221_39%_11%_/_0.09)]"
     >
         <h3 class="text-left font-bold">{{ variant.title }}</h3>
         <Accordion type="single" collapsible>

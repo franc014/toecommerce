@@ -1,6 +1,6 @@
 <template>
     <li class="flex flex-col gap-4 border-b border-dashed border-zinc-400 px-4 py-4 last:border-b-0">
-        <img :src="item.image" :alt="item.title" class="aspect-square w-16 rounded shadow-lg" />
+        <img :src="item.image_url" :alt="item.title" class="aspect-square w-18 rounded object-cover shadow-lg" />
 
         <div class="space-y-2">
             <h3 class="text-lg font-bold text-zinc-800">{{ item.title }}</h3>

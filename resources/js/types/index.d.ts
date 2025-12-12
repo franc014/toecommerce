@@ -97,7 +97,7 @@ export interface CartItem {
     id: number;
     title: string;
     slug: string;
-    image: string;
+    image_url: string;
     product_id: number;
     price: number;
     tax: number;

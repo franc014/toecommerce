@@ -27,9 +27,14 @@
 
                 <ul class="f-header__list grow basis-0 lg:justify-center">
                     <li class="f-header__item" v-for="item in menu.items" :key="item.id">
-                        <Link prefetch :href="item.url" class="f-header__link" :aria-current="item.url === $page.url ? 'page' : ''" view-transition>{{
-                            item.label
-                        }}</Link>
+                        <Link
+                            prefetch
+                            :href="item.url"
+                            class="f-header__link"
+                            :aria-current="$page.url.startsWith(item.url) ? 'page' : ''"
+                            view-transition
+                            >{{ item.label }}</Link
+                        >
                     </li>
                 </ul>
 
