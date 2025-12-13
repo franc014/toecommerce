@@ -13,7 +13,7 @@ use Illuminate\Support\ItemNotFoundException;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
-class HomeController extends Controller
+class HomePageController extends Controller
 {
     private $slug = 'home';
 
@@ -22,8 +22,6 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-
-
         try {
 
             $components = [];

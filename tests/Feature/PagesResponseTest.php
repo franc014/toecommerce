@@ -86,3 +86,8 @@ it('gives successful response for checkout page', function () {
     $response = $this->actingAs($user)->withCookie('cart', $cart->ui_cart_id)->get(route('storefront.checkout'));
     $response->assertStatus(200);
 });
+
+it('gives successful response for about page', function () {
+    $response = $this->get(route('storefront.about'));
+    $response->assertStatus(200);
+});

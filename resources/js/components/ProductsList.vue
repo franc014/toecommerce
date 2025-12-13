@@ -5,12 +5,10 @@ import { Product } from '../types';
 
 const props = defineProps<{
     products: Product[];
-    paginationLinks: string[];
+    paginationLinks?: string[];
 }>();
 
 const { products, paginationLinks } = props;
-
-console.log(paginationLinks);
 </script>
 <template>
     <ul class="products-grid pb-10">
@@ -19,6 +17,6 @@ console.log(paginationLinks);
         </li>
     </ul>
     <div class="mx-auto flex flex-col items-center pb-30">
-        <Pagination :links="paginationLinks" />
+        <Pagination :links="paginationLinks" v-if="paginationLinks" />
     </div>
 </template>

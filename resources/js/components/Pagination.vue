@@ -19,8 +19,6 @@ const props = defineProps<{
 }>();
 
 const { links } = props;
-
-console.log(links);
 </script>
 
 <style scoped></style>
