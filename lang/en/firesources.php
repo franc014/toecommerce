@@ -174,5 +174,6 @@ return [
     'menu_items' => 'Menu Items',
     'sub_menu_items' => 'Sub Menu Items',
     'more_bulk_actions' => 'More Bulk Actions',
+    'video' => 'Video',
 
 ];

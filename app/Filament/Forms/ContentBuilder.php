@@ -25,6 +25,7 @@ class ContentBuilder
                 ContentBlocks::richEditor(),
                 ContentBlocks::cta(),
                 ContentBlocks::image(),
+                ContentBlocks::video(),
                 ContentBlocks::newProductsChoice(),
                 ContentBlocks::featuredProduct(),
                 ContentBlocks::collections(),

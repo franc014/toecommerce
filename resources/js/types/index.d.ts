@@ -183,6 +183,7 @@ export interface PageComponentContent {
     "featured-product": Array;
     collections: Array;
     feature: Array;
+    video: Array;
 }
 
 export interface Menu {

@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\CMS\FeatureTransformable;
+use App\CMS\ImageTransformable;
+use App\CMS\RichTextTransformable;
 
-class AboutPageController extends Controller
+class AboutPageController extends PageController
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+    protected $slug = 'acerca-de';
+    protected $transformables = [];
+    protected $view = 'About';
+
+
+    public function __construct()
     {
-        return Inertia::render('About');
+        $this->transformables =
+            [
+                new ImageTransformable,
+                new RichTextTransformable,
+                new FeatureTransformable
+            ];
     }
+
 }

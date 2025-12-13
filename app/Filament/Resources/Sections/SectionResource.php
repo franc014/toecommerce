@@ -2,8 +2,7 @@
 
 namespace App\Filament\Resources\Sections;
 
-use App\Filament\Resources\Sections\Pages\CreateSection;
-use App\Filament\Resources\Sections\Pages\EditSection;
+
 use App\Filament\Resources\Sections\Pages\ListSections;
 use App\Filament\Resources\Sections\Schemas\SectionForm;
 use App\Filament\Resources\Sections\Tables\SectionsTable;
@@ -36,6 +35,11 @@ class SectionResource extends Resource
     public static function getNavigationGroup(): UnitEnum|string|null
     {
         return __('firesources.cms');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 
     protected static ?int $navigationSort = 1;

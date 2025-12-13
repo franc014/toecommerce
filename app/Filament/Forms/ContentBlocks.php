@@ -171,6 +171,27 @@ class ContentBlocks
 
     }
 
+    public static function video(): Block
+    {
+        return Block::make('video')
+            ->schema([
+                TextInput::make('title')
+                    ->label(__('firesources.title'))
+                    ->required()
+                    ->maxLength(128),
+                Textarea::make('message')
+                    ->label(__('firesources.message'))
+                    ->maxLength(256),
+                TextInput::make('link')
+                    ->label(__('firesources.link'))
+                    ->required()
+                    ->maxLength(2048),
+            ])
+            ->label(__('firesources.video'))
+            ->icon(Heroicon::VideoCamera);
+
+    }
+
     public static function newProductsChoice(): Block
     {
         return Block::make('new-products')
@@ -232,7 +253,7 @@ class ContentBlocks
             ->schema([
                 TextInput::make('title')
                     ->label(__('firesources.title'))
-                    ->maxLength(32)
+                    ->maxLength(128)
                     ->required(),
                 Textarea::make('message')
                     ->label(__('firesources.message'))

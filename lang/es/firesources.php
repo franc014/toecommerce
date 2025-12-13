@@ -172,6 +172,7 @@ return [
     'menu_items' => 'Elementos de Menu',
     'sub_menu_items' => 'Elementos de Sub-Menú',
     'more_bulk_actions' => 'Más Acciones de Lote',
+    'video' => 'Video',
 
 
 ];

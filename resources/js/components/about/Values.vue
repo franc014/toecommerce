@@ -6,7 +6,7 @@
                     <div class="col-span-12 lg:col-span-6">
                         <div>
                             <h2 class="pt-5 font-serif2 text-4xl leading-tight text-zinc-50">
-                                Mejores Telas, Futuro Más Brillante: Nuestra Promesa Ecológica
+                                {{ heading }}
                             </h2>
                         </div>
                     </div>
@@ -23,8 +23,7 @@
                                 </svg>
                             </span>
                             <p class="text-xl tracking-wide text-zinc-50">
-                                Creemos que un mundo hermoso es el mejor patio de recreo para nuestras mascotas. Por eso, la sostenibilidad está en el
-                                corazón de cada puntada que damos.
+                                {{ message }}
                             </p>
                         </div>
                     </div>
@@ -34,16 +33,8 @@
 
         <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-lg md:max-w-3xl lg:w-[calc(100%_-_4rem)] lg:max-w-5xl xl:max-w-7xl">
             <ul class="feature-v8__sub-content grid grid-cols-12 gap-y-8 lg:gap-12">
-                <li class="col-span-12 lg:col-span-4">
-                    <FeatureCard />
-                </li>
-
-                <li class="col-span-12 lg:col-span-4">
-                    <FeatureCard />
-                </li>
-
-                <li class="col-span-12 lg:col-span-4">
-                    <FeatureCard />
+                <li class="col-span-12 lg:col-span-4" v-for="feature in features" :key="feature.title">
+                    <FeatureCard :feature="feature" />
                 </li>
             </ul>
         </div>
@@ -54,6 +45,15 @@
 <script setup lang="ts">
 import FeatureCard from '@/components/FeatureCard.vue';
 import SectionDividerPaper from '@/components/SectionDividerPaper.vue';
+import { PageComponentContent } from '@/types';
+
+const { content } = defineProps<{
+    content: PageComponentContent;
+}>();
+
+const heading = content.heading[0].content;
+const message = content.paragraph[0].content;
+const features = content.feature;
 </script>
 
 <style scoped></style>

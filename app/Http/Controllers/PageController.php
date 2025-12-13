@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Page;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\ItemNotFoundException;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+
+abstract class PageController extends Controller
+{
+    public function __invoke()
+    {
+        try {
+
+            $components = [];
+            $page = Page::bySlug($this->slug);
+
+            foreach ($page->sectionsForUI($this->transformables) as $section) {
+                $component = Str::studly($section['slug']);
+                $components[] = [
+                    'class' => $component,
+                    'content' => $section['content'],
+                ];
+            }
+
+            return Inertia::render($this->view, [
+                'components' => collect($components)->keyBy('class'),
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            ray('the error here: model not found');
+            abort(404);
+        } catch (ItemNotFoundException $e) {
+            ray('the error here: item not found');
+            abort(404);
+        }
+    }
+}
