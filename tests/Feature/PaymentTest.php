@@ -51,8 +51,6 @@ function confirmation()
 
 test('can confirm payphone payment', function () {
 
-    $this->withoutExceptionHandling();
-
     [$response, $order] = confirmation();
     expect($response->status())->toBe(302);
     $response->assertRedirect(route('filament.customer.resources.orders.view', ['record' => $order->code]));

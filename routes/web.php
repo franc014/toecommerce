@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\ProductsPageController;
 use App\Http\Controllers\CollectionsPageController;
 use App\Http\Controllers\UserInfoEntryController;
+use App\Http\Controllers\ContactPageController;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +23,7 @@ Route::get('/products/{product:slug}', ProductPageController::class)->name('stor
 Route::get('/collections', CollectionsPageController::class)->name('storefront.collections');
 Route::get('/collections/{collection:slug}', CollectionPageController::class)->name('storefront.collection');
 Route::get('/about', AboutPageController::class)->name('storefront.about');
+Route::get('/contact', [ContactPageController::class,'index'])->name('storefront.contact');
 
 
 Route::post('/cart/create', [CartController::class, 'create'])->name('cart.create');
@@ -29,6 +31,9 @@ Route::post('/cart/show', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/items/addOrUpdate', [CartItemController::class, 'addOrUpdate'])->name('cart.items.addOrUpdate');
 Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('cart.items.remove');
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
+
+
+Route::post('/contact', [ContactPageController::class, 'sendMessage'])->name('storefront.send-message');
 
 Route::get('/login', function () {
     return Inertia::location('/customer/login'); // redirect()->route('filament.customer.auth.login');

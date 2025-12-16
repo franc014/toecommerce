@@ -1,5 +1,5 @@
 <template>
-    <p class="text-xs tracking-wide text-red-500">
+    <p class="text-xs tracking-wide text-red-600">
         {{ props.error }}
     </p>
 </template>

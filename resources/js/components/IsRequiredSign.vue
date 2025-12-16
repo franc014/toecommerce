@@ -1,5 +1,5 @@
 <template>
-    <span class="text-red-500">*</span>
+    <span class="block text-3xl text-red-600">*</span>
 </template>
 
 <script setup lang="ts"></script>
