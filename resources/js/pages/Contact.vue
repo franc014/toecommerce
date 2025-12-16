@@ -8,7 +8,7 @@
         </div>
 
         <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-lg md:max-w-3xl lg:w-[calc(100%_-_4rem)] lg:max-w-5xl">
-            <div class="mb-20 grid grid-cols-12 gap-8 lg:gap-12">
+            <div class="mb-20 grid grid-cols-12 gap-8 border-b border-dashed border-gray-300 pb-20 lg:gap-12">
                 <div class="col-span-12 lg:col-span-6">
                     <CompanyInfo :company="company" />
                 </div>

@@ -1,6 +1,6 @@
 <template>
-    <section class="feature-v8 has-section-divider-top relative pb-20 lg:pb-32">
-        <div class="feature-v8__main-content bg-zinc-500 pt-20 lg:pt-32">
+    <section class="feature-v8 has-section-divider-top relative bg-orange-50 pb-20 lg:pb-32">
+        <div class="feature-v8__main-content bg-sky-700 pt-20 lg:pt-32">
             <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-lg md:max-w-3xl lg:w-[calc(100%_-_4rem)] lg:max-w-5xl xl:max-w-7xl">
                 <div class="grid grid-cols-12 gap-y-5 lg:justify-between lg:gap-8">
                     <div class="col-span-12 lg:col-span-6">
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-lg md:max-w-3xl lg:w-[calc(100%_-_4rem)] lg:max-w-5xl xl:max-w-7xl">
+        <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-lg p-10 md:max-w-3xl lg:w-[calc(100%_-_4rem)] lg:max-w-5xl xl:max-w-7xl">
             <ul class="feature-v8__sub-content grid grid-cols-12 gap-y-8 lg:gap-12">
                 <li class="col-span-12 lg:col-span-4" v-for="feature in features" :key="feature.title">
                     <FeatureCard :feature="feature" />

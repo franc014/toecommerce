@@ -1,7 +1,7 @@
 <template>
     <div class="card-v13">
         <span class="card-v13__figure-wrapper" href="#0">
-            <figure class="card-v13__figure">
+            <figure class="card-v13__figure border border-dashed border-zinc-400">
                 <img :src="feature.image" :alt="feature.title" class="h-64 w-42 object-cover" aria-hidden="true" />
             </figure>
         </span>

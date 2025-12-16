@@ -1,6 +1,6 @@
 <template>
-    <section class="socials-v3 py-8 lg:py-12">
-        <div class="mx-auto w-[calc(100%_-_2.5rem)] max-w-7xl lg:w-[calc(100%_-_4rem)]">
+    <section class="socials-v3 pb-8 lg:pb-12">
+        <div class="wrapper">
             <div class="mb-8 lg:mb-12">
                 <h1 class="text-center font-serif2 text-4xl">Síguenos</h1>
             </div>

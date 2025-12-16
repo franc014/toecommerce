@@ -2,7 +2,7 @@
     <section class="has-section-divider-bottom relative bg-orange-300 py-20">
         <div class="wrapper">
             <div
-                class="boxed-feature bg-white shadow-[0_0.9px_1.25px_hsl(221_39%_11%/0.025),0_3px_5px_hsl(221_39%_11%/0.05),0_12px_20px_hsl(221_39%_11%/0.09)]"
+                class="boxed-feature bg-orange-50 shadow-[0_0.9px_1.25px_hsl(221_39%_11%/0.025),0_3px_5px_hsl(221_39%_11%/0.05),0_12px_20px_hsl(221_39%_11%/0.09)]"
             >
                 <div class="grid lg:grid-cols-2">
                     <div class="grid min-w-0 auto-rows-min content-center items-center gap-4 p-6 lg:order-2 xl:p-12">

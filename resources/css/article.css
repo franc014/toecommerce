@@ -29,5 +29,7 @@ Usage: codyhouse.co/license
   height: 1px;
   width: auto;
   flex-grow: 1;
-  @apply bg-zinc-300;
+
+  @apply  border border-zinc-300 border-dashed;
+
 }

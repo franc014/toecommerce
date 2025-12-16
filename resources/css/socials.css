@@ -54,7 +54,7 @@ Usage: codyhouse.co/license
   transition: opacity 0.2s;
 }
 .socials-v3__btn:hover {
-  @apply bg-white;
+  @apply bg-orange-100;
   @apply shadow-md;
   opacity: 1 !important;
 }
