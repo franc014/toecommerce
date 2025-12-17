@@ -6,6 +6,8 @@ use App\Settings\CompanySettings;
 use Illuminate\Support\Facades\Mail;
 
 test('user can send contact form', function () {
+    $this->withoutExceptionHandling();
+
     $companySettings = app(CompanySettings::class);
     $companySettings->email = 'customer@example.com';
     $companySettings->save();

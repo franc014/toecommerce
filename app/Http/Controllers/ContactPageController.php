@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendContactRequest;
 use App\Mail\UserContactSent;
 use App\Models\Contact;
 use App\Settings\CompanySettings;
@@ -16,6 +17,7 @@ class ContactPageController extends Controller
      */
     public function index(CompanySettings $companySettings)
     {
+
         $companyInformation = [
             'phone' => $companySettings->phone,
             'email' => $companySettings->email,
@@ -31,16 +33,10 @@ class ContactPageController extends Controller
         ]);
     }
 
-    public function sendMessage(Request $request, CompanySettings $companySettings)
+    public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|max:24',
-            'last_name' => 'required|max:24',
-            'phone' => 'max:24',
-            'email' => 'required|email',
-            'message' => 'required|max:2048',
-        ]);
-        $contact = Contact::create($validated);
+
+        $contact = Contact::create($request->validated());
 
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 

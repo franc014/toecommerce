@@ -162,7 +162,7 @@
 }
 
 .form-input {
-    @apply border border-zinc-400 tracking-wider;
+    @apply border border-zinc-400  tracking-wider selection:bg-orange-200;
 }
 
 .grid-layout:first-of-type {

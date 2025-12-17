@@ -14,6 +14,7 @@ use App\Http\Controllers\CollectionsPageController;
 use App\Http\Controllers\UserInfoEntryController;
 use App\Http\Controllers\ContactPageController;
 use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,7 +34,9 @@ Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
 
 
-Route::post('/contact', [ContactPageController::class, 'sendMessage'])->name('storefront.send-message');
+Route::post('/contact', [ContactPageController::class, 'sendMessage'])
+->middleware([HandlePrecognitiveRequests::class])
+->name('storefront.send-message');
 
 Route::get('/login', function () {
     return Inertia::location('/customer/login'); // redirect()->route('filament.customer.auth.login');
