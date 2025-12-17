@@ -13,6 +13,8 @@ use App\Http\Controllers\ProductsPageController;
 use App\Http\Controllers\CollectionsPageController;
 use App\Http\Controllers\UserInfoEntryController;
 use App\Http\Controllers\ContactPageController;
+use App\Http\Controllers\PrivacyPolicyPageController;
+use App\Http\Controllers\TermsAndConditionsPageController;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +27,8 @@ Route::get('/collections', CollectionsPageController::class)->name('storefront.c
 Route::get('/collections/{collection:slug}', CollectionPageController::class)->name('storefront.collection');
 Route::get('/about', AboutPageController::class)->name('storefront.about');
 Route::get('/contact', [ContactPageController::class,'index'])->name('storefront.contact');
-
+Route::get('/terminos-y-condiciones', TermsAndConditionsPageController::class)->name('storefront.terms-and-conditions');
+Route::get('/politica-de-privacidad', PrivacyPolicyPageController::class)->name('storefront.privacy-policy');
 
 Route::post('/cart/create', [CartController::class, 'create'])->name('cart.create');
 Route::post('/cart/show', [CartController::class, 'show'])->name('cart.show');

@@ -82,7 +82,7 @@ class SectionsTable
                     ->beforeReplicaSaved(function (Model $replica): void {
                         $replica->title = $replica->title.'-Copy';
                         $replica->slug = $replica->slug.'-copy';
-                    }),
+                    })->slideOver(false)->modalWidth('xl'),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

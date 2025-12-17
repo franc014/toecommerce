@@ -24,7 +24,7 @@
                             <h4 class="mb-2 lg:mb-3 lg:text-xl">Menu</h4>
                             <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
                                 <li class="col-span-12" v-for="item in footerMenu.items" :key="item.id">
-                                    <Link class="footer-v6__link" :href="item.url">{{ item.label }}</Link>
+                                    <Link class="footer-v6__link" :href="item.url" prefetch>{{ item.label }}</Link>
                                 </li>
                             </ul>
                         </div>
@@ -33,7 +33,7 @@
                             <h4 class="mb-2 lg:mb-3 lg:text-xl">Legal</h4>
                             <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
                                 <li class="col-span-12" v-for="item in legalMenu.items" :key="item.id">
-                                    <Link class="footer-v6__link" :href="item.url">{{ item.label }}</Link>
+                                    <Link class="footer-v6__link" :href="item.url" prefetch>{{ item.label }}</Link>
                                 </li>
                             </ul>
                         </div>
