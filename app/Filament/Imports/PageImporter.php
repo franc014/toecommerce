@@ -37,7 +37,7 @@ class PageImporter extends Importer
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
             ImportColumn::make('published_at')
-                ->rules(['datetime']),
+                ->rules(['required']),
         ];
     }
 
