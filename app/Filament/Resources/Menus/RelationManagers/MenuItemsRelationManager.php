@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Menus\RelationManagers;
 
+use App\Filament\Exports\MenuItemExporter;
+use App\Filament\Imports\MenuItemImporter;
+use Filament\Actions\Action;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -10,6 +13,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DissociateAction;
 use Filament\Actions\DissociateBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
+use Filament\Actions\Imports\Models\Import;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -82,43 +88,56 @@ class MenuItemsRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('label')
+            ->reorderable('order_column')
+            ->reorderRecordsTriggerAction(
+                fn (Action $action, bool $isReordering) => $action
+                    ->button()
+                    ->label($isReordering ? 'Disable reordering' : 'Enable reordering'),
+            )
+             ->modifyQueryUsing(function ($query) {
+                 return $query->ordered();
+             })
             ->columns([
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('label')
-                    ->sortable()
-                    ->label(__('firesources.label'))
-                    ->searchable(),
-                TextColumn::make('url')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->label(__('firesources.created_at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label(__('firesources.updated_at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+                 TextColumn::make('slug')
+                     ->searchable(),
+                 TextColumn::make('label')
+                     ->sortable()
+                     ->label(__('firesources.label'))
+                     ->searchable(),
+                 TextColumn::make('url')
+                     ->searchable(),
+                 TextColumn::make('created_at')
+                     ->label(__('firesources.created_at'))
+                     ->dateTime()
+                     ->sortable()
+                     ->toggleable(isToggledHiddenByDefault: true),
+                 TextColumn::make('updated_at')
+                     ->label(__('firesources.updated_at'))
+                     ->dateTime()
+                     ->sortable()
+                     ->toggleable(isToggledHiddenByDefault: true),
+             ])
             ->filters([
-                //
-            ])
+                 //
+             ])
             ->headerActions([
-                CreateAction::make(),
-                // AssociateAction::make(),
-            ])
+                 CreateAction::make(),
+                 ExportAction::make()
+                 ->exporter(MenuItemExporter::class),
+                 ImportAction::make()
+                 ->importer(MenuItemImporter::class),
+                 // AssociateAction::make(),
+             ])
             ->recordActions([
-                EditAction::make(),
-                // DissociateAction::make(),
-                DeleteAction::make(),
-            ])
+                 EditAction::make(),
+                 // DissociateAction::make(),
+                 DeleteAction::make(),
+             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DissociateBulkAction::make(),
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+                 BulkActionGroup::make([
+                     DissociateBulkAction::make(),
+                     DeleteBulkAction::make(),
+                 ]),
+             ]);
     }
 }
