@@ -88,10 +88,9 @@ class AppServiceProvider extends ServiceProvider
 
         DeleteBulkAction::configureUsing(function (DeleteBulkAction $action) {
             return $action
-               ->modalWidth('xl')
-               ->slideOver(false);
+                ->modalWidth('xl')
+                ->slideOver(false);
         });
-
 
     }
 }

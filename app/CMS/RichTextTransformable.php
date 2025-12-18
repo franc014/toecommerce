@@ -11,6 +11,7 @@ class RichTextTransformable implements ContentTransformable
         if (isset($item['type']) && $item['type'] === 'rich-editor') {
             $item['data']['content'] = RichContentRenderer::make($item['data']['content'])->toHtml();
         }
+
         return $item;
     }
 }

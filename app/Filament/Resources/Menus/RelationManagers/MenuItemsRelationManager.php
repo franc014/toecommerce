@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Menus\RelationManagers;
 
-use App\Filament\Forms\Components\SharedFields;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -15,11 +14,10 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
-use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Str;
 
 class MenuItemsRelationManager extends RelationManager
@@ -35,26 +33,26 @@ class MenuItemsRelationManager extends RelationManager
                     ->columns(2)
                     ->schema([
                         TextInput::make('label')
-                        ->label(__('firesources.label'))
-                        ->required()
-                        ->maxLength(100)
-                        ->live(debounce: 500)
-                        ->afterStateUpdated(function (Set $set, ?string $state) {
-                            $set('slug', Str::slug($state));
-                        }),
+                            ->label(__('firesources.label'))
+                            ->required()
+                            ->maxLength(100)
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                $set('slug', Str::slug($state));
+                            }),
                         TextInput::make('slug')
-                        ->required()
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(100),
-                            TextInput::make('url')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(100),
+                        TextInput::make('url')
                             ->required(),
-                        ]),
+                    ]),
 
                 Section::make(__('firesources.sub_menu_items'))
                     ->secondary()
                     ->columns(2)
                     ->schema([
-                       Repeater::make('items')
+                        Repeater::make('items')
                             ->collapsible()
                             ->collapsed()
                             ->schema([
@@ -73,10 +71,9 @@ class MenuItemsRelationManager extends RelationManager
 
                             ])
                             ->columnSpanFull()
-                            ->defaultItems(0)
+                            ->defaultItems(0),
 
                     ]),
-
 
             ]);
     }
@@ -110,11 +107,11 @@ class MenuItemsRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make(),
-                //AssociateAction::make(),
+                // AssociateAction::make(),
             ])
             ->recordActions([
                 EditAction::make(),
-                //DissociateAction::make(),
+                // DissociateAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

@@ -2,7 +2,6 @@
 
 namespace App\CMS;
 
-use App\Models\Product;
 use App\Models\ProductCollection;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,6 +23,7 @@ class CollectionsTransformable implements ContentTransformable
                 ];
             }
         }
+
         return $item;
     }
 }

@@ -22,7 +22,7 @@ class SendContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'first_name' => 'required|max:24',
+            'first_name' => 'required|max:24',
             'last_name' => 'required|max:24',
             'phone' => 'max:24',
             'email' => 'required|email',

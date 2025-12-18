@@ -15,7 +15,6 @@ use UnitEnum;
 
 class ManageStorefront extends SettingsPage
 {
-
     use HasPageShield;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
@@ -52,6 +51,4 @@ class ManageStorefront extends SettingsPage
                     ->required(),
             ]);
     }
-
-
 }

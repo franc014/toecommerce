@@ -2,7 +2,6 @@
 
 namespace App\CMS;
 
-use App\CMS\ContentTransformable;
 use Illuminate\Support\Facades\Storage;
 
 class ImageTransformable implements ContentTransformable

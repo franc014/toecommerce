@@ -15,14 +15,13 @@ test('user can send contact form', function () {
     Mail::fake();
 
     $this->post(route('storefront.send-message'), [
-             'first_name' => 'John',
-             'last_name' => 'Doe',
-             'phone' => '1234567890',
-             'email' => 'customer@example.com',
-             'message' => 'This is a test message',
-         ])
-         ->assertStatus(200);
-
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'phone' => '1234567890',
+        'email' => 'customer@example.com',
+        'message' => 'This is a test message',
+    ])
+        ->assertStatus(200);
 
     $this->assertDatabaseHas('contacts', [
         'first_name' => 'John',
@@ -31,7 +30,6 @@ test('user can send contact form', function () {
         'email' => 'customer@example.com',
         'message' => 'This is a test message',
     ]);
-
 
     $contact = Contact::first();
     $userContactSentMailable = new UserContactSent($contact);

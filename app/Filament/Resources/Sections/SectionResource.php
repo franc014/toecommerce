@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Sections;
 
-
 use App\Filament\Resources\Sections\Pages\ListSections;
 use App\Filament\Resources\Sections\Schemas\SectionForm;
 use App\Filament\Resources\Sections\Tables\SectionsTable;

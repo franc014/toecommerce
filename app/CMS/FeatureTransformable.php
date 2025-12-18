@@ -11,6 +11,7 @@ class FeatureTransformable implements ContentTransformable
         if (isset($item['type']) && $item['type'] === 'feature') {
             $item['data']['image'] = Storage::url($item['data']['image']);
         }
+
         return $item;
     }
 }

@@ -489,6 +489,4 @@ test('can get a product related products based on collections', function () {
     expect($productB->relatedProducts()->first()->id)->toBe($productA->id);
     expect($productC->relatedProducts())->toBeEmpty();
 
-
-
 });

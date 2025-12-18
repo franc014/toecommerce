@@ -174,5 +174,4 @@ return [
     'more_bulk_actions' => 'Más Acciones de Lote',
     'video' => 'Video',
 
-
 ];

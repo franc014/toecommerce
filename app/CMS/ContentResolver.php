@@ -4,7 +4,6 @@ namespace App\CMS;
 
 use App\Models\Section;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
-use Illuminate\Support\Facades\Storage;
 
 class ContentResolver
 {
@@ -15,12 +14,11 @@ class ContentResolver
         $this->images = $section->hasMedia('*') ? $section->getMedia('*') : null;
     }
 
-    //Array of interface ContentTransformable instances
+    // Array of interface ContentTransformable instances
     public function resolve(array $transformables = []): array
     {
 
         $data = $this->section->content;
-
 
         $data = collect($data)->map(function ($item) use ($transformables) {
 
@@ -31,7 +29,6 @@ class ContentResolver
 
             return $item;
         });
-
 
         $contentByType = $data->groupBy('type');
 

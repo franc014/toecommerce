@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Settings\StorefrontSettings;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductsPageController extends Controller
 {
-
     public function __invoke(StorefrontSettings $sfSettings)
     {
 

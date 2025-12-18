@@ -117,7 +117,7 @@ class ProductForm
                                 TextInput::make('stock_threshold_for_customers')
                                     ->label(__('firesources.stock_threshold_for_customers'))
                                     ->numeric()
-                                    ->step(1)
+                                    ->step(1),
                             ]),
                         Tab::make(__('firesources.variant_options'))
                             ->icon(Heroicon::OutlinedSwatch)

@@ -79,7 +79,7 @@ test('an item can have subitems', function () {
 test('can get main menu', function () {
     $menu = Menu::factory()->create([
         'title' => 'Main',
-        'slug' => 'main'
+        'slug' => 'main',
     ]);
     expect(Menu::byName('main')->id)->toBe($menu->id);
 });

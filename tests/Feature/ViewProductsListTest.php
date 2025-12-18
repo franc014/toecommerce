@@ -89,7 +89,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
         'price' => 20,
         'stock_threshold_for_customers' => 10,
         'stock' => 8,
-        'video' => 'a video url'
+        'video' => 'a video url',
     ]);
 
     $sfSettings = app(StorefrontSettings::class);

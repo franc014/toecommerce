@@ -9,9 +9,10 @@ use App\CMS\RichTextTransformable;
 class AboutPageController extends PageController
 {
     protected $slug = 'acerca-de';
-    protected $transformables = [];
-    protected $view = 'About';
 
+    protected $transformables = [];
+
+    protected $view = 'About';
 
     public function __construct()
     {
@@ -19,8 +20,7 @@ class AboutPageController extends PageController
             [
                 new ImageTransformable,
                 new RichTextTransformable,
-                new FeatureTransformable
+                new FeatureTransformable,
             ];
     }
-
 }

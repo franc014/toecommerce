@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\ItemNotFoundException;
-use Inertia\Inertia;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 abstract class PageController extends Controller
 {

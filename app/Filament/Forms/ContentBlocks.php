@@ -206,7 +206,7 @@ class ContentBlocks
             ->icon(Heroicon::ViewfinderCircle);
     }
 
-    public static function featuredProduct():Block
+    public static function featuredProduct(): Block
     {
         return Block::make('featured-product')
             ->schema([
@@ -240,7 +240,7 @@ class ContentBlocks
             ->schema([
                 CheckboxList::make('collections')
                     ->label(__('firesources.collections'))
-                    ->options(ProductCollection::whereHas('products')->get()->pluck('title', 'id')->toArray())
+                    ->options(ProductCollection::whereHas('products')->get()->pluck('title', 'id')->toArray()),
             ])
             ->maxItems(1)
             ->label(__('firesources.collections'))
@@ -275,6 +275,4 @@ class ContentBlocks
             })
             ->icon(Heroicon::Link);
     }
-
-
 }

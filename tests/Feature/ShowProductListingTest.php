@@ -187,24 +187,22 @@ test('can show a list of published related products based on collections', funct
     $productC->productCollections()->attach([$collectionB->id, $collectionC->id]);
     $productD->productCollections()->attach($collectionC);
 
-
     $this->get(route('storefront.product', ['product' => $productA->slug]))
-    ->assertInertia(function (Assert $page) use ($productB) {
-        return $page->has('relatedProducts', 2)
-        ->has('relatedProducts.0', function (Assert $page) use ($productB) {
-            $page->where('id', $productB->id)
-                ->where('title', $productB->title)
-                ->where('slug', $productB->slug)
-                ->where('price', $productB->price)
-                ->where('price_in_dollars', $productB->price_in_dollars)
-                ->where('images', $productB->productImagesForList)
-                ->where('video', $productB->video)
-                ->where('has_variants', $productB->hasPublishedVariants())
-                ->where('variants', $productB->variants)
-                ->where('dropping_stock', false);
+        ->assertInertia(function (Assert $page) use ($productB) {
+            return $page->has('relatedProducts', 2)
+                ->has('relatedProducts.0', function (Assert $page) use ($productB) {
+                    $page->where('id', $productB->id)
+                        ->where('title', $productB->title)
+                        ->where('slug', $productB->slug)
+                        ->where('price', $productB->price)
+                        ->where('price_in_dollars', $productB->price_in_dollars)
+                        ->where('images', $productB->productImagesForList)
+                        ->where('video', $productB->video)
+                        ->where('has_variants', $productB->hasPublishedVariants())
+                        ->where('variants', $productB->variants)
+                        ->where('dropping_stock', false);
+                });
         });
-    });
-
 
 });
 
@@ -249,12 +247,9 @@ it('does not show them, if related products are not published', function () {
     $productC->productCollections()->attach([$collectionB->id, $collectionC->id]);
     $productD->productCollections()->attach($collectionC);
 
-
     $this->get(route('storefront.product', ['product' => $productA->slug]))
-    ->assertInertia(function (Assert $page) use ($productB) {
-        return $page->has('relatedProducts', 1);
-    });
-
-
+        ->assertInertia(function (Assert $page) {
+            return $page->has('relatedProducts', 1);
+        });
 
 });

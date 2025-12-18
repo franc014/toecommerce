@@ -7,8 +7,8 @@ use App\Mail\UserContactSent;
 use App\Models\Contact;
 use App\Settings\CompanySettings;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class ContactPageController extends Controller
 {
@@ -24,12 +24,12 @@ class ContactPageController extends Controller
             'address' => $companySettings->address,
             'whatsapp' => $companySettings->whatsapp,
             'socialMedia' => $companySettings->socialMedia,
-            'workingDays' => $companySettings->workingDays
+            'workingDays' => $companySettings->workingDays,
 
         ];
 
         return Inertia::render('Contact', [
-            'companyInformation' => $companyInformation
+            'companyInformation' => $companyInformation,
         ]);
     }
 

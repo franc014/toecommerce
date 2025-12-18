@@ -15,14 +15,14 @@ test('can show company information', function () {
         'socialMedia' => [
             'facebook' => 'https://www.facebook.com',
             'twitter' => 'https://www.twitter.com',
-            'instagram' => 'https://www.instagram.com'
+            'instagram' => 'https://www.instagram.com',
         ],
         'workingDays' => [
             'monday' => '7:00 - 16:00',
             'tuesday' => '7:00 - 16:00',
             'wednesday' => '7:00 - 16:00',
             'thursday' => '7:00 - 16:00',
-        ]
+        ],
     ];
 
     foreach ($companyInformation as $key => $value) {

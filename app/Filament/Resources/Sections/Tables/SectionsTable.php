@@ -11,7 +11,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ImportAction;
-use Filament\Actions\Imports\Models\Import;
 use Filament\Actions\ReplicateAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -88,10 +87,10 @@ class SectionsTable
             ])
             ->headerActions([
                 ExportAction::make()
-                ->exporter(SectionExporter::class)
-                ->columnMappingColumns(3),
+                    ->exporter(SectionExporter::class)
+                    ->columnMappingColumns(3),
                 ImportAction::make()
-                ->importer(SectionImporter::class),
+                    ->importer(SectionImporter::class),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

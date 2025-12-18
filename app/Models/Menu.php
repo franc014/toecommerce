@@ -16,7 +16,7 @@ class Menu extends Model
         return $this->hasMany(MenuItem::class);
     }
 
-    public static function byName($name = 'main'): Menu | null
+    public static function byName($name = 'main'): ?Menu
     {
         return self::where('slug', $name)->with('items')->first();
     }

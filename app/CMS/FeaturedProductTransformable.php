@@ -28,6 +28,7 @@ class FeaturedProductTransformable implements ContentTransformable
             ];
 
         }
+
         return $item;
     }
 }

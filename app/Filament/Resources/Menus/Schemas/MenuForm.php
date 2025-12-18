@@ -8,6 +8,7 @@ use Filament\Schemas\Schema;
 class MenuForm
 {
     use SharedFields;
+
     public static function configure(Schema $schema): Schema
     {
         return $schema

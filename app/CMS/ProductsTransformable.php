@@ -26,6 +26,7 @@ class ProductsTransformable implements ContentTransformable
                 ];
             }
         }
+
         return $item;
     }
 }

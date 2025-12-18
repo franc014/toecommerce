@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Menus;
 
 use App\Filament\Resources\Menus\Pages\EditMenu;
 use App\Filament\Resources\Menus\Pages\ListMenus;
+use App\Filament\Resources\Menus\RelationManagers\MenuItemsRelationManager;
 use App\Filament\Resources\Menus\Schemas\MenuForm;
 use App\Filament\Resources\Menus\Tables\MenusTable;
 use App\Models\Menu;
@@ -13,7 +14,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
-use App\Filament\Resources\Menus\RelationManagers\MenuItemsRelationManager;
 
 class MenuResource extends Resource
 {
@@ -51,7 +51,7 @@ class MenuResource extends Resource
     public static function getRelations(): array
     {
         return [
-            MenuItemsRelationManager::class
+            MenuItemsRelationManager::class,
         ];
     }
 
@@ -59,7 +59,7 @@ class MenuResource extends Resource
     {
         return [
             'index' => ListMenus::route('/'),
-            //'create' => CreateMenu::route('/create'),
+            // 'create' => CreateMenu::route('/create'),
             'edit' => EditMenu::route('/{record}/edit'),
         ];
     }

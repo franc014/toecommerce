@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources\Pages\Tables;
 
+use App\Filament\Exports\PageExporter;
+use App\Filament\Imports\PageImporter;
 use App\Filament\Resources\Pages\PageResource;
 use App\Models\Page;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -90,6 +94,13 @@ class PagesTable
             ->recordActions([
                 ...self::customActions(),
                 EditAction::make(),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                ->exporter(PageExporter::class)
+                ->columnMappingColumns(3),
+                ImportAction::make()
+                ->importer(PageImporter::class)
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

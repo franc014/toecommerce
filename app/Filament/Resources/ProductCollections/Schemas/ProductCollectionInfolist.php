@@ -18,10 +18,10 @@ class ProductCollectionInfolist
                 TextEntry::make('description')->label(__('firesources.description'))
                     ->columnSpanFull(),
                 ImageEntry::make('featured_image')
-                ->imageWidth(500)
-                ->imageHeight(300)
-                ->columnSpanFull()
-                ->label(__('firesources.featured_image'))
+                    ->imageWidth(500)
+                    ->imageHeight(300)
+                    ->columnSpanFull()
+                    ->label(__('firesources.featured_image')),
 
             ]);
     }

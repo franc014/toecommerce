@@ -223,7 +223,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         );
     }
 
-    public function relatedProducts(): EloquentCollection | null
+    public function relatedProducts(): ?EloquentCollection
     {
         $collections = $this->productCollections->pluck('id')->toArray();
 
@@ -234,7 +234,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         } else {
             return null;
         }
-
 
     }
 }

@@ -110,7 +110,6 @@ it('gives successful response for about page', function () {
         'slug' => 'acerca-de',
     ]);
 
-
     $page->sections()->attach([$section1->id]);
     $response = $this->get(route('storefront.about'));
     $response->assertStatus(200);
@@ -123,29 +122,27 @@ it('gives successful response for contact page', function () {
 
 it('gives successful response for terms and conditions page', function () {
 
-
     $section1 = Section::factory()->create([
-       'slug' => 'hero',
-       'content' => [
-           [
-               'type' => 'heading',
-               'data' => [
-                   'content' => 'Heading 1',
-                   'level' => 'h1',
-               ],
-           ],
-           [
-               'type' => 'paragraph',
-               'data' => [
-                   'content' => 'Paragraph 1',
-               ],
-           ],
-       ],
+        'slug' => 'hero',
+        'content' => [
+            [
+                'type' => 'heading',
+                'data' => [
+                    'content' => 'Heading 1',
+                    'level' => 'h1',
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'content' => 'Paragraph 1',
+                ],
+            ],
+        ],
     ]);
     $page = Page::factory()->published()->create([
         'slug' => 'terminos-y-condiciones',
     ]);
-
 
     $page->sections()->attach([$section1->id]);
     $response = $this->get(route('storefront.terms-and-conditions'));
@@ -154,29 +151,27 @@ it('gives successful response for terms and conditions page', function () {
 
 it('gives successful response for privacy policy page', function () {
 
-
     $section1 = Section::factory()->create([
-       'slug' => 'hero',
-       'content' => [
-           [
-               'type' => 'heading',
-               'data' => [
-                   'content' => 'Heading 1',
-                   'level' => 'h1',
-               ],
-           ],
-           [
-               'type' => 'paragraph',
-               'data' => [
-                   'content' => 'Paragraph 1',
-               ],
-           ],
-       ],
+        'slug' => 'hero',
+        'content' => [
+            [
+                'type' => 'heading',
+                'data' => [
+                    'content' => 'Heading 1',
+                    'level' => 'h1',
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'content' => 'Paragraph 1',
+                ],
+            ],
+        ],
     ]);
     $page = Page::factory()->published()->create([
         'slug' => 'politica-de-privacidad',
     ]);
-
 
     $page->sections()->attach([$section1->id]);
     $response = $this->get(route('storefront.privacy-policy'));
