@@ -30,7 +30,6 @@ class MenuItemImporter extends Importer
                 ->rules(['required', 'max:255']),
             ImportColumn::make('items')
                 ->requiredMapping()
-                ->rules(['required'])
                 ->castStateUsing(function ($state) {
                     return json_decode($state);
                 }),
