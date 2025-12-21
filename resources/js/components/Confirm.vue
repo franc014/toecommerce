@@ -1,19 +1,21 @@
 <template>
     <AlertDialog>
         <AlertDialogTrigger as-child>
-            <Button variant="outline">
+            <Button variant="outline" class="hover:bg-orange-200">
                 <slot name="icon"></slot>
                 {{ buttonLabel }}
             </Button>
         </AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent class="bg-orange-100">
             <AlertDialogHeader>
                 <AlertDialogTitle> {{ title }} </AlertDialogTitle>
                 <AlertDialogDescription> {{ description }} </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-                <AlertDialogCancel>{{ cancelLabelAction }}</AlertDialogCancel>
-                <AlertDialogAction @click="handleAction">{{ acceptLabelAction }}</AlertDialogAction>
+                <AlertDialogCancel class="hover:bg-orange-200">{{ cancelLabelAction }}</AlertDialogCancel>
+                <AlertDialogAction class="bg-orange-800 text-zinc-100 hover:bg-orange-400 hover:text-zinc-600" @click="handleAction">{{
+                    acceptLabelAction
+                }}</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

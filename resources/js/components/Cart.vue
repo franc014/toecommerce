@@ -36,9 +36,9 @@
                     <CartTally />
 
                     <div class="flex items-center justify-between gap-4" v-if="!cartStore.isEmpty">
-                        <Button>
+                        <Button variant="outline" class="hover:bg-orange-200">
                             <CreditCard />
-                            <Link href="/checkout" class="w-full">Checkout</Link>
+                            <Link href="/checkout" class="w-full" prefetch>Checkout</Link>
                         </Button>
 
                         <!-- <Button variant="secondary" @click="emptyCart" class="cursor-pointer">
@@ -61,7 +61,6 @@
                     <div class="my-4 flex flex-col items-center space-y-4 place-self-center tracking-wider" v-if="cartStore.isEmpty">
                         <p class="text-3xl font-bold">El carrito esta vacío.</p>
                         <Ban class="h-12 w-12" />
-                        <Link href="/" class="text-2xl text-sky-800 underline hover:text-orange-700">Volver a la tienda</Link>
                     </div>
                 </SheetFooter>
             </SheetContent>

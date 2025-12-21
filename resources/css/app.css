@@ -17,6 +17,7 @@
 @import './feature_card.css';
 @import './details-list.css';
 @import './socials.css';
+@import './payphone.css';
 
 
 
@@ -162,7 +163,13 @@
 }
 
 .form-input {
-    @apply border border-zinc-400  tracking-wider selection:bg-orange-200;
+    @apply border border-zinc-400  tracking-wider selection:bg-orange-200 focus:outline-2 ring-0 h-11 ;
+}
+
+[data-required-sign]::after {
+    content: '*';
+    color: red;
+    @apply text-3xl
 }
 
 .grid-layout:first-of-type {

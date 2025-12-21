@@ -33,7 +33,7 @@
                             <h4 class="mb-2 lg:mb-3 lg:text-xl">Legal</h4>
                             <ul class="grid grid-cols-12 gap-2 lg:gap-3 lg:text-base">
                                 <li class="col-span-12" v-for="item in legalMenu.items" :key="item.id">
-                                    <Link class="footer-v6__link" :href="item.url" prefetch>{{ item.label }}</Link>
+                                    <a class="footer-v6__link" :href="item.url">{{ item.label }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -153,12 +153,12 @@
                                 </li>
 
                                 <li class="col-span-12">
-                                    <a class="footer-v6__link inline-flex items-center" :href="`mailto:${company.email}`">
+                                    <Link class="footer-v6__link inline-flex items-center" :href="`mailto:${company.email}`">
                                         <span class="footer-v6__link-icon flex items-center justify-center" aria-hidden="true"
                                             ><Mail class="w-5"
                                         /></span>
                                         <span class="ml-1 tracking-wider lg:ml-1.5">{{ company.email }}</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

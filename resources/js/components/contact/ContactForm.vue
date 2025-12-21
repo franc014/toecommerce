@@ -87,14 +87,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Button
-                    variant="outline"
-                    type="submit"
-                    class="mt-4 w-full cursor-pointer hover:bg-orange-200"
-                    :tabindex="6"
-                    :disabled="processing"
-                    data-test="login-button"
-                >
+                <Button variant="outline" type="submit" class="mt-4 w-full cursor-pointer hover:bg-orange-200" :tabindex="6" :disabled="processing">
                     <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
                     <SendHorizonal v-else />
                     Enviar

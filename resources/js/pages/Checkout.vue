@@ -2,42 +2,43 @@
     <section class="min-h-screen">
         <div class="wrapper space-y-10 py-20">
             <h1>
-                Checkout for <span class="text-lg italic">{{ user.name }}</span>
+                Checkout de <span class="text-2xl italic">{{ user.name }}</span>
             </h1>
             <div class="checkout-grid">
-                <div>
-                    <Accordion :collapsible="true" default-value="item-1">
-                        <AccordionItem value="item-1" key="item-1">
-                            <AccordionTrigger>Información para facturación</AccordionTrigger>
-                            <AccordionContent>
-                                <PurchaseInfo
-                                    :data="{
-                                        info: billingInfo,
-                                        isSetup: user.has_billing_info,
-                                        type: 'billing',
-                                        title: 'Información para facturación',
-                                        formTitle: 'Por favor llena tu información de facturación:',
-                                    }"
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
-                            <AccordionTrigger>Información para envío</AccordionTrigger>
-                            <AccordionContent>
-                                <PurchaseInfo
-                                    v-if="user.has_billing_info"
-                                    :data="{
-                                        info: shippingInfo,
-                                        isSetup: user.has_shipping_info,
-                                        type: 'shipping',
-                                        title: 'Información para envío',
-                                        formTitle: 'Por favor llena tu información de envío:',
-                                    }"
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
+                <Accordion :collapsible="true" default-value="item-1">
+                    <AccordionItem value="item-1" key="item-1">
+                        <AccordionTrigger class="rounded bg-orange-100 px-2 font-bold tracking-wider"
+                            >1. Información para Facturación</AccordionTrigger
+                        >
+                        <AccordionContent class="px-10 pb-10">
+                            <PurchaseInfo
+                                :data="{
+                                    info: billingInfo,
+                                    isSetup: user.has_billing_info,
+                                    type: 'billing',
+                                    title: 'Información para facturación',
+                                    formTitle: 'Por favor llena tu información de facturación:',
+                                }"
+                            />
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
+                        <AccordionTrigger class="rounded bg-orange-100 px-2 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
+                        <AccordionContent class="px-10 pb-10">
+                            <PurchaseInfo
+                                v-if="user.has_billing_info"
+                                :data="{
+                                    info: shippingInfo,
+                                    isSetup: user.has_shipping_info,
+                                    type: 'shipping',
+                                    title: 'Información para envío',
+                                    formTitle: 'Por favor llena tu información de envío:',
+                                }"
+                            />
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+
                 <div>
                     <div class="space-y-10">
                         <OrderSummary :order="order" :user="user" />
