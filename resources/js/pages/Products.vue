@@ -1,29 +1,25 @@
 <template>
-    <section>
-        <div class="wrapper space-y-6 py-10">
-            <h1>Productos</h1>
-            <ProductsList :products="products" />
+    <section class="space-y-20">
+        <div class="wrapper space-y-10">
+            <Banner title="Nuestros Productos" pre-header="Compra" />
+            <ProductsList :products="products" :paginationLinks="paginationLinks" />
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
+import Banner from '@/components/Banner.vue';
 import ProductsList from '@/components/ProductsList.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 
 import { usePage } from '@inertiajs/vue3';
-import { Product } from '../types/index';
 
 defineOptions({ layout: StorefrontLayout });
 
 const page = usePage();
-const products = page.props.products as Product[];
-
-document.addEventListener('inertia:start', (event) => {
-    console.log(`Starting a visit to ${event.detail.visit.url}`);
-});
-
-//usePoll(2000);
+const paginated = page.props.products as { data: any[]; links: string[] };
+const products = paginated.data;
+const paginationLinks = paginated.links;
 </script>
 
 <style scoped></style>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->json('description');
             $table->string('main_image');
+            $table->string('video')->nullable();
             $table->string('sku')->nullable();
             $table->string('slug');
             $table->string('status');

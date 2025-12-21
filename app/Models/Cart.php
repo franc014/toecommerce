@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Casts\Money;
-use App\Enums\StockControlModes;
 use App\Exceptions\ProductOutOfStockException;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;

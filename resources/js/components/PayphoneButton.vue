@@ -1,7 +1,7 @@
 <template>
     <div class="my-5 space-y-4" id="payphone-box">
-        <h2>Payphone Checkout</h2>
-        <div id="pp-button" ref="payphone-holder"></div>
+        <h2 class="text-4xl">Payphone Checkout</h2>
+        <div id="pp-button" class="rounded-md border-2 border-dashed border-zinc-300" ref="payphone-holder"></div>
     </div>
 </template>
 
@@ -33,5 +33,3 @@ const props = defineProps<{
     gatewayInfo: PayphoneInfo;
 }>();
 </script>
-
-<style scoped></style>

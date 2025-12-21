@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Models\Product;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\SpatieTagsEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -25,10 +28,10 @@ class ProductInfolist
                             ->icon(Heroicon::OutlinedCube)
                             ->schema([
                                 TextEntry::make('title')
-                                          ->label(__('firesources.title')),
+                                    ->label(__('firesources.title')),
                                 TextEntry::make('slug'),
                                 TextEntry::make('description')
-                                          ->label(__('firesources.description')),
+                                    ->label(__('firesources.description')),
                                 TextEntry::make('status')
                                     ->label(__('firesources.status'))
                                     ->badge(),
@@ -36,7 +39,7 @@ class ProductInfolist
                         Tab::make(__('firesources.taxonomies'))
                             ->icon(Heroicon::OutlinedTag)
                             ->schema([
-                                TextEntry::make('tags.name')
+                                SpatieTagsEntry::make('tags.name')
                                     ->label(__('firesources.tags'))
                                     ->placeholder(__('firesources.no_tags_message'))->badge()->color('primary'),
                                 TextEntry::make('categories.title')->label(__('firesources.categories'))->badge()->placeholder(__('firesources.no_categories_message'))->color('primary'),
@@ -56,9 +59,8 @@ class ProductInfolist
                                 TextEntry::make('sku'),
                             ]),
 
-                         Tab::make(__('firesources.variant_options'))
+                        Tab::make(__('firesources.variant_options'))
                             ->icon(Heroicon::OutlinedSwatch)
-
                             ->schema([
                                 RepeatableEntry::make('variant_options')
                                     ->label(__('firesources.variant_options'))
@@ -66,26 +68,28 @@ class ProductInfolist
                                     ->schema([
                                         TextEntry::make('name')->label(__('firesources.name')),
                                         RepeatableEntry::make('values')
-                                        ->grid(2)
-                                        ->label(__('firesources.variant_option_values'))
-                                        ->schema([
-                                            TextEntry::make('value')->label(__('firesources.value')),
-                                        ])
-                                ])
+                                            ->grid(2)
+                                            ->label(__('firesources.variant_option_values'))
+                                            ->schema([
+                                                TextEntry::make('value')->label(__('firesources.value')),
+                                            ]),
+                                    ]),
                             ]),
 
-
-
-                        Tab::make(__('firesources.images'))
+                        Tab::make(__('firesources.media'))
                             ->icon(Heroicon::OutlinedPhoto)
                             ->schema([
+                                TextEntry::make('video')->label(__('firesources.video_url'))->url(function (Product $record) {
+                                    return $record->video;
+                                })->openUrlInNewTab(),
+                                ImageEntry::make('main_image')->label(__('firesources.main_image')),
                                 SpatieMediaLibraryImageEntry::make('product_images')->label('')
                                     ->label(__('firesources.images'))
                                     ->placeholder(__('firesources.no_photos_message'))
                                     ->conversion('thumb')
                                     ->collection('product-images'),
                             ]),
-                        ]),
+                    ]),
 
             ]);
     }

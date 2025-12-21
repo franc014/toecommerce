@@ -7,7 +7,10 @@ use App\Utils\PayphonePayment;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
@@ -70,5 +73,24 @@ class AppServiceProvider extends ServiceProvider
                 ->icon(Heroicon::Trash)
                 ->label(__('firesources.delete'));
         });
+
+        ExportAction::configureUsing(function (ExportAction $action) {
+            return $action
+                ->icon(Heroicon::ArrowUpRight)
+                ->label(__('firesources.export'));
+        });
+
+        ImportAction::configureUsing(function (ImportAction $action) {
+            return $action
+                ->icon(Heroicon::ArrowDownLeft)
+                ->label(__('firesources.import'));
+        });
+
+        DeleteBulkAction::configureUsing(function (DeleteBulkAction $action) {
+            return $action
+                ->modalWidth('xl')
+                ->slideOver(false);
+        });
+
     }
 }

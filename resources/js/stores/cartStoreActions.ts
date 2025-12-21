@@ -4,16 +4,25 @@ import { CartItem, DataForCart } from '@/types';
 
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+
 async function createCartInDB(cartId: string) {
 
-    const cartDB = await axios.post(create().url,{
-         id: cartId,
-    });
+    try {
+        console.info('creating cart url', create().url);
 
-    return cartDB;
+        const cartDB = await axios.post(create().url,{
+            id: cartId,
+        });
+
+        return cartDB;
+    }catch (e: any) {
+        console.error('hey...', e.message);
+    }
+
 }
 
 async function getCartFromDB(cartId: string, store: any) {
+
     const cartDB = await axios.post(show().url, {
         id: cartId
     });
@@ -29,7 +38,6 @@ async function getCartFromDB(cartId: string, store: any) {
 }
 
 export async function init(cookieCart:string) {
-    //const cartLS = localStorage.getItem('cart');
 
         if (cookieCart) {
 
@@ -41,9 +49,9 @@ export async function init(cookieCart:string) {
             } catch (e: any) {
                 // restore cart to DB with LS cart if it has been removed for some reason
                 console.error('Sorry. Could not get cart: ', e.message);
-                const uuid = uuidv4();
+                /* const uuid = uuidv4();
                 const cartDB = await createCartInDB(uuid);
-                this.id = cartDB.data.ui_cart_id;
+                this.id = cartDB.data.ui_cart_id; */
 
             }
 

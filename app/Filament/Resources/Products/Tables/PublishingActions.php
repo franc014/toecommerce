@@ -124,6 +124,6 @@ class PublishingActions
                         ->success()
                         ->title(__('firesources.archived_products'))->send();
                 }),
-        ])->label('More actions');
+        ])->label(__('firesources.more_bulk_actions'));
     }
 }

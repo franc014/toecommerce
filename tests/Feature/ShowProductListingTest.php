@@ -3,12 +3,12 @@
 use App\Enums\StockControlModes;
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
 use App\Models\Product;
+use App\Models\ProductCollection;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('shows a listing of a published product', function () {
-    $this->withoutExceptionHandling();
 
     $product = Product::factory()->published()->create([
         'main_image' => 'product.jpg',
@@ -20,6 +20,7 @@ it('shows a listing of a published product', function () {
                 return $page
                     ->where('id', $product->id)
                     ->where('title', $product->title)
+                    ->where('summary', $product->summary)
                     ->where('description', RichContentRenderer::make($product->description)->customBlocks([
                         HeroBlock::class,
                     ])->toHtml())
@@ -58,6 +59,7 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)
@@ -92,6 +94,7 @@ it('does not show warning text if product stock is not dropping below threshold,
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)
@@ -128,6 +131,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
                         HeroBlock::class,
                     ])->toHtml())
                     ->where('slug', $product->slug)
+                    ->where('summary', $product->summary)
                     ->where('price_in_dollars', $product->price_in_dollars)
                     ->where('has_taxes', $product->hasTaxes())
                     ->where('taxes', $product->formatted_taxes)
@@ -138,6 +142,114 @@ it('does not show warning text if product stock is dropping below threshold, in 
                     ->where('images', $product->productImagesForList)
                     ->where('dropping_stock', false);
             });
+        });
+
+});
+
+test('can show a list of published related products based on collections', function () {
+
+    $collectionA = ProductCollection::factory()->create([
+        'title' => 'Collection A',
+        'slug' => 'collection-a',
+    ]);
+    $collectionB = ProductCollection::factory()->create([
+        'title' => 'Collection B',
+        'slug' => 'collection-b',
+    ]);
+
+    $collectionC = ProductCollection::factory()->create([
+        'title' => 'Collection C',
+        'slug' => 'collection-c',
+    ]);
+
+    $productA = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+    ]);
+
+    $productB = Product::factory()->published()->create([
+        'title' => 'Product B',
+        'slug' => 'product-b',
+    ]);
+
+    $productC = Product::factory()->published()->create([
+        'title' => 'Product C',
+        'slug' => 'product-c',
+    ]);
+
+    $productD = Product::factory()->published()->create([
+        'title' => 'Product D',
+        'slug' => 'product-d',
+    ]);
+
+    $productA->productCollections()->attach([$collectionA->id, $collectionB->id]);
+    $productB->productCollections()->attach($collectionA);
+    $productC->productCollections()->attach([$collectionB->id, $collectionC->id]);
+    $productD->productCollections()->attach($collectionC);
+
+    $this->get(route('storefront.product', ['product' => $productA->slug]))
+        ->assertInertia(function (Assert $page) use ($productB) {
+            return $page->has('relatedProducts', 2)
+                ->has('relatedProducts.0', function (Assert $page) use ($productB) {
+                    $page->where('id', $productB->id)
+                        ->where('title', $productB->title)
+                        ->where('slug', $productB->slug)
+                        ->where('price', $productB->price)
+                        ->where('price_in_dollars', $productB->price_in_dollars)
+                        ->where('images', $productB->productImagesForList)
+                        ->where('video', $productB->video)
+                        ->where('has_variants', $productB->hasPublishedVariants())
+                        ->where('variants', $productB->variants)
+                        ->where('dropping_stock', false);
+                });
+        });
+
+});
+
+it('does not show them, if related products are not published', function () {
+
+    $collectionA = ProductCollection::factory()->create([
+        'title' => 'Collection A',
+        'slug' => 'collection-a',
+    ]);
+    $collectionB = ProductCollection::factory()->create([
+        'title' => 'Collection B',
+        'slug' => 'collection-b',
+    ]);
+
+    $collectionC = ProductCollection::factory()->create([
+        'title' => 'Collection C',
+        'slug' => 'collection-c',
+    ]);
+
+    $productA = Product::factory()->published()->create([
+        'title' => 'Product A',
+        'slug' => 'product-a',
+    ]);
+
+    $productB = Product::factory()->draft()->create([
+        'title' => 'Product B',
+        'slug' => 'product-b',
+    ]);
+
+    $productC = Product::factory()->published()->create([
+        'title' => 'Product C',
+        'slug' => 'product-c',
+    ]);
+
+    $productD = Product::factory()->published()->create([
+        'title' => 'Product D',
+        'slug' => 'product-d',
+    ]);
+
+    $productA->productCollections()->attach([$collectionA->id, $collectionB->id]);
+    $productB->productCollections()->attach($collectionA);
+    $productC->productCollections()->attach([$collectionB->id, $collectionC->id]);
+    $productD->productCollections()->attach($collectionC);
+
+    $this->get(route('storefront.product', ['product' => $productA->slug]))
+        ->assertInertia(function (Assert $page) {
+            return $page->has('relatedProducts', 1);
         });
 
 });

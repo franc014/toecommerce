@@ -1,20 +1,46 @@
+<template>
+    <div>
+        <Hero :content="heroContent" />
+        <RecentProducts :content="recentProductsContent" />
+        <Collections :content="collectionsContent" />
+        <OurPromise :content="ourPromiseContent" />
+    </div>
+</template>
+
 <script setup lang="ts">
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 
+import Collections from '@/components/home/Collections.vue';
+import Hero from '@/components/home/Hero.vue';
+import RecentProducts from '@/components/home/RecentProducts.vue';
+
+import OurPromise from '@/components/home/OurPromise.vue';
+
+import { PageComponentContent, PageComponents } from '@/types';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+
+const components = page.props.components as PageComponents;
+
+const heroContent = computed(() => {
+    return components['Hero'].content as PageComponentContent;
+});
+
+const recentProductsContent = computed(() => {
+    return components['RecentProducts'].content as PageComponentContent;
+});
+
+const collectionsContent = computed(() => {
+    return components['Collections'].content as PageComponentContent;
+});
+
+const ourPromiseContent = computed(() => {
+    return components['OurPromise'].content as PageComponentContent;
+});
+
 defineOptions({ layout: StorefrontLayout });
 </script>
-
-<template>
-    <section>
-        <div class="container mx-auto py-10">
-            <h1>Bienvenidos a la tienda!</h1>
-        </div>
-    </section>
-    <section>
-        <div class="container mx-auto py-10">
-            <h2>Productos</h2>
-        </div>
-    </section>
-</template>
 
 <style scoped></style>

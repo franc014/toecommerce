@@ -1,0 +1,84 @@
+/* --------------------------------
+
+File#: _2_product-card-v2
+Title: Product Card v2
+Descr: A selection of product information used as a teaser for further content
+Usage: codyhouse.co/license
+
+-------------------------------- */
+
+/* li {
+    @apply bg-orange-100;
+} */
+
+.prod-card-v2 {
+    --rating-icon-size: 28px;
+    position: relative;
+}
+
+.prod-card-v2__img-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+.prod-card-v2__img-link img {
+    display: block;
+    width: 100%;
+    transition: 0.3s;
+}
+.prod-card-v2__img-link img:nth-child(2) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    opacity: 0;
+}
+.prod-card-v2__img-link:hover img:nth-child(1) {
+    opacity: 0.85;
+}
+.prod-card-v2__img-link:hover img:nth-child(2) {
+    opacity: 1;
+}
+
+.prod-card-v2__badge {
+    position: absolute;
+    z-index: 1;
+    @apply top-3 lg:top-5;
+    @apply right-3 lg:right-5;
+    @apply bg-zinc-900/90;
+    @apply px-3 py-1.5 lg:px-5 lg:py-2;
+    @apply rounded;
+    pointer-events: none;
+    @apply text-sm lg:text-base;
+    @apply text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.product-card-v2__title {
+    @apply text-zinc-900 max-w-min;
+    text-decoration: none;
+    font-weight: bold;
+}
+.product-card-v2__title:hover {
+    text-decoration: underline;
+}
+
+.prod-card-v2__price {
+    text-decoration: none;
+    @apply text-2xl font-bold tracking-wider;
+}
+
+.prod-card-v2__old-price {
+    @apply text-zinc-500;
+    text-decoration: line-through;
+}
+.prod-card-v2__old-price::before {
+    content: 'original price';
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+}

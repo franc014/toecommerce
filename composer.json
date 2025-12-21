@@ -14,11 +14,15 @@
         "filament/spatie-laravel-tags-plugin": "^4.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
+        "laravel/nightwatch": "^1.19",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.12",
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "spatie/laravel-backup": "^9.3",
         "spatie/laravel-ray": "^1.40",
         "symfony/http-client": "^7.3",
-        "symfony/mailgun-mailer": "^7.3"
+        "symfony/mailgun-mailer": "^7.3",
+        "wnx/laravel-backup-restore": "^1.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

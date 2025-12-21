@@ -53,6 +53,7 @@ export interface Product {
     id: number;
     title: string;
     slug: string;
+    summary: string;
     description: string;
     price_in_dollars: string;
     has_variants: boolean;
@@ -96,7 +97,7 @@ export interface CartItem {
     id: number;
     title: string;
     slug: string;
-    image: string;
+    image_url: string;
     product_id: number;
     price: number;
     tax: number;
@@ -140,5 +141,90 @@ export interface DataForCart {
 export interface CartDrawer {
     open: boolean;
 }
+
+export interface PageComponents {
+    [key: string]: PageComponent;
+}
+
+export interface PageComponent {
+    class: string;
+    content: Object;
+}
+
+export interface Heading {
+    content: string,
+    level: number
+}
+
+export interface Paragraph {
+    content: string
+}
+
+export interface CTA {
+    content: string,
+    link: string
+}
+
+
+export interface Collection {
+    id: number;
+    title: string;
+    slug: string;
+    featured_image: string;
+    products_count: number;
+}
+
+export interface PageComponentContent {
+    heading: Array<Heading>;
+    paragraph: Array<Paragraph>;
+    cta: Array<CTA>;
+    image: Array;
+    "new-products": Array;
+    "featured-product": Array;
+    collections: Array;
+    feature: Array;
+    video: Array;
+}
+
+export interface Menu {
+    title: string;
+    slug: string;
+    items: Array<MenuItem>;
+}
+
+export interface MenuItem {
+    id: number;
+    label: string;
+    slug: string;
+    url: string;
+}
+
+export interface Company {
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+    socialMedia: SocialMedia;
+    workingDays: WorkingDays;
+}
+
+export interface SocialMedia {
+    facebook: string;
+    instagram: string;
+    twitter: string;
+    youtube: string;
+}
+
+export interface WorkingDays {
+    monday: string;
+    tuesday: string;
+    wednesday: string;
+    thursday: string;
+    friday: string;
+    saturday: string;
+    sunday: string;
+}
+
+
 
 export type BreadcrumbItemType = BreadcrumbItem;

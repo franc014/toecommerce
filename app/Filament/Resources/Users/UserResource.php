@@ -17,7 +17,6 @@ use UnitEnum;
 
 class UserResource extends Resource
 {
-
     protected static ?string $model = User::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
@@ -60,8 +59,8 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
-            //'create' => CreateUser::route('/create'),
-            //'edit' => EditUser::route('/{record}/edit'),
+            // 'create' => CreateUser::route('/create'),
+            // 'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

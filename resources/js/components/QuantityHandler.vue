@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center gap-2">
         <Quantity @update:modelValue="setQuantity" class="w-32" :modelValue="quantity" />
-        <Button class="bg-emerald-500 tracking-wider text-zinc-100 hover:bg-emerald-400" @click="updateCart">
+        <Button class="bg-orange-500 tracking-wider text-zinc-100 hover:bg-orange-400" @click="updateCart">
             <CirclePlus class="h-5 w-5" /> Añadir
         </Button>
     </div>

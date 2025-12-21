@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
-use App\Enums\StockControlModes;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
@@ -12,6 +11,7 @@ use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibr
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -221,5 +221,19 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                 return $taxes->implode(', ');
             }
         );
+    }
+
+    public function relatedProducts(): ?EloquentCollection
+    {
+        $collections = $this->productCollections->pluck('id')->toArray();
+
+        if (count($collections) > 0) {
+            return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
+                $query->whereIn('product_collections.id', $collections);
+            })->where('id', '!=', $this->id)->get();
+        } else {
+            return null;
+        }
+
     }
 }

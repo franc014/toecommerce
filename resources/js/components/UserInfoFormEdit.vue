@@ -2,7 +2,7 @@
     <Form class="space-y-4" :action="update(parseInt(info.id))" method="put" v-slot="{ errors, processing }" @success="onSuccessEdit">
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
-                <Label for="email" class="tracking-wide">Email <IsRequiredSign /></Label>
+                <Label for="email" class="tracking-wide">Email </Label>
                 <Input
                     id="email"
                     type="email"
@@ -12,13 +12,13 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="email"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.email" :error="errors.email" />
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="first_name" class="tracking-wide">Nombres <IsRequiredSign /></Label>
+                <Label for="first_name" class="tracking-wide">Nombres </Label>
                 <Input
                     id="first_name"
                     type="text"
@@ -28,13 +28,13 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="first_name"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.first_name" :error="errors.first_name" />
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="last_name" class="tracking-wide">Apellidos <IsRequiredSign /></Label>
+                <Label for="last_name" class="tracking-wide">Apellidos </Label>
                 <Input
                     id="last_name"
                     type="text"
@@ -44,7 +44,7 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="last_name"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.last_name" :error="errors.last_name" />
             </div>
@@ -60,7 +60,7 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="phone"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.phone" :error="errors.phone" />
             </div>
@@ -75,7 +75,7 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="country"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.country" :error="errors.country" />
             </div>
@@ -91,13 +91,13 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="state"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.state" :error="errors.state" />
             </div>
 
             <div class="space-y-2">
-                <Label for="city" class="tracking-wide">Ciudad <IsRequiredSign /></Label>
+                <Label for="city" class="tracking-wide">Ciudad </Label>
                 <Input
                     id="city"
                     type="text"
@@ -107,13 +107,13 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="city"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.city" :error="errors.city" />
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="address" class="tracking-wide">Dirección <IsRequiredSign /></Label>
+                <Label for="address" class="tracking-wide">Dirección </Label>
                 <Input
                     id="address"
                     type="text"
@@ -123,13 +123,13 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="address"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.address" :error="errors.address" />
             </div>
 
             <div class="space-y-2">
-                <Label for="zipcode" class="tracking-wide">Código Postal <IsRequiredSign /></Label>
+                <Label for="zipcode" class="tracking-wide">Código Postal </Label>
                 <Input
                     id="zipcode"
                     type="text"
@@ -139,7 +139,7 @@
                     autofocus
                     :tabindex="1"
                     autocomplete="zipcode"
-                    class="tracking-wide"
+                    class="form-input tracking-wide"
                 />
                 <ValidationError v-if="errors.zipcode" :error="errors.zipcode" />
             </div>
@@ -150,7 +150,14 @@
             </div>
 
             <div class="space-y-2">
-                <Button type="submit" class="mt-4 w-full cursor-pointer" :tabindex="4" :disabled="processing" data-test="login-button">
+                <Button
+                    type="submit"
+                    class="mt-4 w-full cursor-pointer hover:bg-orange-200"
+                    :tabindex="4"
+                    :disabled="processing"
+                    data-test="login-button"
+                    variant="outline"
+                >
                     <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
                     <Save v-else />
                     Guardar
@@ -168,7 +175,6 @@ import { update } from '@/routes/storefront/user-info-entry';
 import { Form, router } from '@inertiajs/vue3';
 import { LoaderCircle, Save } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
-import IsRequiredSign from './IsRequiredSign.vue';
 import ValidationError from './ValidationError.vue';
 
 import { checkout } from '@/routes/storefront';

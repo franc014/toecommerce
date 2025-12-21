@@ -10,7 +10,6 @@ use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Schemas\OrderInfolist;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
 use App\Models\Order;
-use App\Traits\PurchasesNavigationGroup;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
@@ -19,11 +18,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class OrderResource extends Resource
 {
-    use PurchasesNavigationGroup;
-
     protected static ?string $model = Order::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -42,9 +40,24 @@ class OrderResource extends Resource
         return __('firesources.orders');
     }
 
+    public static function getNavigationGroup(): UnitEnum|string|null
+    {
+        return __('firesources.purchases');
+    }
+
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         return 'icon-clipboard-list';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+
+        if (Filament::getCurrentPanel()->getId() === 'customer') {
+            return static::getModel()::query()->where('user_id', auth()->user()->id)->count();
+        }
+
+        return static::getModel()::query()->count();
     }
 
     public static function form(Schema $schema): Schema

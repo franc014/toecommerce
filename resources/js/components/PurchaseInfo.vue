@@ -1,26 +1,26 @@
 <template>
-    <h2 class="my-5">{{ title }}</h2>
+    <h2 class="my-5 text-4xl">{{ title }}</h2>
 
-    <ul v-if="isSetup" class="pb-5">
-        <li><span class="font-bold">Nombres:</span> {{ info.first_name }}</li>
-        <li><span class="font-bold">Apellidos:</span> {{ info.last_name }}</li>
-        <li><span class="font-bold">Email:</span> {{ info.email }}</li>
-        <li><span class="font-bold">País:</span> {{ info.country }}</li>
-        <li><span class="font-bold">Estado o Provincia:</span> {{ info.state }}</li>
-        <li><span class="font-bold">Ciudad:</span> {{ info.city }}</li>
-        <li><span class="font-bold">Dirección:</span> {{ info.address }}</li>
-        <li><span class="font-bold">Teléfono:</span> {{ info.phone }}</li>
-        <li><span class="font-bold">Código postal:</span> {{ info.zipcode }}</li>
+    <ul v-if="isSetup" class="mb-8 space-y-2 text-lg">
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Nombres:</span> {{ info.first_name }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Apellidos:</span> {{ info.last_name }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Email:</span> {{ info.email }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">País:</span> {{ info.country }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Estado o Provincia:</span> {{ info.state }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Ciudad:</span> {{ info.city }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Dirección:</span> {{ info.address }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Teléfono:</span> {{ info.phone }}</li>
+        <li class="tracking-wider"><span class="font-bold tracking-wide">Código postal:</span> {{ info.zipcode }}</li>
     </ul>
 
-    <Dialog v-if="isSetup">
+    <Dialog v-if="isSetup" :modal="true">
         <DialogTrigger as-child>
-            <Button class="text-base tracking-wide">
+            <Button class="cursor-pointer text-base tracking-wide hover:bg-orange-200" variant="outline">
                 <FilePenLine />
                 Editar información {{ type === 'billing' ? 'de facturación' : 'de envío' }}
             </Button>
         </DialogTrigger>
-        <DialogContent class="min-w-[700px] sm:max-w-[425px]">
+        <DialogContent class="min-w-[700px] bg-zinc-50 sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>Editar información {{ type === 'billing' ? 'de facturación' : 'de envío' }}</DialogTitle>
                 <DialogDescription>
@@ -32,7 +32,7 @@
     </Dialog>
 
     <div v-if="!isSetup" class="space-y-8 font-bold">
-        <h3>{{ formTitle }}</h3>
+        <h3 class="text-lg font-normal tracking-wider">{{ formTitle }}</h3>
         <CloneBillingInfo @accept-cloning="handleAccpetCloning" v-if="type === 'shipping'" />
         <UserInfoForm :type="type" v-if="!acceptsCloningBilling" />
     </div>

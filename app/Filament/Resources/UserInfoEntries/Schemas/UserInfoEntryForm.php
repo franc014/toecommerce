@@ -7,7 +7,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class UserInfoEntryForm
 {
@@ -64,7 +63,6 @@ class UserInfoEntryForm
                 TextInput::make('zipcode')
                     ->label(__('firesources.zip_code'))
                     ->required(),
-
 
             ]);
     }

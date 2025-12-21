@@ -7,10 +7,9 @@ use Spatie\LaravelSettings\Settings;
 
 class StorefrontSettings extends Settings
 {
-
     public int $products_per_page;
-    public string $stock_control_mode;
 
+    public StockControlModes $stock_control_mode;
 
     public static function group(): string
     {
@@ -19,6 +18,6 @@ class StorefrontSettings extends Settings
 
     public function isAppInStrictMode()
     {
-        return $this->stock_control_mode === StockControlModes::STRICT->value;
+        return $this->stock_control_mode === StockControlModes::STRICT;
     }
 }

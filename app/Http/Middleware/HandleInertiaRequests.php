@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Menu;
+use App\Settings\CompanySettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,8 +37,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $mainMenu = Menu::byName('main');
+        $footerMenu = Menu::byName('footer');
+        $legalMenu = Menu::byName('legal');
+
+        $company = app(CompanySettings::class)->toArray();
+
         return [
             ...parent::share($request),
+            'mainMenu' => $mainMenu,
+            'footerMenu' => $footerMenu,
+            'legalMenu' => $legalMenu,
+            'company' => $company,
             'name' => config('app.name'),
             'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [

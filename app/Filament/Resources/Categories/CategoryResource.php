@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Categories;
 
-use App\Enums\NavigationGroup;
 use App\Filament\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
@@ -41,7 +40,12 @@ class CategoryResource extends Resource
 
     public static function getNavigationGroup(): UnitEnum|string|null
     {
-        return NavigationGroup::TAXONOMIES;
+        return __('firesources.taxonomies');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

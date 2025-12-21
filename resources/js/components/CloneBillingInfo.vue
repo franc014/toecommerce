@@ -10,9 +10,9 @@
             </div>
         </div>
         <Form :action="useBillingAsShipping()" method="post" v-slot="{ errors, processing }" @success="handleSuccess">
-            <Button v-if="accepts" class="cursor-pointer">
+            <Button v-if="accepts" class="cursor-pointer hover:bg-orange-200" variant="outline">
                 <Copy />
-                Utilizar información de facturación para envío
+                Clonar
             </Button>
         </Form>
         <Toaster richColors :duration="3000" />

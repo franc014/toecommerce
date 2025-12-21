@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ProductCollections;
 
-use App\Enums\NavigationGroup;
 use App\Filament\Resources\ProductCollections\Pages\CreateProductCollection;
 use App\Filament\Resources\ProductCollections\Pages\EditProductCollection;
 use App\Filament\Resources\ProductCollections\Pages\ListProductCollections;
@@ -36,10 +35,15 @@ class ProductCollectionResource extends Resource
 
     public static function getNavigationGroup(): UnitEnum|string|null
     {
-        return NavigationGroup::TAXONOMIES;
+        return __('firesources.taxonomies');
     }
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Schema $schema): Schema
     {

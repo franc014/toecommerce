@@ -1,0 +1,122 @@
+/* --------------------------------
+
+File#: _1_video-feature
+Title: Video Feature
+Descr: A CTA box over a background video
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.video-feature {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  @apply shadow-md shadow-zinc-400;
+}
+
+.video-feature__box-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.video-feature__box {
+  @apply bg-white/[.98];
+}
+@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .video-feature__box {
+    @apply bg-orange-200/80;
+      backdrop-filter: blur(10px);
+  }
+}
+
+.video-feature__video-wrapper {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.video-feature__video-wrapper img, .video-feature__video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+     object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.video-feature__video-wrapper img {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .video-feature__video-wrapper video {
+    visibility: hidden;
+  }
+  .video-feature__video-wrapper img {
+    display: block;
+  }
+}
+
+.video-feature__link {
+  --transition-duration: .4s;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @apply bg-zinc-900/20;
+  border-radius: inherit;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  @apply text-gray-900;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: var(--transition-duration);
+}
+.video-feature__link > * {
+  position: relative;
+  z-index: 2;
+}
+.video-feature__link::before {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -5%;
+  width: 110%;
+  height: 140%;
+  @apply bg-orange-700;
+  will-change: transform;
+  -webkit-transform: scaleY(0) skewY(10deg);transform: scaleY(0) skewY(10deg);
+          transform-origin: center bottom;
+  transition: -webkit-transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.video-feature__link:hover {
+  @apply text-white;
+}
+.video-feature__link:hover::before {
+  -webkit-transform: scaleY(1) skewY(0deg);transform: scaleY(1) skewY(0deg);
+}
+.video-feature__link:hover .video-feature__link-icon > *:first-child {
+  transform: rotate(-180deg);
+}
+.video-feature__link:hover .video-feature__link-icon > *:last-child {
+  transform: rotate(180deg);
+}
+
+.video-feature__link-icon > * {
+  will-change: transform;
+  transition: -webkit-transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform var(--transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.video-feature__link-icon > *:first-child {
+  -webkit-transform-origin: 8px 5px;transform-origin: 8px 5px;
+}
+.video-feature__link-icon > *:last-child {
+  -webkit-transform-origin: 8px 11px;transform-origin: 8px 11px;
+}

@@ -12,6 +12,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -45,6 +46,16 @@ class ProductsTable
                     ->label(__('firesources.price'))
                     ->money()
                     ->sortable(),
+
+                ImageColumn::make('main_image')
+                    ->label(__('firesources.image'))
+                    ->circular()
+                    ->imageSize(60),
+
+                TextColumn::make('productCollections.title')
+                    ->label(__('firesources.collections'))
+                    ->badge()
+                    ->searchable(),
 
                 TextColumn::make('created_at')
                     ->label(__('firesources.created_at'))

@@ -1,0 +1,113 @@
+/* --------------------------------
+
+File#: _1_card-v12
+Title: Card v12
+Descr: Container of information used as teaser for further content exploration
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.card-v12 {
+  --card-v12-transition-duration: .4s;
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  @apply bg-white/95;
+  will-change: transform;
+  transition: box-shadow, transform;
+  transition-duration: var(--card-v12-transition-duration);
+}
+@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .card-v12 {
+    @apply bg-white/80;
+    backdrop-filter: blur(10px);
+  }
+}
+.card-v12::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  @apply shadow-inner;
+}
+.card-v12:hover {
+  @apply shadow-md;
+  transform: translateY(-2px);
+}
+
+.card-v12__figure {
+  position: relative;
+  z-index: 2;
+  clip-path: inset(0% 0.75rem 0% 0% round 0% 0.25em 0.25em 0%);
+  will-change: clip-path;
+  transition: clip-path var(--card-v12-transition-duration);
+}
+.card-v12__figure img {
+  will-change: transform;
+  transition: transform var(--card-v12-transition-duration);
+}
+.card-v12:hover .card-v12__figure {
+  clip-path: inset(0% calc(0.75rem + 80px) 0% 0% round 0% 0.25em 0.25em 0%);
+}
+@media (min-width: 64rem) {
+  .card-v12__figure {
+    clip-path: inset(0% 1.125rem 0% 0% round 0% 0.25em 0.25em 0%);
+  }
+  .card-v12:hover .card-v12__figure {
+    clip-path: inset(0% calc(1.125rem + 80px) 0% 0% round 0% 0.25em 0.25em 0%);
+  }
+}
+
+.card-v12:hover .card-v12__figure img {
+  transform: translateX(-40px);
+}
+
+.card-v12__separator {
+  display: block;
+  width: 32px;
+}
+
+.card-v12__icon {
+  --size: 60px;
+  position: absolute;
+  z-index: 1;
+  right: 0.75rem;
+  top: calc(50% - var(--size)/2);
+  height: var(--size);
+  width: var(--size);
+  opacity: 0;
+  transform: translateX(-20px);
+  will-change: transform;
+  transition: transform, opacity;
+  transition-duration: var(--card-v12-transition-duration);
+}
+@media (min-width: 64rem) {
+  .card-v12__icon {
+    right: 1.125rem;
+  }
+}
+.card-v12__icon .icon-group > * {
+  transform-origin: 57px 30px;
+  will-change: transform;
+  transition: transform var(--card-v12-transition-duration);
+}
+.card-v12__icon .icon-group > *:nth-child(2) {
+  transform: rotate(35deg);
+}
+.card-v12__icon .icon-group > *:nth-child(3) {
+  transform: rotate(-35deg);
+}
+.card-v12:hover .card-v12__icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+.card-v12:hover .card-v12__icon .icon-group > *:nth-child(2),
+.card-v12:hover .card-v12__icon .icon-group > *:nth-child(3) {
+  transform: rotate(0);
+}
