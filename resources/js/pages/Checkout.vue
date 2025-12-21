@@ -1,13 +1,13 @@
 <template>
     <section class="min-h-screen">
         <div class="wrapper space-y-10 py-20">
-            <h1>
-                Checkout de <span class="text-2xl italic">{{ user.name }}</span>
+            <h1 class="font-serif2">
+                Checkout de <span class="text-2xl tracking-wider italic">{{ user.name }}</span>
             </h1>
             <div class="checkout-grid">
                 <Accordion :collapsible="true" default-value="item-1">
                     <AccordionItem value="item-1" key="item-1">
-                        <AccordionTrigger class="rounded bg-orange-100 px-2 font-bold tracking-wider"
+                        <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider"
                             >1. Información para Facturación</AccordionTrigger
                         >
                         <AccordionContent class="px-10 pb-10">
@@ -23,7 +23,7 @@
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
-                        <AccordionTrigger class="rounded bg-orange-100 px-2 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
+                        <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
                         <AccordionContent class="px-10 pb-10">
                             <PurchaseInfo
                                 v-if="user.has_billing_info"
@@ -39,12 +39,17 @@
                     </AccordionItem>
                 </Accordion>
 
-                <div>
-                    <div class="space-y-10">
-                        <OrderSummary :order="order" :user="user" />
-                        <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
-                    </div>
-                </div>
+                <Accordion :collapsible="true" default-value="item-1">
+                    <AccordionItem value="item-1" key="item-1">
+                        <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
+                        <AccordionContent class="px-10 py-10">
+                            <div class="space-y-10">
+                                <OrderSummary :order="order" :user="user" />
+                                <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
         </div>
     </section>

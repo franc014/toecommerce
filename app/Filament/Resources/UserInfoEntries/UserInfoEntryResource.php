@@ -46,6 +46,16 @@ class UserInfoEntryResource extends Resource
         return 'icon-user-pen';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+
+        if (Filament::getCurrentPanel()->getId() === 'customer') {
+            return static::getModel()::query()->where('user_id', auth()->user()->id)->count();
+        }
+
+        return static::getModel()::query()->count();
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();

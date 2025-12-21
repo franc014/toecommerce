@@ -38,7 +38,7 @@
                     <div class="flex items-center justify-between gap-4" v-if="!cartStore.isEmpty">
                         <Button variant="outline" class="hover:bg-orange-200">
                             <CreditCard />
-                            <Link href="/checkout" class="w-full" prefetch>Checkout</Link>
+                            <a href="/checkout" class="w-full">Checkout</a>
                         </Button>
 
                         <!-- <Button variant="secondary" @click="emptyCart" class="cursor-pointer">
@@ -74,7 +74,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetOverlay, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useCartStore } from '@/stores/cartStore';
-import { Link } from '@inertiajs/vue3';
 import { Ban, CreditCard, ShoppingCart as ShoppingCartIcon, Trash2 } from 'lucide-vue-next';
 import CartTally from './CartTally.vue';
 import Confirm from './Confirm.vue';

@@ -52,7 +52,12 @@ class OrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+
+        if (Filament::getCurrentPanel()->getId() === 'customer') {
+            return static::getModel()::query()->where('user_id', auth()->user()->id)->count();
+        }
+
+        return static::getModel()::query()->count();
     }
 
     public static function form(Schema $schema): Schema
