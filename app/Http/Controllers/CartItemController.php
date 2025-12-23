@@ -9,11 +9,15 @@ use App\Utils\ResolvesPurchasable;
 use Closure;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 class CartItemController extends Controller
 {
     public function addOrUpdate(Request $request)
     {
+        $fromRoute = url()->previous();
+
         $request->validate([
             'ui_cart_id' => 'required | uuid',
             'product_id' => 'required | integer',
@@ -45,7 +49,8 @@ class CartItemController extends Controller
 
             $item = $addsToCart->handle();
 
-            return ['item' => $item];
+
+            //return redirect()->back();
 
         } catch (BindingResolutionException $e) {
 

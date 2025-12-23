@@ -34,9 +34,9 @@
 <script lang="ts" setup>
 import { Badge } from '@/components/ui/badge';
 import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
-import { useCartStore } from '@/stores/cartStore';
-import { Link } from '@inertiajs/vue3';
-import { Product } from '../types';
+import { addOrUpdate } from '@/routes/cart/items';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { Cart, Product } from '../types';
 import ProductVariants from './ProductVariants.vue';
 import QuantityHandler from './QuantityHandler.vue';
 const { product } = defineProps<{ product: Product }>();
@@ -46,19 +46,39 @@ const { images } = product;
 const mainImage = images[0];
 const featureImage = images[1];
 
+const page = usePage();
+const shoppingCart = page.props.shoppingCart as Cart;
 const { qty, setQuantity } = useCartItemQuantity(product.slug);
 
-const cartStore = useCartStore();
+//const cartStore = useCartStore();
 
 const productUrl = `/products/${slug}`;
 
+const form = useForm({
+    ui_cart_id: shoppingCart.ui_cart_id,
+    product_id: product.id,
+    quantity: qty.value,
+    purchasable_type: 'product',
+});
+
 function updateCart() {
-    cartStore.addOrUpdateItem({
+    form.post(addOrUpdate().url, {
+        preserveScroll: true,
+        onSuccess: () => {
+            console.log('success');
+            window.location.reload();
+            /* router.push({
+                url: home().url,
+                component: 'Home',
+            }); */
+        },
+    });
+    /* cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
         product_id: product.id,
         quantity: qty.value,
         purchasable_type: 'product',
-    });
+    }); */
 }
 </script>
 

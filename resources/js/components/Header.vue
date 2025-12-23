@@ -51,9 +51,14 @@
 
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue';
-
 import { Menu } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
+/* const shoppingCart = page.props.shoppingCart as string;
+
+const cart = JSON.parse(shoppingCart); */
 
 defineProps<{
     menu: Menu;

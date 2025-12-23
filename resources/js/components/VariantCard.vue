@@ -20,21 +20,20 @@
 <script setup lang="ts">
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useCartItemQuantity } from '@/composables/useCartItemQuantity';
-import { useCartStore } from '@/stores/cartStore';
 import { ProductVariant } from '@/types';
 import QuantityHandler from './QuantityHandler.vue';
-const cartStore = useCartStore();
+/* const cartStore = useCartStore(); */
 
 const { variant } = defineProps<{ variant: ProductVariant }>();
 const { qty, setQuantity } = useCartItemQuantity(variant.slug);
 
 function updateCart() {
-    cartStore.addOrUpdateItem({
+    /*  cartStore.addOrUpdateItem({
         ui_cart_id: cartStore.id,
         product_id: variant.id,
         quantity: qty.value,
         purchasable_type: 'product-variant',
-    });
+    }); */
 }
 </script>
 

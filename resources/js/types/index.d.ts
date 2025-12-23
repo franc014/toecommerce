@@ -80,8 +80,12 @@ export interface ProductVariant {
 
 
 export interface Cart {
+    ui_cart_id: string;
     id: string;
     items: CartItem[];
+    cart_aggregation: CartAggregation;
+    isEmpty: boolean;
+
 }
 
 

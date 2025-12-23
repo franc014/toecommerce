@@ -241,4 +241,20 @@ class Cart extends Model
     {
         return $this->paid_at !== null;
     }
+
+    public function toArray()
+    {
+        return [
+            'ui_cart_id' => $this->ui_cart_id,
+            'items' => $this->items->toArray(),
+            'isEmpty' => $this->isEmpty(),
+            'cart_aggregation' => [
+                'total_without_taxes_in_dollars' => $this->total_without_taxes_in_dollars,
+                'total_with_taxes_in_dollars' => $this->total_with_taxes_in_dollars,
+                'total_computed_taxes_in_dollars' => $this->total_computed_taxes_in_dollars,
+                'total_in_dollars' => $this->total_amount_in_dollars,
+                'items_count' => $this->items_count,
+            ]
+        ];
+    }
 }

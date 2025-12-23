@@ -2,23 +2,24 @@
     <div>
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
+        <!--  <Hero :content="heroContent" />
+        <RecentProducts :content="recentProductsContent" />
         <Collections :content="collectionsContent" />
-        <OurPromise :content="ourPromiseContent" />
+        <OurPromise :content="ourPromiseContent" /> -->
     </div>
 </template>
 
 <script setup lang="ts">
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 
-import Collections from '@/components/home/Collections.vue';
-import Hero from '@/components/home/Hero.vue';
-import RecentProducts from '@/components/home/RecentProducts.vue';
-
-import OurPromise from '@/components/home/OurPromise.vue';
-
 import { PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+
+import Hero from '@/components/home/Hero.vue';
+import RecentProducts from '@/components/home/RecentProducts.vue';
+/* import Collections from '@/components/home/Collections.vue';
+import OurPromise from '@/components/home/OurPromise.vue'; */
 
 const page = usePage();
 

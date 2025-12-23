@@ -11,19 +11,17 @@
 import { Toaster } from '@/components/ui/sonner';
 import { Company, Menu } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import { toast } from 'vue-sonner';
 import 'vue-sonner/style.css';
 import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
-import { useCartStore } from '../stores/cartStore';
-const cartStore = useCartStore();
+//const cartStore = useCartStore();
 const page = usePage();
 const mainMenu = page.props.mainMenu as Menu;
 const footerMenu = page.props.footerMenu as Menu;
 const legalMenu = page.props.legalMenu as Menu;
 const company = page.props.company as Company;
 
-cartStore.$onAction(({ name, onError, after }) => {
+/* cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {
         after((result) => {
             toast.success('Item added to cart');
@@ -49,7 +47,7 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
     }
-});
+}); */
 </script>
 
 <style scoped></style>

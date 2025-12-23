@@ -40,8 +40,7 @@ import { ref, watchEffect } from 'vue';
 import { CartItem } from '../types';
 import Quantity from './Quantity.vue';
 
-import { useCartStore } from '../stores/cartStore';
-const cartStore = useCartStore();
+//const cartStore = useCartStore();
 
 const props = defineProps<{
     item: CartItem;
@@ -53,7 +52,7 @@ const quantity = ref(item.value.quantity);
 const prevQuantity = ref(item.value.quantity);
 
 const changeQuantity = (value: number) => {
-    quantity.value = value;
+    /* quantity.value = value;
 
     const type = item.value.purchasable_type === 'App\\Models\\Product' ? 'product' : 'product-variant';
     if (quantity.value !== prevQuantity.value) {
@@ -64,14 +63,14 @@ const changeQuantity = (value: number) => {
             purchasable_type: type,
         });
         prevQuantity.value = value;
-    }
+    } */
 };
 
 function remove() {
-    cartStore.removeItem({
+    /*  cartStore.removeItem({
         ui_cart_id: cartStore.id,
         item_id: item.value.id,
-    });
+    }); */
 }
 
 watchEffect(() => {
