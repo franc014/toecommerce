@@ -10,23 +10,25 @@
         </SheetTrigger>
 
         <SheetOverlay class="sheet-overlay">
-            <SheetContent class="min-w-1/2 bg-zinc-50">
+            <SheetContent class="min-w-full bg-zinc-50 md:min-w-1/2">
                 <SheetHeader>
                     <header class="flex items-center gap-2 px-4">
                         <SheetTitle>
-                            <h2 class="mt-4 flex items-baseline gap-2 text-2xl tracking-wide">
-                                <ShoppingCartIcon class="mr-4 h-10 w-10" />
-                                <span v-if="cartStore.aggregation.items_count > 0"
-                                    >{{ cartStore.aggregation.items_count }} {{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }}</span
-                                >
-                                <span v-else>Ningún ítem</span>
-                                en tu carrito de compras
+                            <h2 class="mt-4 flex flex-nowrap gap-2 text-left text-2xl tracking-wide md:items-baseline">
+                                <div class="flex items-center gap-2">
+                                    <ShoppingCartIcon class="mr-4 h-8 w-8 md:h-12 md:w-12" />
+                                    <span v-if="cartStore.aggregation.items_count > 0">{{ cartStore.aggregation.items_count }}</span>
+                                    <span v-if="cartStore.aggregation.items_count > 0"
+                                        >{{ cartStore.aggregation.items_count > 1 ? 'ítems' : 'ítem' }} en tu carrito</span
+                                    >
+                                    <span v-else>Ningún ítem en tu carrito</span>
+                                </div>
                             </h2>
                         </SheetTitle>
                     </header>
                 </SheetHeader>
 
-                <ul class="sheet-content space-y-8 border-t border-zinc-200 px-4 py-8">
+                <ul class="sheet-content space-y-8 border-t border-dashed border-zinc-500 px-4 py-8">
                     <li v-for="item in cartStore.cartItems" :key="item.id">
                         <CartItem :item="item" />
                     </li>

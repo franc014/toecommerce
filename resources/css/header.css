@@ -7,7 +7,7 @@ Usage: codyhouse.co/license
 
 -------------------------------- */
 :root {
-    --f-header-height: 50px;
+    --f-header-height: 90px;
     --f-header-logo-width: 70px;
 }
 @media (min-width: 64rem) {
@@ -60,7 +60,7 @@ Usage: codyhouse.co/license
     --anim-menu-btn-icon-stroke: 2px;
 }
 
-.f-header__nav {
+/* .f-header__nav {
     position: absolute;
     top: 0;
     left: 0;
@@ -78,17 +78,17 @@ Usage: codyhouse.co/license
     opacity: 0;
     -webkit-transform: translateY(-1em);
     transform: translateY(-1em);
-}
+} */
 .f-header__nav::before {
     /* top header bg + border */
-    content: '';
+   /*  content: '';
     display: block;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
     height: var(--f-header-height);
     background-color: inherit;
-    @apply border-b border-zinc-300;
+    @apply border-b border-zinc-300; */
 }
 
 .f-header__nav--is-visible {
@@ -115,10 +115,10 @@ Usage: codyhouse.co/license
     /* hide logo nav on small devices */
 }
 
-.f-header__item {
+/* .f-header__item {
     flex-shrink: 0;
     @apply border-b border-zinc-300;
-}
+} */
 
 .f-header__dropdown-icon {
     --size: 16px;

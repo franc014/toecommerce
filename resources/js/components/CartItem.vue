@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="flex w-5/6 items-center justify-between gap-3">
+        <div class="flex items-center justify-between gap-3 md:w-5/6">
             <p class="flex flex-col gap-1">
                 <span class="text-xs font-bold">Precio:</span>
                 {{ item.price_in_dollars }}

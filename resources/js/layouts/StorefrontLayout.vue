@@ -3,7 +3,7 @@
     <main>
         <slot />
     </main>
-    <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" :expand="true" />
+    <Toaster richColors :closeButton="true" closeButtonPosition="top-left" :duration="5000" theme="light" position="top-right" :expand="true" />
     <Footer :company="company" :footerMenu="footerMenu" :legalMenu="legalMenu" />
 </template>
 

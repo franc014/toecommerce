@@ -1,5 +1,5 @@
 <template>
-    <section class="mb-6 flex flex-col gap-4 border-t border-b border-zinc-200 py-4" v-if="!cartStore.isEmpty">
+    <section class="mb-6 flex flex-col gap-4 border-t border-b border-dashed border-zinc-400 py-4" v-if="!cartStore.isEmpty">
         <p class="text-base font-bold">
             Total sin impuestos: <span class="italic">{{ cartStore.aggregation.total_without_taxes_in_dollars }}</span>
         </p>
