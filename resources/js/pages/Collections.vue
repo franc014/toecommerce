@@ -1,5 +1,5 @@
 <template>
-    <section class="space-y-20">
+    <section class="mt-40 space-y-20 md:mt-0">
         <div class="wrapper space-y-10 pb-30">
             <Banner title="Colecciones" pre-header="Descubre" />
             <CollectionsGallery :collections="collections" />

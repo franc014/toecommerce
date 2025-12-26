@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <section class="mt-40 md:mt-0">
         <Story :content="storyContent" />
         <VideoPresentation :content="videoContent" />
         <Values :content="valuesContent" />
-    </div>
+    </section>
 </template>
 
 <script setup lang="ts">

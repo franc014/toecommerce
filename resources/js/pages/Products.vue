@@ -1,6 +1,6 @@
 <template>
-    <section class="space-y-20">
-        <div class="wrapper space-y-10">
+    <section class="mt-40 md:mt-0">
+        <div class="wrapper mr-2 space-y-10">
             <Banner title="Nuestros Productos" pre-header="Compra" />
             <ProductsList :products="products" :paginationLinks="paginationLinks" />
         </div>

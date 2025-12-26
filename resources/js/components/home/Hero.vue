@@ -3,7 +3,7 @@
         <div class="wrapper">
             <div class="feature-v4__grid grid grid-cols-12 items-center gap-5 lg:gap-8">
                 <transition appear @enter="enter" @beforeEnter="beforeEnter">
-                    <div class="relative z-[1] col-span-12 mt-52 lg:col-span-5">
+                    <div class="relative z-[1] col-span-12 mt-52 md:mt-0 lg:col-span-5">
                         <div
                             class="mb-1.5 max-w-fit border-b border-dashed border-b-orange-500 pb-1 text-xs font-semibold tracking-widest text-orange-700 uppercase lg:mb-3 lg:text-sm"
                         >

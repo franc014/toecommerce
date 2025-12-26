@@ -9,7 +9,7 @@
                 <i class="anim-menu-btn__icon anim-menu-btn__icon--close" aria-hidden="true"></i>
             </button> -->
 
-            <div class="mt-5 md:hidden">
+            <div class="mt-5 md:mt-0 md:hidden">
                 <Cart />
             </div>
         </div>
@@ -23,7 +23,7 @@
                     </Link>
                 </div>
 
-                <ul class="f-header__list mt-5 flex flex-wrap items-center gap-0 space-x-6 lg:justify-center">
+                <ul class="f-header__list mt-5 flex flex-wrap items-center gap-0 space-x-6 md:mt-0 lg:justify-center">
                     <li class="f-header__item" v-for="item in menu.items" :key="item.id">
                         <Link
                             prefetch

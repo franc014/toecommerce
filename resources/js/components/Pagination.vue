@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center gap-6">
+    <div class="pagination flex items-baseline gap-6">
         <component
             class="pagination-link text-xl font-semibold"
             v-for="link in links"

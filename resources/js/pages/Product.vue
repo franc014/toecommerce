@@ -1,5 +1,5 @@
 <template>
-    <section class="pt-30 pb-20">
+    <section class="mt-52 pb-20 md:mt-0">
         <div class="wrapper">
             <section class="product-grid">
                 <div>

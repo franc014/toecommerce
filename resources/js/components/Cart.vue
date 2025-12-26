@@ -3,7 +3,7 @@
         <SheetTrigger as-child>
             <Button class="relative cursor-pointer bg-orange-300 px-4 py-2 hover:bg-orange-600">
                 <ShoppingCartIcon class="h-6 w-6" />
-                <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 -right-2 bg-sky-600 text-zinc-50">{{
+                <Badge v-if="!cartStore.isEmpty" class="absolute -top-3 right-0 bg-sky-600 text-zinc-50">{{
                     cartStore.aggregation.items_count
                 }}</Badge>
             </Button>

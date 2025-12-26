@@ -1,5 +1,5 @@
 <template>
-    <section class="contact-v3 relative z-[1] py-20">
+    <section class="contact-v3 relative z-[1] mt-50 md:mt-20">
         <div class="mx-auto mb-10 w-[calc(100%_-_2.5rem)] max-w-xl lg:mb-12 lg:w-[calc(100%_-_4rem)]">
             <div class="text-center">
                 <h1 class="text-4x mb-2 font-serif2">Contáctanos</h1>
