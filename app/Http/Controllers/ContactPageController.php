@@ -31,14 +31,14 @@ class ContactPageController extends Controller
 
         return Inertia::render('Contact', [
             'companyInformation' => $companyInformation,
-            'honeypot' => $honeypot
+            'honeypot' => $honeypot,
         ]);
     }
 
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
 
-        //$request->validated()
+        // $request->validated()
         $contact = Contact::create($request->all());
 
         Mail::to($companySettings->email)->send(new UserContactSent($contact));

@@ -19,7 +19,6 @@ use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Spatie\Honeypot\ProtectAgainstSpam;
 
 Route::get('/', HomePageController::class)->name('storefront.home');
 Route::get('/products', ProductsPageController::class)->name('storefront.products');

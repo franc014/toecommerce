@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserInfoEntryRequest;
-use Illuminate\Http\Request;
 
 class UserInfoEntryController extends Controller
 {
@@ -11,18 +10,18 @@ class UserInfoEntryController extends Controller
     {
 
         auth()->user()->userInfoEntries()->create([
-             'first_name' => $request->first_name,
-             'last_name' => $request->last_name,
-             'type' => $request->type,
-             'country' => $request->country,
-             'state' => $request->state,
-             'city' => $request->city,
-             'address' => $request->address,
-             'phone' => $request->phone,
-             'zipcode' => $request->zipcode,
-             'email' => $request->email,
-             'is_main' => true,
-         ]);
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'type' => $request->type,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'zipcode' => $request->zipcode,
+            'email' => $request->email,
+            'is_main' => true,
+        ]);
 
         return redirect()->intended(route('storefront.checkout', absolute: false));
     }

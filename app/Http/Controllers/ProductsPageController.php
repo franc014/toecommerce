@@ -26,8 +26,6 @@ class ProductsPageController extends Controller
             ];
         });
 
-        ray($products);
-
         return Inertia::render('Products', [
             'products' => $products,
         ]);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ItemNotFoundException;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -30,10 +31,10 @@ abstract class PageController extends Controller
             ]);
 
         } catch (ModelNotFoundException $e) {
-            ray('the error here: model not found');
+            Log::error('Model not found');
             abort(404);
         } catch (ItemNotFoundException $e) {
-            ray('the error here: item not found');
+            Log::error('the error here: item not found');
             abort(404);
         }
     }
