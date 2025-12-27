@@ -9,13 +9,14 @@ use App\Settings\CompanySettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Spatie\Honeypot\Honeypot;
 
 class ContactPageController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function index(CompanySettings $companySettings)
+    public function index(CompanySettings $companySettings, Honeypot $honeypot)
     {
 
         $companyInformation = [
@@ -30,13 +31,15 @@ class ContactPageController extends Controller
 
         return Inertia::render('Contact', [
             'companyInformation' => $companyInformation,
+            'honeypot' => $honeypot
         ]);
     }
 
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
 
-        $contact = Contact::create($request->validated());
+        //$request->validated()
+        $contact = Contact::create($request->all());
 
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 

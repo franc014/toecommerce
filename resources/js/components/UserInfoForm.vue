@@ -1,58 +1,148 @@
 <template>
-    <Form class="w-full" :action="store()" method="post" v-slot="{ errors, processing }" @success="handleSuccess">
+    <Form class="w-full" :action="store()" method="post" #default="{ errors, processing, validate, invalid, validating }" @success="handleSuccess">
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="email" class="flex items-center tracking-wide">Email</Label>
-                <Input id="email" type="email" name="email" required autofocus :tabindex="1" autocomplete="email" class="form-input" />
-                <ValidationError v-if="errors.email" :error="errors.email" />
+                <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    required
+                    autofocus
+                    @blur="validate('email')"
+                    :tabindex="1"
+                    autocomplete="email"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('email')" :error="errors.email" />
             </div>
 
             <div class="col-span-2 space-y-2">
                 <Label for="first_name" class="tracking-wide">Nombres</Label>
-                <Input id="first_name" type="text" name="first_name" required autofocus :tabindex="2" autocomplete="first_name" class="form-input" />
-                <ValidationError v-if="errors.first_name" :error="errors.first_name" />
+                <Input
+                    id="first_name"
+                    @blur="validate('first_name')"
+                    type="text"
+                    name="first_name"
+                    required
+                    autofocus
+                    :tabindex="2"
+                    autocomplete="first_name"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('first_name')" :error="errors.first_name" />
             </div>
 
             <div class="col-span-2 space-y-2">
                 <Label for="last_name" class="tracking-wide">Apellidos</Label>
-                <Input id="last_name" type="text" name="last_name" required autofocus :tabindex="3" autocomplete="last_name" class="form-input" />
-                <ValidationError v-if="errors.last_name" :error="errors.last_name" />
+                <Input
+                    id="last_name"
+                    type="text"
+                    name="last_name"
+                    @blur="validate('last_name')"
+                    required
+                    autofocus
+                    :tabindex="3"
+                    autocomplete="last_name"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('last_name')" :error="errors.last_name" />
             </div>
 
             <div class="space-y-2">
                 <Label for="phone" class="tracking-wide">Teléfono</Label>
-                <Input id="phone" type="phone" name="phone" required autofocus :tabindex="4" autocomplete="phone" class="form-input" />
-                <ValidationError v-if="errors.phone" :error="errors.phone" />
+                <Input
+                    id="phone"
+                    type="phone"
+                    @blur="validate('phone')"
+                    name="phone"
+                    required
+                    autofocus
+                    :tabindex="4"
+                    autocomplete="phone"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('phone')" :error="errors.phone" />
             </div>
 
             <div class="space-y-2">
                 <Label for="country" class="tracking-wide">País </Label>
-                <Input id="country" type="text" name="country" required autofocus :tabindex="5" autocomplete="country" class="form-input" />
-                <ValidationError v-if="errors.country" :error="errors.country" />
+                <Input
+                    id="country"
+                    @blur="validate('country')"
+                    type="text"
+                    name="country"
+                    required
+                    autofocus
+                    :tabindex="5"
+                    autocomplete="country"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('country')" :error="errors.country" />
             </div>
 
             <div class="space-y-2">
                 <Label for="state" class="tracking-wide">Provincia </Label>
-                <Input id="state" type="text" name="state" required autofocus :tabindex="6" autocomplete="state" class="form-input" />
-                <ValidationError v-if="errors.state" :error="errors.state" />
+                <Input
+                    id="state"
+                    type="text"
+                    @blur="validate('state')"
+                    name="state"
+                    required
+                    autofocus
+                    :tabindex="6"
+                    autocomplete="state"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('state')" :error="errors.state" />
             </div>
 
             <div class="space-y-2">
                 <Label for="city" class="tracking-wide">Ciudad</Label>
-                <Input id="city" type="text" name="city" required autofocus :tabindex="7" autocomplete="city" class="form-input" />
-                <ValidationError v-if="errors.city" :error="errors.city" />
+                <Input
+                    id="city"
+                    type="text"
+                    @blur="validate('city')"
+                    name="city"
+                    required
+                    autofocus
+                    :tabindex="7"
+                    autocomplete="city"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('city')" :error="errors.city" />
             </div>
 
             <div class="col-span-2 space-y-2">
                 <Label for="address" class="tracking-wide">Dirección</Label>
-                <Input id="address" type="text" name="address" required autofocus :tabindex="8" autocomplete="address" class="form-input" />
-                <ValidationError v-if="errors.address" :error="errors.address" />
+                <Input
+                    id="address"
+                    type="text"
+                    @blur="validate('address')"
+                    name="address"
+                    required
+                    autofocus
+                    :tabindex="8"
+                    autocomplete="address"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('address')" :error="errors.address" />
             </div>
 
             <div class="space-y-2">
                 <Label for="zipcode" class="tracking-wide">Código Postal</Label>
-                <Input id="zipcode" type="text" name="zipcode" required autofocus :tabindex="9" autocomplete="zipcode" class="form-input" />
-                <ValidationError v-if="errors.zipcode" :error="errors.zipcode" />
+                <Input
+                    id="zipcode"
+                    type="text"
+                    @blur="validate('zipcode')"
+                    name="zipcode"
+                    required
+                    autofocus
+                    :tabindex="9"
+                    autocomplete="zipcode"
+                    class="form-input"
+                />
+                <ValidationError v-if="invalid('zipcode')" :error="errors.zipcode" />
             </div>
 
             <div class="space-y-2">

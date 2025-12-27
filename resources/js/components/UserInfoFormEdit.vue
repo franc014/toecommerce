@@ -1,5 +1,12 @@
 <template>
-    <Form class="space-y-4" :action="update(parseInt(info.id))" method="put" v-slot="{ errors, processing }" @success="onSuccessEdit">
+    <Form
+        class="space-y-4"
+        #default="{ errors, processing, validate, invalid, validating }"
+        :action="update(parseInt(info.id))"
+        method="put"
+        v-slot="{ errors, processing }"
+        @success="onSuccessEdit"
+    >
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="email" class="tracking-wide">Email </Label>
@@ -7,6 +14,7 @@
                     id="email"
                     type="email"
                     name="email"
+                    @blur="validate('email')"
                     v-model="info.email"
                     required
                     autofocus
@@ -14,7 +22,7 @@
                     autocomplete="email"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.email" :error="errors.email" />
+                <ValidationError v-if="invalid('email')" :error="errors.email" />
             </div>
 
             <div class="col-span-2 space-y-2">
@@ -24,13 +32,14 @@
                     type="text"
                     name="first_name"
                     v-model="info.first_name"
+                    @blur="validate('first_name')"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="2"
                     autocomplete="first_name"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.first_name" :error="errors.first_name" />
+                <ValidationError v-if="invalid('first_name')" :error="errors.first_name" />
             </div>
 
             <div class="col-span-2 space-y-2">
@@ -39,14 +48,15 @@
                     id="last_name"
                     type="text"
                     name="last_name"
+                    @blur="validate('last_name')"
                     v-model="info.last_name"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="3"
                     autocomplete="last_name"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.last_name" :error="errors.last_name" />
+                <ValidationError v-if="invalid('last_name')" :error="errors.last_name" />
             </div>
 
             <div class="space-y-2">
@@ -55,14 +65,15 @@
                     id="phone"
                     type="phone"
                     name="phone"
+                    @blur="validate('phone')"
                     v-model="info.phone"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="4"
                     autocomplete="phone"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.phone" :error="errors.phone" />
+                <ValidationError v-if="invalid('phone')" :error="errors.phone" />
             </div>
             <div class="space-y-2">
                 <Label for="country" class="tracking-wide">País </Label>
@@ -70,14 +81,15 @@
                     id="country"
                     type="text"
                     name="country"
+                    @blur="validate('country')"
                     v-model="info.country"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="5"
                     autocomplete="country"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.country" :error="errors.country" />
+                <ValidationError v-if="invalid('country')" :error="errors.country" />
             </div>
 
             <div class="space-y-2">
@@ -86,14 +98,15 @@
                     id="state"
                     type="text"
                     name="state"
+                    @blur="validate('state')"
                     v-model="info.state"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="6"
                     autocomplete="state"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.state" :error="errors.state" />
+                <ValidationError v-if="invalid('state')" :error="errors.state" />
             </div>
 
             <div class="space-y-2">
@@ -102,14 +115,15 @@
                     id="city"
                     type="text"
                     name="city"
+                    @blur="validate('city')"
                     v-model="info.city"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="7"
                     autocomplete="city"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.city" :error="errors.city" />
+                <ValidationError v-if="invalid('city')" :error="errors.city" />
             </div>
 
             <div class="col-span-2 space-y-2">
@@ -118,14 +132,15 @@
                     id="address"
                     type="text"
                     name="address"
+                    @blur="validate('address')"
                     v-model="info.address"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="8"
                     autocomplete="address"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.address" :error="errors.address" />
+                <ValidationError v-if="invalid('address')" :error="errors.address" />
             </div>
 
             <div class="space-y-2">
@@ -135,13 +150,14 @@
                     type="text"
                     name="zipcode"
                     v-model="info.zipcode"
+                    @blur="validate('zipcode')"
                     required
                     autofocus
-                    :tabindex="1"
+                    :tabindex="9"
                     autocomplete="zipcode"
                     class="form-input tracking-wide"
                 />
-                <ValidationError v-if="errors.zipcode" :error="errors.zipcode" />
+                <ValidationError v-if="invalid('zipcode')" :error="errors.zipcode" />
             </div>
 
             <div class="space-y-2">
@@ -153,7 +169,7 @@
                 <Button
                     type="submit"
                     class="mt-4 w-full cursor-pointer hover:bg-orange-200"
-                    :tabindex="4"
+                    :tabindex="10"
                     :disabled="processing"
                     data-test="login-button"
                     variant="outline"

@@ -41,10 +41,10 @@
                 <Accordion :collapsible="true" default-value="item-1">
                     <AccordionItem value="item-1" key="item-1">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
-                        <AccordionContent class="py-10">
+                        <AccordionContent class="py-5">
                             <div class="space-y-10">
                                 <!-- <OrderSummary :order="order" :user="user" /> -->
-                                <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
+                                <PayphoneButton :gatewayInfo="payphoneInfo" />
                             </div>
                         </AccordionContent>
                     </AccordionItem>

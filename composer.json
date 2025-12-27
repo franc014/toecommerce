@@ -19,6 +19,7 @@
         "laravel/wayfinder": "^0.1.12",
         "league/flysystem-aws-s3-v3": "^3.0",
         "spatie/laravel-backup": "^9.3",
+        "spatie/laravel-honeypot": "^4.6",
         "spatie/laravel-ray": "^1.40",
         "symfony/http-client": "^7.3",
         "symfony/mailgun-mailer": "^7.3",

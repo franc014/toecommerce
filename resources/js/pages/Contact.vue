@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-span-12 lg:col-span-6">
-                    <ContactForm />
+                    <ContactForm :honeypot="honeypot" />
                 </div>
             </div>
             <div>
@@ -35,6 +35,9 @@ import { usePage } from '@inertiajs/vue3';
 defineOptions({ layout: StorefrontLayout });
 
 const company = usePage().props.companyInformation as Company;
+const honeypot = usePage().props.honeypot as any;
+
+console.log(honeypot);
 
 const socialMedia = company.socialMedia;
 

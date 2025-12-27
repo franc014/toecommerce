@@ -34,7 +34,7 @@
                     </li>
                 </ul>
 
-                <SheetFooter>
+                <SheetFooter class="shadow-2xl shadow-zinc-800">
                     <CartTally />
 
                     <div class="flex items-center justify-between gap-4" v-if="!cartStore.isEmpty">
