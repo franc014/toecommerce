@@ -1,9 +1,10 @@
 <template>
+    <AppHead :metaTags="metaTags" :company="company" />
     <section class="contact-v3 relative z-[1] mt-50 md:mt-20">
         <div class="mx-auto mb-10 w-[calc(100%_-_2.5rem)] max-w-xl lg:mb-12 lg:w-[calc(100%_-_4rem)]">
             <div class="text-center">
-                <h1 class="text-4x mb-2 font-serif2">Contáctanos</h1>
-                <p class="text-xl tracking-wider">Estamos disponibles para ayudarte a resolver cualquier duda que puedas tener.</p>
+                <h1 class="text-4x mb-2 font-serif2">{{ heading }}</h1>
+                <p class="text-xl tracking-wider">{{ message }}</p>
             </div>
         </div>
 
@@ -14,7 +15,7 @@
                 </div>
 
                 <div class="col-span-12 lg:col-span-6">
-                    <ContactForm :honeypot="honeypot" />
+                    <ContactForm />
                 </div>
             </div>
             <div>
@@ -25,19 +26,22 @@
 </template>
 
 <script setup lang="ts">
+import AppHead from '@/components/AppHead.vue';
 import CompanyInfo from '@/components/contact/CompanyInfo.vue';
 import ContactForm from '@/components/contact/ContactForm.vue';
 import Socials from '@/components/contact/Socials.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Company } from '@/types';
+import { Company, PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 defineOptions({ layout: StorefrontLayout });
 
-const company = usePage().props.companyInformation as Company;
-const honeypot = usePage().props.honeypot as any;
+const page = usePage();
 
-console.log(honeypot);
+const metaTags = page.props.metatags as any;
+const company = page.props.company as Company;
+const components = page.props.components as PageComponents;
 
 const socialMedia = company.socialMedia;
 
@@ -52,6 +56,17 @@ const socials = {
     twitter,
     youtube,
 };
+
+const contactIntro = computed(() => {
+    return components['ContactIntro'].content as PageComponentContent;
+});
+
+const heading = computed(() => {
+    return contactIntro.value.heading[0].content;
+});
+const message = computed(() => {
+    return contactIntro.value.paragraph[0].content;
+});
 </script>
 
 <style scoped></style>

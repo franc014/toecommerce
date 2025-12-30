@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Settings\StorefrontSettings;
-use Inertia\Inertia;
 
-class ProductsPageController extends Controller
+class ProductsPageController extends PageController
 {
-    public function __invoke(StorefrontSettings $sfSettings)
+
+    public function __construct(StorefrontSettings $sfSettings)
     {
+        $this->view = 'Products';
+        $this->slug = 'products';
 
         $products = Product::published()->with('variants')->paginate($sfSettings->products_per_page)->through(function ($product) {
             return [
@@ -26,8 +28,11 @@ class ProductsPageController extends Controller
             ];
         });
 
-        return Inertia::render('Products', [
-            'products' => $products,
-        ]);
+        $this->extendedData = [
+            'products' => $products
+        ];
+
     }
+
+
 }

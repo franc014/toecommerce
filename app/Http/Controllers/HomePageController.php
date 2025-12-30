@@ -10,14 +10,11 @@ use App\CMS\ProductsTransformable;
 
 class HomePageController extends PageController
 {
-    protected $slug = 'home';
-
-    protected $transformables = [];
-
-    protected $view = 'Home';
 
     public function __construct()
     {
+        $this->view = 'Home';
+        $this->slug = 'home';
         $this->transformables =
              [
                  new ImageTransformable,

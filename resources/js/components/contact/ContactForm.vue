@@ -85,10 +85,10 @@
                 />
                 <ValidationError v-if="invalid('message')" :error="errors.message" />
             </div>
-            <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`">
+            <!-- <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`">
                 <Input :id="honeypot.nameFieldName" type="text" :name="honeypot.nameFieldName" class="form-input" :value="''" />
                 <Input type="text" :name="honeypot.validFromFieldName" class="form-input" :value="honeypot.encryptedValidFrom" />
-            </div>
+            </div> -->
 
             <div class="col-span-2 space-y-2">
                 <Button variant="outline" type="submit" class="mt-4 w-full cursor-pointer hover:bg-orange-200" :tabindex="6" :disabled="processing">
@@ -112,10 +112,6 @@ import { sendMessage } from '@/routes/storefront';
 import { Form } from '@inertiajs/vue3';
 import { LoaderCircle, SendHorizonal } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
-
-defineProps<{
-    honeypot: any;
-}>();
 
 const handleSuccess = () => {
     toast.success('Mensaje enviado con éxito');

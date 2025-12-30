@@ -1,5 +1,6 @@
 <template>
-    <section class="mt-52 pb-20 md:mt-0">
+    <section class="mt-52 pb-20 md:mt-20">
+        <AppHead :metaTags="metaTags" :company="company" />
         <div class="wrapper">
             <section class="product-grid">
                 <div>
@@ -48,13 +49,14 @@
 
 <script setup lang="ts">
 import AddToCart from '@/components/AddToCart.vue';
+import AppHead from '@/components/AppHead.vue';
 import ProductGallery from '@/components/ProductGallery.vue';
 import ProductsList from '@/components/ProductsList.vue';
 import ProductVariants from '@/components/ProductVariants.vue';
 import SectionDivider from '@/components/SectionDivider.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Product } from '@/types';
+import { Company, Product } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 
 import BackgroundDecoration from '@/components/BackgroundDecoration.vue';
@@ -65,6 +67,8 @@ const page = usePage();
 
 const product = page.props.product as Product;
 const relatedProducts = page.props.relatedProducts as Product[];
+const metaTags = page.props.metatags as any;
+const company = page.props.company as Company;
 </script>
 
 <style scoped></style>

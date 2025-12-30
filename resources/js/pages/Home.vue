@@ -1,5 +1,6 @@
 <template>
     <div>
+        <AppHead :metaTags="metaTags" :company="company" />
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
         <Collections :content="collectionsContent" />
@@ -16,11 +17,14 @@ import RecentProducts from '@/components/home/RecentProducts.vue';
 
 import OurPromise from '@/components/home/OurPromise.vue';
 
-import { PageComponentContent, PageComponents } from '@/types';
+import AppHead from '@/components/AppHead.vue';
+import { Company, PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const page = usePage();
+const metaTags = page.props.metatags as any;
+const company = page.props.company as Company;
 
 const components = page.props.components as PageComponents;
 
