@@ -6,9 +6,9 @@ use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
 use App\Models\Product;
 use App\Traits\Metatags;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Spatie\SchemaOrg\Schema;
 
 class ProductPageController extends Controller
 {
@@ -117,6 +117,12 @@ class ProductPageController extends Controller
 
     private function schema_org()
     {
-        return null;
+        $sp = Schema::Product()->name($this->product->title)
+                ->sameAs(route('storefront.product', ['product' => $this->product->slug]))
+                ->image(Storage::url($this->product->main_image))
+                ->description($this->product->excerpt ?? '')
+                ->keywords($this->product->tags()->pluck('name')->implode(', '));
+
+        return json_encode($sp);
     }
 }

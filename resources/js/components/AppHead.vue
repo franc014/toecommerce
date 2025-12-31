@@ -12,6 +12,10 @@
         <meta property="twitter:title" :content="metaTags.twitter_title" />
         <meta property="twitter:description" :content="metaTags.twitter_description" />
         <meta property="twitter:image" :content="metaTags.twitter_image" />
+
+        <component is="script" type="application/ld+json" v-if="metaTags.schemaOrg">
+            {{ metaTags.schemaOrg }}
+        </component>
     </Head>
 </template>
 
@@ -19,7 +23,7 @@
 import { Company } from '@/types';
 import { Head } from '@inertiajs/vue3';
 
-defineProps<{
+const props = defineProps<{
     metaTags: any;
     company: Company;
 }>();

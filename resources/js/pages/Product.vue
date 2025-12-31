@@ -69,6 +69,8 @@ const product = page.props.product as Product;
 const relatedProducts = page.props.relatedProducts as Product[];
 const metaTags = page.props.metatags as any;
 const company = page.props.company as Company;
+
+console.log(metaTags);
 </script>
 
 <style scoped></style>
