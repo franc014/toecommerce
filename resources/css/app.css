@@ -143,30 +143,34 @@
 
 
 
-.products-grid {
+/* .products-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
-}
+} */
 
 
 
 
-.latest-products-grid {
+/* .latest-products-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2.75rem;
-}
+} */
 
 @media screen and (min-width: 768px) {
     .latest-products-grid {
+        display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.75rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
     .products-grid {
+        display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 3rem;
     }
 
     .latest-products-grid {
