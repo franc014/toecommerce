@@ -1,6 +1,6 @@
 <template>
     <Form
-        class="w-full space-y-4"
+        class="w-11/12 space-y-4"
         :action="sendMessage()"
         method="post"
         #default="{ errors, processing, validate, invalid, validating }"
