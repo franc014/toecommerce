@@ -29,7 +29,7 @@ class ProductsPageController extends PageController
         });
 
         $this->extendedData = [
-            'products' => $products
+            'products' => fn () => $products
         ];
 
     }

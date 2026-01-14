@@ -39,8 +39,8 @@ abstract class PageController extends Controller
             }
 
             return Inertia::render($this->view, [
-                'components' => collect($components)->keyBy('class'),
-                'metatags' => $this->metatags(),
+                'components' => fn () => collect($components)->keyBy('class'),
+                'metatags' => fn () => $this->metatags(),
                 ...$this->extendedData
             ]);
 
