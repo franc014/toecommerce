@@ -2,7 +2,7 @@
     <Form class="w-full" :action="store()" method="post" #default="{ errors, processing, validate, invalid, validating }" @success="handleSuccess">
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
-                <Label for="email" class="flex items-center tracking-wide">Email</Label>
+                <Label for="email" class="flex items-center tracking-wide">Email <IsRequiredSign /></Label>
                 <Input
                     id="email"
                     type="email"
@@ -18,7 +18,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="first_name" class="tracking-wide">Nombres</Label>
+                <Label for="first_name" class="tracking-wide">Nombres <IsRequiredSign /></Label>
                 <Input
                     id="first_name"
                     @blur="validate('first_name')"
@@ -34,7 +34,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="last_name" class="tracking-wide">Apellidos</Label>
+                <Label for="last_name" class="tracking-wide">Apellidos <IsRequiredSign /></Label>
                 <Input
                     id="last_name"
                     type="text"
@@ -82,7 +82,7 @@
             </div>
 
             <div class="space-y-2">
-                <Label for="state" class="tracking-wide">Provincia </Label>
+                <Label for="state" class="tracking-wide">Provincia/Estado </Label>
                 <Input
                     id="state"
                     type="text"
@@ -98,7 +98,7 @@
             </div>
 
             <div class="space-y-2">
-                <Label for="city" class="tracking-wide">Ciudad</Label>
+                <Label for="city" class="tracking-wide">Ciudad <IsRequiredSign /></Label>
                 <Input
                     id="city"
                     type="text"
@@ -114,7 +114,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="address" class="tracking-wide">Dirección</Label>
+                <Label for="address" class="tracking-wide">Dirección <IsRequiredSign /></Label>
                 <Input
                     id="address"
                     type="text"
@@ -162,6 +162,7 @@
 </template>
 
 <script setup lang="ts">
+import IsRequiredSign from '@/components/IsRequiredSign.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

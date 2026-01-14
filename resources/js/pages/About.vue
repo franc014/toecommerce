@@ -13,12 +13,12 @@ import Story from '@/components/about/Story.vue';
 import Values from '@/components/about/Values.vue';
 import VideoPresentation from '@/components/about/VideoPresentation.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Company, PageComponentContent, PageComponents } from '@/types';
+import { Company, Metatags, PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const page = usePage();
-const metaTags = page.props.metatags as any;
+const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
 
 const components = page.props.components as PageComponents;

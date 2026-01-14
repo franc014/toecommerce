@@ -9,7 +9,7 @@
     >
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
-                <Label for="email" class="tracking-wide">Email </Label>
+                <Label for="email" class="tracking-wide">Email <IsRequiredSign /></Label>
                 <Input
                     id="email"
                     type="email"
@@ -26,7 +26,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="first_name" class="tracking-wide">Nombres </Label>
+                <Label for="first_name" class="tracking-wide">Nombres <IsRequiredSign /></Label>
                 <Input
                     id="first_name"
                     type="text"
@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="last_name" class="tracking-wide">Apellidos </Label>
+                <Label for="last_name" class="tracking-wide">Apellidos <IsRequiredSign /></Label>
                 <Input
                     id="last_name"
                     type="text"
@@ -110,7 +110,7 @@
             </div>
 
             <div class="space-y-2">
-                <Label for="city" class="tracking-wide">Ciudad </Label>
+                <Label for="city" class="tracking-wide">Ciudad <IsRequiredSign /></Label>
                 <Input
                     id="city"
                     type="text"
@@ -127,7 +127,7 @@
             </div>
 
             <div class="col-span-2 space-y-2">
-                <Label for="address" class="tracking-wide">Dirección </Label>
+                <Label for="address" class="tracking-wide">Dirección <IsRequiredSign /></Label>
                 <Input
                     id="address"
                     type="text"
@@ -184,6 +184,7 @@
 </template>
 
 <script setup lang="ts">
+import IsRequiredSign from '@/components/IsRequiredSign.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -205,7 +206,7 @@ const props = defineProps({
 const info = ref({} as UserInfoEntry);
 
 onMounted(() => {
-    const infoForEdit = { ...props.info };
+    const infoForEdit = { ...props.info } as UserInfoEntry;
     info.value = infoForEdit;
 });
 

@@ -9,7 +9,7 @@ const { content } = defineProps<{
     content: PageComponentContent;
 }>();
 
-const privacyPolicy = (content as any)['rich-editor'][0].content;
+const privacyPolicy = content['rich-editor'][0].content;
 </script>
 
 <style scoped></style>

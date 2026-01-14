@@ -13,17 +13,17 @@ import AppHead from '@/components/AppHead.vue';
 import Banner from '@/components/Banner.vue';
 import ProductsList from '@/components/ProductsList.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Company, PageComponentContent, PageComponents } from '@/types';
+import { Company, Metatags, PageComponentContent, PageComponents, Product } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 defineOptions({ layout: StorefrontLayout });
 
 const page = usePage();
-const paginated = page.props.products as { data: any[]; links: string[] };
+const paginated = page.props.products as { data: Product[]; links: string[] };
 const products = paginated.data;
 const paginationLinks = paginated.links;
-const metaTags = page.props.metatags as any;
+const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
 
 const components = page.props.components as PageComponents;

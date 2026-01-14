@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import Banner from '@/components/Banner.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Collection, Company, PageComponentContent, PageComponents } from '@/types';
+import { Collection, Company, Metatags, PageComponentContent, PageComponents } from '@/types';
 
 import { usePage } from '@inertiajs/vue3';
 
@@ -26,7 +26,7 @@ const page = usePage();
 const components = page.props.components as PageComponents;
 const collections = page.props.collections as Collection[];
 
-const metaTags = page.props.metatags as any;
+const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
 
 const intro = computed(() => {

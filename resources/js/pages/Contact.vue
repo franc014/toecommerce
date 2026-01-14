@@ -31,7 +31,7 @@ import CompanyInfo from '@/components/contact/CompanyInfo.vue';
 import ContactForm from '@/components/contact/ContactForm.vue';
 import Socials from '@/components/contact/Socials.vue';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Company, PageComponentContent, PageComponents } from '@/types';
+import { Company, Metatags, PageComponentContent, PageComponents } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -39,7 +39,7 @@ defineOptions({ layout: StorefrontLayout });
 
 const page = usePage();
 
-const metaTags = page.props.metatags as any;
+const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
 const components = page.props.components as PageComponents;
 

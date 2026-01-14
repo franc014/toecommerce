@@ -42,7 +42,7 @@
                     <AccordionItem value="item-1" key="item-1">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
                         <AccordionContent class="py-5">
-                            <div class="space-y-10">
+                            <div class="space-y-10 md:px-10">
                                 <!-- <OrderSummary :order="order" :user="user" /> -->
                                 <PayphoneButton :gatewayInfo="payphoneInfo" />
                             </div>

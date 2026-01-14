@@ -37,7 +37,7 @@ export interface User {
 }
 
 export interface UserInfoEntry {
-    id: number;
+    id: string;
     email: string;
     first_name: string;
     last_name: string;
@@ -77,13 +77,10 @@ export interface ProductVariant {
     images: Array<string>;
 }
 
-
-
 export interface Cart {
     id: string;
     items: CartItem[];
 }
-
 
 export interface CartAggregation{
     total_with_taxes_in_dollars: string;
@@ -184,6 +181,7 @@ export interface PageComponentContent {
     collections: Array;
     feature: Array;
     video: Array;
+    'rich-editor': Array;
 }
 
 export interface Menu {
@@ -223,6 +221,19 @@ export interface WorkingDays {
     friday: string;
     saturday: string;
     sunday: string;
+}
+
+export interface Metatags {
+    title: string;
+    description: string;
+    og_title: string;
+    og_description: string;
+    og_image: string;
+    twitter_title: string;
+    twitter_description: string;
+    twitter_image: string;
+    robots: string;
+    schemaOrg: string;
 }
 
 

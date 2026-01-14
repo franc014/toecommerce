@@ -30,9 +30,6 @@ abstract class PageController extends Controller
 
             $this->page = $page;
 
-            ray($this->metatags());
-
-
             foreach ($page->sectionsForUI($this->transformables) as $section) {
                 $component = Str::studly($section['slug']);
                 $components[] = [

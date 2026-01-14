@@ -56,7 +56,7 @@ import ProductVariants from '@/components/ProductVariants.vue';
 import SectionDivider from '@/components/SectionDivider.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
-import { Company, Product } from '@/types';
+import { Company, Metatags, Product } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 
 import BackgroundDecoration from '@/components/BackgroundDecoration.vue';
@@ -67,10 +67,8 @@ const page = usePage();
 
 const product = page.props.product as Product;
 const relatedProducts = page.props.relatedProducts as Product[];
-const metaTags = page.props.metatags as any;
+const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
-
-console.log(metaTags);
 </script>
 
 <style scoped></style>

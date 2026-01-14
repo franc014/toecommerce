@@ -41,7 +41,7 @@ const { content } = defineProps<{
 const heading = content.heading[0].content;
 const message = content.paragraph[0].content;
 const image = content.image[0]['image'];
-const storyBody = (content as any)['rich-editor'][0].content;
+const storyBody = content['rich-editor'][0].content;
 </script>
 
 <style scoped></style>
