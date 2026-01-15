@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Menu;
 use App\Settings\CompanySettings;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -45,11 +46,11 @@ class HandleInertiaRequests extends Middleware
 
         return [
             ...parent::share($request),
-            'mainMenu' => $mainMenu,
-            'footerMenu' => $footerMenu,
-            'legalMenu' => $legalMenu,
-            'company' => $company,
-            'name' => config('app.name'),
+            'mainMenu' => Inertia::once(fn () => $mainMenu),
+            'footerMenu' => Inertia::once(fn () => $footerMenu),
+            'legalMenu' => Inertia::once(fn () => $legalMenu),
+            'company' => Inertia::once(fn () => $company),
+            'name' => Inertia::once(fn () => config('app.name')),
             'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [
                 'user' => $request->user(),
