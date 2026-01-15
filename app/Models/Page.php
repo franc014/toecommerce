@@ -63,7 +63,7 @@ class Page extends Model
                 ->with('sections', function ($query) {
                     $query->orderBy('order_column');
                 })
-                ->lazy()->firstOrFail();
+                ->firstOrFail();
         });
     }
 

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Mail;
 class ContactPageController extends PageController
 {
 
-
     public function __construct()
     {
         $this->slug = 'contact';
@@ -21,9 +20,7 @@ class ContactPageController extends PageController
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
 
-        // $request->validated()
         $contact = Contact::create($request->all());
-
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
     }

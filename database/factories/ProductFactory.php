@@ -32,6 +32,7 @@ class ProductFactory extends Factory
             'stock' => fake()->numberBetween(0, 200),
             'sku' => fake()->ean13(),
             'published_at' => null,
+            'stock_threshold_for_customers' => 10,
 
         ];
     }
