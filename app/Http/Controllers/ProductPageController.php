@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
 use App\Models\Product;
+use App\Traits\Metatags;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Spatie\SchemaOrg\Schema;
 
 class ProductPageController extends Controller
 {
+    use Metatags;
+
+    private Product $product;
+
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, Product $product)
+    public function __invoke(Product $product)
     {
+        $this->product = $product;
 
         $data = [
             'id' => $product->id,
@@ -54,6 +60,69 @@ class ProductPageController extends Controller
         return Inertia::render('Product', [
             'product' => $data,
             'relatedProducts' => $relatedProducts,
+            'metatags' => $this->metatags(),
         ]);
+    }
+
+    private function title()
+    {
+        return $this->product->title;
+    }
+
+    private function description()
+    {
+        return $this->product->excerpt ?? '';
+    }
+
+    private function og_title()
+    {
+        return $this->product->title;
+    }
+
+    private function og_description()
+    {
+        return $this->product->excerpt ?? '';
+    }
+
+    private function og_image()
+    {
+        return Storage::url($this->product->main_image);
+    }
+
+    private function twitter_card()
+    {
+        return 'summary_large_image';
+    }
+
+    private function twitter_title()
+    {
+        return $this->product->title;
+    }
+
+    private function twitter_description()
+    {
+        return $this->product->excerpt ?? '';
+    }
+
+    private function twitter_image()
+    {
+        return  Storage::url($this->product->main_image);
+    }
+
+
+    private function robots()
+    {
+        return 'index,follow';
+    }
+
+    private function schema_org()
+    {
+        $sp = Schema::Product()->name($this->product->title)
+                ->sameAs(route('storefront.product', ['product' => $this->product->slug]))
+                ->image(Storage::url($this->product->main_image))
+                ->description($this->product->excerpt ?? '')
+                ->keywords($this->product->tags()->pluck('name')->implode(', '));
+
+        return json_encode($sp);
     }
 }

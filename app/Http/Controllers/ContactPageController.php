@@ -6,38 +6,21 @@ use App\Http\Requests\SendContactRequest;
 use App\Mail\UserContactSent;
 use App\Models\Contact;
 use App\Settings\CompanySettings;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Inertia\Inertia;
 
-class ContactPageController extends Controller
+class ContactPageController extends PageController
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function index(CompanySettings $companySettings)
+
+    public function __construct()
     {
-
-        $companyInformation = [
-            'phone' => $companySettings->phone,
-            'email' => $companySettings->email,
-            'address' => $companySettings->address,
-            'whatsapp' => $companySettings->whatsapp,
-            'socialMedia' => $companySettings->socialMedia,
-            'workingDays' => $companySettings->workingDays,
-
-        ];
-
-        return Inertia::render('Contact', [
-            'companyInformation' => $companyInformation,
-        ]);
+        $this->slug = 'contact';
+        $this->view = 'Contact';
     }
 
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
 
-        $contact = Contact::create($request->validated());
-
+        $contact = Contact::create($request->all());
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
     }

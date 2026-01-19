@@ -21,7 +21,7 @@
                 </div>
 
                 <div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex flex-col gap-4">
                         <QuantityHandler :updateCart="updateCart" v-on:updateQuantity="setQuantity" :quantity="qty" />
                         <ProductVariants :variants="product.variants" v-if="product.has_variants" />
                     </div>

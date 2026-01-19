@@ -1,8 +1,8 @@
 <template>
     <section class="border-b border-dashed border-zinc-400 pb-8">
         <h2 class="text-4xl">Resumen de la orden</h2>
-        <div class="flex flex-col gap-4 p-4">
-            <Table class="rounded-md border border-dashed border-zinc-500">
+        <div class="flex flex-col gap-4 py-4 md:p-4">
+            <Table class="overflow-scroll rounded-md border border-dashed border-zinc-500">
                 <TableHeader>
                     <TableRow>
                         <TableHead class="w-[100px]"> Producto </TableHead>
@@ -22,8 +22,8 @@
                     </TableRow>
                 </TableBody>
             </Table>
-            <div class="flex items-end justify-between">
-                <ul class="spacy-y-3 tracking-wider">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <ul class="space-y-3 tracking-wider">
                     <li>Subtotal con impuestos: {{ order.total_with_taxes_in_dollars }}</li>
                     <li>Subtotal sin impuestos: {{ order.total_without_taxes_in_dollars }}</li>
                     <li>Impuestos: {{ order.total_computed_taxes_in_dollars }}</li>

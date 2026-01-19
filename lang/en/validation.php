@@ -194,6 +194,18 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'first_name' => 'Nombre',
+        'last_name' => 'Apellido',
+        'address' => 'Dirección',
+        'phone' => 'Teléfono',
+        'message' => 'Mensaje',
+        'country' => 'Páis',
+        'state' => 'Provincia/Estado',
+        'city' => 'Ciudad',
+        'zipcode' => 'Código Postal',
+
+
+    ],
 
 ];

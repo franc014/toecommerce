@@ -1,6 +1,6 @@
 <template>
-    <section class="min-h-screen">
-        <div class="wrapper space-y-10 py-20">
+    <section class="mt-50 min-h-screen md:mt-0">
+        <div class="wrapper space-y-10 md:py-20">
             <h1 class="font-serif2">
                 Checkout de <span class="text-2xl tracking-wider italic">{{ user.name }}</span>
             </h1>
@@ -10,7 +10,7 @@
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider"
                             >1. Información para Facturación</AccordionTrigger
                         >
-                        <AccordionContent class="px-10 pb-10">
+                        <AccordionContent class="pb-10 md:px-10">
                             <PurchaseInfo
                                 :data="{
                                     info: billingInfo,
@@ -24,7 +24,7 @@
                     </AccordionItem>
                     <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
-                        <AccordionContent class="px-10 pb-10">
+                        <AccordionContent class="pb-10 md:px-10">
                             <PurchaseInfo
                                 v-if="user.has_billing_info"
                                 :data="{
@@ -38,14 +38,13 @@
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-
                 <Accordion :collapsible="true" default-value="item-1">
                     <AccordionItem value="item-1" key="item-1">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
-                        <AccordionContent class="px-10 py-10">
-                            <div class="space-y-10">
-                                <OrderSummary :order="order" :user="user" />
-                                <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
+                        <AccordionContent class="py-5">
+                            <div class="space-y-10 md:px-10">
+                                <!-- <OrderSummary :order="order" :user="user" /> -->
+                                <PayphoneButton :gatewayInfo="payphoneInfo" />
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -56,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import OrderSummary from '@/components/OrderSummary.vue';
 import PayphoneButton from '@/components/PayphoneButton.vue';
 import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';

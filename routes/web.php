@@ -26,7 +26,7 @@ Route::get('/products/{product:slug}', ProductPageController::class)->name('stor
 Route::get('/collections', CollectionsPageController::class)->name('storefront.collections');
 Route::get('/collections/{collection:slug}', CollectionPageController::class)->name('storefront.collection');
 Route::get('/about', AboutPageController::class)->name('storefront.about');
-Route::get('/contact', [ContactPageController::class, 'index'])->name('storefront.contact');
+Route::get('/contact', ContactPageController::class)->name('storefront.contact');
 Route::get('/terminos-y-condiciones', TermsAndConditionsPageController::class)->name('storefront.terms-and-conditions');
 Route::get('/politica-de-privacidad', PrivacyPolicyPageController::class)->name('storefront.privacy-policy');
 
@@ -49,8 +49,8 @@ Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('pa
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
     Route::post('/orders/cancel', [OrderController::class, 'cancelOrder'])->name('storefront.orders.cancel');
-    Route::post('/user-info', [UserInfoEntryController::class, 'store'])->name('storefront.user-info-entry.store');
-    Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->name('storefront.user-info-entry.update');
+    Route::post('/user-info', [UserInfoEntryController::class, 'store'])->middleware(HandlePrecognitiveRequests::class)->name('storefront.user-info-entry.store');
+    Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->middleware(HandlePrecognitiveRequests::class)->name('storefront.user-info-entry.update');
     Route::post('/shipping-info/use-billing', [UserInfoEntryController::class, 'useBillingAsShipping'])->name('storefront.user-info-entry.use-billing-as-shipping');
 
 });

@@ -125,7 +125,7 @@ class Order extends Model
 
     public function removeItem(CartItem $cartItem): void
     {
-        // ray($this->orderItems);
+
         $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
         $item->delete();
     }
@@ -166,8 +166,6 @@ class Order extends Model
     {
 
         $payphoneConfirmation = json_decode($payphoneConfirmation, true);
-
-        // ray($payphoneConfirmation);
 
         if (Arr::exists($payphoneConfirmation, 'errorCode')) {
             throw new PayphoneTransactionErrorException;

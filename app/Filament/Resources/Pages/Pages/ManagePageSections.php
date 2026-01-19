@@ -26,9 +26,9 @@ class ManagePageSections extends ManageRelatedRecords
             ->headerActions([
                 CreateAction::make(),
                 ExportAction::make()
-                ->exporter(PageSectionExporter::class),
+                    ->exporter(PageSectionExporter::class),
                 ImportAction::make()
-                ->importer(PageSectionImporter::class),
+                    ->importer(PageSectionImporter::class),
 
             ]);
     }

@@ -1,11 +1,13 @@
 <template>
-    <Dialog class="bg-sky-200" :modal="true">
-        <DialogTrigger class="flex cursor-pointer items-center gap-2 rounded-md bg-sky-500 px-3 py-2 text-sm text-zinc-100 hover:bg-sky-400">
+    <Dialog :modal="true">
+        <DialogTrigger
+            class="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-sky-500 px-3 py-2 text-center text-sm text-zinc-100 hover:bg-sky-400"
+        >
             <SwatchBook class="h-4 w-4" />
             Variantes
         </DialogTrigger>
 
-        <DialogScrollContent class="dialog-content min-w-[800px] bg-zinc-300 sm:max-w-[425px]">
+        <DialogScrollContent class="dialog-content bg-zinc-300 sm:max-w-[425px] md:min-w-[800px]">
             <DialogHeader class="mb-4">
                 <DialogTitle class="tracking-wide">Variantes de producto</DialogTitle>
                 <DialogDescription class="tracking-wider">Puedes agregar variantes de producto a tu carrito </DialogDescription>
@@ -30,11 +32,6 @@ defineProps<{
 </script>
 
 <style scoped>
-.variants-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-}
 .dialog-overlay {
     background: rgba(232, 169, 81, 0.2);
     position: fixed;

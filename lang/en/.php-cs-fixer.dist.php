@@ -25,6 +25,6 @@ return (new Config())
             // ->notPath([/* ... */])
             // 💡 extra configs
             // ->ignoreDotFiles(false) // true by default in v3, false in v4 or future mode
-            // ->ignoreVCSIgnored(true) // true by default
+            // ->ignoreVCS(true) // true by default
     )
 ;

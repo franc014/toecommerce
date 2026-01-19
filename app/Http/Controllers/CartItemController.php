@@ -41,8 +41,6 @@ class CartItemController extends Controller
 
             $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($request->input('product_id'), $request->input('purchasable_type')), $request->input('quantity'));
 
-            // ray($addsToCart);
-
             $item = $addsToCart->handle();
 
             return ['item' => $item];

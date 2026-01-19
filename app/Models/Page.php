@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\CMS\ContentResolver;
 use App\Enums\PageStatus;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -62,7 +63,7 @@ class Page extends Model
                 ->with('sections', function ($query) {
                     $query->orderBy('order_column');
                 })
-                ->lazy()->firstOrFail();
+                ->firstOrFail();
         });
     }
 

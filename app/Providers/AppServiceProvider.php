@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Vite::prefetch(concurrency: 3);
+        Vite::prefetch(concurrency: 6);
         Model::automaticallyEagerLoadRelationships();
         Model::unguard();
 

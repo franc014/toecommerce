@@ -164,7 +164,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         }
 
         foreach ($transformed as $key => $options) {
-            // ray($key, $options);
+
             $lowL = collect([]);
 
             foreach ($options as $keyp => $value) {

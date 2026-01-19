@@ -3,27 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCollection;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
-class CollectionsPageController extends Controller
+use Illuminate\Support\Facades\Storage;
+
+class CollectionsPageController extends PageController
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+
+    public function __construct()
     {
-        return Inertia::render('Collections', [
-            'collections' => ProductCollection::query()->get()->map(function ($collection) {
-                return [
-                    'id' => $collection->id,
-                    'title' => $collection->title,
-                    'slug' => $collection->slug,
-                    'description' => $collection->description,
-                    'featured_image' => Storage::url($collection->featured_image),
-                ];
-            }),
-        ]);
+        $this->slug = 'collections';
+        $this->view = 'Collections';
+
+        $collections = ProductCollection::query()->get()->map(function ($collection) {
+            return [
+                'id' => $collection->id,
+                'title' => $collection->title,
+                'slug' => $collection->slug,
+                'description' => $collection->description,
+                'featured_image' => Storage::url($collection->featured_image),
+            ];
+        });
+
+        $this->extendedData = [
+            'collections' => $collections
+        ];
     }
+
 }
