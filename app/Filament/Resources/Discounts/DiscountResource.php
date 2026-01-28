@@ -13,14 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
 use UnitEnum;
 
 class DiscountResource extends Resource
 {
     protected static ?string $model = Discount::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -32,11 +31,6 @@ class DiscountResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('firesources.discounts');
-    }
-
-    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
-    {
-        return 'icon-discount';
     }
 
     public static function getNavigationGroup(): UnitEnum|string|null
@@ -65,8 +59,8 @@ class DiscountResource extends Resource
     {
         return [
             'index' => ListDiscounts::route('/'),
-            'create' => CreateDiscount::route('/create'),
-            'edit' => EditDiscount::route('/{record}/edit'),
+            // 'create' => CreateDiscount::route('/create'),
+            // 'edit' => EditDiscount::route('/{record}/edit'),
         ];
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('percentage');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
+            $table->string('status')->default('inactive');
             $table->timestamps();
         });
     }

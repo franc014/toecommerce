@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Money;
+use App\Enums\DiscountStatus;
 use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
@@ -104,11 +105,10 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         return $this->belongsToMany(Discount::class);
     }
 
-    public function activeDiscounts(): Collection
+    public function validDiscounts(): Collection
     {
-        $now = now();
-
-        return $this->discounts()->where('start_date', '<=', $now)->where('end_date', '>=', $now)->get();
+        return $this->discounts()->where('status', DiscountStatus::ACTIVE->value)
+            ->orWhere('status', DiscountStatus::SCHEDULED->value)->get();
     }
 
     public function user(): BelongsTo

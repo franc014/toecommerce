@@ -30,6 +30,12 @@ class DiscountsTable
                     ->dateTime()
                     ->sortable(),
 
+                TextColumn::make('status')
+                    ->label(__('firesources.status'))
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('created_at')
                     ->label(__('firesources.created_at'))
                     ->dateTime()

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Models\Discount;
 use App\Models\Product;
 use App\Models\Tax;
 use Filament\Actions\Action;
@@ -47,10 +48,10 @@ class ProductsTable
                     ->money()
                     ->sortable(),
 
-                ImageColumn::make('main_image')
+                /*  ImageColumn::make('main_image')
                     ->label(__('firesources.image'))
                     ->circular()
-                    ->imageSize(60),
+                    ->imageSize(60), */
 
                 TextColumn::make('productCollections.title')
                     ->label(__('firesources.collections'))
@@ -111,8 +112,33 @@ class ProductsTable
                     ->after(function () {
                         return Notification::make()
                             ->success()
-                            ->title('Impuestos actualizados')->send();
+                            ->title(__('firesources.taxes_updated'))->send();
                     }),
+                Action::make('discounts')
+                    ->label(__('firesources.discounts'))
+                    ->icon(Heroicon::OutlinedTag)
+                    ->color('success')
+                    ->schema([
+                        CheckboxList::make('discounts')
+                            ->label(__('firesources.discounts'))
+                            ->options(function () {
+                                return Discount::valid()->pluck('name', 'id');
+                            }),
+                    ])
+                    ->fillForm(function (Product $record) {
+                        return [
+                            'discounts' => $record->discounts()->get()->pluck('id'),
+                        ];
+                    })
+                    ->action(function (Product $record, array $data) {
+                        $record->discounts()->sync($data['discounts']);
+                    })
+                    ->after(function () {
+                        return Notification::make()
+                            ->success()
+                            ->title(__('firesources.discounts_updated'))->send();
+                    }),
+
                 EditAction::make(),
 
                 PublishingActions::getPublishingActions(),
@@ -138,6 +164,25 @@ class ProductsTable
                     })
                     ->color('info')
                     ->icon(Heroicon::OutlinedPercentBadge),
+
+                BulkAction::make('assignDiscounts')
+                    ->label(__('firesources.assign_discounts'))
+                    ->schema([
+                        CheckboxList::make('discounts')->options(Discount::valid()->pluck('name', 'id'))
+                            ->label(__('firesources.discounts'))
+                            ->default([]),
+                    ])
+                    ->action(function (array $data, Collection $records) {
+                        foreach ($records as $record) {
+                            $record->discounts()->sync($data['discounts']);
+                        }
+                    })->after(function () {
+                        return Notification::make()
+                            ->success()
+                            ->title(__('firesources.discounts_updated'))->send();
+                    })
+                    ->color('success')
+                    ->icon(Heroicon::OutlinedTag),
                 DeleteBulkAction::make(),
 
                 PublishingActions::getBulkPublishingActions(),

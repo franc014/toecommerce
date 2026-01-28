@@ -178,5 +178,11 @@ return [
     'video' => 'Video',
     'start_date' => 'Start Date',
     'end_date' => 'End Date',
+    'discounts_updated' => 'Discounts updated',
+    'taxes_updated' => 'Taxes updated',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'scheduled' => 'Scheduled',
+    'assign_discounts' => 'Assign Discounts',
 
 ];

@@ -176,5 +176,11 @@ return [
     'video' => 'Video',
     'start_date' => 'Fecha de Inicio',
     'end_date' => 'Fecha de Fin',
+    'discounts_updated' => 'Descuentos actualizados',
+    'taxes_updated' => 'Impuestos actualizados',
+    'active' => 'Activo',
+    'inactive' => 'Inactivo',
+    'scheduled' => 'Programado',
+    'assign_discounts' => 'Asignar Descuentos',
 
 ];
