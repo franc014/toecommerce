@@ -22,6 +22,7 @@ return [
     'no_photos_message' => 'No photos uploaded yet',
     'price' => 'Price',
     'discount' => 'Discount',
+    'discounts' => 'Discounts',
     'taxes' => 'Taxes',
     'stock' => 'Stock',
     'stock_threshold_for_customers' => 'Dropping Stock Threshold',
@@ -175,5 +176,7 @@ return [
     'sub_menu_items' => 'Sub Menu Items',
     'more_bulk_actions' => 'More Bulk Actions',
     'video' => 'Video',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
 
 ];

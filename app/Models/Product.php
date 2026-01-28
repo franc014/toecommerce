@@ -7,7 +7,6 @@ use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
-use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -98,6 +97,18 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
     public function taxes(): BelongsToMany
     {
         return $this->belongsToMany(Tax::class);
+    }
+
+    public function discounts(): BelongsToMany
+    {
+        return $this->belongsToMany(Discount::class);
+    }
+
+    public function activeDiscounts(): Collection
+    {
+        $now = now();
+
+        return $this->discounts()->where('start_date', '<=', $now)->where('end_date', '>=', $now)->get();
     }
 
     public function user(): BelongsTo

@@ -22,6 +22,7 @@ return [
     'no_photos_message' => 'No se han subido fotos todavia',
     'price' => 'Precio',
     'discount' => 'Descuento',
+    'discounts' => 'Descuentos',
     'taxes' => 'Impuestos',
     'stock' => 'Stock',
     'stock_threshold_for_customers' => 'Umbral para alerta "stock en descenso" para clientes',
@@ -173,5 +174,7 @@ return [
     'sub_menu_items' => 'Elementos de Sub-Menú',
     'more_bulk_actions' => 'Más Acciones de Lote',
     'video' => 'Video',
+    'start_date' => 'Fecha de Inicio',
+    'end_date' => 'Fecha de Fin',
 
 ];
