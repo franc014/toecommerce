@@ -20,8 +20,7 @@ class Discount extends Model
 
     public function scopeValid($query)
     {
-        return $query->where('status', DiscountStatus::ACTIVE->value)
-            ->orWhere('status', DiscountStatus::SCHEDULED->value);
+        return $query->where('status', DiscountStatus::ACTIVE->value);
     }
 
     public static function setStatus()
@@ -43,7 +42,7 @@ class Discount extends Model
 
     public function changeStatus(DiscountStatus $status)
     {
-        $this->status = $status->value;
+        $this->status = $status;
         $this->save();
     }
 

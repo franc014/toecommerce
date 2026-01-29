@@ -14,7 +14,12 @@
                 </h2>
 
                 <div class="my-1 space-y-2 lg:my-1.5">
-                    <p class="prod-card-v2__price pb-4">{{ product.price_in_dollars }}</p>
+                    <p class="prod-card-v2__price pb-4">
+                        <span :class="{ 'has-discount': product.has_discounts }">{{ product.price_in_dollars }}</span>
+                        <span v-if="product.has_discounts" class="ml-2 text-xl font-semibold text-emerald-600"
+                            >({{ product.discounted_price_in_dollars }})</span
+                        >
+                    </p>
                     <Badge variant="secondary" class="border border-zinc-400 bg-orange-200" v-if="product.dropping_stock">
                         <span class="tracking-wider">Se está agotando</span>
                     </Badge>

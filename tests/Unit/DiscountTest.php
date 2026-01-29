@@ -54,7 +54,7 @@ test('can change discount status manually', function () {
 
     $discount->changeStatus(DiscountStatus::INACTIVE);
 
-    expect($discount->fresh()->status)->toBe(DiscountStatus::INACTIVE->value);
+    expect($discount->fresh()->status)->toBe(DiscountStatus::INACTIVE);
 });
 
 test('fetching valid discounts available', function () {
@@ -77,7 +77,7 @@ test('fetching valid discounts available', function () {
     ]);
 
     $validDiscounts = Discount::valid()->get();
-    expect($validDiscounts)->toHaveCount(2);
+    expect($validDiscounts)->toHaveCount(1);
 
 });
 

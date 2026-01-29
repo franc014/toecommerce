@@ -11,15 +11,6 @@ enum DiscountStatus: string implements HasColor, HasLabel
     case INACTIVE = 'inactive';
     case SCHEDULED = 'scheduled';
 
-    public function label(): string
-    {
-        return match ($this) {
-            self::ACTIVE => 'Activo',
-            self::INACTIVE => 'Inactivo',
-            self::SCHEDULED => 'Programado',
-        };
-    }
-
     public function getLabel(): ?string
     {
         return match ($this) {

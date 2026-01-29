@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\DiscountCalculationModes;
 use App\Enums\StockControlModes;
 use App\Settings\StorefrontSettings;
 use BackedEnum;
@@ -48,6 +49,11 @@ class ManageStorefront extends SettingsPage
                     ->label(__('firesources.stock_control_mode'))
                     ->enum(StockControlModes::class)
                     ->options(StockControlModes::class)
+                    ->required(),
+                Select::make('discount_calculation_mode')
+                    ->label(__('firesources.discount_mode'))
+                    ->enum(DiscountCalculationModes::class)
+                    ->options(DiscountCalculationModes::class)
                     ->required(),
             ]);
     }

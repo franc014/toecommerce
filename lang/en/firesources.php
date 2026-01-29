@@ -184,5 +184,6 @@ return [
     'inactive' => 'Inactive',
     'scheduled' => 'Scheduled',
     'assign_discounts' => 'Assign Discounts',
+    'discount_mode' => 'Discount Mode',
 
 ];

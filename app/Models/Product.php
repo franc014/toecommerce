@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Money;
+use App\Enums\DiscountCalculationModes;
 use App\Enums\DiscountStatus;
 use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
@@ -35,7 +36,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         'description' => 'array',
     ];
 
-    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes'];
+    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes', 'discounted_price_in_dollars'];
 
     public function setUpRichContent(): void
     {
@@ -108,7 +109,12 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
     public function validDiscounts(): Collection
     {
         return $this->discounts()->where('status', DiscountStatus::ACTIVE->value)
-            ->orWhere('status', DiscountStatus::SCHEDULED->value)->get();
+            ->get();
+    }
+
+    public function hasDiscounts(): bool
+    {
+        return $this->validDiscounts()->count() >= 1;
     }
 
     public function user(): BelongsTo
@@ -146,6 +152,70 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
     public function computedTaxes(): float
     {
         return $this->price * ($this->taxes->sum('percentage') / 100);
+    }
+
+    public function discountedPrice(): float
+    {
+        $storefrontSettings = app(StorefrontSettings::class);
+        $calculationMode = $storefrontSettings->discount_calculation_mode;
+
+        $validDiscounts = $this->validDiscounts();
+
+        if ($validDiscounts->isEmpty()) {
+            return $this->price;
+        }
+
+        $discountedPrices = $validDiscounts->map(function ($discount) {
+            $discountAmount = $this->price * ($discount->percentage / 100);
+
+            return $this->price - $discountAmount;
+        });
+
+        if ($calculationMode === DiscountCalculationModes::HIGHEST) {
+            return min($discountedPrices->toArray());
+        } elseif ($calculationMode === DiscountCalculationModes::SUM) {
+            return $this->price - $discountedPrices->reduce(function ($carry, $item) {
+                return $carry + ($this->price - $item);
+            }, 0);
+        }
+
+        return $this->price;
+    }
+
+    public function discountedPriceInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->discountedPrice())
+        );
+    }
+
+    public function discountsForList(): Attribute
+    {
+        $storefrontSettings = app(StorefrontSettings::class);
+        $calculationMode = $storefrontSettings->discount_calculation_mode;
+
+        if ($calculationMode === DiscountCalculationModes::HIGHEST) {
+            return Attribute::make(
+                get: fn () => $this->validDiscounts()->map(function ($discount) {
+                    return [
+                        'name' => $discount->name,
+                        'percentage' => $discount->percentage,
+                    ];
+                })->sortByDesc('percentage')->take(1)->values()->toArray()
+            );
+
+        }
+
+        return Attribute::make(
+            get: function () {
+                return $this->validDiscounts()->map(function ($discount) {
+                    return [
+                        'name' => $discount->name,
+                        'percentage' => $discount->percentage,
+                    ];
+                })->values()->toArray();
+            }
+        );
     }
 
     public function productImages()

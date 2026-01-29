@@ -63,6 +63,12 @@ export interface Product {
     taxes: string;
     main_image: string;
     dropping_stock: boolean;
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
 
 }
 

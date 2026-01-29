@@ -182,5 +182,6 @@ return [
     'inactive' => 'Inactivo',
     'scheduled' => 'Programado',
     'assign_discounts' => 'Asignar Descuentos',
+    'discount_mode' => 'Modo de Descuento',
 
 ];
