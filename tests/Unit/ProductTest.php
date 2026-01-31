@@ -330,6 +330,46 @@ it('calculates product price with taxes', function () {
     expect($product->priceWithTaxes())->toBe((5232 * (1 + ($taxIVA->percentage / 100) + ($taxISD->percentage / 100))) / 100);
 });
 
+it('calculates discounted product price with taxes', function () {
+    setDiscountCalculationMode();
+
+    $discountA = Discount::factory()->active()->create([
+        'name' => 'Discount A',
+        'percentage' => 20,
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(15),
+    ]);
+
+    $discountB = Discount::factory()->active()->create([
+        'name' => 'Discount B',
+        'percentage' => 10,
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDay(),
+    ]);
+
+    $taxIVA = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15,
+        'description' => 'IVA 15%',
+    ]);
+
+    $taxISD = Tax::factory()->create([
+        'name' => 'ISD',
+        'percentage' => 10,
+        'description' => 'ISD 10%',
+    ]);
+
+    $product = Product::factory()->published()->create([
+        'price' => 52.32,
+    ]);
+
+    $product->discounts()->attach([$discountA->id, $discountB->id]);
+
+    $product->taxes()->attach([$taxIVA->id, $taxISD->id]);
+
+    expect($product->discountedPriceWithTaxes())->toBe((5232 - (5232 * 0.20)) * (1 + ($taxIVA->percentage / 100) + ($taxISD->percentage / 100)) / 100);
+});
+
 it('calculates product price with discount calulated from the highest discount', function () {
 
     setDiscountCalculationMode(DiscountCalculationModes::HIGHEST);

@@ -149,8 +149,20 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
     }
 
+    public function discountedPriceWithTaxes(): float
+    {
+        $price = $this->discountedPrice() * 100;
+
+        return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
+    }
+
     public function computedTaxes(): float
     {
+
+        if ($this->hasDiscounts()) {
+            return $this->discountedPrice() * ($this->taxes->sum('percentage') / 100);
+        }
+
         return $this->price * ($this->taxes->sum('percentage') / 100);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\DiscountStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,5 +24,12 @@ class DiscountFactory extends Factory
             'start_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'end_date' => $this->faker->dateTimeBetween('now', '+1 month'),
         ];
+    }
+
+    public function active(): Factory
+    {
+        return $this->state([
+            'status' => DiscountStatus::ACTIVE,
+        ]);
     }
 }

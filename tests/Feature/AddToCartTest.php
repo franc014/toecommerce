@@ -2,8 +2,10 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Discount;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Tax;
 
 it('defines the product data to add to the cart', function () {
 
@@ -976,4 +978,163 @@ test('purchasable type is required', function () {
         'product_id' => $product->id,
         'quantity' => 4,
     ]))->assertInvalid(['purchasable_type']);
+});
+
+/**
+ *  Discount tests
+ * **/
+test('can add a published product with discount to the cart', function () {
+
+    setDiscountCalculationMode();
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+        'main_image' => 'image.jpg',
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+    $quantityToAdd = 1;
+
+    $taxA = Tax::factory()->create([
+        'name' => 'VAT',
+        'percentage' => 15,
+    ]);
+
+    $taxB = Tax::factory()->create([
+        'name' => 'Service Tax',
+        'percentage' => 5,
+    ]);
+
+    $product->taxes()->attach([$taxA->id, $taxB->id]);
+
+    $discountA = Discount::factory()->active()->create([
+        'name' => 'Summer Sale',
+        'percentage' => 10,
+    ]);
+
+    $discountB = Discount::factory()->active()->create([
+        'name' => 'Another Sale',
+        'percentage' => 20,
+    ]);
+
+    $product->discounts()->attach([$discountA->id, $discountB->id]);
+
+    $discountedPrice = $product->price - ($product->price * 0.20);
+
+    expect($cart->items)->toHaveCount(2);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $quantityToAdd,
+        'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    expect($cart->fresh()->items)->toHaveCount(3);
+
+    $this->assertDatabaseHas('carts', [
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'image' => $product->main_image,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'has_discount' => 1,
+        'discounted_price' => $discountedPrice * 100,
+        // 'discount_percentage' => 20,
+        'quantity' => $quantityToAdd,
+        'total' => $discountedPrice * 100 * $quantityToAdd,
+        'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $quantityToAdd) * 100,
+        'computed_taxes' => $discountedPrice * 0.20 * 100, // $product->computedTaxes() * $quantityToAdd * 100,
+    ]);
+
+});
+
+test('can update an existing cart item quantity with discount', function () {
+    setDiscountCalculationMode();
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+    ]);
+    $discountA = Discount::factory()->active()->create([
+        'name' => 'Summer Sale',
+        'percentage' => 10,
+    ]);
+    $discountB = Discount::factory()->active()->create([
+        'name' => 'Another Sale',
+        'percentage' => 20,
+    ]);
+
+    $taxA = Tax::factory()->create([
+        'name' => 'VAT',
+        'percentage' => 15,
+    ]);
+
+    $taxB = Tax::factory()->create([
+        'name' => 'Service Tax',
+        'percentage' => 5,
+    ]);
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $product->discounts()->attach([$discountA->id, $discountB->id]);
+    $product->taxes()->attach([$taxA->id, $taxB->id]);
+    $discountedPrice = $product->price - ($product->price * 0.20);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'price' => $product->price,
+        'quantity' => 4,
+        'total' => 4 * $product->price,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'has_discount' => true,
+        'discounted_price' => $discountedPrice,
+        'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * 4),
+        'computed_taxes' => $discountedPrice * 0.20 * 4,
+    ]);
+    $newQuantity = 5;
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => $newQuantity,
+        'purchasable_type' => 'product',
+    ]))->assertStatus(200);
+
+    $this->assertDatabaseHas('carts', [
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    $this->assertDatabaseHas('cart_items', [
+        'cart_id' => $cart->id,
+        'title' => $product->title,
+        'slug' => $product->slug,
+        'purchasable_id' => $product->id,
+        'purchasable_type' => Product::class,
+        'price' => $product->price * 100,
+        'quantity' => $newQuantity,
+        'taxes' => json_encode($product->taxes->toArray()),
+        'total' => $discountedPrice * 100 * $newQuantity,
+        'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $newQuantity) * 100,
+        'computed_taxes' => $discountedPrice * 0.20 * $newQuantity * 100,
+    ]);
+
 });

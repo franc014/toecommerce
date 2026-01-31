@@ -25,6 +25,7 @@ class CartItem extends Model
     {
         return [
             'price' => Money::class,
+            'discounted_price' => Money::class,
             'quantity' => 'integer',
             'total' => Money::class,
             'total_with_taxes' => Money::class,

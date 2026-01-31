@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
@@ -53,16 +52,7 @@ class CartItemController extends Controller
                     'message' => 'Product not found',
                 ],
             ], 404);
-
-        } /* catch (ProductOutOfStockException $e) {
-
-            return response()->json([
-                'error' => [
-                    'code' => 422,
-                    'message' => 'Product is out of stock',
-                ],
-            ], 422);
-        } */
+        }
     }
 
     public function remove(Request $request)

@@ -26,6 +26,13 @@ class PerformsAddsToCart
         $this->data['total_with_taxes'] = $this->model->priceWithTaxes() * $this->quantity;
         $this->data['computed_taxes'] = $this->model->computedTaxes() * $this->quantity;
 
+        if ($this->model->hasDiscounts()) {
+            $this->data['has_discount'] = true;
+            $this->data['discounted_price'] = $this->model->discountedPrice();
+            $this->data['total'] = $this->model->discountedPrice() * $this->quantity;
+            $this->data['total_with_taxes'] = $this->model->discountedPriceWithTaxes() * $this->quantity;
+        }
+
     }
 
     private function setPurchasableData()
