@@ -19,7 +19,7 @@ class CartItem extends Model
 
     protected $with = ['purchasable'];
 
-    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation'];
+    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation', 'discounted_price_in_dollars'];
 
     protected function casts(): array
     {
@@ -89,6 +89,13 @@ class CartItem extends Model
     {
         return Attribute::make(
             get: fn () => Storage::url($this->image),
+        );
+    }
+
+    public function discountedPriceInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->discounted_price)
         );
     }
 }

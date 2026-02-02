@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ProductVariants\Tables;
 
+use App\Filament\Actions\BulkDiscountsAction;
+use App\Filament\Actions\DiscountsAction;
 use App\Filament\Resources\Products\Tables\PublishingActions;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -33,9 +35,11 @@ class ProductVariantsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DiscountsAction::make(),
                 PublishingActions::getPublishingActions(),
             ])
             ->toolbarActions([
+                BulkDiscountsAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

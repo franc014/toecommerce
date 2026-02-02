@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Casts\Money;
-use App\Enums\DiscountCalculationModes;
-use App\Enums\DiscountStatus;
 use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
+use App\Traits\Discountable;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
+use App\Traits\Taxable;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,7 +26,7 @@ use Spatie\Tags\HasTags;
 
 class Product extends Model implements HasMedia, HasRichContent, Purchasable
 {
-    use HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable;
+    use Discountable, HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable, Taxable;
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -74,13 +74,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         return false;
     }
 
-    public function priceWithTaxesInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->priceWithTaxes())
-        );
-    }
-
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
@@ -101,22 +94,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         return $this->belongsToMany(Tax::class);
     }
 
-    public function discounts(): BelongsToMany
-    {
-        return $this->belongsToMany(Discount::class);
-    }
-
-    public function validDiscounts(): Collection
-    {
-        return $this->discounts()->where('status', DiscountStatus::ACTIVE->value)
-            ->get();
-    }
-
-    public function hasDiscounts(): bool
-    {
-        return $this->validDiscounts()->count() >= 1;
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -135,99 +112,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
     public static function bySlug(string $slug)
     {
         return self::where('slug', $slug)->first();
-    }
-
-    public function hasTaxes(): bool
-    {
-        return $this->taxes->count() >= 1;
-    }
-
-    public function priceWithTaxes(): float
-    {
-        $price = (int) $this->getAttributes()['price'];
-
-        return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
-    }
-
-    public function discountedPriceWithTaxes(): float
-    {
-        $price = $this->discountedPrice() * 100;
-
-        return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
-    }
-
-    public function computedTaxes(): float
-    {
-
-        if ($this->hasDiscounts()) {
-            return $this->discountedPrice() * ($this->taxes->sum('percentage') / 100);
-        }
-
-        return $this->price * ($this->taxes->sum('percentage') / 100);
-    }
-
-    public function discountedPrice(): float
-    {
-        $storefrontSettings = app(StorefrontSettings::class);
-        $calculationMode = $storefrontSettings->discount_calculation_mode;
-
-        $validDiscounts = $this->validDiscounts();
-
-        if ($validDiscounts->isEmpty()) {
-            return $this->price;
-        }
-
-        $discountedPrices = $validDiscounts->map(function ($discount) {
-            $discountAmount = $this->price * ($discount->percentage / 100);
-
-            return $this->price - $discountAmount;
-        });
-
-        if ($calculationMode === DiscountCalculationModes::HIGHEST) {
-            return min($discountedPrices->toArray());
-        } elseif ($calculationMode === DiscountCalculationModes::SUM) {
-            return $this->price - $discountedPrices->reduce(function ($carry, $item) {
-                return $carry + ($this->price - $item);
-            }, 0);
-        }
-
-        return $this->price;
-    }
-
-    public function discountedPriceInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->discountedPrice())
-        );
-    }
-
-    public function discountsForList(): Attribute
-    {
-        $storefrontSettings = app(StorefrontSettings::class);
-        $calculationMode = $storefrontSettings->discount_calculation_mode;
-
-        if ($calculationMode === DiscountCalculationModes::HIGHEST) {
-            return Attribute::make(
-                get: fn () => $this->validDiscounts()->map(function ($discount) {
-                    return [
-                        'name' => $discount->name,
-                        'percentage' => $discount->percentage,
-                    ];
-                })->sortByDesc('percentage')->take(1)->values()->toArray()
-            );
-
-        }
-
-        return Attribute::make(
-            get: function () {
-                return $this->validDiscounts()->map(function ($discount) {
-                    return [
-                        'name' => $discount->name,
-                        'percentage' => $discount->percentage,
-                    ];
-                })->values()->toArray();
-            }
-        );
     }
 
     public function productImages()
@@ -301,19 +185,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                 'sku' => '',
             ]);
         }
-    }
-
-    public function formattedTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                $taxes = $this->taxes->map(function ($tax) {
-                    return $tax->name.' ('.$tax->percentage.'%)';
-                });
-
-                return $taxes->implode(', ');
-            }
-        );
     }
 
     public function relatedProducts(): ?EloquentCollection

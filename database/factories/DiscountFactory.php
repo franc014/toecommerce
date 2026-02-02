@@ -32,4 +32,18 @@ class DiscountFactory extends Factory
             'status' => DiscountStatus::ACTIVE,
         ]);
     }
+
+    public function inactive(): Factory
+    {
+        return $this->state([
+            'status' => DiscountStatus::INACTIVE,
+        ]);
+    }
+
+    public function scheduled(): Factory
+    {
+        return $this->state([
+            'status' => DiscountStatus::SCHEDULED,
+        ]);
+    }
 }

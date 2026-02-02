@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Discount;
-use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('discount_product', function (Blueprint $table) {
+        Schema::create('discountables', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Discount::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Product::class)->constrained()->onDelete('cascade');
+            $table->foreignId('discount_id')->constrained()->onDelete('cascade');
+            $table->foreignId('discountable_id');
+            $table->string('discountable_type');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('discount_product');
+        Schema::dropIfExists('discountables');
     }
 };

@@ -370,7 +370,7 @@ it('calculates discounted product price with taxes', function () {
     expect($product->discountedPriceWithTaxes())->toBe((5232 - (5232 * 0.20)) * (1 + ($taxIVA->percentage / 100) + ($taxISD->percentage / 100)) / 100);
 });
 
-it('calculates product price with discount calulated from the highest discount', function () {
+it('calculates product price with discount calulated from the highest discount applied', function () {
 
     setDiscountCalculationMode(DiscountCalculationModes::HIGHEST);
 
@@ -399,7 +399,7 @@ it('calculates product price with discount calulated from the highest discount',
     expect($product->discountedPrice())->toBe(80.00);
 });
 
-it('calculates product price with discount calulated from the sum of discounts', function () {
+it('calculates product price with discount calulated from the sum of discounts applied', function () {
 
     setDiscountCalculationMode(DiscountCalculationModes::SUM);
 

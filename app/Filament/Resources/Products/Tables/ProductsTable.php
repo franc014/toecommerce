@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
-use App\Models\Discount;
+use App\Filament\Actions\BulkDiscountsAction;
+use App\Filament\Actions\DiscountsAction;
 use App\Models\Product;
 use App\Models\Tax;
 use Filament\Actions\Action;
-use Filament\Actions\BulkAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -17,7 +17,6 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Collection;
 
 class ProductsTable
 {
@@ -114,30 +113,7 @@ class ProductsTable
                             ->success()
                             ->title(__('firesources.taxes_updated'))->send();
                     }),
-                Action::make('discounts')
-                    ->label(__('firesources.discounts'))
-                    ->icon(Heroicon::OutlinedTag)
-                    ->color('success')
-                    ->schema([
-                        CheckboxList::make('discounts')
-                            ->label(__('firesources.discounts'))
-                            ->options(function () {
-                                return Discount::valid()->pluck('name', 'id');
-                            }),
-                    ])
-                    ->fillForm(function (Product $record) {
-                        return [
-                            'discounts' => $record->discounts()->get()->pluck('id'),
-                        ];
-                    })
-                    ->action(function (Product $record, array $data) {
-                        $record->discounts()->sync($data['discounts']);
-                    })
-                    ->after(function () {
-                        return Notification::make()
-                            ->success()
-                            ->title(__('firesources.discounts_updated'))->send();
-                    }),
+                DiscountsAction::make(),
 
                 EditAction::make(),
 
@@ -146,43 +122,8 @@ class ProductsTable
             ])
             ->toolbarActions([
 
-                BulkAction::make('assignTaxes')
-                    ->label(__('firesources.assign_taxes'))
-                    ->schema([
-                        CheckboxList::make('taxes')->options(Tax::query()->pluck('name', 'id'))
-                            ->label(__('firesources.taxes'))
-                            ->default([]),
-                    ])
-                    ->action(function (array $data, Collection $records) {
-                        foreach ($records as $record) {
-                            $record->taxes()->sync($data['taxes']);
-                        }
-                    })->after(function () {
-                        return Notification::make()
-                            ->success()
-                            ->title('Impuestos asignados')->send();
-                    })
-                    ->color('info')
-                    ->icon(Heroicon::OutlinedPercentBadge),
+                BulkDiscountsAction::make(),
 
-                BulkAction::make('assignDiscounts')
-                    ->label(__('firesources.assign_discounts'))
-                    ->schema([
-                        CheckboxList::make('discounts')->options(Discount::valid()->pluck('name', 'id'))
-                            ->label(__('firesources.discounts'))
-                            ->default([]),
-                    ])
-                    ->action(function (array $data, Collection $records) {
-                        foreach ($records as $record) {
-                            $record->discounts()->sync($data['discounts']);
-                        }
-                    })->after(function () {
-                        return Notification::make()
-                            ->success()
-                            ->title(__('firesources.discounts_updated'))->send();
-                    })
-                    ->color('success')
-                    ->icon(Heroicon::OutlinedTag),
                 DeleteBulkAction::make(),
 
                 PublishingActions::getBulkPublishingActions(),

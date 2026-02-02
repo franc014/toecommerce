@@ -6,7 +6,6 @@ use App\CMS\RichTextTransformable;
 
 class PrivacyPolicyPageController extends PageController
 {
-
     public function __construct()
     {
         $this->slug = 'politica-de-privacidad';

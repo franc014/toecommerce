@@ -109,6 +109,9 @@ export interface CartItem {
     price_in_dollars: string;
     total_in_dollars: number;
     computed_taxes_in_dollars: string;
+    discounted_price_in_dollars: string;
+    has_discount: boolean;
+    discounted_price: number;
     purchasable_id: number;
     purchasable_type: string;
     formatted_variation: string;

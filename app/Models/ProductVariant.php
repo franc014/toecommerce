@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Enums\ProductStatus;
+use App\Traits\Discountable;
 use App\Traits\HasProductVariation;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
+use App\Traits\Taxable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +19,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class ProductVariant extends Model implements HasMedia, Purchasable
 {
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
-    use HasFactory, HasProductVariation, InteractsWithMedia, MoneyFormat, Publishable;
+    use Discountable, HasFactory, HasProductVariation, InteractsWithMedia, MoneyFormat, Publishable, Taxable;
 
     protected $appends = ['price_in_dollars', 'formatted_variation', 'taxes'];
 
@@ -60,24 +62,5 @@ class ProductVariant extends Model implements HasMedia, Purchasable
             get: fn () => $this->product->taxes
         );
 
-    }
-
-    public function priceWithTaxesInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->priceWithTaxes())
-        );
-    }
-
-    public function priceWithTaxes(): float
-    {
-        $price = (int) $this->getAttributes()['price'];
-
-        return round(($price * (1 + $this->product->taxes->sum('percentage') / 100)) / 100, 2);
-    }
-
-    public function computedTaxes(): float
-    {
-        return $this->price * ($this->product->taxes->sum('percentage') / 100);
     }
 }

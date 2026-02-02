@@ -3,6 +3,7 @@
 use App\Enums\DiscountStatus;
 use App\Models\Discount;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 test('a product can have many discounts', function () {
     $product = Product::factory()->create();
@@ -10,6 +11,14 @@ test('a product can have many discounts', function () {
     $discount2 = Discount::factory()->create();
     $product->discounts()->attach([$discount1->id, $discount2->id]);
     expect($product->discounts)->toHaveCount(2);
+});
+
+test('a variant can have many discounts', function () {
+    $variant = ProductVariant::factory()->create();
+    $discount1 = Discount::factory()->create();
+    $discount2 = Discount::factory()->create();
+    $variant->discounts()->attach([$discount1->id, $discount2->id]);
+    expect($variant->discounts)->toHaveCount(2);
 });
 
 test('setting status discounts', function () {
@@ -59,21 +68,18 @@ test('can change discount status manually', function () {
 
 test('fetching valid discounts available', function () {
 
-    $activeDiscount = Discount::factory()->create([
+    Discount::factory()->active()->create([
         'start_date' => now()->subDay(),
         'end_date' => now()->addDays(8),
-        'status' => DiscountStatus::ACTIVE->value,
     ]);
-    $inactiveDiscount = Discount::factory()->create([
+    Discount::factory()->inactive()->create([
         'start_date' => now()->subDays(10),
         'end_date' => now()->subDays(5),
-        'status' => DiscountStatus::INACTIVE->value,
     ]);
 
-    $scheduledDiscount = Discount::factory()->create([
+    Discount::factory()->scheduled()->create([
         'start_date' => now()->addDays(2),
         'end_date' => now()->addDays(10),
-        'status' => DiscountStatus::SCHEDULED->value,
     ]);
 
     $validDiscounts = Discount::valid()->get();
@@ -83,24 +89,40 @@ test('fetching valid discounts available', function () {
 
 test('fetching valid discounts for a product', function () {
     $product = Product::factory()->create();
-    $activeDiscount = Discount::factory()->create([
+    $activeDiscount = Discount::factory()->active()->create([
         'start_date' => now()->subDay(),
         'end_date' => now()->addDays(8),
-        'status' => DiscountStatus::ACTIVE->value,
     ]);
-    $scheduledDiscount = Discount::factory()->create([
+    $scheduledDiscount = Discount::factory()->scheduled()->create([
         'start_date' => now()->addDays(2),
         'end_date' => now()->addDays(10),
-        'status' => DiscountStatus::SCHEDULED->value,
     ]);
-    $inactiveDiscount = Discount::factory()->create([
+    $inactiveDiscount = Discount::factory()->inactive()->create([
         'start_date' => now()->subDays(10),
         'end_date' => now()->subDays(5),
-        'status' => DiscountStatus::INACTIVE->value,
     ]);
     $product->discounts()->attach([$activeDiscount->id, $inactiveDiscount->id, $scheduledDiscount->id]);
     $validDiscounts = $product->validDiscounts();
 
-    expect($validDiscounts)->toHaveCount(2);
+    expect($validDiscounts)->toHaveCount(1);
+});
 
+test('fetching valid discounts for a variant', function () {
+    $variant = ProductVariant::factory()->create();
+    $activeDiscount = Discount::factory()->active()->create([
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(8),
+    ]);
+    $scheduledDiscount = Discount::factory()->scheduled()->create([
+        'start_date' => now()->addDays(2),
+        'end_date' => now()->addDays(10),
+    ]);
+    $inactiveDiscount = Discount::factory()->inactive()->create([
+        'start_date' => now()->subDays(10),
+        'end_date' => now()->subDays(5),
+    ]);
+    $variant->discounts()->attach([$activeDiscount->id, $inactiveDiscount->id, $scheduledDiscount->id]);
+    $validDiscounts = $variant->validDiscounts();
+
+    expect($validDiscounts)->toHaveCount(1);
 });
