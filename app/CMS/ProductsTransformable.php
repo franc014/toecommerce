@@ -23,7 +23,7 @@ class ProductsTransformable implements ContentTransformable
                     'has_variants' => $product->hasPublishedVariants(),
                     'variants' => $product->variants,
                     'dropping_stock' => $product->isDroppingStock(),
-                    'has_discounts' => $product->hasDiscounts(),
+                    'has_discounts' => $product->has_discounts,
                     'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
                     'discounts' => $product->discountsForList,
                 ];

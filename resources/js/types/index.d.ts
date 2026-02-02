@@ -81,6 +81,13 @@ export interface ProductVariant {
     price_in_dollars: string;
     formatted_variation: string;
     images: Array<string>;
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
+
 }
 
 export interface Cart {

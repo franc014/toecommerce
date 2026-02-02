@@ -100,10 +100,4 @@ const product = page.props.product as Product;
 const relatedProducts = page.props.relatedProducts as Product[];
 const metaTags = page.props.metatags as Metatags;
 const company = page.props.company as Company;
-
-/* const discountsApplied = computed(() => {
-    const discounts = product.discounts;
-    console.log('Discounts:', discounts);
-    return product.has_discounts;
-}); */
 </script>

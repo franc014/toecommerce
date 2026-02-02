@@ -40,7 +40,7 @@ class ProductPageController extends Controller
             'variants' => $product->variants,
             'main_image' => Storage::url($product->main_image),
             'dropping_stock' => $product->isDroppingStock(),
-            'has_discounts' => $product->hasDiscounts(),
+            'has_discounts' => $product->has_discounts,
             'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
             'discounts' => $product->discountsForList,
         ];
@@ -57,7 +57,7 @@ class ProductPageController extends Controller
                 'has_variants' => $product->hasPublishedVariants(),
                 'variants' => $product->variants,
                 'dropping_stock' => $product->isDroppingStock(),
-                'has_discounts' => $product->hasDiscounts(),
+                'has_discounts' => $product->has_discounts,
                 'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
                 'discounts' => $product->discountsForList,
             ];

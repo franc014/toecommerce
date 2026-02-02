@@ -36,7 +36,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         'description' => 'array',
     ];
 
-    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes', 'discounted_price_in_dollars'];
+    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes', 'has_discounts', 'discounted_price_in_dollars'];
 
     public function setUpRichContent(): void
     {

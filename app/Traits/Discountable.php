@@ -23,9 +23,12 @@ trait Discountable
             ->get();
     }
 
-    public function hasDiscounts(): bool
+    public function hasDiscounts(): Attribute
     {
-        return $this->validDiscounts()->count() >= 1;
+        return Attribute::make(
+            get: fn () => $this->validDiscounts()->count() >= 1
+        );
+        // $this->validDiscounts()->count() >= 1;
     }
 
     public function discountedPrice(): float
