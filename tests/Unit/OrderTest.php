@@ -308,7 +308,7 @@ test('can add a new order item with discount', function () {
     $newItem = CartItem::factory()->create([
         'cart_id' => $cart->id,
         'has_discount' => true,
-        // discount_percentage => 10%,
+        'discount_percentage' => 10,
         'price' => 32,
         'quantity' => 2,
         'discounted_price' => 32 - 3.2,
@@ -336,7 +336,7 @@ test('can add a new order item with discount', function () {
     expect($order->orderItems[2]->discounted_price)->toBe($newItem->discounted_price);
     expect($order->orderItems[2]->discounted_price_in_dollars)->toBe($newItem->discounted_price_in_dollars);
 
-    // expect($order->orderItems[2]->discounted_percentage)->toBe($newItem->discounted_percentage);
+    expect($order->orderItems[2]->discount_percentage)->toBe($newItem->discount_percentage);
 
     expect($order->fresh()->total_amount)->toBe($cart->fresh()->total_amount);
     expect($order->fresh()->total_with_taxes)->toBe($cart->fresh()->total_with_taxes);

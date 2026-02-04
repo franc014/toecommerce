@@ -25,11 +25,29 @@ trait Discountable
 
     public function hasDiscounts(): Attribute
     {
-        // ray($this->validDiscounts()->isEmpty());
-
         return Attribute::make(
             get: fn () => ! $this->validDiscounts()->isEmpty()
         );
+    }
+
+    public function discountPercentage()
+    {
+        $storefrontSettings = app(StorefrontSettings::class);
+        $calculationMode = $storefrontSettings->discount_calculation_mode;
+
+        $validDiscounts = $this->validDiscounts();
+
+        if ($validDiscounts->isEmpty()) {
+            return 0;
+        }
+
+        if ($calculationMode === DiscountCalculationModes::HIGHEST) {
+            return $validDiscounts->max('percentage');
+        } elseif ($calculationMode === DiscountCalculationModes::SUM) {
+            return $validDiscounts->sum('percentage');
+        }
+
+        return 0;
     }
 
     public function discountedPrice(): float

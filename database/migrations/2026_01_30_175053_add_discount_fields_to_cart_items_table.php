@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('cart_items', function (Blueprint $table) {
             $table->boolean('has_discount')->default(false)->after('price');
+            $table->integer('discount_percentage')->default(0);
             $table->integer('discounted_price')->nullable()->after('has_discount');
+
         });
     }
 

@@ -122,7 +122,6 @@ class Cart extends Model
 
     public function updateCartTally(): void
     {
-        $storefrontSettings = app(StorefrontSettings::class);
 
         $itemsWithoutTaxes = $this->items->filter(function ($item) {
             return $item->taxes === null || count(json_decode($item->taxes)) === 0;

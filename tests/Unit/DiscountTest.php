@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DiscountCalculationModes;
 use App\Enums\DiscountStatus;
 use App\Models\Discount;
 use App\Models\Product;
@@ -125,4 +126,46 @@ test('fetching valid discounts for a variant', function () {
     $validDiscounts = $variant->validDiscounts();
 
     expect($validDiscounts)->toHaveCount(1);
+});
+
+test('fetching the product highest discount percentage', function () {
+    setDiscountCalculationMode();
+
+    $product = Product::factory()->create();
+    $activeDiscountA = Discount::factory()->active()->create([
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(8),
+        'percentage' => 10,
+    ]);
+
+    $activeDiscountB = Discount::factory()->active()->create([
+        'start_date' => now()->subDays(4),
+        'end_date' => now()->addDays(15),
+        'percentage' => 30,
+    ]);
+
+    $product->discounts()->attach([$activeDiscountA->id, $activeDiscountB->id]);
+
+    expect($product->discountPercentage())->toEqual(30);
+});
+
+test('fetching the product sum discount percentage', function () {
+    setDiscountCalculationMode(DiscountCalculationModes::SUM);
+
+    $product = Product::factory()->create();
+    $activeDiscountA = Discount::factory()->active()->create([
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(8),
+        'percentage' => 10,
+    ]);
+
+    $activeDiscountB = Discount::factory()->active()->create([
+        'start_date' => now()->subDays(4),
+        'end_date' => now()->addDays(15),
+        'percentage' => 30,
+    ]);
+
+    $product->discounts()->attach([$activeDiscountA->id, $activeDiscountB->id]);
+
+    expect($product->discountPercentage())->toEqual(40);
 });

@@ -88,7 +88,7 @@ class Order extends Model
                 'quantity' => $item->quantity,
                 'price' => $item->price,
                 'discounted_price' => $item->discounted_price,
-                // discount_percentage => $item->discount_percentage
+                'discount_percentage' => $item->discount_percentage,
                 'taxes' => $item->taxes,
                 'total' => $item->total,
                 'total_with_taxes' => $item->total_with_taxes,
@@ -115,8 +115,8 @@ class Order extends Model
             'total_with_taxes' => $item->total_with_taxes,
             'computed_taxes' => $item->computed_taxes,
             'has_discount' => $item->has_discount,
+            'discount_percentage' => $item->discount_percentage,
             'discounted_price' => $item->discounted_price,
-            // 'discounted_percentage' => $item->discounted_percentage
         ]);
     }
 
