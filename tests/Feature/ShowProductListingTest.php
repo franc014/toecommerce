@@ -34,7 +34,10 @@ it('shows a listing of a published product', function () {
                     ->where('variants', $product->variants)
                     ->where('main_image', Storage::url($product->main_image))
                     ->where('images', $product->productImagesForList)
-                    ->where('dropping_stock', false);
+                    ->where('dropping_stock', false)
+                    ->where('has_discounts', false)
+                    ->where('discounted_price_in_dollars', '$0')
+                    ->where('discounts', []);
             });
         });
 
@@ -69,7 +72,10 @@ it('shows warning text if product stock is dropping below threshold, in strict m
                     ->where('variants', $product->variants)
                     ->where('main_image', Storage::url($product->main_image))
                     ->where('images', $product->productImagesForList)
-                    ->where('dropping_stock', true);
+                    ->where('dropping_stock', true)
+                    ->where('has_discounts', false)
+                    ->where('discounted_price_in_dollars', '$0')
+                    ->where('discounts', []);
             });
         });
 
@@ -104,7 +110,10 @@ it('does not show warning text if product stock is not dropping below threshold,
                     ->where('variants', $product->variants)
                     ->where('main_image', Storage::url($product->main_image))
                     ->where('images', $product->productImagesForList)
-                    ->where('dropping_stock', false);
+                    ->where('dropping_stock', false)
+                    ->where('has_discounts', false)
+                    ->where('discounted_price_in_dollars', '$0')
+                    ->where('discounts', []);
             });
         });
 
@@ -139,7 +148,10 @@ it('does not show warning text if product stock is dropping below threshold, in 
                     ->where('variants', $product->variants)
                     ->where('main_image', Storage::url($product->main_image))
                     ->where('images', $product->productImagesForList)
-                    ->where('dropping_stock', false);
+                    ->where('dropping_stock', false)
+                    ->where('has_discounts', false)
+                    ->where('discounted_price_in_dollars', '$0')
+                    ->where('discounts', []);
             });
         });
 
@@ -199,7 +211,10 @@ test('can show a list of published related products based on collections', funct
                         ->where('video', $productB->video)
                         ->where('has_variants', $productB->hasPublishedVariants())
                         ->where('variants', $productB->variants)
-                        ->where('dropping_stock', false);
+                        ->where('dropping_stock', false)
+                        ->where('has_discounts', false)
+                        ->where('discounted_price_in_dollars', '$0')
+                        ->where('discounts', []);
                 });
         });
 

@@ -25,10 +25,11 @@ trait Discountable
 
     public function hasDiscounts(): Attribute
     {
+        // ray($this->validDiscounts()->isEmpty());
+
         return Attribute::make(
-            get: fn () => $this->validDiscounts()->count() >= 1
+            get: fn () => ! $this->validDiscounts()->isEmpty()
         );
-        // $this->validDiscounts()->count() >= 1;
     }
 
     public function discountedPrice(): float
@@ -39,7 +40,7 @@ trait Discountable
         $validDiscounts = $this->validDiscounts();
 
         if ($validDiscounts->isEmpty()) {
-            return $this->price;
+            return 0;
         }
 
         $discountedPrices = $validDiscounts->map(function ($discount) {
@@ -56,7 +57,7 @@ trait Discountable
             }, 0);
         }
 
-        return $this->price;
+        return 0;
     }
 
     public function discountedPriceInDollars(): Attribute

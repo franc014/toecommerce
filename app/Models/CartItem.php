@@ -31,6 +31,7 @@ class CartItem extends Model
             'total_with_taxes' => Money::class,
             'computed_taxes' => Money::class,
             'variation' => 'array',
+            'has_discount' => 'boolean',
         ];
     }
 

@@ -28,7 +28,7 @@ trait Taxable
     public function computedTaxes(): float
     {
 
-        if ($this->hasDiscounts()) {
+        if ($this->has_discounts) {
             return $this->discountedPrice() * ($this->taxes->sum('percentage') / 100);
         }
 

@@ -436,6 +436,15 @@ it('calculates product price with discount calulated from the sum of discounts a
     expect($product->discountedPrice())->toBe(50.00);
 });
 
+it('discounted price is zero when product has no discounts applied', function () {
+
+    setDiscountCalculationMode(DiscountCalculationModes::HIGHEST);
+    $product = Product::factory()->published()->create([
+        'price' => 100.00,
+    ]);
+    expect($product->discountedPrice())->toBe(0.0);
+});
+
 test('getting discounted price in dollars', function () {
     setDiscountCalculationMode(DiscountCalculationModes::SUM);
 
