@@ -14,6 +14,10 @@ class StorefrontSettings extends Settings
 
     public DiscountCalculationModes $discount_calculation_mode;
 
+    public bool $show_discount_campaign_message;
+
+    public string $discount_campaign_message;
+
     public static function group(): string
     {
         return 'storefront';

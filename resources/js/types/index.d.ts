@@ -200,6 +200,11 @@ export interface PageComponentContent {
     'rich-editor': Array;
 }
 
+export interface DiscountDisplay {
+    'show_message': boolean;
+    'message': string;
+}
+
 export interface Menu {
     title: string;
     slug: string;

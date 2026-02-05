@@ -8,7 +8,9 @@ use App\Settings\StorefrontSettings;
 use BackedEnum;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -55,6 +57,11 @@ class ManageStorefront extends SettingsPage
                     ->enum(DiscountCalculationModes::class)
                     ->options(DiscountCalculationModes::class)
                     ->required(),
+                Toggle::make('show_discount_campaign_message')
+                    ->label(__('firesources.show_discount_campaign_message')),
+                Textarea::make('discount_campaign_message')
+                    ->label(__('firesources.discount_campaign_message')),
+
             ]);
     }
 }

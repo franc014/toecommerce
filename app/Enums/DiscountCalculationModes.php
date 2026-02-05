@@ -7,7 +7,7 @@ use Filament\Support\Contracts\HasLabel;
 
 enum DiscountCalculationModes: string implements HasColor, HasLabel
 {
-    case HIGHEST = 'higuest';
+    case HIGHEST = 'highest';
     case SUM = 'sum';
 
     public function getColor(): string

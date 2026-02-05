@@ -183,5 +183,7 @@ return [
     'scheduled' => 'Programado',
     'assign_discounts' => 'Asignar Descuentos',
     'discount_mode' => 'Modo de Descuento',
+    'show_discount_campaign_message' => 'Desplegar mensage de campaña de descuento',
+    'discount_campaign_message' => 'Mensaje para campaña de descuento',
 
 ];

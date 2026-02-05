@@ -185,5 +185,7 @@ return [
     'scheduled' => 'Scheduled',
     'assign_discounts' => 'Assign Discounts',
     'discount_mode' => 'Discount Mode',
+    'show_discount_campaign_message' => 'Display discount campaign message',
+    'discount_campaign_message' => 'Discount campaign message',
 
 ];
