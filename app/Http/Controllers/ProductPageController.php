@@ -40,6 +40,9 @@ class ProductPageController extends Controller
             'variants' => $product->variants,
             'main_image' => Storage::url($product->main_image),
             'dropping_stock' => $product->isDroppingStock(),
+            'has_discounts' => $product->has_discounts,
+            'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
+            'discounts' => $product->discountsForList,
         ];
 
         $relatedProducts = $product->relatedProducts()?->map(function ($product) {
@@ -54,6 +57,9 @@ class ProductPageController extends Controller
                 'has_variants' => $product->hasPublishedVariants(),
                 'variants' => $product->variants,
                 'dropping_stock' => $product->isDroppingStock(),
+                'has_discounts' => $product->has_discounts,
+                'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
+                'discounts' => $product->discountsForList,
             ];
         });
 
@@ -106,9 +112,8 @@ class ProductPageController extends Controller
 
     private function twitter_image()
     {
-        return  Storage::url($this->product->main_image);
+        return Storage::url($this->product->main_image);
     }
-
 
     private function robots()
     {
@@ -118,10 +123,10 @@ class ProductPageController extends Controller
     private function schema_org()
     {
         $sp = Schema::Product()->name($this->product->title)
-                ->sameAs(route('storefront.product', ['product' => $this->product->slug]))
-                ->image(Storage::url($this->product->main_image))
-                ->description($this->product->excerpt ?? '')
-                ->keywords($this->product->tags()->pluck('name')->implode(', '));
+            ->sameAs(route('storefront.product', ['product' => $this->product->slug]))
+            ->image(Storage::url($this->product->main_image))
+            ->description($this->product->excerpt ?? '')
+            ->keywords($this->product->tags()->pluck('name')->implode(', '));
 
         return json_encode($sp);
     }

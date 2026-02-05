@@ -83,6 +83,4 @@ trait Metatags
     {
         return null;
     }
-
-
 }

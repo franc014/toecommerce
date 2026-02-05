@@ -161,14 +161,13 @@ it('does not show warning text if product stock is dropping below threshold, in 
     setStrictMode(StockControlModes::NONE);
     setPaginationNumber(2);
 
-    //Product::factory()->published()->create();
+    // Product::factory()->published()->create();
     $product = Product::factory()->published()->create([
         'title' => 'Product 1',
         'slug' => 'product-1',
         'stock_threshold_for_customers' => 10,
         'stock' => 8,
     ]);
-
 
     $this->get(route('storefront.products'))->assertInertia(
         fn (Assert $page) => $page
@@ -177,7 +176,7 @@ it('does not show warning text if product stock is dropping below threshold, in 
                 'products.data.0',
                 function (Assert $page) use ($product) {
                     $page->where('id', $product->id)
-                         ->where('title', $product->title)
+                        ->where('title', $product->title)
                         ->where('slug', $product->slug)
                         ->where('price', $product->price)
                         ->where('video', $product->video)

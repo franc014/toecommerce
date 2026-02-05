@@ -11,6 +11,7 @@
 |
 */
 
+use App\Enums\DiscountCalculationModes;
 use App\Enums\StockControlModes;
 use App\Settings\StorefrontSettings;
 
@@ -55,5 +56,12 @@ function setPaginationNumber(int $paginationNumber = 10)
 {
     $sfSettings = app(StorefrontSettings::class);
     $sfSettings->products_per_page = $paginationNumber;
+    $sfSettings->save();
+}
+
+function setDiscountCalculationMode(DiscountCalculationModes $mode = DiscountCalculationModes::HIGHEST)
+{
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->discount_calculation_mode = $mode;
     $sfSettings->save();
 }

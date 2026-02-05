@@ -63,6 +63,12 @@ export interface Product {
     taxes: string;
     main_image: string;
     dropping_stock: boolean;
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
 
 }
 
@@ -75,6 +81,13 @@ export interface ProductVariant {
     price_in_dollars: string;
     formatted_variation: string;
     images: Array<string>;
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
+
 }
 
 export interface Cart {
@@ -103,6 +116,9 @@ export interface CartItem {
     price_in_dollars: string;
     total_in_dollars: number;
     computed_taxes_in_dollars: string;
+    discounted_price_in_dollars: string;
+    has_discount: boolean;
+    discounted_price: number;
     purchasable_id: number;
     purchasable_type: string;
     formatted_variation: string;
@@ -182,6 +198,11 @@ export interface PageComponentContent {
     feature: Array;
     video: Array;
     'rich-editor': Array;
+}
+
+export interface DiscountDisplay {
+    'show_message': boolean;
+    'message': string;
 }
 
 export interface Menu {

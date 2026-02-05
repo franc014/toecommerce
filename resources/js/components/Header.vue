@@ -1,5 +1,8 @@
 <template>
     <header class="f-header js-f-header relative">
+        <div class="flex items-center justify-center bg-linear-to-r from-orange-300 to-sky-500 py-3" v-if="discount_display_config.show_message">
+            <p class="font-bold tracking-wider">{{ discount_display_config.message }} ❤️</p>
+        </div>
         <div class="f-header__mobile-content wrapper">
             <Link href="/" class="f-header__logo flex items-center gap-2">
                 <img src="/images/logo3.png" alt="Logo" />
@@ -50,8 +53,12 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue';
 
-import { Menu } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { DiscountDisplay, Menu } from '@/types';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
+const discount_display_config = page.props.discountsDisplayConfig as DiscountDisplay;
 
 defineProps<{
     menu: Menu;

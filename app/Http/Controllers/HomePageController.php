@@ -10,7 +10,6 @@ use App\CMS\ProductsTransformable;
 
 class HomePageController extends PageController
 {
-
     public function __construct()
     {
         $this->view = 'Home';

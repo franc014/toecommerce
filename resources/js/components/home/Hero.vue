@@ -3,7 +3,7 @@
         <div class="wrapper">
             <div class="feature-v4__grid grid grid-cols-12 items-center gap-5 lg:gap-8">
                 <transition appear @enter="enter" @beforeEnter="beforeEnter">
-                    <div class="relative z-[1] col-span-12 mt-52 md:mt-0 lg:col-span-5">
+                    <div class="relative z-1 col-span-12 mt-52 md:mt-0 lg:col-span-5">
                         <div
                             class="mb-1.5 max-w-fit border-b border-dashed border-b-orange-500 pb-1 text-xs font-semibold tracking-widest text-orange-700 uppercase lg:mb-3 lg:text-sm"
                         >
@@ -30,7 +30,7 @@
                     </div>
                 </transition>
 
-                <div class="col-span-12 lg:col-span-7">
+                <div class="col-span-12 lg:col-span-7" :class="{ 'pt-12': discount_display_config.show_message }">
                     <figure>
                         <img class="block h-[450px] w-full object-cover md:h-[850px]" :src="image[0]['image']" alt="Image description" />
                     </figure>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 // @ts-nocheck
 import { PageComponentContent } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import SectionDivider from '../SectionDivider.vue';
 
 import { SplitText } from 'gsap/all';
@@ -55,6 +55,10 @@ import { onUnmounted } from 'vue';
 const { content } = defineProps<{
     content: PageComponentContent;
 }>();
+
+const page = usePage();
+
+const discount_display_config = page.props.discountsDisplayConfig as DiscountDisplay;
 
 const heading = content.heading[0].content;
 const message = content.paragraph[1].content;

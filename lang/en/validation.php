@@ -205,7 +205,6 @@ return [
         'city' => 'Ciudad',
         'zipcode' => 'Código Postal',
 
-
     ],
 
 ];
