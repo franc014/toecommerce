@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             /* ProductSeeder::class, */
             /*  TaxSeeder::class, */
-            ShieldSeederDiscounts::class,
+            ShieldSeeder::class,
         ]);
     }
 }
