@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactPageController extends PageController
 {
-
     public function __construct()
     {
         $this->slug = 'contact';

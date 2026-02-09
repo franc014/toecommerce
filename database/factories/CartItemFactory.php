@@ -37,6 +37,9 @@ class CartItemFactory extends Factory
             'computed_taxes' => $computedTaxes,
             'total_with_taxes' => $total,
             'purchasable_type' => Product::class,
+            'has_discount' => false,
+            'discount_percentage' => 0,
+
         ];
     }
 }

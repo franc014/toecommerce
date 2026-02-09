@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Menu;
 use App\Settings\CompanySettings;
+use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Middleware;
@@ -43,6 +44,12 @@ class HandleInertiaRequests extends Middleware
         $legalMenu = Menu::byName('legal');
 
         $company = app(CompanySettings::class)->toArray();
+        $storeFront = app(StorefrontSettings::class)->toArray();
+
+        $discountsDisplayConfig = [
+            'show_message' => $storeFront['show_discount_campaign_message'],
+            'message' => $storeFront['discount_campaign_message'],
+        ];
 
         return [
             ...parent::share($request),
@@ -55,6 +62,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'discountsDisplayConfig' => $discountsDisplayConfig,
         ];
     }
 }

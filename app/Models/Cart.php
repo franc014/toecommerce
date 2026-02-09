@@ -96,9 +96,15 @@ class Cart extends Model
 
         $totalTaxes = collect($taxes)->sum('percentage');
 
+        if ($item->has_discount) {
+            $basePrice = $item->discounted_price;
+        } else {
+            $basePrice = $item->price;
+        }
+
         $item->quantity = $quantity;
-        $item->total = $item->price * $item->quantity;
-        $item->total_with_taxes = $quantity * $item->price * (1 + $totalTaxes / 100);
+        $item->total = $basePrice * $item->quantity;
+        $item->total_with_taxes = $quantity * $basePrice * (1 + $totalTaxes / 100);
         $item->computed_taxes = $item->total_with_taxes - $item->total;
         $item->save();
 
@@ -116,6 +122,7 @@ class Cart extends Model
 
     public function updateCartTally(): void
     {
+
         $itemsWithoutTaxes = $this->items->filter(function ($item) {
             return $item->taxes === null || count(json_decode($item->taxes)) === 0;
         });

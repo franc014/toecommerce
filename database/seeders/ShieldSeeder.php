@@ -38,6 +38,10 @@ class ShieldSeeder extends Seeder
                     'ForceDelete:Menu', 'ForceDeleteAny:Menu', 'RestoreAny:Menu', 'Replicate:Menu', 'Reorder:Menu',
                     'ViewAny:Menu', 'View:Menu', 'Create:Menu', 'Update:Menu', 'Delete:Menu', 'Restore:Menu',
                     'ForceDelete:Menu', 'ForceDeleteAny:Menu', 'RestoreAny:Menu', 'Replicate:Menu', 'Reorder:Menu',
+                    'ViewAny:Discount', 'View:Discount', 'Create:Discount', 'Update:Discount', 'Delete:Discount', 'Restore:Discount',
+                    'ForceDelete:Discount', 'ForceDeleteAny:Discount', 'RestoreAny:Discount', 'Replicate:Discount', 'Reorder:Discount',
+                    'ViewAny:Discount', 'View:Discount', 'Create:Discount', 'Update:Discount', 'Delete:Discount', 'Restore:Discount',
+                    'ForceDelete:Discount', 'ForceDeleteAny:Discount', 'RestoreAny:Discount', 'Replicate:Discount', 'Reorder:Discount',
 
                 ]], ['name' => 'customer', 'guard_name' => 'web',
                     'permissions' => [

@@ -84,8 +84,11 @@ class Order extends Model
                 'cart_item_id' => $item->id,
                 'title' => $item->title,
                 'slug' => $item->slug,
+                'has_discount' => $item->has_discount,
                 'quantity' => $item->quantity,
                 'price' => $item->price,
+                'discounted_price' => $item->discounted_price,
+                'discount_percentage' => $item->discount_percentage,
                 'taxes' => $item->taxes,
                 'total' => $item->total,
                 'total_with_taxes' => $item->total_with_taxes,
@@ -98,6 +101,7 @@ class Order extends Model
 
     public function addItem(CartItem $item)
     {
+
         $this->orderItems()->create([
             'purchasable_id' => $item->purchasable_id,
             'purchasable_type' => $item->purchasable_type,
@@ -110,6 +114,9 @@ class Order extends Model
             'total' => $item->total,
             'total_with_taxes' => $item->total_with_taxes,
             'computed_taxes' => $item->computed_taxes,
+            'has_discount' => $item->has_discount,
+            'discount_percentage' => $item->discount_percentage,
+            'discounted_price' => $item->discounted_price,
         ]);
     }
 

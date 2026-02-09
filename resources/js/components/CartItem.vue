@@ -10,10 +10,15 @@
         </div>
 
         <div class="flex items-center justify-between gap-3 md:w-5/6">
-            <p class="flex flex-col gap-1">
-                <span class="text-xs font-bold">Precio:</span>
-                {{ item.price_in_dollars }}
-            </p>
+            <div class="flex flex-col gap-2">
+                <p>
+                    <span class="text-xs font-bold">Precio:</span>
+                </p>
+                <p class="flex gap-3">
+                    <span :class="{ 'has-discount': item.has_discount }">{{ item.price_in_dollars }}</span>
+                    <span v-if="item.has_discount" class="text-emerald-700">{{ item.discounted_price_in_dollars }} </span>
+                </p>
+            </div>
 
             <div class="flex items-center justify-between gap-2">
                 <Quantity class="w-28 p-1 text-xs" :modelValue="quantity" @update:modelValue="changeQuantity" />

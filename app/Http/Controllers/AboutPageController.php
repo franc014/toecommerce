@@ -8,7 +8,6 @@ use App\CMS\RichTextTransformable;
 
 class AboutPageController extends PageController
 {
-
     public function __construct()
     {
         $this->view = 'About';

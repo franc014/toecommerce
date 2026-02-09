@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCollection;
-
 use Illuminate\Support\Facades\Storage;
 
 class CollectionsPageController extends PageController
 {
-
     public function __construct()
     {
         $this->slug = 'collections';
@@ -25,8 +23,7 @@ class CollectionsPageController extends PageController
         });
 
         $this->extendedData = [
-            'collections' => $collections
+            'collections' => $collections,
         ];
     }
-
 }

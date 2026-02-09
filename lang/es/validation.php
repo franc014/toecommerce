@@ -78,7 +78,7 @@ return [
     'integer' => 'El campo :attribute debe ser un número entero.',
     'ip' => 'El campo :attribute debe ser una dirección IP válida.',
     'ipv4' => 'El campo :attribute debe ser una dirección IPv4 válida.',
-        'ipv6' => 'El campo :attribute debe ser una dirección IPv6 válida.',
+    'ipv6' => 'El campo :attribute debe ser una dirección IPv6 válida.',
     'json' => 'El campo :attribute debe ser una cadena JSON válida.',
     'list' => 'El campo :attribute debe ser una lista.',
     'lowercase' => 'El campo :attribute debe estar en minúsculas.',

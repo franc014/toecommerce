@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Casts\Money;
 use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
+use App\Traits\Discountable;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
-use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
+use App\Traits\Taxable;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,7 +26,7 @@ use Spatie\Tags\HasTags;
 
 class Product extends Model implements HasMedia, HasRichContent, Purchasable
 {
-    use HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable;
+    use Discountable, HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable, Taxable;
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -35,7 +36,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         'description' => 'array',
     ];
 
-    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes'];
+    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes', 'has_discounts', 'discounted_price_in_dollars'];
 
     public function setUpRichContent(): void
     {
@@ -71,13 +72,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         }
 
         return false;
-    }
-
-    public function priceWithTaxesInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->priceWithTaxes())
-        );
     }
 
     public function categories(): BelongsToMany
@@ -118,23 +112,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
     public static function bySlug(string $slug)
     {
         return self::where('slug', $slug)->first();
-    }
-
-    public function hasTaxes(): bool
-    {
-        return $this->taxes->count() >= 1;
-    }
-
-    public function priceWithTaxes(): float
-    {
-        $price = (int) $this->getAttributes()['price'];
-
-        return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
-    }
-
-    public function computedTaxes(): float
-    {
-        return $this->price * ($this->taxes->sum('percentage') / 100);
     }
 
     public function productImages()
@@ -208,19 +185,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                 'sku' => '',
             ]);
         }
-    }
-
-    public function formattedTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                $taxes = $this->taxes->map(function ($tax) {
-                    return $tax->name.' ('.$tax->percentage.'%)';
-                });
-
-                return $taxes->implode(', ');
-            }
-        );
     }
 
     public function relatedProducts(): ?EloquentCollection

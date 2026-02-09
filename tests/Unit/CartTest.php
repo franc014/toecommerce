@@ -165,6 +165,67 @@ test('getting totals', function () {
 
 });
 
+test('getting totals when items have discounts', function () {
+
+    $itemATotalWithTaxes = 120 * (1 + 0.15 + 0.10); // 150 // computed tax: 30
+    $itemBTotalWithTaxes = 32 * (1 + 0.15); // 36.8 // computed tax 4.8 (20% discount applied)
+    $itemCTotalWithTaxes = 100; // 100 -> no taxes
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(3)->state(new Sequence(
+        [
+            'price' => 40,
+            'quantity' => 3,
+            'total' => 120,
+            'taxes' => json_encode([
+                [
+                    'percentage' => 15,
+                    'name' => 'IVA',
+                ],
+                [
+                    'percentage' => 10,
+                    'name' => 'ISD',
+                ],
+            ]),
+            'total_with_taxes' => $itemATotalWithTaxes,
+            'computed_taxes' => 30,
+        ],
+        [
+            'price' => 20,
+            'quantity' => 2,
+            'total' => 36.8,
+            'taxes' => json_encode([
+                [
+                    'percentage' => 15,
+                    'name' => 'IVA',
+                ],
+            ]),
+            'has_discount' => true,
+            // discount of 20%
+            'discounted_price' => 16,
+            'total_with_taxes' => $itemBTotalWithTaxes,
+            'computed_taxes' => 4.8,
+        ],
+        [
+            'price' => 50,
+            'quantity' => 2,
+            'total' => 100,
+            'taxes' => json_encode([]),
+            'total_with_taxes' => $itemCTotalWithTaxes,
+            'computed_taxes' => 0,
+        ]
+    )), 'items')->create();
+
+    expect($cart->fresh()->total_without_taxes)->toBe(100.0);
+    expect($cart->fresh()->total_without_taxes_in_dollars)->toBe('$100');
+    expect($cart->fresh()->total_with_taxes)->toBe(156.8);
+    expect($cart->fresh()->total_computed_taxes)->toBe(34.8);
+
+    expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$34.8');
+    expect($cart->fresh()->total_amount)->toBe(291.6);
+    expect($cart->fresh()->total_amount_in_dollars)->toBe('$291.6');
+
+});
+
 test('getting the total count of items in the cart', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2)->state(new Sequence([
         'price' => 40.00,

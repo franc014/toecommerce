@@ -15,11 +15,14 @@ abstract class PageController extends Controller
     use Metatags;
 
     private ?Page $page;
-    protected array $extendedData = [];
-    protected array $transformables = [];
-    protected string $view;
-    protected string $slug;
 
+    protected array $extendedData = [];
+
+    protected array $transformables = [];
+
+    protected string $view;
+
+    protected string $slug;
 
     public function __invoke()
     {
@@ -41,7 +44,7 @@ abstract class PageController extends Controller
             return Inertia::render($this->view, [
                 'components' => fn () => collect($components)->keyBy('class'),
                 'metatags' => fn () => $this->metatags(),
-                ...$this->extendedData
+                ...$this->extendedData,
             ]);
 
         } catch (ModelNotFoundException $e) {

@@ -275,6 +275,11 @@ a.pagination-link:hover {
     }
 }
 
+.has-discount {
+    @apply border-dashed border-zinc-600 line-through decoration-red-400;
+    text-decoration-style: wavy;
+}
+
 
 
 

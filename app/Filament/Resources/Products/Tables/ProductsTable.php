@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Filament\Actions\BulkDiscountsAction;
+use App\Filament\Actions\DiscountsAction;
 use App\Models\Product;
 use App\Models\Tax;
 use Filament\Actions\Action;
-use Filament\Actions\BulkAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -16,7 +17,6 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Collection;
 
 class ProductsTable
 {
@@ -47,10 +47,10 @@ class ProductsTable
                     ->money()
                     ->sortable(),
 
-                ImageColumn::make('main_image')
+                /*  ImageColumn::make('main_image')
                     ->label(__('firesources.image'))
                     ->circular()
-                    ->imageSize(60),
+                    ->imageSize(60), */
 
                 TextColumn::make('productCollections.title')
                     ->label(__('firesources.collections'))
@@ -111,8 +111,10 @@ class ProductsTable
                     ->after(function () {
                         return Notification::make()
                             ->success()
-                            ->title('Impuestos actualizados')->send();
+                            ->title(__('firesources.taxes_updated'))->send();
                     }),
+                DiscountsAction::make(),
+
                 EditAction::make(),
 
                 PublishingActions::getPublishingActions(),
@@ -120,24 +122,8 @@ class ProductsTable
             ])
             ->toolbarActions([
 
-                BulkAction::make('assignTaxes')
-                    ->label(__('firesources.assign_taxes'))
-                    ->schema([
-                        CheckboxList::make('taxes')->options(Tax::query()->pluck('name', 'id'))
-                            ->label(__('firesources.taxes'))
-                            ->default([]),
-                    ])
-                    ->action(function (array $data, Collection $records) {
-                        foreach ($records as $record) {
-                            $record->taxes()->sync($data['taxes']);
-                        }
-                    })->after(function () {
-                        return Notification::make()
-                            ->success()
-                            ->title('Impuestos asignados')->send();
-                    })
-                    ->color('info')
-                    ->icon(Heroicon::OutlinedPercentBadge),
+                BulkDiscountsAction::make(),
+
                 DeleteBulkAction::make(),
 
                 PublishingActions::getBulkPublishingActions(),

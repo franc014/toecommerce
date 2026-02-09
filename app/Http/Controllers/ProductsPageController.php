@@ -7,7 +7,6 @@ use App\Settings\StorefrontSettings;
 
 class ProductsPageController extends PageController
 {
-
     public function __construct(StorefrontSettings $sfSettings)
     {
         $this->view = 'Products';
@@ -25,14 +24,15 @@ class ProductsPageController extends PageController
                 'has_variants' => $product->hasPublishedVariants(),
                 'variants' => $product->variants,
                 'dropping_stock' => $product->isDroppingStock(),
+                'has_discounts' => $product->has_discounts,
+                'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
+                'discounts' => $product->discountsForList,
             ];
         });
 
         $this->extendedData = [
-            'products' => fn () => $products
+            'products' => fn () => $products,
         ];
 
     }
-
-
 }
