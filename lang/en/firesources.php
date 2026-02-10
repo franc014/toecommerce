@@ -31,6 +31,7 @@ return [
     'add_value_variant_option' => 'Add value variant option',
     'value' => 'Value',
     'generate_variants' => 'Generate variants',
+    'variants_generated' => 'Variants have been generated',
     'main_image' => 'Main Image',
     'gallery_images' => 'Gallery Images',
     'edit' => 'Edit',
