@@ -1,13 +1,13 @@
 {
     "agents": [
-        "claude_code",
         "copilot",
-        "gemini",
         "opencode"
     ],
     "editors": [
         "vscode"
     ],
-    "guidelines": [],
+    "guidelines": [
+        "filament/filament"
+    ],
     "herd_mcp": true
 }

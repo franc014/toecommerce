@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Orders\Schemas;
 
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
@@ -20,6 +21,32 @@ class OrderInfolist
                     ->columns(2)
                     ->columnSpanFull()
                     ->collapsible()
+                    ->headerActions([
+                        Action::make('confirm-payment')
+                            ->label(__('firesources.confirm_payment'))
+                            ->icon(Heroicon::CheckCircle)
+                            ->color('success')
+                            ->requiresConfirmation()
+                            ->slideOver(false)
+                            ->modalWidth('xl')
+                            ->modalHeading(__('firesources.confirm_payment'))
+                            ->modalDescription(__('firesources.confirm_payment_description'))
+                            ->modalSubmitActionLabel(__('firesources.confirm'))
+                            ->hidden(function ($record) {
+                                if (Filament::getCurrentPanel()->getId() !== 'admin') {
+                                    return true;
+                                }
+                                if (! $record->hasItems()) {
+                                    return true;
+                                }
+
+                                return $record->isConfirmed();
+                            })
+                            ->action(function ($record) {
+                                $record->markAsPaid();
+                            })
+                            ->successNotificationTitle(__('firesources.order_marked_as_paid')),
+                    ])
                     ->schema([
                         TextEntry::make('code')
                             ->label(__('firesources.code')),
@@ -48,6 +75,7 @@ class OrderInfolist
                         TextEntry::make('paid_at')
                             ->label(__('firesources.paid_at'))
                             ->badge()
+                            ->color(fn ($record) => $record->isConfirmed() ? 'success' : 'warning')
                             ->dateTime()
                             ->placeholder(__('firesources.not_paid_yet')),
                     ]),
@@ -83,13 +111,20 @@ class OrderInfolist
                             ->icon(Heroicon::Banknotes)
                             ->url(fn () => route('storefront.checkout'))
                             ->hidden(function ($record) {
+                                if (Filament::getCurrentPanel()->getId() === 'admin') {
+                                    return true;
+                                }
+
                                 return $record->paid_at !== null;
                             }),
                         Action::make('purchase-more')
                             ->icon(Heroicon::BuildingStorefront)
                             ->label(__('firesources.purchase_more'))
                             ->color('secondary')
-                            ->url(fn () => route('storefront.products')),
+                            ->url(fn () => route('storefront.products'))
+                            ->hidden(function () {
+                                return Filament::getCurrentPanel()->getId() === 'admin';
+                            }),
                     ]),
             ]);
     }

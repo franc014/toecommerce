@@ -28,13 +28,16 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 {
     use Discountable, HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable, Taxable;
 
-    protected $casts = [
-        'published_at' => 'datetime',
-        'status' => ProductStatus::class,
-        'price' => Money::class,
-        'variant_options' => 'array',
-        'description' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'status' => ProductStatus::class,
+            'price' => Money::class,
+            'variant_options' => 'array',
+            'description' => 'array',
+        ];
+    }
 
     protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes', 'has_discounts', 'discounted_price_in_dollars'];
 

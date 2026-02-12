@@ -1,30 +1,27 @@
-import { show, create, empty } from '@/routes/cart';
+import { create, empty, show } from '@/routes/cart';
 import { addOrUpdate, remove } from '@/routes/cart/items';
 import { CartItem, DataForCart } from '@/types';
 
-import axios from "axios";
-import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { v7 as uuidv7 } from 'uuid';
 
 async function createCartInDB(cartId: string) {
-
     try {
         console.info('creating cart url', create().url);
 
-        const cartDB = await axios.post(create().url,{
+        const cartDB = await axios.post(create().url, {
             id: cartId,
         });
 
         return cartDB;
-    }catch (e: any) {
+    } catch (e: any) {
         console.error('hey...', e.message);
     }
-
 }
 
 async function getCartFromDB(cartId: string, store: any) {
-
     const cartDB = await axios.post(show().url, {
-        id: cartId
+        id: cartId,
     });
 
     store.items = cartDB.data.items;
@@ -37,62 +34,52 @@ async function getCartFromDB(cartId: string, store: any) {
     return cartDB;
 }
 
-export async function init(cookieCart:string) {
-
-        if (cookieCart) {
-
-            try {
-                const cartDB = await getCartFromDB(cookieCart, this);
-                console.info('got cart from DB');
-                this.id = cartDB.data.ui_cart_id;
-
-            } catch (e: any) {
-                // restore cart to DB with LS cart if it has been removed for some reason
-                console.error('Sorry. Could not get cart: ', e.message);
-                /* const uuid = uuidv4();
+export async function init(cookieCart: string) {
+    if (cookieCart) {
+        try {
+            const cartDB = await getCartFromDB(cookieCart, this);
+            console.info('got cart from DB');
+            this.id = cartDB.data.ui_cart_id;
+        } catch (e: any) {
+            // restore cart to DB with LS cart if it has been removed for some reason
+            console.error('Sorry. Could not get cart: ', e.message);
+            /* const uuid = uuidv4();
                 const cartDB = await createCartInDB(uuid);
                 this.id = cartDB.data.ui_cart_id; */
+        }
+    } else {
+        try {
+            const uuid = uuidv7();
 
-            }
+            const cartDB = await createCartInDB(uuid);
 
-            }else {
-                try {
-                    const uuid = uuidv4();
-
-                    const cartDB = await createCartInDB(uuid);
-
-                    this.id = cartDB.data.ui_cart_id;
-
-                } catch (e: any) {
-                    console.error('Sorry. Could not create cart: ', e.message);
-                }
-            }
+            this.id = cartDB.data.ui_cart_id;
+        } catch (e: any) {
+            console.error('Sorry. Could not create cart: ', e.message);
+        }
+    }
 }
 
-export async function addOrUpdateItem(data: DataForCart){
+export async function addOrUpdateItem(data: DataForCart) {
     await axios.post(addOrUpdate().url, data);
     await getCartFromDB(this.id, this);
 }
 //todo: also type...
-export async function removeItem(data: object){
+export async function removeItem(data: object) {
     await axios.post(remove().url, data);
-    await getCartFromDB(this.id,this);
+    await getCartFromDB(this.id, this);
 }
-export async function emptyCart(data: object){
-
+export async function emptyCart(data: object) {
     await axios.post(empty().url, data);
     await getCartFromDB(this.id, this);
 }
 
-export  function productInItem(productSlug : string) {
-   const items = this.items;
+export function productInItem(productSlug: string) {
+    const items = this.items;
 
-   const item = items.find(function(item: CartItem){
-       return item.slug === productSlug
-   });
+    const item = items.find(function (item: CartItem) {
+        return item.slug === productSlug;
+    });
 
-   return item?.quantity;
+    return item?.quantity;
 }
-
-
-

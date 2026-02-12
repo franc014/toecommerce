@@ -16,6 +16,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -159,6 +160,11 @@ class ProductForm
                                     ->icon(Heroicon::OutlinedSwatch)
                                     ->action(function (Model $record) {
                                         $record->generateVariants();
+                                    })
+                                    ->after(function () {
+                                        return Notification::make()
+                                            ->success()
+                                            ->title(__('firesources.variants_generated'))->send();
                                     }),
                             ]),
                         Tab::make(__('firesources.media'))

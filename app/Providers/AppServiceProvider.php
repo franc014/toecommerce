@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ImportAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
@@ -72,6 +73,12 @@ class AppServiceProvider extends ServiceProvider
                 ->slideOver(false)
                 ->icon(Heroicon::Trash)
                 ->label(__('firesources.delete'));
+
+        });
+
+        ReplicateAction::configureUsing(function (ReplicateAction $action) {
+            return $action->modalWidth('xl')
+                ->slideOver(false);
         });
 
         ExportAction::configureUsing(function (ExportAction $action) {
