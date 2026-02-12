@@ -188,5 +188,9 @@ return [
     'discount_mode' => 'Discount Mode',
     'show_discount_campaign_message' => 'Display discount campaign message',
     'discount_campaign_message' => 'Discount campaign message',
+    'confirm_payment' => 'Confirm Payment',
+    'confirm_payment_description' => 'Are you sure you want to mark this order as paid?',
+    'confirm' => 'Confirm',
+    'order_marked_as_paid' => 'Order marked as paid successfully',
 
 ];
