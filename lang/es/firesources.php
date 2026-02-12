@@ -186,5 +186,9 @@ return [
     'discount_mode' => 'Modo de Descuento',
     'show_discount_campaign_message' => 'Desplegar mensage de campaña de descuento',
     'discount_campaign_message' => 'Mensaje para campaña de descuento',
+    'confirm_payment' => 'Confirmar Pago',
+    'confirm_payment_description' => '¿Estás seguro de que deseas marcar este pedido como pagado?',
+    'confirm' => 'Confirmar',
+    'order_marked_as_paid' => 'Pedido marcado como pagado exitosamente',
 
 ];
