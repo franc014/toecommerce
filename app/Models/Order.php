@@ -169,6 +169,13 @@ class Order extends Model
         return $this->paid_at !== null;
     }
 
+    public function markAsPaid(): void
+    {
+        $this->update([
+            'paid_at' => now(),
+        ]);
+    }
+
     public function confirm(string $payphoneConfirmation)
     {
 

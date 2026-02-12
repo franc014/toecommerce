@@ -25,7 +25,7 @@
 import { PayphoneInfo } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { OctagonAlertIcon } from 'lucide-vue-next';
-import { v4 as uuidv4 } from 'uuid';
+import { v7 as uuidv7 } from 'uuid';
 import { onMounted, useTemplateRef } from 'vue';
 
 const page = usePage();
@@ -40,7 +40,7 @@ onMounted(() => {
     new PPaymentButtonBox({
         token,
         storeId,
-        clientTransactionId: uuidv4(),
+        clientTransactionId: uuidv7(),
         amount: props.gatewayInfo.payment.amount,
         amountWithoutTax: props.gatewayInfo.payment.amountWithoutTax,
         amountWithTax: props.gatewayInfo.payment.amountWithTax,

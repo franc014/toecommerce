@@ -62,7 +62,7 @@ import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { Order, PayphoneInfo, UserInfoEntry } from '@/types';
+import { PayphoneInfo, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
@@ -74,7 +74,6 @@ const user = page.props.auth.user;
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
-const order = page.props.order as Order;
 
 const cartStore = useCartStore();
 const cartDrawerStore = useCartDrawerStore();

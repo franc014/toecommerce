@@ -141,6 +141,12 @@ export interface Order {
 export interface PayphoneInfo {
     storeId: string;
     token: string;
+    payment: {
+        amount: number,
+        amountWithTax: number,
+        amountWithoutTax: number,
+        tax: number
+    },
 }
 
 

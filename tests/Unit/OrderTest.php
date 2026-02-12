@@ -504,3 +504,16 @@ it('is confirmed', function () {
 
     expect($order->isConfirmed())->toBeTrue();
 });
+
+it('sets an order as paid', function () {
+    $order = Order::factory()->create([
+        'paid_at' => null,
+    ]);
+
+    expect($order->isConfirmed())->toBeFalse();
+
+    $order->markAsPaid();
+
+    expect($order->fresh()->paid_at)->not->toBeNull();
+    expect($order->fresh()->isConfirmed())->toBeTrue();
+});
