@@ -172,21 +172,25 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 
     public function generateVariants(): void
     {
-
         foreach ($this->generateCombinations() as $combination) {
             $values = collect($combination)->values()->join('-');
             $title = $this->title.'-'.$values;
             $slug = Str::slug($title);
 
-            $this->variants()->create([
-                'title' => $title,
-                'slug' => $slug,
-                'variation' => $combination,
-                'price' => $this->price,
-                'stock' => 0,
-                'status' => ProductStatus::DRAFT,
-                'sku' => '',
-            ]);
+            $exists = $this->variants()->where('slug', $slug)->exists();
+
+            if (! $exists) {
+                $this->variants()->create([
+                    'title' => $title,
+                    'slug' => $slug,
+                    'variation' => $combination,
+                    'price' => $this->price,
+                    'stock' => 0,
+                    'status' => ProductStatus::DRAFT,
+                    'sku' => '',
+                ]);
+            }
+
         }
     }
 
