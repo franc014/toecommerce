@@ -97,14 +97,6 @@ class ProductForm
                                     ->inputMode('decimal')
                                     ->prefix('$'),
 
-                                TextInput::make('discount')
-                                    ->label(__('firesources.discount'))
-                                    ->numeric()
-                                    ->minValue(0.01)
-                                    ->maxValue(100)
-                                    ->inputMode('decimal')
-                                    ->prefix('%'),
-
                                 CheckboxList::make('taxes')
                                     ->label(__('firesources.taxes'))
                                     ->getOptionLabelFromRecordUsing(fn (Tax $record) => "{$record->name} [{$record->percentage} %]")

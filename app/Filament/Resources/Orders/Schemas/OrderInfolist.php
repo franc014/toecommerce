@@ -68,6 +68,16 @@ class OrderInfolist
                             ->label(__('firesources.total_amount'))
                             ->numeric()
                             ->money('USD'),
+                        TextEntry::make('payphone_metadata')
+                            ->label(__('firesources.last_four_digits'))
+                            ->formatStateUsing(function ($state) {
+                                return '**** **** **** '.json_decode($state)->lastDigits;
+                            }),
+                        TextEntry::make('payphone_metadata')
+                            ->label(__('firesources.id_document'))
+                            ->formatStateUsing(function ($state) {
+                                return json_decode($state)->document;
+                            }),
                         TextEntry::make('created_at')
                             ->label(__('firesources.created_at'))
                             ->dateTime()

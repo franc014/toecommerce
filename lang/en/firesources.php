@@ -192,5 +192,9 @@ return [
     'confirm_payment_description' => 'Are you sure you want to mark this order as paid?',
     'confirm' => 'Confirm',
     'order_marked_as_paid' => 'Order marked as paid successfully',
+    'last_four_digits' => 'Card last four digits',
+    'id_document' => 'Id Document',
+    'copy_uppercase' => 'Copy',
+    'copy_lowercase' => 'copy',
 
 ];
