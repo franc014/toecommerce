@@ -29,13 +29,6 @@ class ProductVariantForm
                     ->numeric()
                     ->inputMode('decimal')
                     ->prefix('$'),
-                TextInput::make('discount')
-                    ->label(__('firesources.discount'))
-                    ->numeric()
-                    ->minValue(0.01)
-                    ->maxValue(100)
-                    ->inputMode('decimal')
-                    ->suffix('%'),
                 Select::make('status')
                     ->label(__('firesources.status'))
                     ->options(ProductStatus::class)

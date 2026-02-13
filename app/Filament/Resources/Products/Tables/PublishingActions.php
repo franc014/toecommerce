@@ -21,6 +21,10 @@ class PublishingActions
         return ActionGroup::make([
             ReplicateAction::make()
                 ->label(__('firesources.duplicate'))
+                ->beforeReplicaSaved(function (Model $replica) {
+                    $replica->title = $replica->title.'-'.__('firesources.copy_uppercase');
+                    $replica->slug = $replica->slug.'-'.__('firesources.copy_lowercase');
+                })
                 ->successNotificationTitle('Producto duplicado')->size('xs'),
 
             Action::make('publish')

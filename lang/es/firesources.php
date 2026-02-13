@@ -190,5 +190,8 @@ return [
     'confirm_payment_description' => '¿Estás seguro de que deseas marcar este pedido como pagado?',
     'confirm' => 'Confirmar',
     'order_marked_as_paid' => 'Pedido marcado como pagado exitosamente',
-
+    'last_four_digits' => 'Últimos 4 dígitos de tarjeta',
+    'id_document' => 'Documento de Identificación',
+    'copy_uppercase' => 'Copia',
+    'copy_lowercase' => 'copia',
 ];

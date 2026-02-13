@@ -243,6 +243,52 @@ test('can not generate variants when no variant options are defined for a produc
 
 });
 
+test('can not generate a variant if variant already exist', function () {
+    $variantOptions = [
+        [
+            'name' => 'size',
+            'values' => [
+                ['value' => 'small'],
+                ['value' => 'medium'],
+                ['value' => 'large'],
+            ],
+        ],
+
+        [
+            'name' => 'color',
+            'values' => [
+                ['value' => 'red'],
+                ['value' => 'blue'],
+                ['value' => 'green'],
+            ],
+        ],
+
+        [
+            'name' => 'material',
+            'values' => [
+                ['value' => 'leather'],
+                ['value' => 'fabric'],
+                ['value' => 'synthetic'],
+            ],
+        ],
+    ];
+
+    $product = Product::factory()->create(
+        [
+            'title' => 'Sneakers',
+            'slug' => 'sneakers',
+            'variant_options' => $variantOptions,
+        ]
+    );
+
+    $product->generateVariants();
+
+    expect($product->variants()->count())->toBe(27);
+    $product->generateVariants();
+    expect($product->variants()->count())->toBe(27);
+
+});
+
 test('verifying product has published variants', function () {
     $product = Product::factory()->create();
     ProductVariant::factory()->published()->count(2)->create([
