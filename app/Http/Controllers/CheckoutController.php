@@ -8,10 +8,11 @@ use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Honeypot\Honeypot;
 
 class CheckoutController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, Honeypot $honeypot)
     {
 
         try {
@@ -39,6 +40,7 @@ class CheckoutController extends Controller
                         ],
 
                     ],
+                    'honeypot' => $honeypot,
                 ]
             );
         } catch (PlaceOrderForEmptyCartException $e) {
