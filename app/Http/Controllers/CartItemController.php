@@ -42,14 +42,14 @@ class CartItemController extends Controller
 
             $item = $addsToCart->handle();
 
-            return ['item' => $item];
+            return response()->json(['item' => $item, 'message' => __('storefront.cart_item_added')]);
 
         } catch (BindingResolutionException $e) {
 
             return response()->json([
                 'error' => [
                     'code' => 404,
-                    'message' => 'Product not found',
+                    'message' => __('storefront.cart_item_not_found'),
                 ],
             ], 404);
         }
@@ -64,5 +64,7 @@ class CartItemController extends Controller
 
         $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
         $cart->removeItem($request->input('item_id'));
+
+        return response()->json(['message' => __('storefront.cart_item_removed')]);
     }
 }

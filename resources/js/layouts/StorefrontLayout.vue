@@ -26,26 +26,51 @@ const company = page.props.company as Company;
 cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {
         after((result) => {
-            toast.success('Item added to cart');
+            if (result?.message) {
+                toast.success(result.message);
+            }
         });
         onError((error: any) => {
-            if (error.response.data.message) {
+            if (error.response?.data?.message) {
                 toast.error(error.response.data.message);
-            } else {
+            } else if (error.response?.data?.error?.message) {
                 toast.error(error.response.data.error.message);
+            } else {
+                toast.error('An error occurred while updating your cart');
             }
         });
     }
 
     if (name === 'removeItem') {
         after((result) => {
-            toast.success('Item removed from cart');
+            if (result?.message) {
+                toast.success(result.message);
+            }
         });
         onError((error: any) => {
-            if (error.response.data.message) {
+            if (error.response?.data?.message) {
                 toast.error(error.response.data.message);
-            } else {
+            } else if (error.response?.data?.error?.message) {
                 toast.error(error.response.data.error.message);
+            } else {
+                toast.error('An error occurred while removing the item');
+            }
+        });
+    }
+
+    if (name === 'emptyCart') {
+        after((result) => {
+            if (result?.message) {
+                toast.success(result.message);
+            }
+        });
+        onError((error: any) => {
+            if (error.response?.data?.message) {
+                toast.error(error.response.data.message);
+            } else if (error.response?.data?.error?.message) {
+                toast.error(error.response.data.error.message);
+            } else {
+                toast.error('An error occurred while emptying your cart');
             }
         });
     }

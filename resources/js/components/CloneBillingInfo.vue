@@ -25,10 +25,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Toaster } from '@/components/ui/sonner';
 import { checkout } from '@/routes/storefront';
 import { useBillingAsShipping } from '@/routes/storefront/user-info-entry';
-import { Form, router } from '@inertiajs/vue3';
+import { Form, router, usePage } from '@inertiajs/vue3';
 import { Copy } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { toast } from 'vue-sonner';
+
+const page = usePage();
 
 const emits = defineEmits<{ acceptCloning: [clone: boolean] }>();
 
@@ -39,12 +41,25 @@ function handleAccept(clone: boolean | any): void {
     emits('acceptCloning', clone);
 }
 
-function handleSuccess(): void {
+/* function handleSuccess(): void {
     toast.success('Información guardada!');
     setTimeout(() => {
         router.visit(checkout().url);
     }, 2000);
+} */
+
+function handleSuccess() {
+    console.log(page.props.flash?.success);
 }
+
+watchEffect(() => {
+    if (page.props.flash?.success) {
+        toast.success(page.props.flash.success);
+        setTimeout(() => {
+            router.visit(checkout().url);
+        }, 2000);
+    }
+});
 </script>
 
 <style scoped></style>

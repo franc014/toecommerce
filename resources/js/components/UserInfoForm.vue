@@ -174,6 +174,7 @@ import { checkout } from '@/routes/storefront';
 import { store } from '@/routes/storefront/user-info-entry';
 import { Form, router, usePage } from '@inertiajs/vue3';
 import { LoaderCircle, Save } from 'lucide-vue-next';
+import { watchEffect } from 'vue';
 import { toast } from 'vue-sonner';
 import ValidationError from './ValidationError.vue';
 
@@ -185,12 +186,25 @@ const props = defineProps({
     type: String,
 });
 
-function handleSuccess() {
+/* function handleSuccess() {
     toast.success('Información guardada!');
     setTimeout(() => {
         router.visit(checkout().url);
     }, 1000);
+} */
+
+function handleSuccess() {
+    console.log(page.props.flash?.success);
 }
+
+watchEffect(() => {
+    if (page.props.flash?.success) {
+        toast.success(page.props.flash.success);
+        setTimeout(() => {
+            router.visit(checkout().url);
+        }, 1000);
+    }
+});
 </script>
 
 <style scoped></style>

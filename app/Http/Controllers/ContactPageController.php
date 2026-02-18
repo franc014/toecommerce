@@ -24,7 +24,7 @@ class ContactPageController extends PageController
         $contact = Contact::create($request->validated());
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
-        return redirect()->back()->with('success', 'Message sent!');
+        return redirect()->back()->with('success', __('storefront.contact_success'));
 
     }
 }

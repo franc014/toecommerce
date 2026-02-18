@@ -22,6 +22,16 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    honeypot?: {
+        enabled: boolean;
+        nameFieldName: string;
+        validFromFieldName: string;
+        encryptedValidFrom: string;
+    };
+    flash?: {
+        success?: string;
+        error?: string;
+    };
 };
 
 export interface User {
@@ -69,7 +79,6 @@ export interface Product {
         name: string;
         percentage: number;
     }>;
-
 }
 
 export interface ProductVariant {
@@ -87,7 +96,6 @@ export interface ProductVariant {
         name: string;
         percentage: number;
     }>;
-
 }
 
 export interface Cart {
@@ -95,7 +103,7 @@ export interface Cart {
     items: CartItem[];
 }
 
-export interface CartAggregation{
+export interface CartAggregation {
     total_with_taxes_in_dollars: string;
     total_without_taxes_in_dollars: string;
     total_computed_taxes_in_dollars: string;
@@ -142,13 +150,12 @@ export interface PayphoneInfo {
     storeId: string;
     token: string;
     payment: {
-        amount: number,
-        amountWithTax: number,
-        amountWithoutTax: number,
-        tax: number
-    },
+        amount: number;
+        amountWithTax: number;
+        amountWithoutTax: number;
+        tax: number;
+    };
 }
-
 
 export interface DataForCart {
     ui_cart_id: string;
@@ -171,19 +178,18 @@ export interface PageComponent {
 }
 
 export interface Heading {
-    content: string,
-    level: number
+    content: string;
+    level: number;
 }
 
 export interface Paragraph {
-    content: string
+    content: string;
 }
 
 export interface CTA {
-    content: string,
-    link: string
+    content: string;
+    link: string;
 }
-
 
 export interface Collection {
     id: number;
@@ -198,8 +204,8 @@ export interface PageComponentContent {
     paragraph: Array<Paragraph>;
     cta: Array<CTA>;
     image: Array;
-    "new-products": Array;
-    "featured-product": Array;
+    'new-products': Array;
+    'featured-product': Array;
     collections: Array;
     feature: Array;
     video: Array;
@@ -207,8 +213,8 @@ export interface PageComponentContent {
 }
 
 export interface DiscountDisplay {
-    'show_message': boolean;
-    'message': string;
+    show_message: boolean;
+    message: string;
 }
 
 export interface Menu {
@@ -262,7 +268,5 @@ export interface Metatags {
     robots: string;
     schemaOrg: string;
 }
-
-
 
 export type BreadcrumbItemType = BreadcrumbItem;
