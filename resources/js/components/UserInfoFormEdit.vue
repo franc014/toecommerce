@@ -7,6 +7,10 @@
         v-slot="{ errors, processing }"
         @success="onSuccessEdit"
     >
+        <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`" style="display: none">
+            <input type="text" :name="honeypot.nameFieldName" :id="honeypot.nameFieldName" />
+            <input type="text" :name="honeypot.validFromFieldName" :value="honeypot.encryptedValidFrom" />
+        </div>
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="email" class="tracking-wide">Email <IsRequiredSign /></Label>
@@ -189,7 +193,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { update } from '@/routes/storefront/user-info-entry';
-import { Form, router } from '@inertiajs/vue3';
+import { Form, router, usePage } from '@inertiajs/vue3';
 import { LoaderCircle, Save } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import ValidationError from './ValidationError.vue';
@@ -197,6 +201,10 @@ import ValidationError from './ValidationError.vue';
 import { checkout } from '@/routes/storefront';
 import type { UserInfoEntry } from '@/types';
 import { onMounted, ref } from 'vue';
+
+const page = usePage();
+
+const honeypot = page.props.honeypot as any;
 
 const props = defineProps({
     type: String,
@@ -210,8 +218,8 @@ onMounted(() => {
     info.value = infoForEdit;
 });
 
-function onSuccessEdit() {
-    toast.success('Información actualizada!');
+function onSuccessEdit(): void {
+    toast.success(page.flash.success);
     setTimeout(() => {
         router.visit(checkout().url);
     }, 1000);

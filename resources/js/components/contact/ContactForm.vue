@@ -6,6 +6,10 @@
         #default="{ errors, processing, validate, invalid, validating }"
         @success="handleSuccess"
     >
+        <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`" style="display: none">
+            <input type="text" :name="honeypot.nameFieldName" :id="honeypot.nameFieldName" />
+            <input type="text" :name="honeypot.validFromFieldName" :value="honeypot.encryptedValidFrom" />
+        </div>
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="first_name" class="tracking-wide">Nombre <IsRequiredSign /> </Label>
@@ -109,13 +113,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { sendMessage } from '@/routes/storefront';
-import { Form } from '@inertiajs/vue3';
+import { Form, usePage } from '@inertiajs/vue3';
 import { LoaderCircle, SendHorizonal } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 
-const handleSuccess = () => {
-    toast.success('Mensaje enviado con éxito');
-};
+const page = usePage();
+
+const honeypot = page.props.honeypot!;
+
+function handleSuccess() {
+    toast.success(page.flash.success as string);
+}
 </script>
 
 <style scoped></style>

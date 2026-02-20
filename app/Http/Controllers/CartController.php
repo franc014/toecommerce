@@ -46,6 +46,6 @@ class CartController extends Controller
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
         $cart->empty();
 
-        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => []];
+        return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => [], 'message' => __('storefront.cart_emptied')]);
     }
 }
