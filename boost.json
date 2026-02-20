@@ -3,11 +3,20 @@
         "copilot",
         "opencode"
     ],
-    "editors": [
-        "vscode"
+    "guidelines": true,
+    "herd_mcp": true,
+    "mcp": true,
+    "nightwatch_mcp": true,
+    "packages": [
+        "filament/filament",
+        "spatie/laravel-ray"
     ],
-    "guidelines": [
-        "filament/filament"
-    ],
-    "herd_mcp": true
+    "sail": false,
+    "skills": [
+        "wayfinder-development",
+        "pest-testing",
+        "inertia-vue-development",
+        "tailwindcss-development",
+        "debugging-output-and-previewing-html-using-ray"
+    ]
 }

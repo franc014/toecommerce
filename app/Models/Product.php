@@ -185,7 +185,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                     'slug' => $slug,
                     'variation' => $combination,
                     'price' => $this->price,
-                    'stock' => 0,
+                    'stock' => $this->stock,
                     'status' => ProductStatus::DRAFT,
                     'sku' => '',
                 ]);

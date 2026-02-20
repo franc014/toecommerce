@@ -19,6 +19,7 @@ use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Spatie\Honeypot\ProtectAgainstSpam;
 
 Route::get('/', HomePageController::class)->name('storefront.home');
 Route::get('/products', ProductsPageController::class)->name('storefront.products');
@@ -37,7 +38,7 @@ Route::post('/cart/items/remove', [CartItemController::class, 'remove'])->name('
 Route::post('/cart/empty', [CartController::class, 'empty'])->name('cart.empty');
 
 Route::post('/contact', [ContactPageController::class, 'sendMessage'])
-    ->middleware([HandlePrecognitiveRequests::class])
+    ->middleware([HandlePrecognitiveRequests::class, ProtectAgainstSpam::class])
     ->name('storefront.send-message');
 
 Route::get('/login', function () {
@@ -49,8 +50,8 @@ Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('pa
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
     Route::post('/orders/cancel', [OrderController::class, 'cancelOrder'])->name('storefront.orders.cancel');
-    Route::post('/user-info', [UserInfoEntryController::class, 'store'])->middleware(HandlePrecognitiveRequests::class)->name('storefront.user-info-entry.store');
-    Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->middleware(HandlePrecognitiveRequests::class)->name('storefront.user-info-entry.update');
+    Route::post('/user-info', [UserInfoEntryController::class, 'store'])->middleware([HandlePrecognitiveRequests::class, ProtectAgainstSpam::class])->name('storefront.user-info-entry.store');
+    Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->middleware([HandlePrecognitiveRequests::class, ProtectAgainstSpam::class])->name('storefront.user-info-entry.update');
     Route::post('/shipping-info/use-billing', [UserInfoEntryController::class, 'useBillingAsShipping'])->name('storefront.user-info-entry.use-billing-as-shipping');
 
 });

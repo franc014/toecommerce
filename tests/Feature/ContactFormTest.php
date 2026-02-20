@@ -6,8 +6,8 @@ use App\Settings\CompanySettings;
 use Illuminate\Support\Facades\Mail;
 
 test('user can send contact form', function () {
-    $this->withoutExceptionHandling();
 
+    config()->set('honeypot.enabled', false);
     $companySettings = app(CompanySettings::class);
     $companySettings->email = 'customer@example.com';
     $companySettings->save();
@@ -21,7 +21,7 @@ test('user can send contact form', function () {
         'email' => 'customer@example.com',
         'message' => 'This is a test message',
     ])
-        ->assertStatus(200);
+        ->assertRedirect();
 
     $this->assertDatabaseHas('contacts', [
         'first_name' => 'John',
