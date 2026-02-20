@@ -286,7 +286,7 @@ test('customer can send billing info', function () {
             'email' => 'customer@example.com',
         ])
         ->assertStatus(302)
-        ->assertRedirect(route('storefront.checkout'));
+        ->assertRedirect();
 
     $this->assertDatabaseHas('user_info_entries', [
         'first_name' => 'John',
@@ -317,7 +317,7 @@ test('customer can send shipping info', function () {
             'email' => 'customer@example.com',
         ])
         ->assertStatus(302)
-        ->assertRedirect(route('storefront.checkout'));
+        ->assertRedirect();
 
     $this->assertDatabaseHas('user_info_entries', [
         'first_name' => 'John',
@@ -374,7 +374,7 @@ test('can clone existing main billing info into shipping info', function () {
 
     $this->actingAs($this->user)
         ->post(route('storefront.user-info-entry.use-billing-as-shipping'))
-        ->assertRedirect(route('storefront.checkout'));
+        ->assertRedirect();
 
     $this->assertDatabaseHas('user_info_entries', [
         'first_name' => $billingInfo->first_name,

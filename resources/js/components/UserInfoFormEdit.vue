@@ -200,7 +200,7 @@ import ValidationError from './ValidationError.vue';
 
 import { checkout } from '@/routes/storefront';
 import type { UserInfoEntry } from '@/types';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const page = usePage();
 
@@ -218,25 +218,12 @@ onMounted(() => {
     info.value = infoForEdit;
 });
 
-/* function onSuccessEdit() {
-    toast.success('Información actualizada!');
+function onSuccessEdit(): void {
+    toast.success(page.flash.success);
     setTimeout(() => {
         router.visit(checkout().url);
     }, 1000);
-} */
-
-function onSuccessEdit() {
-    console.log(page.props.flash?.success);
 }
-
-watchEffect(() => {
-    if (page.props.flash?.success) {
-        toast.success(page.props.flash.success);
-        setTimeout(() => {
-            router.visit(checkout().url);
-        }, 1000);
-    }
-});
 </script>
 
 <style scoped></style>

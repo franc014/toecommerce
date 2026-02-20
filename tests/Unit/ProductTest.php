@@ -225,6 +225,8 @@ test('can generate as many variants as variant options permutations', function (
         'color' => 'green',
         'material' => 'synthetic',
     ]);
+
+    expect($product->variants[0]->stock)->tobe($product->stock);
 });
 
 // review...

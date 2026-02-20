@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserInfoEntryRequest;
+use Inertia\Inertia;
 
 class UserInfoEntryController extends Controller
 {
@@ -23,7 +24,8 @@ class UserInfoEntryController extends Controller
             'is_main' => true,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false))->with('success', __('storefront.user_info_store_success'));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 
     public function update(StoreUserInfoEntryRequest $request, $id)
@@ -42,7 +44,8 @@ class UserInfoEntryController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false))->with('success', __('storefront.user_info_store_success'));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 
     public function useBillingAsShipping()
@@ -63,6 +66,7 @@ class UserInfoEntryController extends Controller
             'is_main' => true,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false))->with('success', __('storefront.user_info_store_success'));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 }

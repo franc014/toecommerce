@@ -7,6 +7,7 @@ use App\Mail\UserContactSent;
 use App\Models\Contact;
 use App\Settings\CompanySettings;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 use Spatie\Honeypot\Honeypot;
 
 class ContactPageController extends PageController
@@ -24,7 +25,7 @@ class ContactPageController extends PageController
         $contact = Contact::create($request->validated());
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
-        return redirect()->back()->with('success', __('storefront.contact_success'));
+        return Inertia::flash('success', __('storefront.contact_success'))->back();
 
     }
 }

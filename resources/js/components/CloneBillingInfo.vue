@@ -27,7 +27,7 @@ import { checkout } from '@/routes/storefront';
 import { useBillingAsShipping } from '@/routes/storefront/user-info-entry';
 import { Form, router, usePage } from '@inertiajs/vue3';
 import { Copy } from 'lucide-vue-next';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 const page = usePage();
@@ -41,25 +41,12 @@ function handleAccept(clone: boolean | any): void {
     emits('acceptCloning', clone);
 }
 
-/* function handleSuccess(): void {
-    toast.success('Información guardada!');
+function handleSuccess(): void {
+    toast.success(page.flash.success);
     setTimeout(() => {
         router.visit(checkout().url);
     }, 2000);
-} */
-
-function handleSuccess() {
-    console.log(page.props.flash?.success);
 }
-
-watchEffect(() => {
-    if (page.props.flash?.success) {
-        toast.success(page.props.flash.success);
-        setTimeout(() => {
-            router.visit(checkout().url);
-        }, 2000);
-    }
-});
 </script>
 
 <style scoped></style>

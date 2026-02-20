@@ -115,7 +115,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { sendMessage } from '@/routes/storefront';
 import { Form, usePage } from '@inertiajs/vue3';
 import { LoaderCircle, SendHorizonal } from 'lucide-vue-next';
-import { watchEffect } from 'vue';
 import { toast } from 'vue-sonner';
 
 const page = usePage();
@@ -123,14 +122,8 @@ const page = usePage();
 const honeypot = page.props.honeypot!;
 
 function handleSuccess() {
-    console.log(page.props.flash?.success);
+    toast.success(page.flash.success as string);
 }
-
-watchEffect(() => {
-    if (page.props.flash?.success) {
-        toast.success(page.props.flash.success);
-    }
-});
 </script>
 
 <style scoped></style>
