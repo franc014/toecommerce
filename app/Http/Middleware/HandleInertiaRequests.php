@@ -51,6 +51,8 @@ class HandleInertiaRequests extends Middleware
             'message' => $storeFront['discount_campaign_message'],
         ];
 
+        $authedUser = $request->user();
+
         return [
             ...parent::share($request),
             'mainMenu' => Inertia::once(fn () => $mainMenu),
@@ -60,7 +62,11 @@ class HandleInertiaRequests extends Middleware
             'name' => Inertia::once(fn () => config('app.name')),
             'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [
-                'user' => $request->user(),
+                'user' => $authedUser,
+            ],
+            'userPurchaseInfo' => [
+                'user_has_billing_info' => $authedUser?->has_billing_info,
+                'user_has_shipping_info' => $authedUser?->has_shipping_info,
             ],
             'discountsDisplayConfig' => $discountsDisplayConfig,
             'flash' => fn () => [

@@ -243,8 +243,8 @@ test('can show the customer information for invoice and shipping', function () {
         ->withCookie('cart', $cart->ui_cart_id)
         ->get(route('storefront.checkout'));
 
-    expect($response->inertiaProps('auth.user.has_billing_info'))->toBeTrue();
-    expect($response->inertiaProps('auth.user.has_shipping_info'))->toBeTrue();
+    expect($response->inertiaProps('userPurchaseInfo.user_has_billing_info'))->toBeTrue();
+    expect($response->inertiaProps('userPurchaseInfo.user_has_shipping_info'))->toBeTrue();
 
     expect($response->inertiaProps('billingInfo')['id'])->toBe($invoiceInfo->id);
     expect($response->inertiaProps('shippingInfo')['id'])->toBe($shippingInfo->id);
@@ -258,7 +258,7 @@ test('shows billing information form if user has no billing info', function () {
         ->withCookie('cart', $cart->ui_cart_id)
         ->get(route('storefront.checkout'));
 
-    expect($response->inertiaProps('auth.user.has_billing_info'))->toBeFalse();
+    expect($response->inertiaProps('userPurchaseInfo.user_has_billing_info'))->toBeFalse();
 
 });
 
@@ -268,7 +268,7 @@ test('shows shipping information form if user has no shipping info', function ()
         ->withCookie('cart', $cart->ui_cart_id)
         ->get(route('storefront.checkout'));
 
-    expect($response->inertiaProps('auth.user.has_shipping_info'))->toBeFalse();
+    expect($response->inertiaProps('userPurchaseInfo.user_has_shipping_info'))->toBeFalse();
 });
 
 test('customer can send billing info', function () {

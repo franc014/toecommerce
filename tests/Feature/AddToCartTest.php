@@ -720,6 +720,7 @@ test('can update an existing cart item quantity', function () {
         'title' => 'Product 1',
         'slug' => 'product-1',
         'price' => 20.00,
+        'stock' => 10,
     ]);
     $uiCartId = fake()->uuid();
     $cart = Cart::factory()->create([
@@ -1066,6 +1067,7 @@ test('can update an existing cart item quantity with discount', function () {
         'title' => 'Product 1',
         'slug' => 'product-1',
         'price' => 20.00,
+        'stock' => 10,
     ]);
     $discountA = Discount::factory()->active()->create([
         'name' => 'Summer Sale',

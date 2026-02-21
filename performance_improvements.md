@@ -136,27 +136,68 @@ protected $appends = [
 ];
 ```
 
-#### Step 3: Add eager loading before accessing relationships
+#### Step 3: Understand automatic eager loading
 
-Accessors that depend on relationships will still work, but require eager loading:
+With `Model::automaticallyEagerLoadRelationships()` enabled, relationship-based accessors work without N+1:
 
 ```php
-// Before calling accessors, eager load the relationships:
-Product::with(['taxes', 'discounts', 'variants'])->get();
+// NO manual with() needed - automatic eager loading handles this:
+Product::get();
 
-// Now accessors work without N+1:
-$product->price_with_taxes_in_dollars;  // Uses loaded $this->taxes
-$product->has_discounts;                 // Uses loaded $this->discounts
+foreach ($products as $product) {
+    $product->price_with_taxes_in_dollars;  // $this->taxes auto-eager loaded
+    $product->has_discounts;                 // Still N+1! Calls validDiscounts() method
+}
 ```
 
-#### Step 4: Update CartController to use explicit mapping
+**Important distinction:**
+
+- **Relationship accessors** (accessing `$this->taxes`, `$this->variants`) → Handled automatically
+- **Method-based accessors** (calling `$this->validDiscounts()`, custom queries) → Still N+1, needs caching or eager loading
+
+#### Step 4: Choose a CartItem Serialization Strategy
+
+When removing `$appends` from CartItem, choose one of these approaches to ensure Vue components receive the expected data:
+
+---
+
+**Option A: Override `toArray()` in CartItem Model**
+
+```php
+// app/Models/CartItem.php
+public function toArray(): array
+{
+    return [
+        'id' => $this->id,
+        'title' => $this->title,
+        'slug' => $this->slug,
+        'price_in_dollars' => $this->price_in_dollars,
+        'total_in_dollars' => $this->total_in_dollars,
+        'quantity' => $this->quantity,
+        'image_url' => $this->image_url,
+        'formatted_variation' => $this->formatted_variation,
+        'has_discount' => $this->has_discount,
+        'discounted_price_in_dollars' => $this->discounted_price_in_dollars,
+    ];
+}
+```
+
+| Pros                            | Cons                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| ✅ Cleaner controller code      | ❌ `toArray()` called in all contexts (queues, logs, events) |
+| ✅ Centralized mapping          | ❌ Less flexibility for different endpoints                  |
+| ✅ Consistent output everywhere | ❌ Could affect queued jobs that serialize CartItem          |
+
+---
+
+**Option B: Manual Mapping in Controller**
 
 ```php
 // app/Http/Controllers/CartController.php
 public function show(Request $request)
 {
     $cart = Cart::byUICartId($request->input('id'))
-        ->with(['items.purchasable'])  // Eager load
+        ->with(['items.purchasable'])
         ->firstOrFail();
 
     return [
@@ -164,11 +205,14 @@ public function show(Request $request)
         'items' => $cart->items->map(fn($item) => [
             'id' => $item->id,
             'title' => $item->title,
+            'slug' => $item->slug,
             'price_in_dollars' => $item->price_in_dollars,
             'total_in_dollars' => $item->total_in_dollars,
             'quantity' => $item->quantity,
             'image_url' => $item->image_url,
-            // ... map all needed fields
+            'formatted_variation' => $item->formatted_variation,
+            'has_discount' => $item->has_discount,
+            'discounted_price_in_dollars' => $item->discounted_price_in_dollars,
         ]),
         'cart_aggregation' => [
             'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
@@ -178,6 +222,82 @@ public function show(Request $request)
     ];
 }
 ```
+
+| Pros                                               | Cons                                        |
+| -------------------------------------------------- | ------------------------------------------- |
+| ✅ Explicit - see exactly what's returned          | ❌ More verbose                             |
+| ✅ Different endpoints can return different fields | ❌ Potential duplication across controllers |
+| ✅ No side effects on queues/logs                  |                                             |
+| ✅ Consistent with "remove `$appends`" strategy    |                                             |
+
+---
+
+**Option C: API Resource (Recommended)**
+
+```php
+// app/Http/Resources/CartItemResource.php
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class CartItemResource extends JsonResource
+{
+    public function toArray($request): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'price_in_dollars' => $this->price_in_dollars,
+            'total_in_dollars' => $this->total_in_dollars,
+            'quantity' => $this->quantity,
+            'image_url' => $this->image_url,
+            'formatted_variation' => $this->formatted_variation,
+            'has_discount' => $this->has_discount,
+            'discounted_price_in_dollars' => $this->discounted_price_in_dollars,
+        ];
+    }
+}
+
+// app/Http/Controllers/CartController.php
+public function show(Request $request)
+{
+    $cart = Cart::byUICartId($request->input('id'))
+        ->with(['items.purchasable'])
+        ->firstOrFail();
+
+    return [
+        'ui_cart_id' => $cart->ui_cart_id,
+        'items' => CartItemResource::collection($cart->items),
+        'cart_aggregation' => [
+            'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
+            'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
+            'items_count' => $cart->items_count,
+        ],
+    ];
+}
+```
+
+| Pros                                          | Cons                           |
+| --------------------------------------------- | ------------------------------ |
+| ✅ Laravel's idiomatic pattern                | ❌ Additional file to maintain |
+| ✅ Centralized, reusable                      |                                |
+| ✅ Different resources for different contexts |                                |
+| ✅ No side effects on model serialization     |                                |
+| ✅ Testable in isolation                      |                                |
+| ✅ Can add metadata, conditional fields       |                                |
+
+---
+
+**Recommendation:** Option C (API Resource) is preferred because it centralizes mapping without affecting model serialization in other contexts. However, Option A (`toArray()` override) is acceptable for CartItem since:
+
+- CartItem is primarily used in cart API responses
+- Carts are ephemeral and unlikely to be serialized in queues
+- Simpler implementation (no new file)
+
+Choose based on your team's preference and project complexity.
 
 **Benefits of Hybrid Strategy:**
 
@@ -189,11 +309,11 @@ public function show(Request $request)
 
 ---
 
-### 2. Missing Eager Loading in Content Transformers
+### 2. Nested Relationship Eager Loading in Transformers
 
-**Severity:** 🔴 Critical
-**Impact:** 4+ extra queries per product
-**Memory Impact:** High
+**Severity:** 🟡 Optimization (Automatic eager loading handles simple relationships)
+**Impact:** Fewer queries per product list
+**Memory Impact:** Low
 
 **Locations:**
 
@@ -201,30 +321,52 @@ public function show(Request $request)
 - `app/CMS/FeaturedProductTransformable.php`
 - `app/CMS/CollectionsTransformable.php`
 
-**Problem:**
+**Current State:**
+
+The application has `Model::automaticallyEagerLoadRelationships()` enabled in `AppServiceProvider.php:44`, which prevents N+1 queries on simple relationships automatically.
 
 ```php
-// ProductsTransformable.php
+// This is NOT an N+1 problem anymore thanks to automatic eager loading:
 $products = Product::whereIn('id', $productsIds)->get();
 
-foreach ($products as $key => $product) {
-    // Each of these triggers a query:
-    $product->price_with_taxes_in_dollars;  // taxes relationship
-    $product->hasPublishedVariants();        // variants query
-    $product->variants;                      // variants query
-    $product->isDroppingStock();             // settings query
-    $product->has_discounts;                 // discounts query
-    $product->discountsForList;              // discounts query
+foreach ($products as $product) {
+    $product->taxes;      // Auto-eager loaded (1 query for all products)
+    $product->discounts;  // Auto-eager loaded (1 query for all products)
+    $product->variants;   // Auto-eager loaded (1 query for all products)
 }
 ```
 
-**Recommended Fix:**
+**What Automatic Eager Loading Does NOT Handle:**
+
+1. **Nested relationships** - accessing `$variant->taxes` inside a loop still causes N+1
+2. **Accessor-triggered queries** - like `has_discounts` which calls `validDiscounts()` internally
+
+**When Manual `with()` Is Still Beneficial:**
 
 ```php
+// NESTED RELATIONSHIPS - still need explicit eager loading
 $products = Product::whereIn('id', $productsIds)
-    ->with(['taxes', 'discounts', 'media', 'variants'])
+    ->with(['variants.taxes', 'variants.discounts'])  // Nested!
+    ->get();
+
+// Now $variant->taxes won't cause N+1
+foreach ($products as $product) {
+    foreach ($product->variants as $variant) {
+        $variant->taxes;  // Would be N+1 without explicit with()
+    }
+}
+```
+
+**Recommended Fix for ProductsTransformable:**
+
+```php
+// Add nested relationship eager loading only
+$products = Product::whereIn('id', $productsIds)
+    ->with(['variants.taxes'])  // Nested relationship - automatic doesn't handle this
     ->get();
 ```
+
+**Note:** Simple relationships (`taxes`, `discounts`, `media`, `variants`) are handled automatically by `Model::automaticallyEagerLoadRelationships()`. Only nested relationships need explicit `with()`.
 
 ---
 
@@ -298,29 +440,30 @@ public function updated($settings): void
 
 ---
 
-### 4. ProductPageController Missing Eager Loading
+### 4. ProductPageController Nested Relationships
 
-**Severity:** 🔴 Critical
-**Impact:** 5+ extra queries per product page view
-**Memory Impact:** High
+**Severity:** 🟡 Optimization
+**Impact:** 2-3 extra queries for nested relationships
+**Memory Impact:** Low
 
 **Location:** `app/Http/Controllers/ProductPageController.php:22`
 
-**Problem:**
+**Current State:**
 
-The product comes from route model binding without any eager loading:
+The product comes from route model binding. Automatic eager loading handles simple relationships, but **nested relationships** still need explicit loading:
 
 ```php
 public function __invoke(Product $product)
 {
-    // $product loaded via route binding, no relationships
-    // Later access triggers N+1:
-    $product->variants;      // Query
-    $product->taxes;         // Query
-    $product->discounts;     // Query
-    $product->productImages(); // Query
+    // Simple relationships - handled by automatic eager loading:
+    $product->variants;      // OK - auto eager loaded
+    $product->taxes;         // OK - auto eager loaded
+    $product->discounts;     // OK - auto eager loaded
 
-    $relatedProducts = $product->relatedProducts(); // N+1 in related products too
+    // NESTED RELATIONSHIPS - still cause N+1:
+    foreach ($product->variants as $variant) {
+        $variant->taxes;     // N+1! Each variant triggers a query
+    }
 }
 ```
 
@@ -329,20 +472,17 @@ public function __invoke(Product $product)
 ```php
 public function __invoke(Product $product)
 {
-    $product->load([
-        'taxes',
-        'discounts',
+    // Load nested relationships explicitly
+    $product->loadMissing([
         'variants.taxes',
         'variants.discounts',
-        'media'
     ]);
-
-    // Or use ->loadMissing() to only load what's not already loaded
-    $product->loadMissing(['taxes', 'discounts', 'variants', 'media']);
 
     // ...
 }
 ```
+
+**Note:** Simple relationships (`taxes`, `discounts`, `media`) are handled automatically. Only nested relationships like `variants.taxes` need explicit loading.
 
 ---
 
@@ -447,15 +587,17 @@ ProductVariant::with('product.taxes')->get();
 
 ---
 
-### 7. Related Products N+1
+### 7. Related Products Nested Relationships
 
-**Severity:** 🟠 Important
-**Impact:** 4+ queries per related product
-**Memory Impact:** Medium
+**Severity:** 🟡 Optimization
+**Impact:** Queries for nested relationships on related products
+**Memory Impact:** Low
 
 **Location:** `app/Models/Product.php:197-208`
 
-**Problem:**
+**Current State:**
+
+Automatic eager loading handles simple relationships on the returned products. However, if you access nested relationships (like `variant->taxes`) on related products, that would still be N+1.
 
 ```php
 public function relatedProducts(): ?EloquentCollection
@@ -468,32 +610,34 @@ public function relatedProducts(): ?EloquentCollection
                 $query->whereIn('product_collections.id', $collections);
             })
             ->where('id', '!=', $this->id)
-            ->get(); // No eager loading!
-    }
-    return null;
-}
-```
-
-**Recommended Fix:**
-
-```php
-public function relatedProducts(): ?EloquentCollection
-{
-    $collections = $this->productCollections->pluck('id')->toArray();
-
-    if (count($collections) > 0) {
-        return Product::published()
-            ->with(['taxes', 'discounts', 'media', 'variants'])
-            ->whereHas('productCollections', function ($query) use ($collections) {
-                $query->whereIn('product_collections.id', $collections);
-            })
-            ->where('id', '!=', $this->id)
-            ->limit(4) // Limit results
             ->get();
     }
     return null;
 }
 ```
+
+**Recommended Fix (if nested relationships are accessed):**
+
+```php
+public function relatedProducts(): ?EloquentCollection
+{
+    $collections = $this->productCollections->pluck('id')->toArray();
+
+    if (count($collections) > 0) {
+        return Product::published()
+            ->with(['variants.taxes'])  // Nested relationships only
+            ->whereHas('productCollections', function ($query) use ($collections) {
+                $query->whereIn('product_collections.id', $collections);
+            })
+            ->where('id', '!=', $this->id)
+            ->limit(4)
+            ->get();
+    }
+    return null;
+}
+```
+
+**Note:** Simple relationships (`taxes`, `discounts`, `media`, `variants`) are handled automatically. Only add `with()` if you access nested relationships in the view.
 
 ---
 
@@ -681,21 +825,23 @@ QUEUE_CONNECTION=redis
 
 ## Summary Table
 
-| #   | Issue                                    | Severity        | Queries Saved         | Memory Impact | Priority |
-| --- | ---------------------------------------- | --------------- | --------------------- | ------------- | -------- |
-| 1   | N+1 on `$appends` accessors (Hybrid fix) | 🔴 Critical     | 3-5 per model         | High          | 1        |
-| 2   | Missing eager loading in transformers    | 🔴 Critical     | 4 per product         | High          | 2        |
-| 3   | Uncached middleware queries              | 🔴 Critical     | 5 per request         | Medium        | 3        |
-| 4   | ProductPageController missing eager load | 🔴 Critical     | 5+ per page           | High          | 4        |
-| 5   | Filament navigation badges               | 🟠 Important    | 10+ per admin page    | Medium        | 5        |
-| 6   | ProductVariant taxes accessor            | 🟠 Important    | 1 per variant         | Medium        | 6        |
-| 7   | Related products N+1                     | 🟠 Important    | 4 per related product | Medium        | 7        |
-| 8   | User model accessors                     | 🟠 Important    | 2 per user            | Medium        | 8        |
-| 9   | Missing database indexes                 | 🟡 Optimization | N/A                   | Query speed   | 9        |
-| 10  | Queue heavy operations                   | 🟡 Optimization | N/A                   | Low           | 10       |
-| 11  | Settings caching                         | 🟡 Optimization | 2 per request         | Low           | 11       |
-| 12  | Inertia deferred props                   | 🟡 Optimization | N/A                   | Low           | 12       |
-| 13  | Redis for cache/queue                    | 🟡 Optimization | N/A                   | N/A           | 13       |
+| #   | Issue                                      | Severity        | Queries Saved      | Memory Impact | Priority |
+| --- | ------------------------------------------ | --------------- | ------------------ | ------------- | -------- |
+| 1   | N+1 on `$appends` accessors (Hybrid fix)   | 🔴 Critical     | 3-5 per model      | High          | 1        |
+| 2   | Nested relationships in transformers       | 🟡 Optimization | 1-2 per product    | Low           | 9        |
+| 3   | Uncached middleware queries                | 🔴 Critical     | 5 per request      | Medium        | 2        |
+| 4   | ProductPageController nested relationships | 🟡 Optimization | 2-3 per page       | Low           | 10       |
+| 5   | Filament navigation badges                 | 🟠 Important    | 10+ per admin page | Medium        | 3        |
+| 6   | ProductVariant taxes accessor (nested)     | 🟠 Important    | 1 per variant      | Medium        | 4        |
+| 7   | Related products nested relationships      | 🟡 Optimization | 1-2 per product    | Low           | 11       |
+| 8   | User model accessors                       | 🟠 Important    | 2 per user         | Medium        | 5        |
+| 9   | Missing database indexes                   | 🟡 Optimization | N/A                | Query speed   | 12       |
+| 10  | Queue heavy operations                     | 🟡 Optimization | N/A                | Low           | 13       |
+| 11  | Settings caching                           | 🟡 Optimization | 2 per request      | Low           | 14       |
+| 12  | Inertia deferred props                     | 🟡 Optimization | N/A                | Low           | 15       |
+| 13  | Redis for cache/queue                      | 🟡 Optimization | N/A                | N/A           | 16       |
+
+**Note:** With `Model::automaticallyEagerLoadRelationships()` enabled, simple relationships are handled automatically. Only nested relationships (e.g., `variants.taxes`) and accessor-triggered queries need manual intervention.
 
 ---
 
@@ -790,40 +936,38 @@ return [
     - Update `CartController::show()` to use explicit mapping
     - Verify all controllers already using manual mapping (they are)
 
-2. **Add eager loading to all CMS transformers:**
-    - `ProductsTransformable` - add `->with(['taxes', 'discounts', 'media', 'variants'])`
-    - `FeaturedProductTransformable` - same eager loading
-    - `CollectionsTransformable` - verify eager loading
-
-3. **Cache menus and settings in HandleInertiaRequests middleware:**
+2. **Cache menus and settings in HandleInertiaRequests middleware:**
     - Wrap `Menu::byName()` calls in `Cache::remember()`
     - Wrap settings in `Cache::remember()`
     - Create observers for cache invalidation
 
-4. **Add eager loading to ProductPageController:**
-    - Add `$product->load(['taxes', 'discounts', 'variants.taxes', 'variants.discounts', 'media'])`
-    - Update `relatedProducts()` to include eager loading
-
 ### Phase 2 - Important
 
-5. **Cache Filament navigation badges:**
+3. **Cache Filament navigation badges:**
     - Add `Cache::remember()` to all `getNavigationBadge()` methods
     - Set 5-minute TTL
 
-6. **Fix ProductVariant taxes accessor:**
+4. **Fix ProductVariant taxes accessor (nested relationship):**
     - Ensure `product.taxes` is eager loaded when fetching variants
-    - Update queries to include `->with('product.taxes')`
+    - Update queries to include `->with('product.taxes')` for nested access
 
-7. **Add eager loading to related products:**
-    - Update `Product::relatedProducts()` method
-    - Add `->with(['taxes', 'discounts', 'media', 'variants'])`
-    - Add `->limit(4)` to constrain results
-
-8. **Fix User model accessors:**
+5. **Fix User model accessors:**
     - Remove `$appends` from User model
     - Use `withCount()` where billing/shipping info counts are needed
 
 ### Phase 3 - Optimizations
+
+6. **Add nested relationship eager loading to transformers:**
+    - `ProductsTransformable` - add `->with(['variants.taxes'])` only if nested access is needed
+    - `FeaturedProductTransformable` - same if applicable
+    - **Note:** Simple relationships are handled automatically by `Model::automaticallyEagerLoadRelationships()`
+
+7. **Add nested relationship eager loading to ProductPageController:**
+    - Add `$product->loadMissing(['variants.taxes'])` only if variants' taxes are accessed
+
+8. **Add nested relationship loading to related products:**
+    - Update `Product::relatedProducts()` to include `->with(['variants.taxes'])` if needed
+    - Add `->limit(4)` to constrain results
 
 9. **Add database indexes:**
     - Create migration for all recommended indexes
@@ -844,6 +988,28 @@ return [
 13. **Evaluate Redis for cache/queue:**
     - Test Redis availability on Laravel Cloud
     - Update `.env` and config if available
+
+---
+
+## Automatic Eager Loading Note
+
+With `Model::automaticallyEagerLoadRelationships()` enabled in `AppServiceProvider.php`, simple relationships are automatically eager loaded when first accessed. This means:
+
+**You DON'T need manual `with()` for:**
+
+```php
+Product::with(['taxes', 'discounts', 'variants'])->get();
+```
+
+**You DO need manual `with()` for:**
+
+```php
+// Nested relationships
+Product::with(['variants.taxes', 'variants.discounts'])->get();
+
+// Relationships with constraints
+Product::with(['variants' => fn($q) => $q->published()])->get();
+```
 
 ---
 
