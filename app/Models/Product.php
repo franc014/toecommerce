@@ -1,0 +1,208 @@
+<?php
+
+namespace App\Models;
+
+use App\Casts\Money;
+use App\Enums\ProductStatus;
+use App\Settings\StorefrontSettings;
+use App\Traits\Discountable;
+use App\Traits\MoneyFormat;
+use App\Traits\Publishable;
+use App\Traits\Taxable;
+use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
+use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Tags\HasTags;
+
+class Product extends Model implements HasMedia, HasRichContent, Purchasable
+{
+    use Discountable, HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable, Taxable;
+
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'status' => ProductStatus::class,
+            'price' => Money::class,
+            'variant_options' => 'array',
+            'description' => 'array',
+        ];
+    }
+
+    public function setUpRichContent(): void
+    {
+        $this->registerRichContent('description');
+        // to use the media library provideer, it should be set up as nullable
+        // ->fileAttachmentProvider(SpatieMediaLibraryFileAttachmentProvider::make());
+    }
+
+    public function dataforCart(): array
+    {
+
+        return [
+            'purchasable_id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
+            'slug' => $this->slug,
+            'image' => $this->main_image,
+            'taxes' => json_encode($this->taxes->select(['name', 'percentage'])),
+            'purchasable_type' => Product::class,
+        ];
+    }
+
+    public function scopeWithStock($query)
+    {
+        return $query->where('stock', '>', 0);
+    }
+
+    public function isDroppingStock(): bool
+    {
+        $storefrontSettings = app(StorefrontSettings::class);
+        if ($storefrontSettings->isAppInStrictMode()) {
+            return $this->stock <= $this->stock_threshold_for_customers;
+        }
+
+        return false;
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function productCollections(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductCollection::class);
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function taxes(): BelongsToMany
+    {
+        return $this->belongsToMany(Tax::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function hasVariants(): bool
+    {
+        return $this->variants()->count() >= 1;
+    }
+
+    public function hasPublishedVariants(): bool
+    {
+        return $this->variants()->published()->count() >= 1;
+    }
+
+    public static function bySlug(string $slug)
+    {
+        return self::where('slug', $slug)->first();
+    }
+
+    public function productImages()
+    {
+        return $this->getMedia('product-images');
+    }
+
+    public function productImagesForList(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->productImages()->take(2)->map(function ($image) {
+                return $image->getFullUrl();
+            })
+        );
+    }
+
+    public function formattedVariantOptions(): array
+    {
+        $options = collect($this->variant_options);
+
+        $transformed = collect([]);
+
+        $pairs = collect([]);
+
+        foreach ($options as $key => $option) {
+            $transformed[$option['name']] = collect($option['values'])->pluck('value')->toArray();
+        }
+
+        foreach ($transformed as $key => $options) {
+
+            $lowL = collect([]);
+
+            foreach ($options as $keyp => $value) {
+                $lowL->push([$key => $value]);
+            }
+
+            $pairs->push($lowL);
+
+        }
+
+        return $pairs->toArray();
+    }
+
+    private function generateCombinations(): Collection
+    {
+        $options = $this->formattedVariantOptions();
+
+        return collect(array_shift($options))
+            ->crossJoin(...$options)
+            ->map(function ($combo) {
+                // $combo is an array of arrays, merge them
+                return array_merge(...$combo);
+            });
+    }
+
+    public function generateVariants(): void
+    {
+        foreach ($this->generateCombinations() as $combination) {
+            $values = collect($combination)->values()->join('-');
+            $title = $this->title.'-'.$values;
+            $slug = Str::slug($title);
+
+            $exists = $this->variants()->where('slug', $slug)->exists();
+
+            if (! $exists) {
+                $this->variants()->create([
+                    'title' => $title,
+                    'slug' => $slug,
+                    'variation' => $combination,
+                    'price' => $this->price,
+                    'stock' => $this->stock,
+                    'status' => ProductStatus::DRAFT,
+                    'sku' => '',
+                ]);
+            }
+
+        }
+    }
+
+    public function relatedProducts(): ?EloquentCollection
+    {
+        $collections = $this->productCollections->pluck('id')->toArray();
+
+        if (count($collections) > 0) {
+            return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
+                $query->whereIn('product_collections.id', $collections);
+            })->where('id', '!=', $this->id)->get();
+        } else {
+            return null;
+        }
+
+    }
+}

@@ -1,0 +1,132 @@
+// @ts-nocheck
+
+	 const SwipeContent = function(element: HTMLElement) {
+		this.element = element;
+		this.delta = [false, false];
+		this.dragging = false;
+		this.intervalId = false;
+		initSwipeContent(this);
+	};
+
+	function initSwipeContent(content: any) {
+		content.element.addEventListener('mousedown', handleEvent.bind(content));
+		content.element.addEventListener('touchstart', handleEvent.bind(content), {passive: true});
+	};
+
+	function initDragging(content:any) {
+		//add event listeners
+		content.element.addEventListener('mousemove', handleEvent.bind(content));
+		content.element.addEventListener('touchmove', handleEvent.bind(content), {passive: true});
+		content.element.addEventListener('mouseup', handleEvent.bind(content));
+		content.element.addEventListener('mouseleave', handleEvent.bind(content));
+		content.element.addEventListener('touchend', handleEvent.bind(content));
+	};
+
+	function cancelDragging(content:any) {
+		//remove event listeners
+		if(content.intervalId) {
+			(!window.requestAnimationFrame) ? clearInterval(content.intervalId) : window.cancelAnimationFrame(content.intervalId);
+			content.intervalId = false;
+		}
+		content.element.removeEventListener('mousemove', handleEvent.bind(content));
+		content.element.removeEventListener('touchmove', handleEvent.bind(content));
+		content.element.removeEventListener('mouseup', handleEvent.bind(content));
+		content.element.removeEventListener('mouseleave', handleEvent.bind(content));
+		content.element.removeEventListener('touchend', handleEvent.bind(content));
+	};
+
+	function handleEvent(event:any) {
+		switch(event.type) {
+			case 'mousedown':
+			case 'touchstart':
+				startDrag(this, event);
+				break;
+			case 'mousemove':
+			case 'touchmove':
+				drag(this, event);
+				break;
+			case 'mouseup':
+			case 'mouseleave':
+			case 'touchend':
+				endDrag(this, event);
+				break;
+		}
+	};
+
+	function startDrag(content:any, event:any) {
+		content.dragging = true;
+		// listen to drag movements
+		initDragging(content);
+		content.delta = [parseInt(unify(event).clientX), parseInt(unify(event).clientY)];
+		// emit drag start event
+		emitSwipeEvents(content, 'dragStart', content.delta, event.target);
+	};
+
+	function endDrag(content:any, event:any) {
+		cancelDragging(content);
+		// credits: https://css-tricks.com/simple-swipe-with-vanilla-javascript/
+		var dx = parseInt(unify(event).clientX),
+	    dy = parseInt(unify(event).clientY);
+
+	  // check if there was a left/right swipe
+		if(content.delta && (content.delta[0] || content.delta[0] === 0)) {
+	    var s = getSign(dx - content.delta[0]);
+
+			if(Math.abs(dx - content.delta[0]) > 30) {
+				(s < 0) ? emitSwipeEvents(content, 'swipeLeft', [dx, dy]) : emitSwipeEvents(content, 'swipeRight', [dx, dy]);
+			}
+
+	    content.delta[0] = false;
+	  }
+		// check if there was a top/bottom swipe
+	  if(content.delta && (content.delta[1] || content.delta[1] === 0)) {
+	  	var y = getSign(dy - content.delta[1]);
+
+	  	if(Math.abs(dy - content.delta[1]) > 30) {
+	    	(y < 0) ? emitSwipeEvents(content, 'swipeUp', [dx, dy]) : emitSwipeEvents(content, 'swipeDown', [dx, dy]);
+	    }
+
+	    content.delta[1] = false;
+	  }
+		// emit drag end event
+	  emitSwipeEvents(content, 'dragEnd', [dx, dy]);
+	  content.dragging = false;
+	};
+
+	function drag(content: any, event: any) {
+		if(!content.dragging) return;
+		// emit dragging event with coordinates
+		(!window.requestAnimationFrame)
+			? content.intervalId = setTimeout(function(){emitDrag.bind(content, event);}, 250)
+			: content.intervalId = window.requestAnimationFrame(emitDrag.bind(content, event));
+	};
+
+	function emitDrag(event:any) {
+		emitSwipeEvents(this, 'dragging', [parseInt(unify(event).clientX), parseInt(unify(event).clientY)]);
+	};
+
+	function unify(event:any) {
+		// unify mouse and touch events
+		return event.changedTouches ? event.changedTouches[0] : event;
+	};
+
+	function emitSwipeEvents(content:any, eventName:any, detail:any, el:any) {
+		var trigger = false;
+		if(el) trigger = el;
+		// emit event with coordinates
+		var event = new CustomEvent(eventName, {detail: {x: detail[0], y: detail[1], origin: trigger}});
+		content.element.dispatchEvent(event);
+	};
+
+	function getSign(x) {
+		if(!Math.sign) {
+			return ((x > 0) - (x < 0)) || +x;
+		} else {
+			return Math.sign(x);
+		}
+	};
+
+
+
+    export default SwipeContent;
+

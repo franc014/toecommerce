@@ -11,9 +11,17 @@
 |
 */
 
+use App\Enums\DiscountCalculationModes;
+use App\Enums\StockControlModes;
+use App\Settings\StorefrontSettings;
+
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
+
+beforeEach(function () {
+    app()->forgetInstance(StorefrontSettings::class);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +49,23 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function setStrictMode(StockControlModes $mode = StockControlModes::STRICT)
 {
-    // ..
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->stock_control_mode = $mode;
+    $sfSettings->save();
+}
+
+function setPaginationNumber(int $paginationNumber = 10)
+{
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->products_per_page = $paginationNumber;
+    $sfSettings->save();
+}
+
+function setDiscountCalculationMode(DiscountCalculationModes $mode = DiscountCalculationModes::HIGHEST)
+{
+    $sfSettings = app(StorefrontSettings::class);
+    $sfSettings->discount_calculation_mode = $mode;
+    $sfSettings->save();
 }

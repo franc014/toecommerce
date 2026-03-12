@@ -1,0 +1,35 @@
+/* --------------------------------
+
+File#: _2_article-v4
+Title: Article v4
+Descr: Article template
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.t-article-v4__divider {
+  display: flex;
+  align-items: center;
+}
+.t-article-v4__divider span {
+  display: block;
+  margin: 0 0.5rem;
+  height: 10px;
+  width: 10px;
+  transform: rotate(45deg);
+  @apply bg-zinc-300;
+}
+@media (min-width: 64rem) {
+  .t-article-v4__divider span {
+    margin: 0 0.75rem;
+  }
+}
+.t-article-v4__divider::before, .t-article-v4__divider::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: auto;
+  flex-grow: 1;
+
+  @apply  border border-zinc-300 border-dashed;
+
+}

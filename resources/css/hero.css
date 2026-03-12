@@ -1,0 +1,75 @@
+
+/* --------------------------------
+
+File#: _1_feature-v4
+Title: Feature v4
+Descr: Content group containing media element + text that outsets its container at a specific breakpoint
+Usage: codyhouse.co/license
+
+-------------------------------- */
+.feature-v4 {
+    --feature-text-offset: 38%;
+    position: relative;
+    z-index: 1;
+}
+
+@media (min-width: 32rem) {
+    .feature-v4__text-offset\@xs {
+        width: calc(100% + var(--feature-text-offset));
+    }
+
+    .feature-v4--invert\@xs .feature-v4__grid > *:last-child {
+        order: -1;
+    }
+    .feature-v4--invert\@xs .feature-v4__text-offset\@xs {
+        margin-left: calc(var(--feature-text-offset) * -1);
+    }
+}
+@media (min-width: 48rem) {
+    .feature-v4__text-offset\@sm {
+        width: calc(100% + var(--feature-text-offset));
+    }
+
+    .feature-v4--invert\@sm .feature-v4__grid > *:last-child {
+        order: -1;
+    }
+    .feature-v4--invert\@sm .feature-v4__text-offset\@sm {
+        margin-left: calc(var(--feature-text-offset) * -1);
+    }
+}
+@media (min-width: 64rem) {
+    .feature-v4__text-offset\@md {
+        width: calc(100% + var(--feature-text-offset));
+    }
+
+    .feature-v4--invert\@md .feature-v4__grid > *:last-child {
+        order: -1;
+    }
+    .feature-v4--invert\@md .feature-v4__text-offset\@md {
+        margin-left: calc(var(--feature-text-offset) * -1);
+    }
+}
+@media (min-width: 80rem) {
+    .feature-v4__text-offset\@lg {
+        width: calc(100% + var(--feature-text-offset));
+    }
+
+    .feature-v4--invert\@lg .feature-v4__grid > *:last-child {
+        order: -1;
+    }
+    .feature-v4--invert\@lg .feature-v4__text-offset\@lg {
+        margin-left: calc(var(--feature-text-offset) * -1);
+    }
+}
+@media (min-width: 90rem) {
+    .feature-v4__text-offset\@xl {
+        width: calc(100% + var(--feature-text-offset));
+    }
+
+    .feature-v4--invert\@xl .feature-v4__grid > *:last-child {
+        order: -1;
+    }
+    .feature-v4--invert\@xl .feature-v4__text-offset\@xl {
+        margin-left: calc(var(--feature-text-offset) * -1);
+    }
+}

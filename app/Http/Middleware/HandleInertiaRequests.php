@@ -2,8 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Inspiring;
+use App\Models\Menu;
+use App\Settings\CompanySettings;
+use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -36,16 +40,42 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+        $mainMenu = Cache::remember('menu.main', now()->addHour(), fn () => Menu::byName('main'));
+        $footerMenu = Cache::remember('menu.footer', now()->addHour(), fn () => Menu::byName('footer'));
+        $legalMenu = Cache::remember('menu.legal', now()->addHour(), fn () => Menu::byName('legal'));
+
+        $company = Cache::remember('settings.company', now()->addHour(), fn () => app(CompanySettings::class)->toArray());
+        $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn () => app(StorefrontSettings::class)->toArray());
+
+        $discountsDisplayConfig = [
+            'show_message' => $storeFront['show_discount_campaign_message'],
+            'message' => $storeFront['discount_campaign_message'],
+        ];
+
+        $authedUser = $request->user();
 
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
+            'mainMenu' => Inertia::once(fn () => $mainMenu),
+            'footerMenu' => Inertia::once(fn () => $footerMenu),
+            'legalMenu' => Inertia::once(fn () => $legalMenu),
+            'company' => Inertia::once(fn () => $company),
+            'name' => Inertia::once(fn () => config('app.name')),
+            'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [
-                'user' => $request->user(),
+                'user' => $authedUser,
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'userPurchaseInfo' => [
+                'user_has_billing_info' => $authedUser?->has_billing_info,
+                'user_has_shipping_info' => $authedUser?->has_shipping_info,
+            ],
+            'discountsDisplayConfig' => $discountsDisplayConfig,
+            'flash' => fn () => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+                'warning' => $request->session()->get('warning'),
+                'info' => $request->session()->get('info'),
+            ],
         ];
     }
 }

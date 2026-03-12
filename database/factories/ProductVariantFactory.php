@@ -1,0 +1,60 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Enums\ProductStatus;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductVariant>
+ */
+class ProductVariantFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $title = $this->faker->sentence(1);
+        $slug = str()->slug($title);
+        $product = Product::factory()->create();
+
+        return [
+            'title' => $title,
+            'slug' => $slug.'-'.$this->faker->uuid(),
+            'description' => fake()->text(),
+            'product_id' => $product->id,
+            'price' => fake()->randomFloat(2, 50, 300),
+            'status' => fake()->randomElement(ProductStatus::class),
+            'sku' => fake()->uuid(),
+            'stock' => fake()->numberBetween(100, 300),
+        ];
+    }
+
+    public function published(): Factory
+    {
+        return $this->state([
+            'status' => ProductStatus::ACTIVE,
+            'published_at' => now(),
+        ]);
+    }
+
+    public function draft(): Factory
+    {
+        return $this->state([
+            'status' => ProductStatus::DRAFT,
+            'published_at' => null,
+        ]);
+    }
+
+    public function archived(): Factory
+    {
+        return $this->state([
+            'status' => ProductStatus::ARCHIVED,
+            'archived_at' => now(),
+        ]);
+    }
+}
