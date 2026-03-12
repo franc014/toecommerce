@@ -50,7 +50,7 @@ class CartItem extends Model
         });
 
         static::saved(function (CartItem $cartItem) {
-            $cartItem->cart->updateCartTally();
+            $cartItem->cart->load('items')->updateCartTally();
         });
 
         static::deleted(function (CartItem $cartItem) {

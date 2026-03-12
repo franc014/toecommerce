@@ -6,6 +6,7 @@ use App\Casts\Money;
 use App\Exceptions\ProductOutOfStockException;
 use App\Settings\StorefrontSettings;
 use App\Traits\MoneyFormat;
+use Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class Cart extends Model
 {
-    /** @use HasFactory<\Database\Factories\CartFactory> */
+    /** @use HasFactory<CartFactory> */
     use HasFactory, MoneyFormat;
 
     protected $appends = ['total_without_taxes_in_dollars', 'total_with_taxes_in_dollars', 'items_count', 'total_computed_taxes_in_dollars', 'total_amount_in_dollars'];
@@ -46,7 +47,7 @@ class Cart extends Model
 
     public function itemById(int $id): ?CartItem
     {
-        return $this->items->findOrFail($id);
+        return $this->items()->findOrFail($id);
     }
 
     public function hasItem(string $slug): bool
@@ -66,7 +67,7 @@ class Cart extends Model
 
     public function getItemByPurchasable(int $purchasableId, string $purchasableType): ?CartItem
     {
-        return $this->items->where('purchasable_id', $purchasableId)
+        return $this->items()->where('purchasable_id', $purchasableId)
             ->where('purchasable_type', $purchasableType)
             ->first();
     }
@@ -80,11 +81,16 @@ class Cart extends Model
 
         if ($cartItem) {
             $this->updateItem($cartItem->id, $data['quantity']);
+            $cartItem->refresh();
         } else {
             $cartItem = DB::transaction(function () use ($data) {
                 return $this->items()->create($data);
             });
         }
+
+        // Explicitly update cart tallies after item is added/updated
+        $this->load('items');
+        $this->updateCartTally();
 
         return $cartItem;
     }
@@ -123,6 +129,7 @@ class Cart extends Model
     public function updateCartTally(): void
     {
 
+        $this->load('items');
         $itemsWithoutTaxes = $this->items->filter(function ($item) {
             return $item->taxes === null || count(json_decode($item->taxes)) === 0;
         });

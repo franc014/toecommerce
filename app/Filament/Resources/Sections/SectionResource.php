@@ -36,10 +36,10 @@ class SectionResource extends Resource
         return __('firesources.cms');
     }
 
-    public static function getNavigationBadge(): ?string
+    /* public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
+    } */
 
     protected static ?int $navigationSort = 1;
 
