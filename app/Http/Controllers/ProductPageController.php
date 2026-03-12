@@ -21,6 +21,11 @@ class ProductPageController extends Controller
      */
     public function __invoke(Product $product)
     {
+
+        $product->loadMissing([
+            'variants.discounts',
+        ]);
+
         $this->product = $product;
 
         $data = [

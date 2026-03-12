@@ -14,6 +14,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Cache;
 use UnitEnum;
 
 class ManageStorefront extends SettingsPage
@@ -63,5 +64,12 @@ class ManageStorefront extends SettingsPage
                     ->label(__('firesources.discount_campaign_message')),
 
             ]);
+    }
+
+    protected function afterSave(): void
+    {
+        // Clear your Laravel cache
+        Cache::forget('settings.storefront');
+
     }
 }

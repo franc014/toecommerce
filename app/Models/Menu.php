@@ -17,6 +17,10 @@ class Menu extends Model
 
     public static function byName($name = 'main'): ?Menu
     {
-        return self::where('slug', $name)->with('items')->first();
+        return self::where('slug', $name)
+            ->with(['items' => function ($query) {
+                $query->orderBy('order_column');
+            }])
+            ->first();
     }
 }
