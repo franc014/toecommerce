@@ -14,7 +14,7 @@
                             <PurchaseInfo
                                 :data="{
                                     info: billingInfo,
-                                    isSetup: user.has_billing_info,
+                                    isSetup: userHasBillingInfo,
                                     type: 'billing',
                                     title: 'Información para facturación',
                                     formTitle: 'Por favor llena tu información de facturación:',
@@ -22,14 +22,14 @@
                             />
                         </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
+                    <AccordionItem value="item-2" v-if="userHasBillingInfo" key="item-2">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
                         <AccordionContent class="pb-10 md:px-10">
                             <PurchaseInfo
-                                v-if="user.has_billing_info"
+                                v-if="userHasBillingInfo"
                                 :data="{
                                     info: shippingInfo,
-                                    isSetup: user.has_shipping_info,
+                                    isSetup: userHasShippingInfo,
                                     type: 'shipping',
                                     title: 'Información para envío',
                                     formTitle: 'Por favor llena tu información de envío:',
@@ -62,7 +62,7 @@ import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { PayphoneInfo, UserInfoEntry } from '@/types';
+import { PayphoneInfo, UserHasInfoEntry, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
@@ -71,6 +71,11 @@ defineOptions({ layout: StorefrontLayout });
 const page = usePage();
 
 const user = page.props.auth.user;
+const userPurchaseInfo = page.props.userPurchaseInfo as UserHasInfoEntry;
+
+const userHasBillingInfo = userPurchaseInfo.user_has_billing_info;
+const userHasShippingInfo = userPurchaseInfo.user_has_shipping_info;
+
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;

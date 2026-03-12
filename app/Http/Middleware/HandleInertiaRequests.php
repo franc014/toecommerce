@@ -6,6 +6,7 @@ use App\Models\Menu;
 use App\Settings\CompanySettings;
 use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Middleware;
 
@@ -39,17 +40,19 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $mainMenu = Menu::byName('main');
-        $footerMenu = Menu::byName('footer');
-        $legalMenu = Menu::byName('legal');
+        $mainMenu = Cache::remember('menu.main', now()->addHour(), fn () => Menu::byName('main'));
+        $footerMenu = Cache::remember('menu.footer', now()->addHour(), fn () => Menu::byName('footer'));
+        $legalMenu = Cache::remember('menu.legal', now()->addHour(), fn () => Menu::byName('legal'));
 
-        $company = app(CompanySettings::class)->toArray();
-        $storeFront = app(StorefrontSettings::class)->toArray();
+        $company = Cache::remember('settings.company', now()->addHour(), fn () => app(CompanySettings::class)->toArray());
+        $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn () => app(StorefrontSettings::class)->toArray());
 
         $discountsDisplayConfig = [
             'show_message' => $storeFront['show_discount_campaign_message'],
             'message' => $storeFront['discount_campaign_message'],
         ];
+
+        $authedUser = $request->user();
 
         return [
             ...parent::share($request),
@@ -60,7 +63,11 @@ class HandleInertiaRequests extends Middleware
             'name' => Inertia::once(fn () => config('app.name')),
             'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [
-                'user' => $request->user(),
+                'user' => $authedUser,
+            ],
+            'userPurchaseInfo' => [
+                'user_has_billing_info' => $authedUser?->has_billing_info,
+                'user_has_shipping_info' => $authedUser?->has_shipping_info,
             ],
             'discountsDisplayConfig' => $discountsDisplayConfig,
             'flash' => fn () => [
