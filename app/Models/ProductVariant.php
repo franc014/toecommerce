@@ -21,8 +21,6 @@ class ProductVariant extends Model implements HasMedia, Purchasable
     /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
     use Discountable, HasFactory, HasProductVariation, InteractsWithMedia, MoneyFormat, Publishable, Taxable;
 
-    protected $appends = ['price_in_dollars', 'formatted_variation', 'taxes', 'has_discounts', 'discounted_price_in_dollars'];
-
     protected function casts(): array
     {
 

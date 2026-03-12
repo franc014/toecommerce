@@ -59,6 +59,11 @@ export interface UserInfoEntry {
     country: string;
 }
 
+export interface UserHasInfoEntry {
+    user_has_billing_info: boolean;
+    user_has_shipping_info: boolean;
+}
+
 export interface Product {
     id: number;
     title: string;

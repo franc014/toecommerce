@@ -64,7 +64,7 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    protected $appends = ['has_billing_info', 'has_shipping_info'];
+    // protected $appends = ['has_billing_info', 'has_shipping_info'];
 
     public function userInfoEntries(): HasMany
     {

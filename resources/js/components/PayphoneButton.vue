@@ -5,12 +5,12 @@
             <div
                 id="pp-button"
                 class="rounded-md border-2 border-dashed border-zinc-300"
-                :class="{ 'blur-sm': !user.has_billing_info || !user.has_shipping_info }"
+                :class="{ 'blur-sm': !userHasBillingInfo || !userHasShippingInfo }"
                 ref="payphone-holder"
             ></div>
             <div
                 class="absolute top-0 left-0 flex h-full w-full flex-col items-center justify-center gap-4"
-                v-if="!user.has_billing_info || !user.has_shipping_info"
+                v-if="!userHasBillingInfo || !userHasShippingInfo"
             >
                 <OctagonAlertIcon class="h-16 w-16" />
                 <p class="mx-auto max-w-fit px-20 text-center text-2xl font-bold tracking-wider">
@@ -22,14 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import { PayphoneInfo } from '@/types';
+import { PayphoneInfo, UserHasInfoEntry } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { OctagonAlertIcon } from 'lucide-vue-next';
 import { v7 as uuidv7 } from 'uuid';
 import { onMounted, useTemplateRef } from 'vue';
 
 const page = usePage();
-const user = page.props.auth.user;
+const userPurchaseInfo = page.props.userPurchaseInfo as UserHasInfoEntry;
+const userHasBillingInfo = userPurchaseInfo.user_has_billing_info;
+const userHasShippingInfo = userPurchaseInfo.user_has_shipping_info;
 
 const payphoneHolder = useTemplateRef('payphone-holder');
 
