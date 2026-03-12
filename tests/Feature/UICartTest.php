@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\CartItemResource;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -50,7 +51,7 @@ test('can get a cart from the ui', function () {
     ]))->assertStatus(200)
         ->assertJson([
             'ui_cart_id' => $uiCartId,
-            'items' => $cart->fresh()->items->toArray(),
+            'items' => CartItemResource::collection($cart->fresh()->items)->resolve(),
             'cart_aggregation' => [
                 'total_without_taxes_in_dollars' => $cart->fresh()->total_without_taxes_in_dollars,
                 'total_with_taxes_in_dollars' => $cart->fresh()->total_with_taxes_in_dollars,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\CartItemResource;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Discount;
@@ -7,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
@@ -117,7 +119,7 @@ test('cart item toArray includes mapped fields', function () {
         'quantity' => 2,
     ]);
 
-    $array = $cartItem->toArray();
+    $array = CartItemResource::make($cartItem)->toArray(new Request);
 
     expect($array)->toHaveKey('id')
         ->and($array)->toHaveKey('title')

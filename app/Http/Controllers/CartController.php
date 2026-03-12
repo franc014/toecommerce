@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartItemResource;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class CartController extends Controller
 
         return [
             'ui_cart_id' => $cart->ui_cart_id,
-            'items' => $cart->items->toArray(),
+            'items' => CartItemResource::collection($cart->items),
             'cart_aggregation' => [
                 'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
                 'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,

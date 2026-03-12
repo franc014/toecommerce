@@ -360,13 +360,12 @@ foreach ($products as $product) {
 **Recommended Fix for ProductsTransformable:**
 
 ```php
-// Add nested relationship eager loading only
-$products = Product::whereIn('id', $productsIds)
-    ->with(['variants.taxes'])  // Nested relationship - automatic doesn't handle this
-    ->get();
+// No manual eager loading needed - automatic eager loading handles simple relationships
+// Note: ProductVariant::taxes is an Attribute (accessor), not a relationship, so it cannot be eager loaded
+$products = Product::whereIn('id', $productsIds)->get();
 ```
 
-**Note:** Simple relationships (`taxes`, `discounts`, `media`, `variants`) are handled automatically by `Model::automaticallyEagerLoadRelationships()`. Only nested relationships need explicit `with()`.
+**Note:** Simple relationships (`taxes`, `discounts`, `media`, `variants`) are handled automatically by `Model::automaticallyEagerLoadRelationships()`. Only nested relationships need explicit `with()`, but only if they are actual relationships - not accessors/attributes.
 
 ---
 
