@@ -9,6 +9,7 @@ use App\Traits\HasProductVariation;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
 use App\Traits\Taxable;
+use Database\Factories\ProductVariantFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ProductVariant extends Model implements HasMedia, Purchasable
 {
-    /** @use HasFactory<\Database\Factories\ProductVariantFactory> */
+    /** @use HasFactory<ProductVariantFactory> */
     use Discountable, HasFactory, HasProductVariation, InteractsWithMedia, MoneyFormat, Publishable, Taxable;
 
     protected function casts(): array
@@ -54,11 +55,15 @@ class ProductVariant extends Model implements HasMedia, Purchasable
         return $this->belongsTo(Product::class);
     }
 
-    public function taxes(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->product->taxes
-        );
+    /*  public function taxes(): Attribute
+     {
+         return Attribute::make(
+             get: fn () => $this->product->taxes
+         );
+     } */
 
+    public function getTaxesAttribute()
+    {
+        return $this->product->taxes;
     }
 }
