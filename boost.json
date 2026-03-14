@@ -6,7 +6,7 @@
     "guidelines": true,
     "herd_mcp": true,
     "mcp": true,
-    "nightwatch_mcp": true,
+    "nightwatch_mcp": false,
     "packages": [
         "filament/filament",
         "spatie/laravel-ray"

@@ -197,9 +197,11 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         $collections = $this->productCollections->pluck('id')->toArray();
 
         if (count($collections) > 0) {
-            return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
-                $query->whereIn('product_collections.id', $collections);
-            })->where('id', '!=', $this->id)->get();
+            return Product::published()
+                ->with(['variants.discounts'])
+                ->whereHas('productCollections', function ($query) use ($collections) {
+                    $query->whereIn('product_collections.id', $collections);
+                })->where('id', '!=', $this->id)->get();
         } else {
             return null;
         }

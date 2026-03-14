@@ -343,8 +343,6 @@ test('can add a variant to the cart after a product has been added', function ()
 
 test('can add a product to the cart after a variant has been added', function () {
 
-    $this->withoutExceptionHandling();
-
     $product = Product::factory()->published()->create([
         'title' => 'Product A',
         'slug' => 'product-a',

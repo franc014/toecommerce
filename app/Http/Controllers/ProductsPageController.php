@@ -12,7 +12,7 @@ class ProductsPageController extends PageController
         $this->view = 'Products';
         $this->slug = 'products';
 
-        $products = Product::published()->with('variants')->paginate($sfSettings->products_per_page)->through(function ($product) {
+        $products = Product::published()->with(['variants.discounts'])->paginate($sfSettings->products_per_page)->through(function ($product) {
             return [
                 'id' => $product->id,
                 'title' => $product->title,
