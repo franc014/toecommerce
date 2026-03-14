@@ -10,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Cache;
 use UnitEnum;
 
 class ManageCompanyInfo extends SettingsPage
@@ -70,5 +71,11 @@ class ManageCompanyInfo extends SettingsPage
                     ->valuePlaceholder('09:00 - 8:00'),
 
             ]);
+    }
+
+    protected function afterSave(): void
+    {
+        // Clear your Laravel cache
+        Cache::forget('settings.company');
     }
 }
