@@ -4,23 +4,20 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CartItemResource extends JsonResource
+class OrderItemResource extends JsonResource
 {
     public function toArray($request): array
     {
         return [
             'id' => $this->id,
+            'cart_item_id' => $this->cart_item_id,
             'purchasable_id' => $this->purchasable_id,
             'purchasable_type' => $this->purchasable_type,
             'title' => $this->title,
             'image' => $this->image,
-            'price_in_dollars' => $this->priceInDollars,
-            'total_in_dollars' => $this->totalInDollars,
-            'quantity' => $this->quantity,
-            'image_url' => $this->image_url,
             'slug' => $this->slug,
             'price' => $this->price,
-            'variation' => $this->variation,
+            'quantity' => $this->quantity,
             'taxes' => $this->taxes,
             'total' => $this->total,
             'total_with_taxes' => $this->total_with_taxes,
@@ -28,9 +25,10 @@ class CartItemResource extends JsonResource
             'has_discount' => $this->has_discount,
             'discount_percentage' => $this->discount_percentage,
             'discounted_price' => $this->discounted_price,
+            'price_in_dollars' => $this->priceInDollars,
+            'total_in_dollars' => $this->totalInDollars,
             'total_with_taxes_in_dollars' => $this->totalWithTaxesInDollars,
             'computed_taxes_in_dollars' => $this->computedTaxesInDollars,
-            'formatted_variation' => $this->formatted_variation,
             'discounted_price_in_dollars' => $this->discountedPriceInDollars,
         ];
     }

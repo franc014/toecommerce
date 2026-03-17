@@ -89,13 +89,52 @@ test('can add a published product to the cart', function () {
         'price' => 20.00,
         'main_image' => 'image.jpg',
     ]);
+
     $uiCartId = fake()->uuid();
-    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+    $cart = Cart::factory()->create([
         'ui_cart_id' => $uiCartId,
     ]);
+
+    $otherProduct1 = Product::factory()->published()->create([
+        'title' => 'Other Product 1',
+        'slug' => 'other-product-1',
+    ]);
+    $otherProduct2 = Product::factory()->published()->create([
+        'title' => 'Other Product 2',
+        'slug' => 'other-product-2',
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $otherProduct1->id,
+        'purchasable_type' => Product::class,
+        'title' => $otherProduct1->title,
+        'slug' => $otherProduct1->slug,
+        'image' => $otherProduct1->main_image,
+        'price' => $otherProduct1->price,
+        'quantity' => 1,
+        'total' => $otherProduct1->price,
+        'total_with_taxes' => $otherProduct1->price,
+        'computed_taxes' => 0,
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'purchasable_id' => $otherProduct2->id,
+        'purchasable_type' => Product::class,
+        'title' => $otherProduct2->title,
+        'slug' => $otherProduct2->slug,
+        'image' => $otherProduct2->main_image,
+        'price' => $otherProduct2->price,
+        'quantity' => 1,
+        'total' => $otherProduct2->price,
+        'total_with_taxes' => $otherProduct2->price,
+        'computed_taxes' => 0,
+    ]);
+
     $quantityToAdd = 1;
 
-    expect($cart->items)->toHaveCount(2);
+    expect($cart->fresh()->items)->toHaveCount(2);
 
     $this->post(route('cart.items.addOrUpdate', [
         'ui_cart_id' => $uiCartId,

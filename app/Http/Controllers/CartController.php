@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CartItemResource;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,7 @@ class CartController extends Controller
             abort(404);
         }
 
-        return [
+        /* return [
             'ui_cart_id' => $cart->ui_cart_id,
             'items' => CartItemResource::collection($cart->items),
             'cart_aggregation' => [
@@ -42,7 +43,9 @@ class CartController extends Controller
                 'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
                 'total_in_dollars' => $cart->total_amount_in_dollars,
                 'items_count' => $cart->items_count,
-            ]];
+            ]]; */
+
+        return new CartResource($cart)->resolve();
     }
 
     public function empty(Request $request)

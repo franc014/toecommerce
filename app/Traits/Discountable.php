@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 
 trait Discountable
 {
+    private ?Collection $cachedValidDiscounts = null;
+
     public function discounts(): MorphToMany
     {
         return $this->morphToMany(Discount::class, 'discountable');
@@ -19,8 +21,12 @@ trait Discountable
 
     public function validDiscounts(): Collection
     {
-        return $this->discounts()->where('status', DiscountStatus::ACTIVE->value)
-            ->get();
+        if ($this->cachedValidDiscounts === null) {
+            $this->cachedValidDiscounts = $this->discounts()->where('status', DiscountStatus::ACTIVE->value)
+                ->get();
+        }
+
+        return $this->cachedValidDiscounts;
     }
 
     public function hasDiscounts(): Attribute
