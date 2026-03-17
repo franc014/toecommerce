@@ -20,8 +20,6 @@ class Cart extends Model
     /** @use HasFactory<CartFactory> */
     use HasFactory, MoneyFormat;
 
-    protected $appends = ['total_without_taxes_in_dollars', 'total_with_taxes_in_dollars', 'items_count', 'total_computed_taxes_in_dollars', 'total_amount_in_dollars'];
-
     protected function casts(): array
     {
         return [

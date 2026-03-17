@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
+use App\Http\Resources\OrderResource;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class CheckoutController extends Controller
             return Inertia::render(
                 'Checkout',
                 [
-                    'order' => $order,
+                    'order' => (new OrderResource($order))->resolve(),
                     'billingInfo' => $billingInfo,
                     'shippingInfo' => $shippingInfo,
                     'gatewayInfo' => [
