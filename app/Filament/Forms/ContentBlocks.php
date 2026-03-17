@@ -198,7 +198,7 @@ class ContentBlocks
             ->schema([
                 CheckboxList::make('products')
                     ->label(__('firesources.new_products'))
-                    ->options(Product::query()->published()->latest()->take(10)->get()->pluck('title', 'id')->toArray())
+                    ->options(Product::query()->published()->latest()->take(10)->pluck('title', 'id')->toArray())
                     ->searchable(),
             ])
             ->maxItems(1)
@@ -226,7 +226,7 @@ class ContentBlocks
                 Select::make('product')
                     ->label(__('firesources.featured_product'))
                     ->required()
-                    ->options(Product::query()->published()->get()->pluck('title', 'id')->toArray())
+                    ->options(Product::query()->published()->pluck('title', 'id')->toArray())
                     ->searchable(),
             ])
             ->maxItems(1)
@@ -240,7 +240,7 @@ class ContentBlocks
             ->schema([
                 CheckboxList::make('collections')
                     ->label(__('firesources.collections'))
-                    ->options(ProductCollection::whereHas('products')->get()->pluck('title', 'id')->toArray()),
+                    ->options(ProductCollection::whereHas('products')->pluck('title', 'id')->toArray()),
             ])
             ->maxItems(1)
             ->label(__('firesources.collections'))
