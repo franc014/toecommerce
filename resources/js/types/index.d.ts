@@ -138,12 +138,43 @@ export interface CartItem {
     purchasable: Product | ProductVariant;
 }
 
+export interface OrderItem {
+    id: number;
+    cart_item_id: number;
+    purchasable_id: number;
+    purchasable_type: string;
+    title: string;
+    image: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    taxes: string | null;
+    total: number;
+    total_with_taxes: number;
+    computed_taxes: number;
+    has_discount: boolean;
+    discount_percentage: number;
+    discounted_price: number;
+    price_in_dollars: string;
+    total_in_dollars: string;
+    total_with_taxes_in_dollars: string;
+    computed_taxes_in_dollars: string;
+    discounted_price_in_dollars: string;
+}
+
 export interface Order {
     id: number;
+    code: string;
+    user_id: number;
+    cart_id: number;
     total_amount: number;
-    total_amount_without_tax: number;
-    total_amount_with_tax: number;
+    total_with_taxes: number;
+    total_without_taxes: number;
     total_computed_taxes: number;
+    paid_at: string | null;
+    payphone_metadata: object | null;
+    created_at: string;
+    updated_at: string;
     total_with_taxes_in_dollars: string;
     total_without_taxes_in_dollars: string;
     total_computed_taxes_in_dollars: string;
