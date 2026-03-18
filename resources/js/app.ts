@@ -4,8 +4,8 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 //import { createApp, h } from 'vue';
-import { createSSRApp, h } from 'vue';
 import { createPinia } from 'pinia';
+import { createSSRApp, h } from 'vue';
 import { useCartStore } from './stores/cartStore';
 
 const appName = import.meta.env.VITE_APP_NAME || 'ToEcommerce';
@@ -29,6 +29,3 @@ createInertiaApp({
         color: '#e94f0dff',
     },
 });
-
-
-

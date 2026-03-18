@@ -13,10 +13,17 @@
 
 use App\Enums\DiscountCalculationModes;
 use App\Enums\StockControlModes;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\Tax;
 use App\Settings\StorefrontSettings;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
     ->in('Feature', 'Unit');
 
 beforeEach(function () {
@@ -48,6 +55,72 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+function createCartWithoutItem(array $productData, $isVariant = false)
+{
+
+    if ($isVariant) {
+        $purchasable = ProductVariant::factory([
+            'product_id' => Product::factory(),
+        ])->published()->create($productData);
+    } else {
+        $purchasable = Product::factory()->published()->create($productData);
+    }
+
+    $cart = Cart::factory()->create();
+
+    return [$purchasable, $cart];
+}
+
+function createCartWithItem(array $data, $isVariant = false)
+{
+    $iva = Tax::factory()->create([
+        'name' => 'IVA',
+        'percentage' => 15,
+        'description' => 'IVA 15%',
+    ]);
+
+    $isd = Tax::factory()->create([
+        'name' => 'ISD',
+        'percentage' => 10,
+        'description' => 'ISD 10%',
+    ]);
+
+    $product = Product::factory()->published()->create($data);
+
+    $product->taxes()->attach([$iva->id, $isd->id]);
+
+    if ($isVariant) {
+        $purchasable = ProductVariant::factory()->published()->create([
+            ...$data,
+            'product_id' => $product->id,
+        ]);
+    } else {
+        $purchasable = $product;
+    }
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(1)->state([
+        'purchasable_id' => $purchasable->id,
+        'purchasable_type' => Product::class,
+        'title' => $purchasable->title,
+        'slug' => $purchasable->slug,
+        'price' => $purchasable->price,
+        'quantity' => 4,
+        'total' => 4 * $purchasable->price,
+        'taxes' => json_encode([
+            [
+                'percentage' => $iva->percentage,
+                'name' => $iva->name,
+            ],
+            [
+                'percentage' => $isd->percentage,
+                'name' => $isd->name,
+            ],
+        ]),
+    ]), 'items')->create();
+
+    return [$purchasable, $cart];
+}
 
 function setStrictMode(StockControlModes $mode = StockControlModes::STRICT)
 {

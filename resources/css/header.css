@@ -42,7 +42,6 @@ Usage: codyhouse.co/license
 }
 
 .f-header__logo {
-
     width: var(--f-header-logo-width);
     flex-shrink: 0;
     text-decoration: none;
@@ -81,7 +80,7 @@ Usage: codyhouse.co/license
 } */
 .f-header__nav::before {
     /* top header bg + border */
-   /*  content: '';
+    /*  content: '';
     display: block;
     position: -webkit-sticky;
     position: sticky;

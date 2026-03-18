@@ -8,7 +8,7 @@
             "type": "local",
             "enabled": true,
             "command": [
-                "php",
+                "vendor/bin/sail",
                 "artisan",
                 "boost:mcp"
             ]

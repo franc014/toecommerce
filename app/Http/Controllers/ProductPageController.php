@@ -23,7 +23,11 @@ class ProductPageController extends Controller
     {
 
         $product->loadMissing([
+            'variants.product.taxes',
             'variants.discounts',
+            'taxes',
+            'tags',
+            'productCollections',
         ]);
 
         $this->product = $product;

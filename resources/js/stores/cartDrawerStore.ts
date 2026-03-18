@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export const useCartDrawerStore = defineStore('cartDrawer', {
     state: () => ({
@@ -14,5 +14,5 @@ export const useCartDrawerStore = defineStore('cartDrawer', {
         close() {
             this.isOpen = false;
         },
-    }
+    },
 });

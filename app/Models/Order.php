@@ -8,6 +8,7 @@ use App\Exceptions\OrderAlreadyConfirmedException;
 use App\Exceptions\PayphoneTransactionErrorException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Traits\MoneyFormat;
+use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ use Illuminate\Support\Str;
 
 class Order extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderFactory> */
+    /** @use HasFactory<OrderFactory> */
     use HasFactory, MoneyFormat;
 
     protected function casts(): array
@@ -43,7 +44,7 @@ class Order extends Model
 
     public function hasItems(): bool
     {
-        return $this->orderItems()->count() > 0;
+        return $this->orderItems()->exists();
     }
 
     public static function placeFor(User $user, Cart $cart)

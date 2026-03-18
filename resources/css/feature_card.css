@@ -7,36 +7,37 @@ Usage: codyhouse.co/license
 
 -------------------------------- */
 .card-v13 {
-  --transition-duration: .3s;
+    --transition-duration: 0.3s;
 }
 
 .card-v13__figure-wrapper {
-  display: block;
+    display: block;
 }
 
 .card-v13__figure {
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  transition: clip-path var(--transition-duration) cubic-bezier(0.215, 0.61, 0.355, 1);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    transition: clip-path var(--transition-duration) cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 .card-v13__figure img {
-  display: block;
-  width: 100%;
-  transform: scale(1.1);
-  filter: grayscale(100%);
-  transition: transform var(--transition-duration) cubic-bezier(0.215, 0.61, 0.355, 1), filter var(--transition-duration);
+    display: block;
+    width: 100%;
+    transform: scale(1.1);
+    filter: grayscale(100%);
+    transition:
+        transform var(--transition-duration) cubic-bezier(0.215, 0.61, 0.355, 1),
+        filter var(--transition-duration);
 }
 .card-v13__figure-wrapper:hover .card-v13__figure {
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 .card-v13__figure-wrapper:hover .card-v13__figure img {
-  transform: scale(.9);
-  filter: hue-rotate(90deg);
-
+    transform: scale(0.9);
+    filter: hue-rotate(90deg);
 }
 
 .card-v13__separator {
-  display: block;
-  width: 40px;
-  height: 3px;
-  @apply bg-gray-900/10;
+    display: block;
+    width: 40px;
+    height: 3px;
+    @apply bg-gray-900/10;
 }
