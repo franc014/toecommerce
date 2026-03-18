@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\CMS\ContentResolver;
 use App\Enums\PageStatus;
+use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Page extends Model
 {
-    /** @use HasFactory<\Database\Factories\PageFactory> */
+    /** @use HasFactory<PageFactory> */
     use HasFactory;
 
     protected function casts(): array
@@ -47,7 +48,7 @@ class Page extends Model
 
     public function hasSections(): bool
     {
-        return $this->sections()->count() > 0;
+        return $this->sections()->exists();
     }
 
     public function scopePublished($query)
@@ -79,10 +80,8 @@ class Page extends Model
                 'slug' => $section->slug,
                 'content' => $contentResolver->resolve($transformables),
             ];
-
         });
 
         return $sectionsMapped->all();
-
     }
 }

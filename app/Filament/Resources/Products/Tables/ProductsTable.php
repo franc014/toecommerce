@@ -102,7 +102,7 @@ class ProductsTable
                     ])
                     ->fillForm(function (Product $record) {
                         return [
-                            'taxes' => $record->taxes()->get()->pluck('id'),
+                            'taxes' => $record->taxes()->pluck('id'),
                         ];
                     })
                     ->action(function (Product $record, array $data) {

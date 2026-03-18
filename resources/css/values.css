@@ -7,23 +7,23 @@ Usage: codyhouse.co/license
 
 -------------------------------- */
 :root {
-  --feature-v8-gap: 3.25rem;
+    --feature-v8-gap: 3.25rem;
 }
 @media (min-width: 64rem) {
-  :root {
-    --feature-v8-gap: 5.125rem;
-  }
+    :root {
+        --feature-v8-gap: 5.125rem;
+    }
 }
 
 .feature-v8 {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .feature-v8__main-content {
-  padding-bottom: calc(var(--feature-v8-gap) * 2);
+    padding-bottom: calc(var(--feature-v8-gap) * 2);
 }
 
 .feature-v8__sub-content {
-  margin-top: calc(var(--feature-v8-gap) * -1);
+    margin-top: calc(var(--feature-v8-gap) * -1);
 }

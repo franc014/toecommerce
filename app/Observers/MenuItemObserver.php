@@ -9,7 +9,6 @@ class MenuItemObserver
 {
     public function saved(MenuItem $menuItem): void
     {
-        ray($menuItem);
         $this->clearMenuCache($menuItem);
     }
 
