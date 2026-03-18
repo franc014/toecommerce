@@ -353,6 +353,7 @@ return Product::published()
 ---
 
 ### 6. Filament Navigation Badges Execute Queries on Every Page Load
+## PENDING: Filament issue
 
 **Files:**
 
@@ -469,6 +470,7 @@ return Product::published()
 ---
 
 ### 9. Product Variant Taxes Accessor N+1
+#### PENDING
 
 **File:** `app/Models/ProductVariant.php:65-68`
 
@@ -501,6 +503,7 @@ protected $with = ['purchasable' => function ($morphTo) {
 ---
 
 ### 10. Cart::allByProductInOpenCarts May Load Too Many Records
+#### PENDING
 
 **File:** `app/Models/CartItem.php:78-86`
 
@@ -585,6 +588,7 @@ public function hasItems(): bool
 ---
 
 ### 12. Filament Actions Loading All Records
+#### PENDING
 
 **Files:**
 
@@ -620,6 +624,7 @@ return Tax::all()->pluck('name', 'id');
 ---
 
 ### 13. CartItem Global `$with` Causes N+1 with Polymorphic Relations
+#### PENDING
 
 **File:** `app/Models/CartItem.php:21`
 
@@ -650,6 +655,7 @@ $cart = Cart::byUICartId($request->input('id'))
 ---
 
 ### 14. Polymorphic Queries Without Type Index
+#### DONE
 
 **Files:**
 
@@ -714,8 +720,9 @@ $collections = ProductCollection::query()
 ---
 
 ## Low Severity Issues (Nice to Have)
+### stop here for tomorrow
 
-### 16. CMS Transformers Missing Eager Loading
+### 16. CMS Transformers Missing Eager Loading: 
 
 **Files:**
 
@@ -739,7 +746,7 @@ $product = Product::with(['variants.discounts', 'taxes', 'media'])->find($produc
 
 ---
 
-### 17. Duplicate Image URL in CartItemResource
+### 17. Duplicate Image URL in CartItemResource: DONE
 
 **File:** `app/Http/Resources/CartItemResource.php:20,33`
 
@@ -751,7 +758,7 @@ Remove duplicate key (line 33).
 
 ---
 
-### 18. Debug Statement in Production Code
+### 18. Debug Statement in Production Code: DONE
 
 **File:** `app/Observers/MenuItemObserver.php:12`
 
@@ -771,7 +778,7 @@ Remove the `ray()` call.
 
 ---
 
-### 19. Large Commented Code Block in CartItem
+### 19. Large Commented Code Block in CartItem: DONE
 
 **File:** `app/Models/CartItem.php:102-131`
 
@@ -783,7 +790,7 @@ Remove commented code if not needed.
 
 ---
 
-### 20. Menu Cache Not Cleared on Menu Update
+### 20. Menu Cache Not Cleared on Menu Update: WISH
 
 **File:** `app/Observers/MenuItemObserver.php`
 
@@ -819,7 +826,7 @@ The application correctly caches settings in `HandleInertiaRequests` middleware.
 
 ---
 
-### 22. Discountable Trait Repeated Queries
+### 22. Discountable Trait Repeated Queries: DONE
 
 **File:** `app/Traits/Discountable.php`
 

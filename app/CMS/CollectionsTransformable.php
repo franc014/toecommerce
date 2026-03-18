@@ -11,7 +11,7 @@ class CollectionsTransformable implements ContentTransformable
     {
         if (isset($item['type']) && $item['type'] === 'collections') {
             $collectionsIds = $item['data']['collections'];
-            $collections = ProductCollection::whereIn('id', $collectionsIds)->get();
+            $collections = ProductCollection::whereIn('id', $collectionsIds)->withCount('products')->get();
 
             foreach ($collections as $key => $collection) {
                 $item['data']['collections'][$key] = [
@@ -19,7 +19,7 @@ class CollectionsTransformable implements ContentTransformable
                     'title' => $collection->title,
                     'slug' => $collection->slug,
                     'featured_image' => $collection->featured_image ? Storage::url($collection->featured_image) : '',
-                    'products_count' => $collection->products()->count(),
+                    'products_count' => $collection->products_count,
                 ];
             }
         }

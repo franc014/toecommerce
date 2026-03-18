@@ -55,7 +55,7 @@ class Cart extends Model
 
     public function hasItems(): bool
     {
-        return $this->items->count() > 0;
+        return $this->items()->exists();
     }
 
     public function isEmpty(): bool
@@ -115,7 +115,6 @@ class Cart extends Model
         if ($this->hasUnpaidOrder()) {
             $this->order->updateItem($item, $quantity);
         }
-
     }
 
     public function removeItem(int $itemId): void

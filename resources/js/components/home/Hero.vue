@@ -70,7 +70,7 @@ const image = content.image;
 let tween;
 
 function beforeEnter() {
-    let tween = gsap.timeline();
+    const tween = gsap.timeline();
 }
 
 function enter(el) {

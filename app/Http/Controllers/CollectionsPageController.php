@@ -12,7 +12,7 @@ class CollectionsPageController extends PageController
         $this->slug = 'collections';
         $this->view = 'Collections';
 
-        $collections = ProductCollection::query()->get()->map(function ($collection) {
+        $collections = ProductCollection::query()->withCount('products')->get()->map(function ($collection) {
             return [
                 'id' => $collection->id,
                 'title' => $collection->title,

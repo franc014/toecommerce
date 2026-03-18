@@ -210,7 +210,7 @@ export interface PageComponents {
 
 export interface PageComponent {
     class: string;
-    content: Object;
+    content: object;
 }
 
 export interface Heading {

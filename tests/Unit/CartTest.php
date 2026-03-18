@@ -3,78 +3,9 @@
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductVariant;
 use App\Models\Tax;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-
-function createCartWithoutItem(array $productData, $isVariant = false)
-{
-
-    if ($isVariant) {
-        $purchasable = ProductVariant::factory([
-            'product_id' => Product::factory(),
-        ])->published()->create($productData);
-    } else {
-        $purchasable = Product::factory()->published()->create($productData);
-    }
-
-    $cart = Cart::factory()->create();
-
-    return [$purchasable, $cart];
-}
-
-function createCartWithItem(array $data, $isVariant = false)
-{
-    $iva = Tax::factory()->create([
-        'name' => 'IVA',
-        'percentage' => 15,
-        'description' => 'IVA 15%',
-    ]);
-
-    $isd = Tax::factory()->create([
-        'name' => 'ISD',
-        'percentage' => 10,
-        'description' => 'ISD 10%',
-    ]);
-
-    $product = Product::factory()->published()->create($data);
-
-    $product->taxes()->attach([$iva->id, $isd->id]);
-
-    if ($isVariant) {
-        $purchasable = ProductVariant::factory()->published()->create([
-            ...$data,
-            'product_id' => $product->id,
-        ]);
-
-    } else {
-        $purchasable = $product;
-    }
-
-    $cart = Cart::factory()->has(CartItem::factory()->count(1)->state([
-        'purchasable_id' => $purchasable->id,
-        'purchasable_type' => Product::class,
-        'title' => $purchasable->title,
-        'slug' => $purchasable->slug,
-        'price' => $purchasable->price,
-        'quantity' => 4,
-        'total' => 4 * $purchasable->price,
-        'taxes' => json_encode([
-            [
-                'percentage' => $iva->percentage,
-                'name' => $iva->name,
-            ],
-            [
-                'percentage' => $isd->percentage,
-                'name' => $isd->name,
-            ],
-        ]),
-    ]), 'items')->create();
-
-    return [$purchasable, $cart];
-}
 
 test('can get a cart item by purchasable', function () {
     [$purchasable, $cart] = createCartWithItem([
@@ -92,7 +23,6 @@ test('can get a cart item by purchasable', function () {
     expect($item->price)->toBe($purchasable->price);
     expect($item->quantity)->toBe(4);
     expect($item->total)->toBe(4 * $purchasable->price);
-
 });
 
 test('getting a cart item by id', function () {
@@ -162,7 +92,6 @@ test('getting totals', function () {
     expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$36');
     expect($cart->fresh()->total_amount)->toBe(296.0);
     expect($cart->fresh()->total_amount_in_dollars)->toBe('$296');
-
 });
 
 test('getting totals when items have discounts', function () {
@@ -223,7 +152,6 @@ test('getting totals when items have discounts', function () {
     expect($cart->fresh()->total_computed_taxes_in_dollars)->toBe('$34.8');
     expect($cart->fresh()->total_amount)->toBe(291.6);
     expect($cart->fresh()->total_amount_in_dollars)->toBe('$291.6');
-
 });
 
 test('getting the total count of items in the cart', function () {

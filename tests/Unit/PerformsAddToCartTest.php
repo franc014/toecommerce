@@ -68,7 +68,7 @@ test('a product added to the cart is also added to an existing unpaid order', fu
 
     [$product, $cart] = createCartWithItem([
         'title' => 'Product 1',
-        'slug' => 'product-1',
+        'slug' => fake()->unique()->slug(),
         'price' => 50,
         'user_id' => $user->id,
     ]);
@@ -111,7 +111,7 @@ test('a product variant can be added to the cart', function () {
     $variant = ProductVariant::factory()->published()->create([
         'product_id' => $product->id,
         'title' => 'Variant 1',
-        'slug' => 'variant-1',
+        'slug' => fake()->unique()->slug(),
         'price' => 50,
     ]);
 
@@ -160,7 +160,7 @@ test('can update quantity of a cart item', function () {
 
     [$product, $cart] = createCartWithItem([
         'title' => 'Product 1',
-        'slug' => 'product-1',
+        'slug' => fake()->unique()->slug(),
         'price' => 50,
     ]);
 
@@ -186,7 +186,7 @@ it('updates order item quantity after updating quantity of a cart item', functio
 
     [$product, $cart] = createCartWithItem([
         'title' => 'Product 1',
-        'slug' => 'product-1',
+        'slug' => fake()->unique()->slug(),
         'price' => 50,
     ]);
 
