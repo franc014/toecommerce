@@ -59,7 +59,7 @@ Usage: codyhouse.co/license
 }
 
 .product-card-v2__title {
-    @apply text-zinc-900 max-w-min;
+    @apply max-w-min text-zinc-900;
     text-decoration: none;
     font-weight: bold;
 }

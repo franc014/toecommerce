@@ -1,8 +1,5 @@
-import { useCartStore } from "@/stores/cartStore";
-import { ref, watchEffect } from "vue"
-
-
-
+import { useCartStore } from '@/stores/cartStore';
+import { ref, watchEffect } from 'vue';
 
 export function useCartItemQuantity(productSlug: string) {
     const qty = ref<number>(1);

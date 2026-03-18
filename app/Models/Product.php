@@ -102,12 +102,12 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 
     public function hasVariants(): bool
     {
-        return $this->variants()->count() >= 1;
+        return $this->variants()->exists();
     }
 
     public function hasPublishedVariants(): bool
     {
-        return $this->variants()->published()->count() >= 1;
+        return $this->variants()->published()->exists();
     }
 
     public static function bySlug(string $slug)
@@ -150,7 +150,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
             }
 
             $pairs->push($lowL);
-
         }
 
         return $pairs->toArray();
@@ -188,7 +187,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
                     'sku' => '',
                 ]);
             }
-
         }
     }
 
@@ -205,6 +203,5 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         } else {
             return null;
         }
-
     }
 }

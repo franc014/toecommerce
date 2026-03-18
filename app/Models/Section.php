@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SectionStatus;
+use Database\Factories\SectionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Enums\Fit;
@@ -13,7 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Section extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\SectionFactory> */
+    /** @use HasFactory<SectionFactory> */
     use HasFactory,InteractsWithMedia;
 
     protected function casts(): array

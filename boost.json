@@ -4,14 +4,14 @@
         "opencode"
     ],
     "guidelines": true,
-    "herd_mcp": true,
+    "herd_mcp": false,
     "mcp": true,
     "nightwatch_mcp": false,
     "packages": [
         "filament/filament",
         "spatie/laravel-ray"
     ],
-    "sail": false,
+    "sail": true,
     "skills": [
         "wayfinder-development",
         "pest-testing",
