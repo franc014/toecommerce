@@ -7,6 +7,7 @@ use App\Enums\PageStatus;
 use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Cache;
 
@@ -58,13 +59,15 @@ class Page extends Model
 
     public static function bySlug($slug)
     {
-        return Cache::remember('page-'.$slug, now()->addDay(), function () use ($slug) {
-            return self::where('slug', $slug)->published()
-                ->with('sections', function ($query) {
-                    $query->orderBy('order_column');
-                })
-                ->firstOrFail();
+        $cacheKey = 'page.id.'.$slug;
+
+        $pageId = Cache::remember($cacheKey, now()->addDay(), function () use ($slug) {
+            return self::where('slug', $slug)->published()->value('id') ?? throw new ModelNotFoundException;
         });
+
+        return self::with(['sections' => function ($query) {
+            $query->orderBy('order_column');
+        }])->published()->findOrFail($pageId);
     }
 
     public function sectionsForUI(array $transformables = []): ?array

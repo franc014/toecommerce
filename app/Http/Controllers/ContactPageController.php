@@ -14,18 +14,21 @@ class ContactPageController extends PageController
 {
     public function __construct(Honeypot $honeypot)
     {
-        $this->slug = 'contact';
-        $this->view = 'Contact';
-        $this->extendedData = ['honeypot' => $honeypot];
+        parent::__construct(
+            componentView: 'Contact',
+            slug: 'contact',
+            transformables: [],
+            extendedData: [
+                'honeypot' => $honeypot,
+            ]
+        );
     }
 
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
-
         $contact = Contact::create($request->validated());
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
         return Inertia::flash('success', __('storefront.contact_success'))->back();
-
     }
 }
