@@ -9,9 +9,6 @@ class CollectionsPageController extends PageController
 {
     public function __construct()
     {
-        $this->slug = 'collections';
-        $this->view = 'Collections';
-
         $collections = ProductCollection::query()->withCount('products')->get()->map(function ($collection) {
             return [
                 'id' => $collection->id,
@@ -22,8 +19,13 @@ class CollectionsPageController extends PageController
             ];
         });
 
-        $this->extendedData = [
-            'collections' => $collections,
-        ];
+        parent::__construct(
+            componentView: 'Collections',
+            slug: 'collections',
+            transformables: [],
+            extendedData: [
+                'collections' => $collections,
+            ]
+        );
     }
 }

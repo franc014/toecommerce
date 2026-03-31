@@ -4,19 +4,21 @@
         "opencode"
     ],
     "guidelines": true,
-    "herd_mcp": false,
     "mcp": true,
     "nightwatch_mcp": false,
     "packages": [
         "filament/filament",
-        "spatie/laravel-ray"
+        "spatie/laravel-ray",
+        "spatie/laravel-backup"
     ],
-    "sail": true,
+    "sail": false,
     "skills": [
+        "laravel-best-practices",
         "wayfinder-development",
         "pest-testing",
         "inertia-vue-development",
         "tailwindcss-development",
+        "laravel-backup",
         "debugging-output-and-previewing-html-using-ray"
     ]
 }

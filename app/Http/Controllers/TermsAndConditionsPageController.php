@@ -8,12 +8,13 @@ class TermsAndConditionsPageController extends PageController
 {
     public function __construct()
     {
-        $this->slug = 'terminos-y-condiciones';
-        $this->view = 'TermsAndConditions';
-
-        $this->transformables =
-            [
+        parent::__construct(
+            componentView: 'TermsAndConditions',
+            slug: 'terminos-y-condiciones',
+            transformables: [
                 new RichTextTransformable,
-            ];
+            ],
+            extendedData: []
+        );
     }
 }
