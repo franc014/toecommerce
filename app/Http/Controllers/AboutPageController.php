@@ -10,14 +10,15 @@ class AboutPageController extends PageController
 {
     public function __construct()
     {
-        $this->view = 'About';
-        $this->slug = 'acerca-de';
-        $this->transformables =
-            [
+        parent::__construct(
+            componentView: 'About',
+            slug: 'acerca-de',
+            transformables: [
                 new ImageTransformable,
                 new RichTextTransformable,
                 new FeatureTransformable,
-            ];
-
+            ],
+            extendedData: []
+        );
     }
 }

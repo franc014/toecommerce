@@ -16,18 +16,12 @@ abstract class PageController extends Controller
 
     private ?Page $page;
 
-    protected array $extendedData = [];
 
-    protected array $transformables = [];
-
-    protected string $view;
-
-    protected string $slug;
+    public function __construct(protected readonly string $componentView, protected readonly string $slug, protected readonly array $transformables, protected readonly array $extendedData = []) {}
 
     public function __invoke()
     {
         try {
-
             $components = [];
             $page = Page::bySlug($this->slug);
 
@@ -41,12 +35,11 @@ abstract class PageController extends Controller
                 ];
             }
 
-            return Inertia::render($this->view, [
-                'components' => fn () => collect($components)->keyBy('class'),
-                'metatags' => fn () => $this->metatags(),
+            return Inertia::render($this->componentView, [
+                'components' => fn() => collect($components)->keyBy('class'),
+                'metatags' => fn() => $this->metatags(),
                 ...$this->extendedData,
             ]);
-
         } catch (ModelNotFoundException $e) {
             Log::error('Model not found');
             abort(404);

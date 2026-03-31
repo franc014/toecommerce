@@ -8,11 +8,13 @@ class PrivacyPolicyPageController extends PageController
 {
     public function __construct()
     {
-        $this->slug = 'politica-de-privacidad';
-        $this->view = 'PrivacyPolicy';
-        $this->transformables =
-            [
+        parent::__construct(
+            componentView: 'PrivacyPolicy',
+            slug: 'politica-de-privacidad',
+            transformables: [
                 new RichTextTransformable,
-            ];
+            ],
+            extendedData: []
+        );
     }
 }
