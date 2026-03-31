@@ -40,9 +40,9 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $mainMenu = Cache::remember('menu.main', now()->addHour(), fn () => Menu::byName('main'));
-        $footerMenu = Cache::remember('menu.footer', now()->addHour(), fn () => Menu::byName('footer'));
-        $legalMenu = Cache::remember('menu.legal', now()->addHour(), fn () => Menu::byName('legal'));
+        $mainMenu = Menu::byName('main');
+        $footerMenu = Menu::byName('footer');
+        $legalMenu = Menu::byName('legal');
 
         $company = Cache::remember('settings.company', now()->addHour(), fn () => app(CompanySettings::class)->toArray());
         $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn () => app(StorefrontSettings::class)->toArray());

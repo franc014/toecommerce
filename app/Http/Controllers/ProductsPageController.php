@@ -9,9 +9,6 @@ class ProductsPageController extends PageController
 {
     public function __construct(StorefrontSettings $sfSettings)
     {
-        $this->view = 'Products';
-        $this->slug = 'products';
-
         $products = Product::published()->with(['variants.discounts'])->paginate($sfSettings->products_per_page)->through(function ($product) {
             return [
                 'id' => $product->id,
@@ -30,9 +27,13 @@ class ProductsPageController extends PageController
             ];
         });
 
-        $this->extendedData = [
-            'products' => fn () => $products,
-        ];
-
+        parent::__construct(
+            componentView: 'Products',
+            slug: 'products',
+            transformables: [],
+            extendedData: [
+                'products' => fn () => $products,
+            ]
+        );
     }
 }

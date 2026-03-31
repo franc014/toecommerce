@@ -12,16 +12,18 @@ class HomePageController extends PageController
 {
     public function __construct()
     {
-        $this->view = 'Home';
-        $this->slug = 'home';
-        $this->transformables =
-             [
-                 new ImageTransformable,
-                 new ProductsTransformable,
-                 new FeaturedProductTransformable,
-                 new CollectionsTransformable,
-                 new FeatureTransformable,
-             ];
 
+        parent::__construct(
+            componentView: 'Home',
+            slug: 'home',
+            transformables: [
+                new ImageTransformable,
+                new ProductsTransformable,
+                new FeaturedProductTransformable,
+                new CollectionsTransformable,
+                new FeatureTransformable,
+            ],
+            extendedData: []
+        );
     }
 }
