@@ -40,18 +40,6 @@ class Discount extends Model
                 $discount->save();
             }
         });
-
-        /* foreach (Discount::all() as $discount) {
-            if ($discount->start_date <= $now && $discount->end_date >= $now) {
-                $discount->status = DiscountStatus::ACTIVE->value;
-            } elseif ($discount->start_date > $now) {
-                $discount->status = DiscountStatus::SCHEDULED->value;
-            } else {
-                $discount->status = DiscountStatus::INACTIVE->value;
-            }
-            $discount->save();
-        } */
-
     }
 
     public function changeStatus(DiscountStatus $status)
