@@ -29,5 +29,11 @@
             "enabled": true,
             "url": "https://nightwatch.laravel.com/mcp"
         }
+    },
+    "agent": {
+    "plan": {
+      "color": "#00a6ed"
     }
+   
+  }
 }
