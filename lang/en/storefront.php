@@ -8,4 +8,5 @@ return [
     'cart_emptied' => 'Cart emptied',
     'cart_item_not_found' => 'Product not found',
     'cart_error' => 'An error occurred while updating your cart',
+    'cash_on_delivery_confirmed' => 'Cash on delivery selected. Your order is pending delivery.',
 ];

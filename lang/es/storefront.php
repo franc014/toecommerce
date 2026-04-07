@@ -8,4 +8,5 @@ return [
     'cart_emptied' => 'Carrito vaciado',
     'cart_item_not_found' => 'Producto no encontrado',
     'cart_error' => 'Ocurrió un error al actualizar tu carrito',
+    'cash_on_delivery_confirmed' => 'Pago contra entrega seleccionado. Tu orden está pendiente de entrega.',
 ];

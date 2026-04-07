@@ -5,11 +5,12 @@
     ],
     "guidelines": true,
     "mcp": true,
-    "nightwatch_mcp": false,
+    "nightwatch_mcp": true,
     "packages": [
         "filament/filament",
         "spatie/laravel-ray",
-        "spatie/laravel-backup"
+        "spatie/laravel-backup",
+        "laravel/nightwatch"
     ],
     "sail": false,
     "skills": [
@@ -18,6 +19,7 @@
         "pest-testing",
         "inertia-vue-development",
         "tailwindcss-development",
+        "configure-nightwatch",
         "laravel-backup",
         "debugging-output-and-previewing-html-using-ray"
     ]

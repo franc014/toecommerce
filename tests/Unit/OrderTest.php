@@ -517,3 +517,26 @@ it('sets an order as paid', function () {
     expect($order->fresh()->paid_at)->not->toBeNull();
     expect($order->fresh()->isConfirmed())->toBeTrue();
 });
+
+test('confirmCashOnDelivery sets payment method and status', function () {
+    $user = User::factory()->create();
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'user_id' => $user->id,
+    ]);
+
+    $order = Order::placeFor($user, $cart);
+
+    expect($order->payment_method)->toBeNull();
+    expect($order->status->value)->toBe('pending');
+    expect($cart->fresh()->paid_at)->toBeNull();
+
+    $order->confirmCashOnDelivery();
+
+    $order = $order->fresh();
+
+    expect($order->payment_method)->toBe('cash_on_delivery');
+    expect($order->status->value)->toBe('pending');
+
+    // Cart should NOT be marked as paid by confirmCashOnDelivery()
+    expect($cart->fresh()->paid_at)->toBeNull();
+});

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Casts\Money;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethods;
 use App\Exceptions\CartAlreadyPaidException;
+use App\Exceptions\InvalidOrderStatusTransitionException;
 use App\Exceptions\OrderAlreadyConfirmedException;
 use App\Exceptions\PayphoneTransactionErrorException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
@@ -29,12 +32,19 @@ class Order extends Model
             'total_with_taxes' => Money::class,
             'total_without_taxes' => Money::class,
             'total_computed_taxes' => Money::class,
+            'paid_at' => 'datetime',
+            'status' => OrderStatus::class,
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class);
     }
 
     public function orderItems(): HasMany
@@ -74,6 +84,7 @@ class Order extends Model
             'total_with_taxes' => $cart->total_with_taxes,
             'total_without_taxes' => $cart->total_without_taxes,
             'total_computed_taxes' => $cart->total_computed_taxes,
+            'status' => OrderStatus::PENDING,
         ]);
 
         foreach ($cart->items as $item) {
@@ -189,7 +200,39 @@ class Order extends Model
         $this->update([
             'paid_at' => now(),
             'payphone_metadata' => $payphoneConfirmation,
+            'status' => OrderStatus::PENDING,
         ]);
+    }
+
+    public function setPaymentMethod(string $paymentMethod): void
+    {
+        $this->update([
+            'payment_method' => $paymentMethod,
+        ]);
+    }
+
+    public function setStatus(OrderStatus $newStatus): void
+    {
+        $currentStatus = $this->status ?? OrderStatus::PENDING;
+
+        // Allow if it's the same status (idempotent)
+        if ($currentStatus === $newStatus) {
+            return;
+        }
+
+        if (! $currentStatus->canTransitionTo($newStatus)) {
+            throw new InvalidOrderStatusTransitionException(
+                "Cannot transition from {$currentStatus->value} to {$newStatus->value}"
+            );
+        }
+
+        $this->update(['status' => $newStatus]);
+    }
+
+    public function confirmCashOnDelivery(): void
+    {
+        $this->setPaymentMethod(PaymentMethods::CASH_ON_DELIVERY->value);
+        $this->setStatus(OrderStatus::PENDING);
     }
 
     protected function totalWithoutTaxesInDollars(): Attribute
