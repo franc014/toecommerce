@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethods;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -22,6 +24,58 @@ class OrderInfolist
                     ->columnSpanFull()
                     ->collapsible()
                     ->headerActions([
+                        Action::make('mark-as-shipping')
+                            ->label(__('firesources.mark_as_shipping'))
+                            ->icon(Heroicon::OutlinedTruck)
+                            ->color('info')
+                            ->requiresConfirmation()
+                            ->modalHeading(__('firesources.mark_as_shipping'))
+                            ->modalDescription(__('firesources.mark_as_shipping_description'))
+                            ->visible(function ($record) {
+                                return Filament::getCurrentPanel()->getId() === 'admin'
+                                    && $record->status === OrderStatus::PENDING;
+                            })
+                            ->action(function ($record) {
+                                $record->setStatus(OrderStatus::SHIPPING);
+                            })
+                            ->successNotificationTitle(__('firesources.order_marked_as_shipping'))
+                            ->modalWidth('md')->slideOver(false),
+
+                        Action::make('mark-as-shipped')
+                            ->label(__('firesources.mark_as_shipped'))
+                            ->icon(Heroicon::OutlinedCheckCircle)
+                            ->color('success')
+                            ->requiresConfirmation()
+                            ->modalHeading(__('firesources.mark_as_shipped'))
+                            ->modalDescription(__('firesources.mark_as_shipped_description'))
+                            ->visible(function ($record) {
+                                return Filament::getCurrentPanel()->getId() === 'admin'
+                                    && $record->status === OrderStatus::SHIPPING;
+                            })
+                            ->action(function ($record) {
+                                $record->setStatus(OrderStatus::SHIPPED);
+                            })
+                            ->successNotificationTitle(__('firesources.order_marked_as_shipped'))
+                            ->modalWidth('md')->slideOver(false),
+
+                        Action::make('cancel-order')
+                            ->label(__('firesources.cancel_order'))
+                            ->icon(Heroicon::OutlinedXCircle)
+                            ->color('danger')
+                            ->requiresConfirmation()
+                            ->modalHeading(__('firesources.cancel_order'))
+                            ->modalDescription(__('firesources.cancel_order_description'))
+                            ->visible(function ($record) {
+                                return Filament::getCurrentPanel()->getId() === 'admin'
+                                    && ($record->status === OrderStatus::PENDING
+                                        || $record->status === OrderStatus::SHIPPING);
+                            })
+                            ->action(function ($record) {
+                                $record->setStatus(OrderStatus::CANCELED);
+                            })
+                            ->successNotificationTitle(__('firesources.order_canceled'))
+                            ->modalWidth('md')->slideOver(false),
+
                         Action::make('confirm-payment')
                             ->label(__('firesources.confirm_payment'))
                             ->icon(Heroicon::CheckCircle)
@@ -40,18 +94,22 @@ class OrderInfolist
                                     return true;
                                 }
 
-                                return $record->isConfirmed();
+                                return $record->isConfirmed() || $record->status === OrderStatus::CANCELED;
                             })
                             ->action(function ($record) {
                                 $record->markAsPaid();
                             })
-                            ->successNotificationTitle(__('firesources.order_marked_as_paid')),
+                            ->successNotificationTitle(__('firesources.order_marked_as_paid'))
+                            ->modalWidth('md')->slideOver(false),
                     ])
                     ->schema([
                         TextEntry::make('code')
                             ->label(__('firesources.code')),
                         TextEntry::make('user.name')
                             ->label(__('firesources.customer')),
+                        TextEntry::make('status')
+                            ->label(__('firesources.status'))
+                            ->badge(),
                         TextEntry::make('total_with_taxes')
                             ->label(__('firesources.total_with_taxes'))
                             ->numeric()
@@ -72,12 +130,21 @@ class OrderInfolist
                             ->label(__('firesources.last_four_digits'))
                             ->formatStateUsing(function ($state) {
                                 return '**** **** **** '.json_decode($state)->lastDigits;
+                            })
+                            ->hidden(function ($record) {
+                                return $record->payment_method !== PaymentMethods::PAYPHONE->value;
                             }),
                         TextEntry::make('payphone_metadata')
                             ->label(__('firesources.id_document'))
                             ->formatStateUsing(function ($state) {
                                 return json_decode($state)->document;
+                            })->hidden(function ($record) {
+                                return $record->payment_method !== PaymentMethods::PAYPHONE->value;
                             }),
+                        TextEntry::make('payment_method')
+                            ->label(__('firesources.payment_method'))
+                            ->badge(),
+
                         TextEntry::make('created_at')
                             ->label(__('firesources.created_at'))
                             ->dateTime()

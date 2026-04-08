@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Enums\OrderStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -23,6 +25,19 @@ class OrdersTable
                 TextColumn::make('user.name')
                     ->label(__('firesources.customer'))
                     ->searchable(),
+                TextColumn::make('status')
+                    ->label(__('firesources.status'))
+                    ->badge()
+                    ->color(function ($record) {
+                        return match ($record->status) {
+                            OrderStatus::PENDING => 'warning',
+                            OrderStatus::SHIPPING => 'info',
+                            OrderStatus::SHIPPED => 'success',
+                            OrderStatus::CANCELED => 'danger',
+                            default => 'gray',
+                        };
+                    })
+                    ->sortable(),
                 TextColumn::make('total_amount')
                     ->label(__('firesources.total_amount'))
                     ->numeric()
@@ -43,7 +58,10 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label(__('firesources.status'))
+                    ->options(OrderStatus::class)
+                    ->native(false),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -28,6 +28,7 @@ class OrderController extends Controller
 
         if ($validated['payment_method'] === PaymentMethods::CASH_ON_DELIVERY->value) {
             $order->confirmCashOnDelivery();
+
             CashOnDeliveryConfirmed::dispatch($order);
 
             return response()->json(['message' => __('storefront.cash_on_delivery_confirmed')])->withoutCookie('cart');

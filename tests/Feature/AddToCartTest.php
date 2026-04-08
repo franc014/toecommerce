@@ -3,6 +3,7 @@
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Discount;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Tax;
@@ -27,7 +28,6 @@ it('defines the product data to add to the cart', function () {
         'purchasable_type' => Product::class,
         'image' => 'image.jpg',
     ]);
-
 });
 
 it('defines the product variant data to add to the cart', function () {
@@ -55,7 +55,6 @@ it('defines the product variant data to add to the cart', function () {
         'taxes' => $variant->taxes,
         'variation' => $variant->variation,
     ]);
-
 });
 
 it('if no variant image is set it will use the product image', function () {
@@ -163,7 +162,6 @@ test('can add a published product to the cart', function () {
         'total_with_taxes' => ($product->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $product->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a published product variant to the cart', function () {
@@ -221,7 +219,6 @@ test('can add a published product variant to the cart', function () {
         'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
         'variation' => json_encode($variant->variation),
     ]);
-
 });
 
 test('can add a product to the cart after a product has been added', function () {
@@ -298,7 +295,6 @@ test('can add a product to the cart after a product has been added', function ()
         'total_with_taxes' => ($productB->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $productB->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a variant to the cart after a product has been added', function () {
@@ -377,7 +373,6 @@ test('can add a variant to the cart after a product has been added', function ()
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a product to the cart after a variant has been added', function () {
@@ -454,7 +449,6 @@ test('can add a product to the cart after a variant has been added', function ()
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a variant to the cart after a variant has been added', function () {
@@ -533,7 +527,6 @@ test('can add a variant to the cart after a variant has been added', function ()
         'total_with_taxes' => ($variantB->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $variantB->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a variant to the cart after its product has been added', function () {
@@ -611,7 +604,6 @@ test('can add a variant to the cart after its product has been added', function 
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can add a product to the cart after its variant has been added', function () {
@@ -689,7 +681,6 @@ test('can add a product to the cart after its variant has been added', function 
         'total_with_taxes' => ($variant->priceWithTaxes() * $quantityToAdd) * 100,
         'computed_taxes' => $variant->computedTaxes() * $quantityToAdd * 100,
     ]);
-
 });
 
 test('can not add an unpublished product to the cart', function () {
@@ -714,7 +705,6 @@ test('can not add an unpublished product to the cart', function () {
     ]))->assertStatus(404);
 
     expect($cart->items)->toHaveCount(2);
-
 });
 
 test('can not add a unpublished product variant to the cart', function () {
@@ -748,7 +738,6 @@ test('can not add a unpublished product variant to the cart', function () {
     ]))->assertStatus(404);
 
     expect($cart->items)->toHaveCount(2);
-
 });
 
 test('can update an existing cart item quantity', function () {
@@ -801,7 +790,6 @@ test('can update an existing cart item quantity', function () {
         'total_with_taxes' => ($product->priceWithTaxes() * $newQuantity) * 100,
         'computed_taxes' => $product->computedTaxes() * $newQuantity * 100,
     ]);
-
 });
 
 // no cart validation: ui_cart_id, required, exists in carts table
@@ -835,7 +823,6 @@ test('cart ui id is required', function () {
         'quantity' => 2,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['ui_cart_id']);
-
 });
 
 test('cart ui id should be a valid uuid', function () {
@@ -857,7 +844,6 @@ test('cart ui id should be a valid uuid', function () {
         'quantity' => 2,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['ui_cart_id']);
-
 });
 
 test('can not add or update a cart item if the product does not exist', function () {
@@ -872,7 +858,35 @@ test('can not add or update a cart item if the product does not exist', function
         'quantity' => 2,
         'purchasable_type' => 'product',
     ]))->assertStatus(404);
+});
 
+// can not add or update a cart item if order has already been placed
+
+test('can not add or update a cart item if order has already a payment method set', function () {
+
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    Order::factory()->create([
+        'cart_id' => $cart->id,
+        'payment_method' => 'credit_card',
+    ]);
+
+    $product = Product::factory()->published()->create([
+        'title' => 'Product 1',
+        'slug' => 'product-1',
+        'price' => 20.00,
+        'stock' => 5,
+    ]);
+
+    $this->post(route('cart.items.addOrUpdate', [
+        'ui_cart_id' => $uiCartId,
+        'product_id' => $product->id,
+        'quantity' => 2,
+        'purchasable_type' => 'product',
+    ]))->assertInvalid(['ui_cart_id']);
 });
 
 test('product id is required', function () {
@@ -887,7 +901,6 @@ test('product id is required', function () {
         'quantity' => 2,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['product_id']);
-
 });
 
 test('product id should be integer', function () {
@@ -902,7 +915,6 @@ test('product id should be integer', function () {
         'quantity' => 2,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['product_id']);
-
 });
 
 test('quantity is required', function () {
@@ -973,7 +985,6 @@ test('quantity should not be less than 1', function () {
         'quantity' => 0,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['quantity']);
-
 });
 
 test('quantity should not be greater than stock', function () {
@@ -995,7 +1006,6 @@ test('quantity should not be greater than stock', function () {
         'quantity' => 7,
         'purchasable_type' => 'product',
     ]))->assertInvalid(['quantity']);
-
 });
 
 test('purchasable type is required', function () {
@@ -1095,7 +1105,6 @@ test('can add a published product with discount to the cart', function () {
         'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $quantityToAdd) * 100,
         'computed_taxes' => $discountedPrice * 0.20 * 100,
     ]);
-
 });
 
 test('can update an existing cart item quantity with discount', function () {
@@ -1177,7 +1186,6 @@ test('can update an existing cart item quantity with discount', function () {
         'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $newQuantity) * 100,
         'computed_taxes' => $discountedPrice * 0.20 * $newQuantity * 100,
     ]);
-
 });
 
 test('can add a published variant with discount to the cart', function () {
@@ -1262,7 +1270,6 @@ test('can add a published variant with discount to the cart', function () {
         'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $quantityToAdd) * 100,
         'computed_taxes' => $discountedPrice * 0.20 * 100,
     ]);
-
 });
 
 test('can update an existing cart variant item quantity with discount', function () {
@@ -1352,5 +1359,4 @@ test('can update an existing cart variant item quantity with discount', function
         'total_with_taxes' => (($discountedPrice + ($discountedPrice * 0.20)) * $newQuantity) * 100,
         'computed_taxes' => $discountedPrice * 0.20 * $newQuantity * 100,
     ]);
-
 });

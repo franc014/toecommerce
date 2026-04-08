@@ -191,3 +191,26 @@ test('an order is deleted when a cart is emptied', function () {
     expect($cart->fresh()->hasOrder())->toBeFalse();
 
 });
+
+test('can not empty a cart if order has already a payment method set', function () {
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'quantity' => 2,
+        'price' => 10,
+        'total' => 20,
+    ]);
+
+    Order::factory()->create([
+        'cart_id' => $cart->id,
+        'payment_method' => 'credit_card',
+    ]);
+
+    $this->post(route('cart.empty', [
+        'id' => $uiCartId,
+    ]))->assertInvalid(['id']);
+});
