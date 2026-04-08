@@ -1,5 +1,6 @@
 <template>
     <div>
+        <AppHead :metaTags="metaTags" :company="company" />
         <Hero :content="heroContent" />
         <RecentProducts :content="recentProductsContent" />
         <!--  <Hero :content="heroContent" />
@@ -22,6 +23,8 @@ import RecentProducts from '@/components/home/RecentProducts.vue';
 import OurPromise from '@/components/home/OurPromise.vue'; */
 
 const page = usePage();
+const metaTags = page.props.metatags as Metatags;
+const company = page.props.company as Company;
 
 const components = page.props.components as PageComponents;
 

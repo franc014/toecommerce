@@ -10,22 +10,20 @@ use App\CMS\ProductsTransformable;
 
 class HomePageController extends PageController
 {
-    protected $slug = 'home';
-
-    protected $transformables = [];
-
-    protected $view = 'Home';
-
     public function __construct()
     {
-        $this->transformables =
-             [
-                 new ImageTransformable,
-                 new ProductsTransformable,
-                 new FeaturedProductTransformable,
-                 new CollectionsTransformable,
-                 new FeatureTransformable,
-             ];
 
+        parent::__construct(
+            componentView: 'Home',
+            slug: 'home',
+            transformables: [
+                new ImageTransformable,
+                new ProductsTransformable,
+                new FeaturedProductTransformable,
+                new CollectionsTransformable,
+                new FeatureTransformable,
+            ],
+            extendedData: []
+        );
     }
 }

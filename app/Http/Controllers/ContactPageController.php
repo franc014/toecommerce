@@ -6,39 +6,29 @@ use App\Http\Requests\SendContactRequest;
 use App\Mail\UserContactSent;
 use App\Models\Contact;
 use App\Settings\CompanySettings;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Spatie\Honeypot\Honeypot;
 
-class ContactPageController extends Controller
+class ContactPageController extends PageController
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function index(CompanySettings $companySettings)
+    public function __construct(Honeypot $honeypot)
     {
-
-        $companyInformation = [
-            'phone' => $companySettings->phone,
-            'email' => $companySettings->email,
-            'address' => $companySettings->address,
-            'whatsapp' => $companySettings->whatsapp,
-            'socialMedia' => $companySettings->socialMedia,
-            'workingDays' => $companySettings->workingDays,
-
-        ];
-
-        return Inertia::render('Contact', [
-            'companyInformation' => $companyInformation,
-        ]);
+        parent::__construct(
+            componentView: 'Contact',
+            slug: 'contact',
+            transformables: [],
+            extendedData: [
+                'honeypot' => $honeypot,
+            ]
+        );
     }
 
     public function sendMessage(SendContactRequest $request, CompanySettings $companySettings)
     {
-
         $contact = Contact::create($request->validated());
-
         Mail::to($companySettings->email)->send(new UserContactSent($contact));
 
+        return Inertia::flash('success', __('storefront.contact_success'))->back();
     }
 }

@@ -39,9 +39,9 @@ class MenusTable
             ])
             ->headerActions([
                 ExportAction::make()
-                ->exporter(MenuExporter::class),
+                    ->exporter(MenuExporter::class),
                 ImportAction::make()
-                ->importer(MenuImporter::class)
+                    ->importer(MenuImporter::class),
             ])
             ->recordActions([
                 EditAction::make(),

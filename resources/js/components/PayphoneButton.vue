@@ -1,14 +1,37 @@
 <template>
-    <div class="my-5 space-y-4" id="payphone-box">
+    <div class="space-y-4" id="payphone-box">
         <h2 class="text-4xl">Payphone Checkout</h2>
-        <div id="pp-button" class="rounded-md border-2 border-dashed border-zinc-300" ref="payphone-holder"></div>
+        <div class="relative">
+            <div
+                id="pp-button"
+                class="rounded-md border-2 border-dashed border-zinc-300"
+                :class="{ 'blur-sm': !userHasBillingInfo || !userHasShippingInfo }"
+                ref="payphone-holder"
+            ></div>
+            <div
+                class="absolute top-0 left-0 flex h-full w-full flex-col items-center justify-center gap-4"
+                v-if="!userHasBillingInfo || !userHasShippingInfo"
+            >
+                <OctagonAlertIcon class="h-16 w-16" />
+                <p class="mx-auto max-w-fit px-20 text-center text-2xl font-bold tracking-wider">
+                    Por favor, registra tu información de facturación y envío para completar tu compra
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PayphoneInfo } from '@/types';
-import { v4 as uuidv4 } from 'uuid';
+import { PayphoneInfo, UserHasInfoEntry } from '@/types';
+import { usePage } from '@inertiajs/vue3';
+import { OctagonAlertIcon } from 'lucide-vue-next';
+import { v7 as uuidv7 } from 'uuid';
 import { onMounted, useTemplateRef } from 'vue';
+
+const page = usePage();
+const userPurchaseInfo = page.props.userPurchaseInfo as UserHasInfoEntry;
+const userHasBillingInfo = userPurchaseInfo.user_has_billing_info;
+const userHasShippingInfo = userPurchaseInfo.user_has_shipping_info;
 
 const payphoneHolder = useTemplateRef('payphone-holder');
 
@@ -19,7 +42,7 @@ onMounted(() => {
     new PPaymentButtonBox({
         token,
         storeId,
-        clientTransactionId: uuidv4(),
+        clientTransactionId: uuidv7(),
         amount: props.gatewayInfo.payment.amount,
         amountWithoutTax: props.gatewayInfo.payment.amountWithoutTax,
         amountWithTax: props.gatewayInfo.payment.amountWithTax,
@@ -33,3 +56,5 @@ const props = defineProps<{
     gatewayInfo: PayphoneInfo;
 }>();
 </script>
+
+<style scoped></style>

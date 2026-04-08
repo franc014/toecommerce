@@ -40,10 +40,10 @@ class ProductCollectionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function getNavigationBadge(): ?string
+    /* public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
+    } */
 
     public static function form(Schema $schema): Schema
     {

@@ -6,17 +6,15 @@ use App\CMS\RichTextTransformable;
 
 class TermsAndConditionsPageController extends PageController
 {
-    protected $slug = 'terminos-y-condiciones';
-
-    protected $transformables = [];
-
-    protected $view = 'TermsAndConditions';
-
     public function __construct()
     {
-        $this->transformables =
-            [
+        parent::__construct(
+            componentView: 'TermsAndConditions',
+            slug: 'terminos-y-condiciones',
+            transformables: [
                 new RichTextTransformable,
-            ];
+            ],
+            extendedData: []
+        );
     }
 }

@@ -22,6 +22,16 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    honeypot?: {
+        enabled: boolean;
+        nameFieldName: string;
+        validFromFieldName: string;
+        encryptedValidFrom: string;
+    };
+    flash?: {
+        success?: string;
+        error?: string;
+    };
 };
 
 export interface User {
@@ -37,7 +47,7 @@ export interface User {
 }
 
 export interface UserInfoEntry {
-    id: number;
+    id: string;
     email: string;
     first_name: string;
     last_name: string;
@@ -47,6 +57,11 @@ export interface UserInfoEntry {
     zipcode: string;
     phone: string;
     country: string;
+}
+
+export interface UserHasInfoEntry {
+    user_has_billing_info: boolean;
+    user_has_shipping_info: boolean;
 }
 
 export interface Product {
@@ -63,7 +78,12 @@ export interface Product {
     taxes: string;
     main_image: string;
     dropping_stock: boolean;
-
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
 }
 
 export interface ProductVariant {
@@ -75,9 +95,13 @@ export interface ProductVariant {
     price_in_dollars: string;
     formatted_variation: string;
     images: Array<string>;
+    has_discounts: boolean;
+    discounted_price_in_dollars: string;
+    discounts: Array<{
+        name: string;
+        percentage: number;
+    }>;
 }
-
-
 
 export interface Cart {
     ui_cart_id: string;
@@ -88,8 +112,7 @@ export interface Cart {
 
 }
 
-
-export interface CartAggregation{
+export interface CartAggregation {
     total_with_taxes_in_dollars: string;
     total_without_taxes_in_dollars: string;
     total_computed_taxes_in_dollars: string;
@@ -110,18 +133,52 @@ export interface CartItem {
     price_in_dollars: string;
     total_in_dollars: number;
     computed_taxes_in_dollars: string;
+    discounted_price_in_dollars: string;
+    has_discount: boolean;
+    discounted_price: number;
     purchasable_id: number;
     purchasable_type: string;
     formatted_variation: string;
     purchasable: Product | ProductVariant;
 }
 
+export interface OrderItem {
+    id: number;
+    cart_item_id: number;
+    purchasable_id: number;
+    purchasable_type: string;
+    title: string;
+    image: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    taxes: string | null;
+    total: number;
+    total_with_taxes: number;
+    computed_taxes: number;
+    has_discount: boolean;
+    discount_percentage: number;
+    discounted_price: number;
+    price_in_dollars: string;
+    total_in_dollars: string;
+    total_with_taxes_in_dollars: string;
+    computed_taxes_in_dollars: string;
+    discounted_price_in_dollars: string;
+}
+
 export interface Order {
     id: number;
+    code: string;
+    user_id: number;
+    cart_id: number;
     total_amount: number;
-    total_amount_without_tax: number;
-    total_amount_with_tax: number;
+    total_with_taxes: number;
+    total_without_taxes: number;
     total_computed_taxes: number;
+    paid_at: string | null;
+    payphone_metadata: object | null;
+    created_at: string;
+    updated_at: string;
     total_with_taxes_in_dollars: string;
     total_without_taxes_in_dollars: string;
     total_computed_taxes_in_dollars: string;
@@ -132,8 +189,13 @@ export interface Order {
 export interface PayphoneInfo {
     storeId: string;
     token: string;
+    payment: {
+        amount: number;
+        amountWithTax: number;
+        amountWithoutTax: number;
+        tax: number;
+    };
 }
-
 
 export interface DataForCart {
     ui_cart_id: string;
@@ -152,23 +214,22 @@ export interface PageComponents {
 
 export interface PageComponent {
     class: string;
-    content: Object;
+    content: object;
 }
 
 export interface Heading {
-    content: string,
-    level: number
+    content: string;
+    level: number;
 }
 
 export interface Paragraph {
-    content: string
+    content: string;
 }
 
 export interface CTA {
-    content: string,
-    link: string
+    content: string;
+    link: string;
 }
-
 
 export interface Collection {
     id: number;
@@ -183,11 +244,17 @@ export interface PageComponentContent {
     paragraph: Array<Paragraph>;
     cta: Array<CTA>;
     image: Array;
-    "new-products": Array;
-    "featured-product": Array;
+    'new-products': Array;
+    'featured-product': Array;
     collections: Array;
     feature: Array;
     video: Array;
+    'rich-editor': Array;
+}
+
+export interface DiscountDisplay {
+    show_message: boolean;
+    message: string;
 }
 
 export interface Menu {
@@ -229,6 +296,17 @@ export interface WorkingDays {
     sunday: string;
 }
 
-
+export interface Metatags {
+    title: string;
+    description: string;
+    og_title: string;
+    og_description: string;
+    og_image: string;
+    twitter_title: string;
+    twitter_description: string;
+    twitter_image: string;
+    robots: string;
+    schemaOrg: string;
+}
 
 export type BreadcrumbItemType = BreadcrumbItem;

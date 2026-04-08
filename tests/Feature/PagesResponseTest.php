@@ -58,11 +58,17 @@ it('gives successful response for home page', function () {
 });
 
 it('gives successful response for products page', function () {
+    Page::factory()->published()->create([
+        'slug' => 'products',
+    ]);
     $response = $this->get(route('storefront.products'));
     $response->assertStatus(200);
 });
 
 it('gives successful response for collections page', function () {
+    Page::factory()->published()->create([
+        'slug' => 'collections',
+    ]);
     $response = $this->get(route('storefront.collections'));
     $response->assertStatus(200);
 });
@@ -116,6 +122,9 @@ it('gives successful response for about page', function () {
 });
 
 it('gives successful response for contact page', function () {
+    Page::factory()->published()->create([
+        'slug' => 'contact',
+    ]);
     $response = $this->get(route('storefront.contact'));
     $response->assertStatus(200);
 });

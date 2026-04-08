@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Resources\CartItemResource;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -45,18 +47,22 @@ test('can get a cart from the ui', function () {
         'ui_cart_id' => $uiCartId,
     ]);
 
+    /* $cartResource = CartResource::collection($cart)->resolve();
+
+    $cartAggregation = $cartResource['cart_aggregation'][] */
+
     $this->post(route('cart.show', [
         'id' => $uiCartId,
     ]))->assertStatus(200)
         ->assertJson([
             'ui_cart_id' => $uiCartId,
-            'items' => $cart->fresh()->items->toArray(),
+            'items' => CartItemResource::collection($cart->fresh()->items)->resolve(),
             'cart_aggregation' => [
-                'total_without_taxes_in_dollars' => $cart->fresh()->total_without_taxes_in_dollars,
-                'total_with_taxes_in_dollars' => $cart->fresh()->total_with_taxes_in_dollars,
-                'total_computed_taxes_in_dollars' => $cart->fresh()->total_computed_taxes_in_dollars,
-                'total_in_dollars' => $cart->fresh()->total_amount_in_dollars,
-                'items_count' => $cart->fresh()->items_count,
+                'total_without_taxes_in_dollars' => $cart->fresh()->totalWithoutTaxesInDollars,
+                'total_with_taxes_in_dollars' => $cart->fresh()->totalWithTaxesInDollars,
+                'total_computed_taxes_in_dollars' => $cart->fresh()->totalComputedTaxesInDollars,
+                'total_in_dollars' => $cart->fresh()->totalAmountInDollars,
+                'items_count' => $cart->fresh()->itemsCount,
             ],
         ]);
 });

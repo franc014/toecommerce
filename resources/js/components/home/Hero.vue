@@ -3,20 +3,20 @@
         <div class="wrapper">
             <div class="feature-v4__grid grid grid-cols-12 items-center gap-5 lg:gap-8">
                 <transition appear @enter="enter" @beforeEnter="beforeEnter">
-                    <div class="relative z-[1] col-span-12 lg:col-span-5">
+                    <div class="relative z-1 col-span-12 mt-52 md:mt-0 lg:col-span-5">
                         <div
                             class="mb-1.5 max-w-fit border-b border-dashed border-b-orange-500 pb-1 text-xs font-semibold tracking-widest text-orange-700 uppercase lg:mb-3 lg:text-sm"
                         >
                             {{ featureText }}
                         </div>
 
-                        <div class="space-y-4">
-                            <h1 class="feature-v4__text-offset@md font-serif2 text-7xl">{{ heading }}</h1>
+                        <div class="space-y-6 md:space-y-4">
+                            <h1 class="feature-v4__text-offset@md font-serif2 text-5xl md:text-7xl">{{ heading }}</h1>
 
                             <p class="text-2xl tracking-wide">{{ message }}</p>
                         </div>
 
-                        <div class="mt-3 lg:mt-8">
+                        <div class="mt-6 lg:mt-8">
                             <div class="flex flex-wrap items-center gap-3 lg:gap-5">
                                 <Link
                                     prefetch
@@ -30,9 +30,9 @@
                     </div>
                 </transition>
 
-                <div class="col-span-12 lg:col-span-7">
+                <div class="col-span-12 lg:col-span-7" :class="{ 'pt-12': discount_display_config.show_message }">
                     <figure>
-                        <img class="block h-[850px] w-full object-cover" :src="image[0]['image']" alt="Image description" />
+                        <img class="block h-[450px] w-full object-cover md:h-[850px]" :src="image[0]['image']" alt="Image description" />
                     </figure>
                 </div>
             </div>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 // @ts-nocheck
 import { PageComponentContent } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import SectionDivider from '../SectionDivider.vue';
 
 import { SplitText } from 'gsap/all';
@@ -56,6 +56,10 @@ const { content } = defineProps<{
     content: PageComponentContent;
 }>();
 
+const page = usePage();
+
+const discount_display_config = page.props.discountsDisplayConfig as DiscountDisplay;
+
 const heading = content.heading[0].content;
 const message = content.paragraph[1].content;
 const featureText = content.paragraph[0].content;
@@ -66,7 +70,7 @@ const image = content.image;
 let tween;
 
 function beforeEnter() {
-    let tween = gsap.timeline();
+    const tween = gsap.timeline();
 }
 
 function enter(el) {

@@ -8,19 +8,17 @@ use App\CMS\RichTextTransformable;
 
 class AboutPageController extends PageController
 {
-    protected $slug = 'acerca-de';
-
-    protected $transformables = [];
-
-    protected $view = 'About';
-
     public function __construct()
     {
-        $this->transformables =
-            [
+        parent::__construct(
+            componentView: 'About',
+            slug: 'acerca-de',
+            transformables: [
                 new ImageTransformable,
                 new RichTextTransformable,
                 new FeatureTransformable,
-            ];
+            ],
+            extendedData: []
+        );
     }
 }

@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Casts\Money;
 use App\Enums\ProductStatus;
 use App\Settings\StorefrontSettings;
+use App\Traits\Discountable;
 use App\Traits\MoneyFormat;
 use App\Traits\Publishable;
-use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
+use App\Traits\Taxable;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,17 +26,18 @@ use Spatie\Tags\HasTags;
 
 class Product extends Model implements HasMedia, HasRichContent, Purchasable
 {
-    use HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable;
+    use Discountable, HasFactory, HasTags, InteractsWithMedia, InteractsWithRichContent, MoneyFormat, Publishable, Taxable;
 
-    protected $casts = [
-        'published_at' => 'datetime',
-        'status' => ProductStatus::class,
-        'price' => Money::class,
-        'variant_options' => 'array',
-        'description' => 'array',
-    ];
-
-    protected $appends = ['price_in_dollars', 'price_with_taxes_in_dollars', 'formatted_taxes'];
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'status' => ProductStatus::class,
+            'price' => Money::class,
+            'variant_options' => 'array',
+            'description' => 'array',
+        ];
+    }
 
     public function setUpRichContent(): void
     {
@@ -73,13 +75,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         return false;
     }
 
-    public function priceWithTaxesInDollars(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->toDollars($this->priceWithTaxes())
-        );
-    }
-
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
@@ -107,34 +102,17 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 
     public function hasVariants(): bool
     {
-        return $this->variants()->count() >= 1;
+        return $this->variants()->exists();
     }
 
     public function hasPublishedVariants(): bool
     {
-        return $this->variants()->published()->count() >= 1;
+        return $this->variants()->published()->exists();
     }
 
     public static function bySlug(string $slug)
     {
         return self::where('slug', $slug)->first();
-    }
-
-    public function hasTaxes(): bool
-    {
-        return $this->taxes->count() >= 1;
-    }
-
-    public function priceWithTaxes(): float
-    {
-        $price = (int) $this->getAttributes()['price'];
-
-        return round(($price * (1 + $this->taxes->sum('percentage') / 100)) / 100, 2);
-    }
-
-    public function computedTaxes(): float
-    {
-        return $this->price * ($this->taxes->sum('percentage') / 100);
     }
 
     public function productImages()
@@ -164,7 +142,7 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         }
 
         foreach ($transformed as $key => $options) {
-            // ray($key, $options);
+
             $lowL = collect([]);
 
             foreach ($options as $keyp => $value) {
@@ -172,7 +150,6 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
             }
 
             $pairs->push($lowL);
-
         }
 
         return $pairs->toArray();
@@ -192,35 +169,25 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
 
     public function generateVariants(): void
     {
-
         foreach ($this->generateCombinations() as $combination) {
             $values = collect($combination)->values()->join('-');
             $title = $this->title.'-'.$values;
             $slug = Str::slug($title);
 
-            $this->variants()->create([
-                'title' => $title,
-                'slug' => $slug,
-                'variation' => $combination,
-                'price' => $this->price,
-                'stock' => 0,
-                'status' => ProductStatus::DRAFT,
-                'sku' => '',
-            ]);
-        }
-    }
+            $exists = $this->variants()->where('slug', $slug)->exists();
 
-    public function formattedTaxes(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                $taxes = $this->taxes->map(function ($tax) {
-                    return $tax->name.' ('.$tax->percentage.'%)';
-                });
-
-                return $taxes->implode(', ');
+            if (! $exists) {
+                $this->variants()->create([
+                    'title' => $title,
+                    'slug' => $slug,
+                    'variation' => $combination,
+                    'price' => $this->price,
+                    'stock' => $this->stock,
+                    'status' => ProductStatus::DRAFT,
+                    'sku' => '',
+                ]);
             }
-        );
+        }
     }
 
     public function relatedProducts(): ?EloquentCollection
@@ -228,12 +195,13 @@ class Product extends Model implements HasMedia, HasRichContent, Purchasable
         $collections = $this->productCollections->pluck('id')->toArray();
 
         if (count($collections) > 0) {
-            return Product::published()->whereHas('productCollections', function ($query) use ($collections) {
-                $query->whereIn('product_collections.id', $collections);
-            })->where('id', '!=', $this->id)->get();
+            return Product::published()
+                ->with(['variants.discounts'])
+                ->whereHas('productCollections', function ($query) use ($collections) {
+                    $query->whereIn('product_collections.id', $collections);
+                })->where('id', '!=', $this->id)->get();
         } else {
             return null;
         }
-
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductOutOfStockException;
 use App\Models\Cart;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
@@ -45,8 +44,6 @@ class CartItemController extends Controller
 
             $addsToCart = new PerformsAddsToCart($cart, new ResolvesPurchasable($request->input('product_id'), $request->input('purchasable_type')), $request->input('quantity'));
 
-            // ray($addsToCart);
-
             $item = $addsToCart->handle();
 
 
@@ -57,19 +54,10 @@ class CartItemController extends Controller
             return response()->json([
                 'error' => [
                     'code' => 404,
-                    'message' => 'Product not found',
+                    'message' => __('storefront.cart_item_not_found'),
                 ],
             ], 404);
-
-        } /* catch (ProductOutOfStockException $e) {
-
-            return response()->json([
-                'error' => [
-                    'code' => 422,
-                    'message' => 'Product is out of stock',
-                ],
-            ], 422);
-        } */
+        }
     }
 
     public function remove(Request $request)
@@ -81,5 +69,7 @@ class CartItemController extends Controller
 
         $cart = Cart::byUICartId($request->input('ui_cart_id'))->firstOrFail();
         $cart->removeItem($request->input('item_id'));
+
+        return response()->json(['message' => __('storefront.cart_item_removed')]);
     }
 }

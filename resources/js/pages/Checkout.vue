@@ -1,6 +1,6 @@
 <template>
-    <section class="min-h-screen">
-        <div class="wrapper space-y-10 py-20">
+    <section class="mt-50 min-h-screen md:mt-0">
+        <div class="wrapper space-y-10 md:py-20">
             <h1 class="font-serif2">
                 Checkout de <span class="text-2xl tracking-wider italic">{{ user.name }}</span>
             </h1>
@@ -10,11 +10,11 @@
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider"
                             >1. Información para Facturación</AccordionTrigger
                         >
-                        <AccordionContent class="px-10 pb-10">
+                        <AccordionContent class="pb-10 md:px-10">
                             <PurchaseInfo
                                 :data="{
                                     info: billingInfo,
-                                    isSetup: user.has_billing_info,
+                                    isSetup: userHasBillingInfo,
                                     type: 'billing',
                                     title: 'Información para facturación',
                                     formTitle: 'Por favor llena tu información de facturación:',
@@ -22,14 +22,14 @@
                             />
                         </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="item-2" v-if="user.has_billing_info" key="item-2">
+                    <AccordionItem value="item-2" v-if="userHasBillingInfo" key="item-2">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">2. Información para Envío</AccordionTrigger>
-                        <AccordionContent class="px-10 pb-10">
+                        <AccordionContent class="pb-10 md:px-10">
                             <PurchaseInfo
-                                v-if="user.has_billing_info"
+                                v-if="userHasBillingInfo"
                                 :data="{
                                     info: shippingInfo,
-                                    isSetup: user.has_shipping_info,
+                                    isSetup: userHasShippingInfo,
                                     type: 'shipping',
                                     title: 'Información para envío',
                                     formTitle: 'Por favor llena tu información de envío:',
@@ -38,14 +38,13 @@
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-
                 <Accordion :collapsible="true" default-value="item-1">
                     <AccordionItem value="item-1" key="item-1">
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
-                        <AccordionContent class="px-10 py-10">
-                            <div class="space-y-10">
-                                <OrderSummary :order="order" :user="user" />
-                                <PayphoneButton :gatewayInfo="payphoneInfo" v-if="user.has_billing_info && user.has_shipping_info" />
+                        <AccordionContent class="py-5">
+                            <div class="space-y-10 md:px-10">
+                                <!-- <OrderSummary :order="order" :user="user" /> -->
+                                <PayphoneButton :gatewayInfo="payphoneInfo" />
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -56,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import OrderSummary from '@/components/OrderSummary.vue';
 import PayphoneButton from '@/components/PayphoneButton.vue';
 import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -64,7 +62,7 @@ import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
 import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { Order, PayphoneInfo, UserInfoEntry } from '@/types';
+import { PayphoneInfo, UserHasInfoEntry, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
@@ -73,10 +71,14 @@ defineOptions({ layout: StorefrontLayout });
 const page = usePage();
 
 const user = page.props.auth.user;
+const userPurchaseInfo = page.props.userPurchaseInfo as UserHasInfoEntry;
+
+const userHasBillingInfo = userPurchaseInfo.user_has_billing_info;
+const userHasShippingInfo = userPurchaseInfo.user_has_shipping_info;
+
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
-const order = page.props.order as Order;
 
 const cartStore = useCartStore();
 const cartDrawerStore = useCartDrawerStore();

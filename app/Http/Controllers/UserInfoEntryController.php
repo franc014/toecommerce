@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserInfoEntryRequest;
+use Inertia\Inertia;
 
 class UserInfoEntryController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreUserInfoEntryRequest $request)
     {
-
-        $request->validate([
-            'type' => 'required|in:billing,shipping',
-            'email' => 'required|email',
-            'first_name' => 'required|min:2|max:16',
-            'last_name' => 'required|min:2|max:16',
-            'country' => 'max:24',
-            'city' => 'required|min:2|max:24',
-            'address' => 'required|min:2|max:128',
-            'state' => 'max:24',
-            'phone' => 'max:24',
-            'zipcode' => 'required|min:4|max:6',
-        ]);
 
         auth()->user()->userInfoEntries()->create([
             'first_name' => $request->first_name,
@@ -36,23 +24,12 @@ class UserInfoEntryController extends Controller
             'is_main' => true,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreUserInfoEntryRequest $request, $id)
     {
-        $request->validate([
-            'type' => 'required|in:billing,shipping',
-            'email' => 'required|email',
-            'first_name' => 'required|min:2|max:16',
-            'last_name' => 'required|min:2|max:16',
-            'country' => 'max:24',
-            'city' => 'required|min:2|max:24',
-            'address' => 'required|min:2|max:128',
-            'state' => 'max:24',
-            'phone' => 'max:24',
-            'zipcode' => 'required|min:4|max:6',
-        ]);
 
         auth()->user()->userInfoEntries()->where('id', $id)->update([
             'first_name' => $request->first_name,
@@ -67,7 +44,8 @@ class UserInfoEntryController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 
     public function useBillingAsShipping()
@@ -88,6 +66,7 @@ class UserInfoEntryController extends Controller
             'is_main' => true,
         ]);
 
-        return redirect()->intended(route('storefront.checkout', absolute: false));
+        return Inertia::flash('success', __('storefront.user_info_store_success'))
+            ->back();
     }
 }

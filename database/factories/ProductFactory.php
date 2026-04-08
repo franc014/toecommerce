@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Enums\ProductStatus;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
+ * @extends Factory<Product>
  */
 class ProductFactory extends Factory
 {
@@ -32,6 +33,7 @@ class ProductFactory extends Factory
             'stock' => fake()->numberBetween(0, 200),
             'sku' => fake()->ean13(),
             'published_at' => null,
+            'stock_threshold_for_customers' => 10,
 
         ];
     }

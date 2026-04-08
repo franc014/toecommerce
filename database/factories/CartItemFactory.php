@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CartItem>
+ * @extends Factory<CartItem>
  */
 class CartItemFactory extends Factory
 {
@@ -37,6 +38,9 @@ class CartItemFactory extends Factory
             'computed_taxes' => $computedTaxes,
             'total_with_taxes' => $total,
             'purchasable_type' => Product::class,
+            'has_discount' => false,
+            'discount_percentage' => 0,
+
         ];
     }
 }

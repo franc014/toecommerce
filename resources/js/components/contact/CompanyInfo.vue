@@ -1,5 +1,5 @@
 <template>
-    <dl class="details-list details-list--rows">
+    <dl class="details-list details-list--rows w-11/12 md:w-full">
         <div class="details-list__item py-5 lg:py-8">
             <dt class="mb-1.5 font-bold lg:mb-2">Dirección</dt>
             <dd class="leading-snug">{{ company.address }}</dd>

@@ -6,7 +6,6 @@ import type { DefineComponent } from 'vue';
 
 import { createSSRApp, h } from 'vue';
 //import { createPinia } from 'pinia';
-import { useCartStore } from './stores/cartStore';
 
 const appName = import.meta.env.VITE_APP_NAME || 'ToEcommerce';
 
@@ -29,6 +28,3 @@ createInertiaApp({
         color: '#e94f0dff',
     },
 });
-
-
-

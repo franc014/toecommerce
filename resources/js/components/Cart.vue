@@ -8,7 +8,7 @@
         </SheetTrigger>
 
         <SheetOverlay class="sheet-overlay">
-            <SheetContent class="min-w-1/2 bg-zinc-50">
+            <SheetContent class="min-w-full bg-zinc-50 md:min-w-1/2">
                 <SheetHeader>
                     <header class="flex items-center gap-2 px-4">
                         <SheetTitle>

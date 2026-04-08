@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\Money;
 use App\Traits\HasProductVariation;
 use App\Traits\MoneyFormat;
+use Database\Factories\CartItemFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,22 +15,22 @@ use Illuminate\Support\Facades\Storage;
 
 class CartItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\CartItemFactory> */
+    /** @use HasFactory<CartItemFactory> */
     use HasFactory, HasProductVariation, MoneyFormat;
 
     protected $with = ['purchasable'];
-
-    protected $appends = ['price_in_dollars', 'total_in_dollars', 'total_with_taxes_in_dollars', 'computed_taxes_in_dollars', 'image_url', 'formatted_variation'];
 
     protected function casts(): array
     {
         return [
             'price' => Money::class,
+            'discounted_price' => Money::class,
             'quantity' => 'integer',
             'total' => Money::class,
             'total_with_taxes' => Money::class,
             'computed_taxes' => Money::class,
             'variation' => 'array',
+            'has_discount' => 'boolean',
         ];
     }
 
@@ -49,7 +50,7 @@ class CartItem extends Model
         });
 
         static::saved(function (CartItem $cartItem) {
-            $cartItem->cart->updateCartTally();
+            $cartItem->cart->load('items')->updateCartTally();
         });
 
         static::deleted(function (CartItem $cartItem) {
@@ -61,7 +62,6 @@ class CartItem extends Model
                 }
             }
         });
-
     }
 
     public function cart(): BelongsTo
@@ -88,6 +88,13 @@ class CartItem extends Model
     {
         return Attribute::make(
             get: fn () => Storage::url($this->image),
+        );
+    }
+
+    public function discountedPriceInDollars(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->toDollars($this->discounted_price)
         );
     }
 }

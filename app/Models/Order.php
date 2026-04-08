@@ -8,6 +8,7 @@ use App\Exceptions\OrderAlreadyConfirmedException;
 use App\Exceptions\PayphoneTransactionErrorException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Traits\MoneyFormat;
+use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,10 +19,8 @@ use Illuminate\Support\Str;
 
 class Order extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderFactory> */
+    /** @use HasFactory<OrderFactory> */
     use HasFactory, MoneyFormat;
-
-    protected $appends = ['total_without_taxes_in_dollars', 'total_with_taxes_in_dollars', 'total_computed_taxes_in_dollars', 'total_amount_in_dollars'];
 
     protected function casts(): array
     {
@@ -45,7 +44,7 @@ class Order extends Model
 
     public function hasItems(): bool
     {
-        return $this->orderItems()->count() > 0;
+        return $this->orderItems()->exists();
     }
 
     public static function placeFor(User $user, Cart $cart)
@@ -84,8 +83,11 @@ class Order extends Model
                 'cart_item_id' => $item->id,
                 'title' => $item->title,
                 'slug' => $item->slug,
+                'has_discount' => $item->has_discount,
                 'quantity' => $item->quantity,
                 'price' => $item->price,
+                'discounted_price' => $item->discounted_price,
+                'discount_percentage' => $item->discount_percentage,
                 'taxes' => $item->taxes,
                 'total' => $item->total,
                 'total_with_taxes' => $item->total_with_taxes,
@@ -98,6 +100,7 @@ class Order extends Model
 
     public function addItem(CartItem $item)
     {
+
         $this->orderItems()->create([
             'purchasable_id' => $item->purchasable_id,
             'purchasable_type' => $item->purchasable_type,
@@ -110,6 +113,9 @@ class Order extends Model
             'total' => $item->total,
             'total_with_taxes' => $item->total_with_taxes,
             'computed_taxes' => $item->computed_taxes,
+            'has_discount' => $item->has_discount,
+            'discount_percentage' => $item->discount_percentage,
+            'discounted_price' => $item->discounted_price,
         ]);
     }
 
@@ -125,7 +131,7 @@ class Order extends Model
 
     public function removeItem(CartItem $cartItem): void
     {
-        // ray($this->orderItems);
+
         $item = $this->orderItems()->where('cart_item_id', $cartItem->id)->first();
         $item->delete();
     }
@@ -162,12 +168,17 @@ class Order extends Model
         return $this->paid_at !== null;
     }
 
+    public function markAsPaid(): void
+    {
+        $this->update([
+            'paid_at' => now(),
+        ]);
+    }
+
     public function confirm(string $payphoneConfirmation)
     {
 
         $payphoneConfirmation = json_decode($payphoneConfirmation, true);
-
-        // ray($payphoneConfirmation);
 
         if (Arr::exists($payphoneConfirmation, 'errorCode')) {
             throw new PayphoneTransactionErrorException;

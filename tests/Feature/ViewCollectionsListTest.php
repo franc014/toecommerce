@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\Page;
 use App\Models\ProductCollection;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('can show a list of collections', function () {
 
-    $this->withoutExceptionHandling();
+    Page::factory()->published()->create([
+        'slug' => 'collections',
+    ]);
 
     $totalCollections = 6;
     $collections = ProductCollection::factory($totalCollections)->create([

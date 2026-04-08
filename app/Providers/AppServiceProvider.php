@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ImportAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
@@ -39,10 +40,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Vite::prefetch(concurrency: 3);
+        $this->configureDefaults();
+        $this->configureFilament();
+    }
+
+    protected function configureDefaults()
+    {
+        Vite::prefetch(concurrency: 6);
         Model::automaticallyEagerLoadRelationships();
         Model::unguard();
+    }
 
+    protected function configureFilament()
+    {
         Action::configureUsing(function (Action $action) {
             return $action->slideover()->modalWidth('5xl');
         });
@@ -64,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
         DeleteAction::configureUsing(function (DeleteAction $action) {
             return $action->modalWidth('xl')
                 ->modalHeading(function () use ($action) {
-                    return __('firesources.delete').($action->getRecordTitle() ? ' '.$action->getRecordTitle() : '');
+                    return __('firesources.delete') . ($action->getRecordTitle() ? ' ' . $action->getRecordTitle() : '');
                 })
                 ->modalDescription(__('firesources.delete_warning'))
                 ->modalCancelActionLabel(__('firesources.cancel'))
@@ -72,6 +82,11 @@ class AppServiceProvider extends ServiceProvider
                 ->slideOver(false)
                 ->icon(Heroicon::Trash)
                 ->label(__('firesources.delete'));
+        });
+
+        ReplicateAction::configureUsing(function (ReplicateAction $action) {
+            return $action->modalWidth('xl')
+                ->slideOver(false);
         });
 
         ExportAction::configureUsing(function (ExportAction $action) {
@@ -91,6 +106,5 @@ class AppServiceProvider extends ServiceProvider
                 ->modalWidth('xl')
                 ->slideOver(false);
         });
-
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartItemResource;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 
@@ -32,13 +34,18 @@ class CartController extends Controller
             abort(404);
         }
 
-        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => $cart->items->toArray(), 'cart_aggregation' => [
-            'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
-            'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
-            'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
-            'total_in_dollars' => $cart->total_amount_in_dollars,
-            'items_count' => $cart->items_count,
-        ]];
+        /* return [
+            'ui_cart_id' => $cart->ui_cart_id,
+            'items' => CartItemResource::collection($cart->items),
+            'cart_aggregation' => [
+                'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
+                'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
+                'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
+                'total_in_dollars' => $cart->total_amount_in_dollars,
+                'items_count' => $cart->items_count,
+            ]]; */
+
+        return new CartResource($cart)->resolve();
     }
 
     public function empty(Request $request)
@@ -46,6 +53,6 @@ class CartController extends Controller
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
         $cart->empty();
 
-        return ['ui_cart_id' => $cart->ui_cart_id, 'items' => []];
+        return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => [], 'message' => __('storefront.cart_emptied')]);
     }
 }

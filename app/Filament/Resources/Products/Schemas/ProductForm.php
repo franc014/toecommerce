@@ -16,6 +16,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -96,14 +97,6 @@ class ProductForm
                                     ->inputMode('decimal')
                                     ->prefix('$'),
 
-                                TextInput::make('discount')
-                                    ->label(__('firesources.discount'))
-                                    ->numeric()
-                                    ->minValue(0.01)
-                                    ->maxValue(100)
-                                    ->inputMode('decimal')
-                                    ->prefix('%'),
-
                                 CheckboxList::make('taxes')
                                     ->label(__('firesources.taxes'))
                                     ->getOptionLabelFromRecordUsing(fn (Tax $record) => "{$record->name} [{$record->percentage} %]")
@@ -159,6 +152,11 @@ class ProductForm
                                     ->icon(Heroicon::OutlinedSwatch)
                                     ->action(function (Model $record) {
                                         $record->generateVariants();
+                                    })
+                                    ->after(function () {
+                                        return Notification::make()
+                                            ->success()
+                                            ->title(__('firesources.variants_generated'))->send();
                                     }),
                             ]),
                         Tab::make(__('firesources.media'))

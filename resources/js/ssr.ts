@@ -19,15 +19,14 @@ createServer(
             resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
             setup: ({ App, props, plugin }) => {
                 const app = createSSRApp({ render: () => h(App, props) })
-                //.use(pinia)
-                .use(plugin);
+                    //.use(pinia)
+                    .use(plugin);
 
                 //const cartPinia = useCartStore(pinia);
                 //cartPinia.init(props.initialPage.props.shoppingCart as string);
 
                 return app;
             },
-
-            }),
+        }),
     { cluster: true },
 );

@@ -97,10 +97,10 @@ class PagesTable
             ])
             ->headerActions([
                 ExportAction::make()
-                ->exporter(PageExporter::class)
-                ->columnMappingColumns(3),
+                    ->exporter(PageExporter::class)
+                    ->columnMappingColumns(3),
                 ImportAction::make()
-                ->importer(PageImporter::class)
+                    ->importer(PageImporter::class),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

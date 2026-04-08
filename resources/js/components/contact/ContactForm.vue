@@ -1,11 +1,15 @@
 <template>
     <Form
-        class="w-full space-y-4"
+        class="w-11/12 space-y-4"
         :action="sendMessage()"
         method="post"
         #default="{ errors, processing, validate, invalid, validating }"
         @success="handleSuccess"
     >
+        <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`" style="display: none">
+            <input type="text" :name="honeypot.nameFieldName" :id="honeypot.nameFieldName" />
+            <input type="text" :name="honeypot.validFromFieldName" :value="honeypot.encryptedValidFrom" />
+        </div>
         <div class="grid grid-cols-2 gap-6">
             <div class="col-span-2 space-y-2">
                 <Label for="first_name" class="tracking-wide">Nombre <IsRequiredSign /> </Label>
@@ -85,6 +89,10 @@
                 />
                 <ValidationError v-if="invalid('message')" :error="errors.message" />
             </div>
+            <!-- <div v-if="honeypot.enabled" :name="`${honeypot.nameFieldName}_wrap`">
+                <Input :id="honeypot.nameFieldName" type="text" :name="honeypot.nameFieldName" class="form-input" :value="''" />
+                <Input type="text" :name="honeypot.validFromFieldName" class="form-input" :value="honeypot.encryptedValidFrom" />
+            </div> -->
 
             <div class="col-span-2 space-y-2">
                 <Button variant="outline" type="submit" class="mt-4 w-full cursor-pointer hover:bg-orange-200" :tabindex="6" :disabled="processing">
@@ -105,12 +113,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { sendMessage } from '@/routes/storefront';
-import { Form } from '@inertiajs/vue3';
+import { Form, usePage } from '@inertiajs/vue3';
 import { LoaderCircle, SendHorizonal } from 'lucide-vue-next';
-
 import { toast } from 'vue-sonner';
+
+const page = usePage();
+
+const honeypot = page.props.honeypot!;
+
 function handleSuccess() {
-    toast.success('Mensaje enviado!');
+    toast.success(page.flash.success as string);
 }
 </script>
 

@@ -43,10 +43,10 @@ class CategoryResource extends Resource
         return __('firesources.taxonomies');
     }
 
-    public static function getNavigationBadge(): ?string
+    /* public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
+    } */
 
     public static function form(Schema $schema): Schema
     {

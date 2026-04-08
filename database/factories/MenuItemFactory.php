@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Menu;
+use App\Models\MenuItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MenuItem>
+ * @extends Factory<MenuItem>
  */
 class MenuItemFactory extends Factory
 {
@@ -17,7 +19,11 @@ class MenuItemFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'menu_id' => Menu::factory(),
+            'slug' => $this->faker->slug(),
+            'label' => $this->faker->words(2, true),
+            'url' => $this->faker->url(),
+            'items' => [],
         ];
     }
 }

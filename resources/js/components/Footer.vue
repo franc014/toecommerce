@@ -7,13 +7,6 @@
                         <img src="/images/logo3.png" alt="Logo" />
                         <span class="mt-22 text-lg leading-tight tracking-wide text-zinc-800">Fashion Dogs</span>
                     </div>
-                    <!-- <div>
-                        <a
-                            class="relative inline-flex cursor-pointer items-center justify-center rounded-md bg-orange-700 px-4 py-2 text-[1em] leading-tight whitespace-nowrap text-white no-underline shadow-md transition-all duration-200 hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700"
-                            href="#0"
-                            >Ven a visitarnos</a
-                        >
-                    </div> -->
                 </div>
             </div>
 

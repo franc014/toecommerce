@@ -5,7 +5,10 @@ namespace App\Http\Middleware;
 use App\Models\Cart;
 use App\Models\Menu;
 use App\Settings\CompanySettings;
+use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 use Inertia\Middleware;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cookie;
@@ -60,18 +63,39 @@ class HandleInertiaRequests extends Middleware
         $footerMenu = Menu::byName('footer');
         $legalMenu = Menu::byName('legal');
 
-        $company = app(CompanySettings::class)->toArray();
+        $company = Cache::remember('settings.company', now()->addHour(), fn() => app(CompanySettings::class)->toArray());
+        $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn() => app(StorefrontSettings::class)->toArray());
+
+        $discountsDisplayConfig = [
+            'show_message' => $storeFront['show_discount_campaign_message'],
+            'message' => $storeFront['discount_campaign_message'],
+        ];
+
+        $authedUser = $request->user();
 
         return [
             ...parent::share($request),
-            'mainMenu' => $mainMenu,
-            'footerMenu' => $footerMenu,
-            'legalMenu' => $legalMenu,
-            'company' => $company,
-            'name' => config('app.name'),
+
             'shoppingCart' => $this->setUpCart($request),
+            'mainMenu' => Inertia::once(fn() => $mainMenu),
+            'footerMenu' => Inertia::once(fn() => $footerMenu),
+            'legalMenu' => Inertia::once(fn() => $legalMenu),
+            'company' => Inertia::once(fn() => $company),
+            'name' => Inertia::once(fn() => config('app.name')),
+
             'auth' => [
-                'user' => $request->user(),
+                'user' => $authedUser,
+            ],
+            'userPurchaseInfo' => [
+                'user_has_billing_info' => $authedUser?->has_billing_info,
+                'user_has_shipping_info' => $authedUser?->has_shipping_info,
+            ],
+            'discountsDisplayConfig' => $discountsDisplayConfig,
+            'flash' => fn() => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+                'warning' => $request->session()->get('warning'),
+                'info' => $request->session()->get('info'),
             ],
         ];
     }

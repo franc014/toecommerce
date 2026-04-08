@@ -10,7 +10,7 @@ class ProductsTransformable implements ContentTransformable
     {
         if (isset($item['type']) && $item['type'] === 'new-products') {
             $productsIds = $item['data']['products'];
-            $products = Product::whereIn('id', $productsIds)->get();
+            $products = Product::whereIn('id', $productsIds)->with(['variants.discounts'])->get();
 
             foreach ($products as $key => $product) {
                 $item['data']['products'][$key] = [
@@ -23,6 +23,9 @@ class ProductsTransformable implements ContentTransformable
                     'has_variants' => $product->hasPublishedVariants(),
                     'variants' => $product->variants,
                     'dropping_stock' => $product->isDroppingStock(),
+                    'has_discounts' => $product->has_discounts,
+                    'discounted_price_in_dollars' => $product->discounted_price_in_dollars,
+                    'discounts' => $product->discountsForList,
                 ];
             }
         }

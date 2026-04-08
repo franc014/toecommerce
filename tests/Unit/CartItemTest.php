@@ -107,3 +107,13 @@ test('getting formatted vatiation', function () {
     expect($item->formatted_variation)->toBe('Color: Red, Size: XL');
 
 });
+
+test('getting the discounted price in dollars', function () {
+    $cartItem = CartItem::factory()->create([
+        'price' => 24.32,
+        'has_discount' => true,
+        'discounted_price' => 19.46,
+    ]);
+
+    expect($cartItem->discounted_price_in_dollars)->toBe('$19.46');
+});
