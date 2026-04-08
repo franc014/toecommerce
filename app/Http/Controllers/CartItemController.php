@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Rules\CartHasNoPaymentMethod;
+use App\Rules\ProductStockAvailable;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
-use Closure;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 
@@ -14,25 +15,10 @@ class CartItemController extends Controller
     public function addOrUpdate(Request $request)
     {
         $request->validate([
-            'ui_cart_id' => 'required | uuid',
+            'ui_cart_id' => ['required', 'uuid', new CartHasNoPaymentMethod],
             'product_id' => 'required | integer',
             'purchasable_type' => 'required | string',
-            'quantity' => ['required', 'integer', 'min:1', function (string $attribute, mixed $value, Closure $fail) use ($request) {
-                $request->validate([
-                    'purchasable_type' => 'required | string',
-                    'product_id' => 'required | integer',
-                ]);
-
-                $purchasableId = $request->input('product_id');
-                $purchasableType = $request->input('purchasable_type');
-
-                $resolver = new ResolvesPurchasable($purchasableId, $purchasableType);
-                $purchasable = $resolver->resolve();
-
-                if ($value > $purchasable->stock) {
-                    $fail("The {$attribute} should be less than or equal to {$purchasable->stock}");
-                }
-            }],
+            'quantity' => ['required', 'integer', 'min:1', new ProductStockAvailable($request)],
         ]);
 
         try {
@@ -58,7 +44,7 @@ class CartItemController extends Controller
     public function remove(Request $request)
     {
         $request->validate([
-            'ui_cart_id' => 'required | uuid',
+            'ui_cart_id' => ['required', 'uuid', new CartHasNoPaymentMethod],
             'item_id' => 'required | integer',
         ]);
 

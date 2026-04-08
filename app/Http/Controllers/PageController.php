@@ -16,7 +16,6 @@ abstract class PageController extends Controller
 
     private ?Page $page;
 
-
     public function __construct(protected readonly string $componentView, protected readonly string $slug, protected readonly array $transformables, protected readonly array $extendedData = []) {}
 
     public function __invoke()
@@ -36,8 +35,8 @@ abstract class PageController extends Controller
             }
 
             return Inertia::render($this->componentView, [
-                'components' => fn() => collect($components)->keyBy('class'),
-                'metatags' => fn() => $this->metatags(),
+                'components' => fn () => collect($components)->keyBy('class'),
+                'metatags' => fn () => $this->metatags(),
                 ...$this->extendedData,
             ]);
         } catch (ModelNotFoundException $e) {
