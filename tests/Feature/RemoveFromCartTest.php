@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentMethods;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -56,7 +57,6 @@ test('can remove an item from the cart', function () {
     expect($cart->fresh()->total_with_taxes)->toBe(20.0);
     expect($cart->fresh()->total_without_taxes)->toBe(0.0);
     expect($cart->fresh()->total_computed_taxes)->toBe(3.0);
-
 });
 
 it('removes an item from order if it is removed from cart', function () {
@@ -177,7 +177,6 @@ it('cancels order after cart is emptied one item at a time', function () {
 
     expect($cart->fresh()->hasOrder())->toBeFalse();
     expect(Order::all())->toHaveCount(0);
-
 });
 
 test('can not remove an item from the cart if the cart does not exist', function () {
@@ -240,7 +239,7 @@ test('can not remove a cart item if order has already a payment method set', fun
 
     Order::factory()->create([
         'cart_id' => $cart->id,
-        'payment_method' => 'credit_card',
+        'payment_method' => PaymentMethods::PAYPHONE->value,
     ]);
 
     $this->post(route('cart.items.remove', [

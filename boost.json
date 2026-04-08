@@ -9,17 +9,16 @@
     "packages": [
         "filament/filament",
         "spatie/laravel-ray",
-        "spatie/laravel-backup",
-        "laravel/nightwatch"
+        "spatie/laravel-backup"
     ],
     "sail": false,
     "skills": [
         "laravel-best-practices",
+        "configure-nightwatch",
         "wayfinder-development",
         "pest-testing",
         "inertia-vue-development",
         "tailwindcss-development",
-        "configure-nightwatch",
         "laravel-backup",
         "debugging-output-and-previewing-html-using-ray"
     ]

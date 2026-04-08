@@ -68,7 +68,12 @@
                                         />
                                     </TabsContent>
                                     <TabsContent value="bank_transfer">
-                                        <BankTransfer />
+                                        <BankTransfer
+                                            :order="order"
+                                            @processing="handlePaymentProcessing"
+                                            @success="handlePaymentSuccess"
+                                            @error="handlePaymentError"
+                                        />
                                     </TabsContent>
                                 </Tabs>
                             </div>

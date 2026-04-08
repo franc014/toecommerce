@@ -9,6 +9,7 @@ return [
     'cart_item_not_found' => 'Product not found',
     'cart_error' => 'An error occurred while updating your cart',
     'cash_on_delivery_confirmed' => 'Cash on delivery selected. Your order is pending delivery.',
+    'bank_transfer_confirmed' => 'Bank transfer confirmed. We have received your payment receipt. Your order is pending verification.',
     'cart_order_already_has_payment_method' => 'An order associated with this cart already has a payment method. You cannot modify the cart items.',
     'order_status_changed_subject' => 'Order :code - Status Updated',
     'order_status_updated' => 'Order Status Updated',

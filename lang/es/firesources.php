@@ -205,4 +205,5 @@ return [
     'order_canceled' => 'Pedido cancelado exitosamente',
     'actions' => 'Acciones',
     'payment_method' => 'Método de Pago',
+    'payment_receipt' => 'Comprobante de Pago',
 ];

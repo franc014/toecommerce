@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentMethods;
+use App\Events\BankTransferReceiptUploaded;
 use App\Events\CashOnDeliveryConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -22,6 +23,7 @@ class OrderController extends Controller
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
             'payment_method' => ['required', 'string', Rule::in(array_map(fn ($case) => $case->value, PaymentMethods::cases()))],
+            'payment_receipt' => ['required_if:payment_method,bank_transfer', 'image', 'max:50'],
         ]);
 
         $order = auth()->user()->orders()->findOrFail($validated['order_id']);
@@ -32,6 +34,18 @@ class OrderController extends Controller
             CashOnDeliveryConfirmed::dispatch($order);
 
             return response()->json(['message' => __('storefront.cash_on_delivery_confirmed')])->withoutCookie('cart');
+        }
+
+        if ($validated['payment_method'] === PaymentMethods::BANK_TRANSFER->value) {
+            $receiptFile = $request->file('payment_receipt');
+            $filename = "receipts/order-{$order->code}-".now()->timestamp.'.'.$receiptFile->getClientOriginalExtension();
+            $receiptPath = $receiptFile->storeAs('', $filename);
+
+            $order->confirmBankTransfer($receiptPath);
+
+            BankTransferReceiptUploaded::dispatch($order);
+
+            return response()->json(['message' => __('storefront.bank_transfer_confirmed')])->withoutCookie('cart');
         }
     }
 }

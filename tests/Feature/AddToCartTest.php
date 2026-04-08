@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentMethods;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Discount;
@@ -871,7 +872,7 @@ test('can not add or update a cart item if order has already a payment method se
 
     Order::factory()->create([
         'cart_id' => $cart->id,
-        'payment_method' => 'credit_card',
+        'payment_method' => PaymentMethods::PAYPHONE->value,
     ]);
 
     $product = Product::factory()->published()->create([

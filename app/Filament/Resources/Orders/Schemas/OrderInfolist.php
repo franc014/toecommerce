@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentMethods;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
@@ -93,6 +94,9 @@ class OrderInfolist
                                 if (! $record->hasItems()) {
                                     return true;
                                 }
+                                if ($record->payment_method === PaymentMethods::PAYPHONE) {
+                                    return true;
+                                }
 
                                 return $record->isConfirmed() || $record->status === OrderStatus::CANCELED;
                             })
@@ -129,21 +133,28 @@ class OrderInfolist
                         TextEntry::make('payphone_metadata')
                             ->label(__('firesources.last_four_digits'))
                             ->formatStateUsing(function ($state) {
-                                return '**** **** **** '.json_decode($state)->lastDigits;
+                                return '**** **** **** ' . json_decode($state)->lastDigits;
                             })
                             ->hidden(function ($record) {
-                                return $record->payment_method !== PaymentMethods::PAYPHONE->value;
+                                return $record->payment_method !== PaymentMethods::PAYPHONE;
                             }),
                         TextEntry::make('payphone_metadata')
                             ->label(__('firesources.id_document'))
                             ->formatStateUsing(function ($state) {
                                 return json_decode($state)->document;
                             })->hidden(function ($record) {
-                                return $record->payment_method !== PaymentMethods::PAYPHONE->value;
+                                return $record->payment_method !== PaymentMethods::PAYPHONE;
                             }),
                         TextEntry::make('payment_method')
                             ->label(__('firesources.payment_method'))
                             ->badge(),
+
+                        ImageEntry::make('payment_receipt_path')
+                            ->label(__('firesources.payment_receipt'))
+                            ->columnSpanFull()
+                            ->visible(function ($record) {
+                                return $record->payment_method === PaymentMethods::BANK_TRANSFER && $record->payment_receipt_path !== null;
+                            }),
 
                         TextEntry::make('created_at')
                             ->label(__('firesources.created_at'))
@@ -152,7 +163,7 @@ class OrderInfolist
                         TextEntry::make('paid_at')
                             ->label(__('firesources.paid_at'))
                             ->badge()
-                            ->color(fn ($record) => $record->isConfirmed() ? 'success' : 'warning')
+                            ->color(fn($record) => $record->isConfirmed() ? 'success' : 'warning')
                             ->dateTime()
                             ->placeholder(__('firesources.not_paid_yet')),
                     ]),
@@ -186,7 +197,7 @@ class OrderInfolist
                         Action::make('pay')
                             ->label(__('firesources.pay'))
                             ->icon(Heroicon::Banknotes)
-                            ->url(fn () => route('storefront.checkout'))
+                            ->url(fn() => route('storefront.checkout'))
                             ->hidden(function ($record) {
                                 if (Filament::getCurrentPanel()->getId() === 'admin') {
                                     return true;
@@ -198,7 +209,7 @@ class OrderInfolist
                             ->icon(Heroicon::BuildingStorefront)
                             ->label(__('firesources.purchase_more'))
                             ->color('secondary')
-                            ->url(fn () => route('storefront.products'))
+                            ->url(fn() => route('storefront.products'))
                             ->hidden(function () {
                                 return Filament::getCurrentPanel()->getId() === 'admin';
                             }),

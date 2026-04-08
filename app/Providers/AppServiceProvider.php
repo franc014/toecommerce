@@ -54,6 +54,11 @@ class AppServiceProvider extends ServiceProvider
             CashOnDeliveryConfirmed::class,
             SendCashOnDeliveryConfirmationNotification::class,
         );
+
+        Event::listen(
+            BankTransferReceiptUploaded::class,
+            SendBankTransferConfirmationNotification::class,
+        );
     }
 
     protected function configureDefaults()

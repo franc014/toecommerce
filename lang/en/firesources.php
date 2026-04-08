@@ -207,5 +207,6 @@ return [
     'order_canceled' => 'Order canceled successfully',
     'actions' => 'Actions',
     'payment_method' => 'Payment Method',
+    'payment_receipt' => 'Payment Receipt',
 
 ];

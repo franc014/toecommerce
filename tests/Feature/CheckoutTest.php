@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\OrderStatus;
 use App\Enums\PaymentMethods;
+use App\Mail\BankTransferConfirmed;
 use App\Mail\CashOnDeliveryConfirmed as CashOnDeliveryConfirmedMailable;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -8,7 +10,10 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\UserInfoEntry;
+use Faker\Provider\Payment;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Symfony\Component\Uid\Ulid;
@@ -434,6 +439,52 @@ test('user can select the cash on delivery method', function () {
             && $mail->order->code === $mail->order->code
             && $mail->hasTo($mail->order->user->email)
             && $mail->hasSubject('Orden confirmada - Pago contra entrega');
+    });
+});
+
+test('user can select the bank transfer method', function () {
+    Mail::fake();
+    Storage::fake();
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->get(route('storefront.checkout'));
+
+    $order = $response->inertiaProps('order');
+
+    $receiptFile = UploadedFile::fake()->image('receipt.jpg', 800, 600)->size(45);
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->post(route('storefront.orders.select-payment-method'), [
+            'order_id' => $order['id'],
+            'payment_method' => PaymentMethods::BANK_TRANSFER->value,
+            'payment_receipt' => $receiptFile,
+        ])
+        ->assertOk()
+        ->assertJson(['message' => __('storefront.bank_transfer_confirmed')]);
+
+    $this->assertDatabaseHas('orders', [
+        'id' => $order['id'],
+        'payment_method' => PaymentMethods::BANK_TRANSFER->value,
+        'status' => OrderStatus::PENDING->value,
+    ]);
+
+    // assert receipt was stored
+    $orderRecord = Order::find($order['id']);
+    expect($orderRecord->payment_receipt_path)->not->toBeNull();
+    Storage::assertExists($orderRecord->payment_receipt_path);
+
+    // assert email is sent to user with bank transfer confirmation details
+    Mail::assertSent(function (BankTransferConfirmed $mail) use ($order) {
+        return $order['id'] === $mail->order->id
+            && $mail->order->code === $mail->order->code
+            && $mail->hasTo($mail->order->user->email)
+            && $mail->hasSubject('Orden confirmada - Transferencia bancaria');
     });
 });
 

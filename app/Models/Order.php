@@ -258,6 +258,15 @@ class Order extends Model
         $this->setStatus(OrderStatus::PENDING);
     }
 
+    public function confirmBankTransfer(string $receiptPath): void
+    {
+        $this->update([
+            'payment_method' => PaymentMethods::BANK_TRANSFER->value,
+            'payment_receipt_path' => $receiptPath,
+            'status' => OrderStatus::PENDING,
+        ]);
+    }
+
     protected function totalWithoutTaxesInDollars(): Attribute
     {
         return Attribute::make(

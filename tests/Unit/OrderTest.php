@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentMethods;
 use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Models\Cart;
@@ -34,10 +35,14 @@ test('can create an order', function () {
         'price' => 100,
         'quantity' => 2,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
-            ['name' => 'ISD',
-                'percentage' => 10],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
+            [
+                'name' => 'ISD',
+                'percentage' => 10,
+            ],
         ]),
         'total' => 200,
         'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
@@ -49,8 +54,10 @@ test('can create an order', function () {
         'price' => 30,
         'quantity' => 3,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
         ]),
         'total' => 90,
         'total_with_taxes' => 3 * 30 * (1 + 0.15),
@@ -88,10 +95,14 @@ test('can create an order with discounted items', function () {
         'quantity' => 2,
         'has_discount' => false,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
-            ['name' => 'ISD',
-                'percentage' => 10],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
+            [
+                'name' => 'ISD',
+                'percentage' => 10,
+            ],
         ]),
         'total' => 200,
         'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
@@ -106,8 +117,10 @@ test('can create an order with discounted items', function () {
         'discounted_price' => 27,
         'quantity' => 3,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
         ]),
         'total' => 27 * 3,
         'total_with_taxes' => 3 * 27 * (1 + 0.15),
@@ -122,8 +135,10 @@ test('can create an order with discounted items', function () {
         'discounted_price' => 14,
         'quantity' => 4,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
         ]),
         'total' => 14 * 4,
         'total_with_taxes' => 4 * 14 * (1 + 0.15),
@@ -177,7 +192,6 @@ test('can create order items', function () {
     expect($order->orderItems[1]->computed_taxes)->toBe($cart->items[1]->computed_taxes);
     expect($order->orderItems[1]->price)->toBe($cart->items[1]->price);
     expect($order->orderItems[1]->quantity)->toBe($cart->items[1]->quantity);
-
 });
 
 test('can create order items with discounts', function () {
@@ -191,10 +205,14 @@ test('can create order items with discounts', function () {
         'price' => 100,
         'quantity' => 2,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
-            ['name' => 'ISD',
-                'percentage' => 10],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
+            [
+                'name' => 'ISD',
+                'percentage' => 10,
+            ],
         ]),
         'total' => 200,
         'total_with_taxes' => 2 * 100 * (1 + 0.15 + 0.10), // 250
@@ -207,8 +225,10 @@ test('can create order items with discounts', function () {
         'price' => 30,
         'quantity' => 3,
         'taxes' => json_encode([
-            ['name' => 'IVA',
-                'percentage' => 15],
+            [
+                'name' => 'IVA',
+                'percentage' => 15,
+            ],
         ]),
         'total' => 27 * 3,
         'total_with_taxes' => 3 * 27 * (1 + 0.15),
@@ -255,7 +275,6 @@ test('can create order items with discounts', function () {
     expect($order->orderItems[1]->computed_taxes)->toBe($cart->items[1]->computed_taxes);
     expect($order->orderItems[1]->price)->toBe($cart->items[1]->price);
     expect($order->orderItems[1]->quantity)->toBe($cart->items[1]->quantity);
-
 });
 
 test('can add a new order item', function () {
@@ -293,7 +312,6 @@ test('can add a new order item', function () {
     expect($order->fresh()->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
     expect($order->fresh()->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
     expect($order->fresh()->paid_at)->toBeNull();
-
 });
 
 test('can add a new order item with discount', function () {
@@ -343,7 +361,6 @@ test('can add a new order item with discount', function () {
     expect($order->fresh()->total_without_taxes)->toBe($cart->fresh()->total_without_taxes);
     expect($order->fresh()->total_computed_taxes)->toBe($cart->fresh()->total_computed_taxes);
     expect($order->fresh()->paid_at)->toBeNull();
-
 });
 
 test('can update an order item', function () {
@@ -402,7 +419,6 @@ test('can update an order item', function () {
     expect($order->fresh()->total_with_taxes)->toBe($item->total);
     expect($order->fresh()->total_without_taxes)->toBe(0.0);
     expect($order->fresh()->paid_at)->toBeNull();
-
 });
 
 test('can update an order item with discount', function () {
@@ -467,7 +483,6 @@ test('can update an order item with discount', function () {
     expect($order->fresh()->total_with_taxes)->toBe($item->total);
     expect($order->fresh()->total_without_taxes)->toBe(0.0);
     expect($order->fresh()->paid_at)->toBeNull();
-
 });
 
 test('trying to place an order for a cart with no items throws an exception', function () {
@@ -534,7 +549,7 @@ test('confirmCashOnDelivery sets payment method and status', function () {
 
     $order = $order->fresh();
 
-    expect($order->payment_method)->toBe('cash_on_delivery');
+    expect($order->payment_method)->toBe(PaymentMethods::CASH_ON_DELIVERY);
     expect($order->status->value)->toBe('pending');
 
     // Cart should NOT be marked as paid by confirmCashOnDelivery()
