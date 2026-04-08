@@ -208,5 +208,6 @@ return [
     'actions' => 'Actions',
     'payment_method' => 'Payment Method',
     'payment_receipt' => 'Payment Receipt',
+    'paid' => 'Paid',
 
 ];

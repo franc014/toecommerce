@@ -206,4 +206,5 @@ return [
     'actions' => 'Acciones',
     'payment_method' => 'Método de Pago',
     'payment_receipt' => 'Comprobante de Pago',
+    'paid' => 'Pagado',
 ];

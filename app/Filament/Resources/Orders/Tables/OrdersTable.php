@@ -9,7 +9,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -58,10 +58,12 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->label(__('firesources.status'))
-                    ->options(OrderStatus::class)
-                    ->native(false),
+                Filter::make('is_paid')
+                    ->label(__('firesources.paid'))
+                    ->toggle()
+                    ->query(function ($query) {
+                        return $query->whereNotNull('paid_at');
+                    }),
             ])
             ->recordActions([
                 ViewAction::make(),
