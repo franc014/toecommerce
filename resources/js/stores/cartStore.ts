@@ -1,7 +1,6 @@
 import { create, empty, show } from '@/routes/cart';
 import { addOrUpdate, remove } from '@/routes/cart/items';
 import { useHttp } from '@inertiajs/vue3';
-import axios from 'axios';
 import { defineStore } from 'pinia';
 import { v7 as uuidv7 } from 'uuid';
 import { CartAggregation, CartItem, DataForCart } from '../types/index';
@@ -34,21 +33,30 @@ export const useCartStore = defineStore('cart', {
         },
 
         async addOrUpdateItem(data: DataForCart) {
-            const response = await axios.post(addOrUpdate().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(addOrUpdate().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         async removeItem(data: { ui_cart_id: string; item_id: number }) {
-            const response = await axios.post(remove().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(remove().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         async emptyCart(data: { id: string }) {
-            const response = await axios.post(empty().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(empty().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         productInItem(productSlug: string) {
@@ -67,7 +75,7 @@ export const useCartStore = defineStore('cart', {
 
                 return cartDB;
             } catch (e: any) {
-                console.error('hey...', e.message);
+                console.error(e.message);
                 throw e;
             }
         },

@@ -31,13 +31,18 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
         onError((error: any) => {
-            if (error.response?.data?.message) {
+            console.log('error from addOrUpdateItem action in sfl: ', error.response);
+
+            const data = JSON.parse(error.response);
+
+            console.log('data from error response: ', data);
+            /* if (error.response?.data?.message) {
                 toast.error(error.response.data.message);
             } else if (error.response?.data?.error?.message) {
                 toast.error(error.response.data.error.message);
             } else {
                 toast.error('An error occurred while updating your cart');
-            }
+            } */
         });
     }
 
