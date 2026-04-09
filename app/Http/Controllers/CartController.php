@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Rules\CartHasNoPaymentMethod;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -38,6 +38,10 @@ class CartController extends Controller
 
     public function empty(Request $request)
     {
+        $request->validate([
+            'id' => ['required', 'uuid', new CartHasNoPaymentMethod],
+        ]);
+
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
         $cart->empty();
 

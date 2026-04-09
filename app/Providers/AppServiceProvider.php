@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\CashOnDeliveryConfirmed;
+use App\Listeners\SendCashOnDeliveryConfirmationNotification;
 use App\Utils\PayphoneGateway;
 use App\Utils\PayphonePayment;
 use Filament\Actions\Action;
@@ -15,6 +17,7 @@ use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,6 +45,20 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureFilament();
+        $this->configureEvents();
+    }
+
+    protected function configureEvents()
+    {
+        Event::listen(
+            CashOnDeliveryConfirmed::class,
+            SendCashOnDeliveryConfirmationNotification::class,
+        );
+
+        Event::listen(
+            BankTransferReceiptUploaded::class,
+            SendBankTransferConfirmationNotification::class,
+        );
     }
 
     protected function configureDefaults()
@@ -74,7 +91,7 @@ class AppServiceProvider extends ServiceProvider
         DeleteAction::configureUsing(function (DeleteAction $action) {
             return $action->modalWidth('xl')
                 ->modalHeading(function () use ($action) {
-                    return __('firesources.delete') . ($action->getRecordTitle() ? ' ' . $action->getRecordTitle() : '');
+                    return __('firesources.delete').($action->getRecordTitle() ? ' '.$action->getRecordTitle() : '');
                 })
                 ->modalDescription(__('firesources.delete_warning'))
                 ->modalCancelActionLabel(__('firesources.cancel'))

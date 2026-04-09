@@ -193,6 +193,11 @@ export interface PayphoneInfo {
     };
 }
 
+export interface PaymentMethod {
+    value: string;
+    label: string;
+}
+
 export interface DataForCart {
     ui_cart_id: string;
     product_id: number;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentMethods;
 use App\Exceptions\CartAlreadyPaidException;
 use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Http\Resources\OrderResource;
@@ -29,6 +30,10 @@ class CheckoutController extends Controller
                     'order' => (new OrderResource($order))->resolve(),
                     'billingInfo' => $billingInfo,
                     'shippingInfo' => $shippingInfo,
+                    'paymentMethods' => collect(PaymentMethods::cases())->map(fn ($case) => [
+                        'value' => $case->value,
+                        'label' => $case->getLabel(),
+                    ])->toArray(),
                     'gatewayInfo' => [
                         // 'payphoneAPIURL' => config('app.payphone_app_url'),
                         'storeId' => config('app.payphone.store_id'),

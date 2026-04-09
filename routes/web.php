@@ -49,6 +49,7 @@ Route::get('/payments/confirm', [PaymentController::class, 'confirm'])->name('pa
 
 Route::middleware([Authenticate::class])->group(function () {
     Route::get('/checkout', CheckoutController::class)->name('storefront.checkout');
+    Route::post('/orders/select-payment-method', [OrderController::class, 'selectPaymentMethod'])->name('storefront.orders.select-payment-method');
     Route::post('/orders/cancel', [OrderController::class, 'cancelOrder'])->name('storefront.orders.cancel');
     Route::post('/user-info', [UserInfoEntryController::class, 'store'])->middleware([HandlePrecognitiveRequests::class, ProtectAgainstSpam::class])->name('storefront.user-info-entry.store');
     Route::put('/user-info/{id}', [UserInfoEntryController::class, 'update'])->middleware([HandlePrecognitiveRequests::class, ProtectAgainstSpam::class])->name('storefront.user-info-entry.update');
