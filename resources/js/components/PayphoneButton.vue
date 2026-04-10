@@ -1,6 +1,6 @@
 <template>
-    <div class="space-y-4" id="payphone-box">
-        <h2 class="text-4xl">Payphone Checkout</h2>
+    <div class="space-y-4 rounded-lg border border-zinc-200 bg-zinc-50 p-6" id="payphone-box">
+        <h3 class="text-xl font-semibold">Payphone Checkout</h3>
         <div class="relative">
             <div
                 id="pp-button"

@@ -52,7 +52,6 @@ test('setting status discounts', function () {
     expect($inactiveDiscounts)->toHaveCount(1);
     expect($scheduledDiscounts)->toHaveCount(1);
     expect($activeDiscounts)->toHaveCount(2);
-
 });
 
 test('can change discount status manually', function () {
@@ -85,7 +84,6 @@ test('fetching valid discounts available', function () {
 
     $validDiscounts = Discount::valid()->get();
     expect($validDiscounts)->toHaveCount(1);
-
 });
 
 test('fetching valid discounts for a product', function () {
@@ -168,4 +166,19 @@ test('fetching the product sum discount percentage', function () {
     $product->discounts()->attach([$activeDiscountA->id, $activeDiscountB->id]);
 
     expect($product->discountPercentage())->toEqual(40);
+});
+
+test('Figuring out if there is an active discount in the current day', function () {
+    $product = Product::factory()->create();
+    $activeDiscount = Discount::factory()->active()->create([
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(8),
+    ]);
+
+    $inactiveDiscount = Discount::factory()->inactive()->create([
+        'start_date' => now()->subDays(10),
+        'end_date' => now()->subDays(5),
+    ]);
+
+    expect(Discount::thereIsActiveDiscountToday())->toBeTrue();
 });

@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethods;
 use App\Enums\StockControlModes;
 use App\Events\OrderConfirmed;
 use App\Facades\PayphonePaymentGateway;
@@ -46,7 +48,6 @@ function confirmation()
     ]));
 
     return [$response, $order];
-
 }
 
 test('can confirm payphone payment', function () {
@@ -60,6 +61,8 @@ test('can confirm payphone payment', function () {
 
     $this->assertDatabaseHas('orders', [
         'payphone_metadata' => json_encode($this->paymentMeta),
+        'status' => OrderStatus::PENDING,
+        'payment_method' => PaymentMethods::PAYPHONE,
     ]);
 });
 
@@ -129,7 +132,6 @@ function assertForStockTracking()
     ]));
 
     return [$productA, $productB];
-
 }
 
 test('for every product in order its stock is reduced after payment is confirmed in strick mode', function () {
@@ -146,7 +148,6 @@ test('for every product in order its stock is reduced after payment is confirmed
         'id' => $productB->id,
         'stock' => 4,
     ]);
-
 });
 
 test('for every product in order its stock is not reduced after payment is confirmed in non strick mode', function () {
@@ -163,7 +164,6 @@ test('for every product in order its stock is not reduced after payment is confi
         'id' => $productB->id,
         'stock' => 5,
     ]);
-
 });
 
 test('can not confirm if order is already paid', function () {
@@ -200,7 +200,6 @@ test('can not confirm if order is already paid', function () {
     ]))
         ->assertSessionHas('order-confirmation-error', 'La orden ya ha sido confirmada.')
         ->assertRedirect(route('storefront.products'));
-
 });
 
 test('can not confirm if payphone transaction response has errors', function () {
@@ -230,7 +229,6 @@ test('can not confirm if payphone transaction response has errors', function () 
     ]))
         ->assertRedirect(route('storefront.products'))
         ->assertSessionHas('order-confirmation-error', 'La transacción ha fallado. Inténtalo de nuevo o contacta con el administrador.');
-
 });
 
 it('sends a confirmation email with link to order page', function () {
@@ -256,5 +254,4 @@ it('sends a confirmation email with link to order page', function () {
     /* $orderConfirmedMailable->assertSeeInHtml(route('filament.customer.resources.orders.view', [
         'record' => 'CONFIRMATIONCODE123456789',
     ])); */
-
 });

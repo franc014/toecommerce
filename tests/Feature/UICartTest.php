@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentMethods;
 use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
@@ -27,7 +28,6 @@ test('can create a new cart from pinia', function () {
 
     expect(Cart::count())->toBe(1);
     expect(Cart::first()->items()->count())->toBe(0);
-
 });
 
 test('cart id is required', function () {
@@ -133,7 +133,6 @@ test('a cart can be emptied', function () {
     expect($cart->fresh()->total_with_taxes)->toBe(0.0);
     expect($cart->fresh()->total_computed_taxes)->toBe(0.0);
     expect($cart->fresh()->total_without_taxes)->toBe(0.0);
-
 });
 
 test('an order is deleted when a cart is emptied', function () {
@@ -189,5 +188,27 @@ test('an order is deleted when a cart is emptied', function () {
     ]))->assertStatus(200);
 
     expect($cart->fresh()->hasOrder())->toBeFalse();
+});
 
+test('can not empty a cart if order has already a payment method set', function () {
+    $uiCartId = fake()->uuid();
+    $cart = Cart::factory()->create([
+        'ui_cart_id' => $uiCartId,
+    ]);
+
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'quantity' => 2,
+        'price' => 10,
+        'total' => 20,
+    ]);
+
+    Order::factory()->create([
+        'cart_id' => $cart->id,
+        'payment_method' => PaymentMethods::PAYPHONE->value,
+    ]);
+
+    $this->post(route('cart.empty', [
+        'id' => $uiCartId,
+    ]))->assertInvalid(['id']);
 });
