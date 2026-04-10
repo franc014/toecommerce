@@ -43,8 +43,39 @@
                         <AccordionTrigger class="rounded bg-zinc-200/50 px-4 font-bold tracking-wider">3. Pago</AccordionTrigger>
                         <AccordionContent class="py-5">
                             <div class="space-y-10 md:px-10">
-                                <!-- <OrderSummary :order="order" :user="user" /> -->
-                                <PayphoneButton :gatewayInfo="payphoneInfo" />
+                                <h2 class="text-4xl">Métodos de Pago</h2>
+                                <Tabs default-value="payphone" class="w-full">
+                                    <TabsList class="grid w-full grid-cols-3">
+                                        <TabsTrigger
+                                            v-for="method in paymentMethods"
+                                            :key="method.value"
+                                            :value="method.value"
+                                            class="tab-trigger"
+                                            :disabled="isPaymentProcessing"
+                                        >
+                                            {{ method.label }}
+                                        </TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="payphone">
+                                        <PayphoneButton :gatewayInfo="payphoneInfo" />
+                                    </TabsContent>
+                                    <TabsContent value="cash_on_delivery">
+                                        <CashOnDelivery
+                                            :order="order"
+                                            @processing="handlePaymentProcessing"
+                                            @success="handlePaymentSuccess"
+                                            @error="handlePaymentError"
+                                        />
+                                    </TabsContent>
+                                    <TabsContent value="bank_transfer">
+                                        <BankTransfer
+                                            :order="order"
+                                            @processing="handlePaymentProcessing"
+                                            @success="handlePaymentSuccess"
+                                            @error="handlePaymentError"
+                                        />
+                                    </TabsContent>
+                                </Tabs>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -55,16 +86,18 @@
 </template>
 
 <script setup lang="ts">
+import BankTransfer from '@/components/BankTransfer.vue';
+import CashOnDelivery from '@/components/CashOnDelivery.vue';
 import PayphoneButton from '@/components/PayphoneButton.vue';
 import PurchaseInfo from '@/components/PurchaseInfo.vue';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import StorefrontLayout from '@/layouts/StorefrontLayout.vue';
 import { checkout, products } from '@/routes/storefront/';
-import { useCartDrawerStore } from '@/stores/cartDrawerStore';
 import { useCartStore } from '@/stores/cartStore';
-import { PayphoneInfo, UserHasInfoEntry, UserInfoEntry } from '@/types';
+import { PaymentMethod, PayphoneInfo, UserHasInfoEntry, UserInfoEntry } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 defineOptions({ layout: StorefrontLayout });
 
@@ -79,13 +112,24 @@ const userHasShippingInfo = userPurchaseInfo.user_has_shipping_info;
 const billingInfo = page.props.billingInfo as UserInfoEntry;
 const shippingInfo = page.props.shippingInfo as UserInfoEntry;
 const payphoneInfo = page.props.gatewayInfo as PayphoneInfo;
+const paymentMethods = page.props.paymentMethods as PaymentMethod[];
+const order = page.props.order as { id: number; code: string };
 
 const cartStore = useCartStore();
-const cartDrawerStore = useCartDrawerStore();
 
-onMounted(() => {
-    cartDrawerStore.close();
-});
+const isPaymentProcessing = ref(false);
+
+const handlePaymentProcessing = () => {
+    isPaymentProcessing.value = true;
+};
+
+const handlePaymentSuccess = () => {
+    isPaymentProcessing.value = true;
+};
+
+const handlePaymentError = () => {
+    isPaymentProcessing.value = false;
+};
 
 cartStore.$onAction(({ name, onError, after }) => {
     if (name === 'addOrUpdateItem') {
@@ -102,7 +146,7 @@ cartStore.$onAction(({ name, onError, after }) => {
     }
 
     if (name === 'removeItem') {
-        after((result) => {
+        after(() => {
             router.visit(checkout().url);
         });
         onError((error: any) => {
@@ -115,7 +159,7 @@ cartStore.$onAction(({ name, onError, after }) => {
     }
 
     if (name === 'emptyCart') {
-        after((result) => {
+        after(() => {
             router.visit(products().url);
         });
         onError((error: any) => {

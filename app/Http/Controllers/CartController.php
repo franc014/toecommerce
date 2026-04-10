@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Rules\CartHasNoPaymentMethod;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -23,7 +23,6 @@ class CartController extends Controller
 
         return response()->json(['ui_cart_id' => $cart->ui_cart_id, 'items' => []])
             ->cookie('cart', $cart->ui_cart_id, 60 * 24 * 30);
-
     }
 
     public function show(Request $request)
@@ -34,22 +33,15 @@ class CartController extends Controller
             abort(404);
         }
 
-        /* return [
-            'ui_cart_id' => $cart->ui_cart_id,
-            'items' => CartItemResource::collection($cart->items),
-            'cart_aggregation' => [
-                'total_without_taxes_in_dollars' => $cart->total_without_taxes_in_dollars,
-                'total_with_taxes_in_dollars' => $cart->total_with_taxes_in_dollars,
-                'total_computed_taxes_in_dollars' => $cart->total_computed_taxes_in_dollars,
-                'total_in_dollars' => $cart->total_amount_in_dollars,
-                'items_count' => $cart->items_count,
-            ]]; */
-
         return new CartResource($cart)->resolve();
     }
 
     public function empty(Request $request)
     {
+        $request->validate([
+            'id' => ['required', 'uuid', new CartHasNoPaymentMethod],
+        ]);
+
         $cart = Cart::byUICartId($request->input('id'))->firstOrFail();
         $cart->empty();
 

@@ -27,7 +27,14 @@
         "nightwatch": {
             "type": "remote",
             "enabled": true,
-            "url": "https://nightwatch.laravel.com/mcp"
+            "url": "https://nightwatch.laravel.com/mcp",
+            "oauth": {}
         }
+    },
+    "agent": {
+    "plan": {
+      "color": "#00a6ed"
     }
+   
+  }
 }

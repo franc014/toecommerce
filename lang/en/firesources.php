@@ -196,5 +196,18 @@ return [
     'id_document' => 'Id Document',
     'copy_uppercase' => 'Copy',
     'copy_lowercase' => 'copy',
+    'mark_as_shipping' => 'Mark as Shipping',
+    'mark_as_shipping_description' => 'Are you sure you want to mark this order as being prepared for shipment?',
+    'order_marked_as_shipping' => 'Order marked as shipping successfully',
+    'mark_as_shipped' => 'Mark as Shipped',
+    'mark_as_shipped_description' => 'Are you sure you want to mark this order as shipped/delivered?',
+    'order_marked_as_shipped' => 'Order marked as shipped successfully',
+    'cancel_order' => 'Cancel Order',
+    'cancel_order_description' => 'Are you sure you want to cancel this order? This action cannot be undone.',
+    'order_canceled' => 'Order canceled successfully',
+    'actions' => 'Actions',
+    'payment_method' => 'Payment Method',
+    'payment_receipt' => 'Payment Receipt',
+    'paid' => 'Paid',
 
 ];

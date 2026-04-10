@@ -252,4 +252,9 @@ class Cart extends Model
     {
         return $this->paid_at !== null;
     }
+
+    public function markAsPaid(): void
+    {
+        $this->finish();
+    }
 }

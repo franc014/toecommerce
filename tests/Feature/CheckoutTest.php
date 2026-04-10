@@ -1,12 +1,21 @@
 <?php
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethods;
+use App\Mail\BankTransferConfirmed;
+use App\Mail\CashOnDeliveryConfirmed as CashOnDeliveryConfirmedMailable;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\UserInfoEntry;
+use Faker\Provider\Payment;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Inertia\Testing\AssertableInertia as Assert;
 use Symfony\Component\Uid\Ulid;
 
 beforeEach(function () {
@@ -67,6 +76,7 @@ test('an order is created when visiting the checkout page for the first time', f
         'total_with_taxes' => $order['total_with_taxes'] * 100,
         'total_without_taxes' => $order['total_without_taxes'] * 100,
         'total_computed_taxes' => $order['total_computed_taxes'] * 100,
+        'status' => 'pending',
     ]);
 
     $this->assertDatabaseHas('order_items', [
@@ -96,7 +106,6 @@ test('an order is created when visiting the checkout page for the first time', f
         'total_with_taxes' => $cart->items->last()->total_with_taxes * 100,
         'computed_taxes' => $cart->items->last()->computed_taxes * 100,
     ]);
-
 });
 
 test('can not create order if cart is empty', function () {
@@ -116,7 +125,6 @@ test('can not create order if cart is empty', function () {
 
     expect($this->user->orders)->toHaveCount(0);
     expect($this->user->orders->first())->toBeNull();
-
 });
 
 test('can not create order if cart has already been paid', function () {
@@ -132,7 +140,6 @@ test('can not create order if cart has already been paid', function () {
 
     expect($this->user->orders)->toHaveCount(0);
     expect($this->user->orders->first())->toBeNull();
-
 });
 
 test('order is not created when visiting the checkout after the first time', function () {
@@ -167,7 +174,6 @@ test('can cancel order', function () {
     expect($this->user->fresh()->orders)->toHaveCount(0);
     expect(Order::all())->toHaveCount(0);
     expect(OrderItem::all())->toHaveCount(0);
-
 });
 
 test('user is redirected to products page if cart is empty', function () {
@@ -197,7 +203,6 @@ test('cart is updated with user id when visiting the checkout page', function ()
         'id' => $cart->id,
         'user_id' => $this->user->id,
     ]);
-
 });
 
 test('guest users should login to access the checkout page', function () {
@@ -248,7 +253,6 @@ test('can show the customer information for invoice and shipping', function () {
 
     expect($response->inertiaProps('billingInfo')['id'])->toBe($invoiceInfo->id);
     expect($response->inertiaProps('shippingInfo')['id'])->toBe($shippingInfo->id);
-
 });
 
 test('shows billing information form if user has no billing info', function () {
@@ -259,7 +263,6 @@ test('shows billing information form if user has no billing info', function () {
         ->get(route('storefront.checkout'));
 
     expect($response->inertiaProps('userPurchaseInfo.user_has_billing_info'))->toBeFalse();
-
 });
 
 test('shows shipping information form if user has no shipping info', function () {
@@ -363,6 +366,128 @@ test('guests can not send customer info', function () {
     ]);
 });
 
+// payment methods options
+
+test('can show payment method options', function () {
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create();
+
+    // assert user can see payment options defined in enum
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->get(route('storefront.checkout'))
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->has('paymentMethods', 3)
+                ->has(
+                    'paymentMethods.0',
+                    fn (Assert $page) => $page
+                        ->where('value', 'payphone')
+                        ->where('label', 'Payphone')
+                )
+                ->has(
+                    'paymentMethods.1',
+                    fn (Assert $page) => $page
+                        ->where('value', 'cash_on_delivery')
+                        ->where('label', 'Pago contra entrega')
+                )
+                ->has(
+                    'paymentMethods.2',
+                    fn (Assert $page) => $page
+                        ->where('value', 'bank_transfer')
+                        ->where('label', 'Transferencia bancaria')
+                )
+        );
+
+    $paymentMethods = $response->inertiaProps('paymentMethods');
+    expect($paymentMethods)->toEqual(collect(PaymentMethods::cases())->map(fn ($case) => [
+        'value' => $case->value,
+        'label' => $case->getLabel(),
+    ])->toArray());
+});
+
+test('user can select the cash on delivery method', function () {
+    Mail::fake();
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->get(route('storefront.checkout'));
+
+    $order = $response->inertiaProps('order');
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->post(route('storefront.orders.select-payment-method'), [
+            'order_id' => $order['id'],
+            'payment_method' => 'cash_on_delivery',
+        ])
+        ->assertOk()
+        ->assertJson(['message' => __('storefront.cash_on_delivery_confirmed')]);
+
+    $this->assertDatabaseHas('orders', [
+        'id' => $order['id'],
+        'payment_method' => 'cash_on_delivery',
+        'status' => 'pending',
+    ]);
+
+    // assert email is sent to user with COD confirmation details
+    Mail::assertSent(function (CashOnDeliveryConfirmedMailable $mail) use ($order) {
+        return $order['id'] === $mail->order->id
+            && $mail->order->code === $mail->order->code
+            && $mail->hasTo($mail->order->user->email)
+            && $mail->hasSubject('Orden confirmada - Pago contra entrega');
+    });
+});
+
+test('user can select the bank transfer method', function () {
+    Mail::fake();
+    Storage::fake();
+
+    $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->get(route('storefront.checkout'));
+
+    $order = $response->inertiaProps('order');
+
+    $receiptFile = UploadedFile::fake()->image('receipt.jpg', 800, 600)->size(45);
+
+    $response = $this->actingAs($this->user)
+        ->withCookie('cart', $cart->ui_cart_id)
+        ->post(route('storefront.orders.select-payment-method'), [
+            'order_id' => $order['id'],
+            'payment_method' => PaymentMethods::BANK_TRANSFER->value,
+            'payment_receipt' => $receiptFile,
+        ])
+        ->assertOk()
+        ->assertJson(['message' => __('storefront.bank_transfer_confirmed')]);
+
+    $this->assertDatabaseHas('orders', [
+        'id' => $order['id'],
+        'payment_method' => PaymentMethods::BANK_TRANSFER->value,
+        'status' => OrderStatus::PENDING->value,
+    ]);
+
+    // assert receipt was stored
+    $orderRecord = Order::find($order['id']);
+    expect($orderRecord->payment_receipt_path)->not->toBeNull();
+    Storage::assertExists($orderRecord->payment_receipt_path);
+
+    // assert email is sent to user with bank transfer confirmation details
+    Mail::assertSent(function (BankTransferConfirmed $mail) use ($order) {
+        return $order['id'] === $mail->order->id
+            && $mail->order->code === $mail->order->code
+            && $mail->hasTo($mail->order->user->email)
+            && $mail->hasSubject('Orden confirmada - Transferencia bancaria');
+    });
+});
+
 // use billing info as shipping info
 
 test('can clone existing main billing info into shipping info', function () {
@@ -389,7 +514,6 @@ test('can clone existing main billing info into shipping info', function () {
         'email' => $billingInfo->email,
         'is_main' => true,
     ]);
-
 });
 
 // validation user info
