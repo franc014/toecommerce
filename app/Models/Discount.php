@@ -52,4 +52,9 @@ class Discount extends Model
     {
         return Discount::where('status', $status->value)->get();
     }
+
+    public static function thereIsActiveDiscountToday(): bool
+    {
+        return Discount::valid()->exists();
+    }
 }

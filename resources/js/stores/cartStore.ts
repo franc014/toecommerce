@@ -1,6 +1,6 @@
 import { create, empty, show } from '@/routes/cart';
 import { addOrUpdate, remove } from '@/routes/cart/items';
-import axios from 'axios';
+import { useHttp } from '@inertiajs/vue3';
 import { defineStore } from 'pinia';
 import { v7 as uuidv7 } from 'uuid';
 import { CartAggregation, CartItem, DataForCart } from '../types/index';
@@ -17,15 +17,15 @@ export const useCartStore = defineStore('cart', {
                 try {
                     const cartDB = await this.getCartFromDB(cookieCart);
                     console.info('got cart from DB');
-                    this.id = cartDB.data.ui_cart_id;
+                    this.id = cartDB.ui_cart_id;
                 } catch (e: any) {
                     console.error('Sorry. Could not get cart: ', e.message);
                 }
             } else {
                 try {
                     const uuid = uuidv7();
-                    const cartDB = await this.createCartInDB(uuid);
-                    this.id = cartDB.data.ui_cart_id;
+                    const cartDB = (await this.createCartInDB(uuid)) as { ui_cart_id: string };
+                    this.id = cartDB.ui_cart_id;
                 } catch (e: any) {
                     console.error('Sorry. Could not create cart: ', e.message);
                 }
@@ -33,21 +33,30 @@ export const useCartStore = defineStore('cart', {
         },
 
         async addOrUpdateItem(data: DataForCart) {
-            const response = await axios.post(addOrUpdate().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(addOrUpdate().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         async removeItem(data: { ui_cart_id: string; item_id: number }) {
-            const response = await axios.post(remove().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(remove().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         async emptyCart(data: { id: string }) {
-            const response = await axios.post(empty().url, data);
+            const http = useHttp({
+                ...data,
+            });
+            const response = await http.post(empty().url);
             await this.getCartFromDB(this.id);
-            return response.data;
+            return response;
         },
 
         productInItem(productSlug: string) {
@@ -57,28 +66,32 @@ export const useCartStore = defineStore('cart', {
 
         async createCartInDB(cartId: string) {
             try {
-                console.info('creating cart url', create().url);
-                const cartDB = await axios.post(create().url, {
+                console.info('creating cart url...', create().url);
+                const http = useHttp({
                     id: cartId,
                 });
+
+                const cartDB = await http.post(create().url);
+
                 return cartDB;
             } catch (e: any) {
-                console.error('hey...', e.message);
+                console.error(e.message);
                 throw e;
             }
         },
 
         async getCartFromDB(cartId: string) {
-            const cartDB = await axios.post(show().url, {
+            const http = useHttp({
                 id: cartId,
             });
+            const cartDB = (await http.post(show().url)) as { items: CartItem[]; cart_aggregation: CartAggregation; ui_cart_id: string };
 
-            this.items = cartDB.data.items;
-            this.aggregation['total_without_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_without_taxes_in_dollars;
-            this.aggregation['total_with_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_with_taxes_in_dollars;
-            this.aggregation['total_computed_taxes_in_dollars'] = cartDB.data.cart_aggregation.total_computed_taxes_in_dollars;
-            this.aggregation['total_in_dollars'] = cartDB.data.cart_aggregation.total_in_dollars;
-            this.aggregation['items_count'] = cartDB.data.cart_aggregation.items_count;
+            this.items = cartDB.items;
+            this.aggregation['total_without_taxes_in_dollars'] = cartDB.cart_aggregation.total_without_taxes_in_dollars;
+            this.aggregation['total_with_taxes_in_dollars'] = cartDB.cart_aggregation.total_with_taxes_in_dollars;
+            this.aggregation['total_computed_taxes_in_dollars'] = cartDB.cart_aggregation.total_computed_taxes_in_dollars;
+            this.aggregation['total_in_dollars'] = cartDB.cart_aggregation.total_in_dollars;
+            this.aggregation['items_count'] = cartDB.cart_aggregation.items_count;
 
             return cartDB;
         },

@@ -16,6 +16,17 @@ import 'vue-sonner/style.css';
 import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
 import { useCartStore } from '../stores/cartStore';
+
+const getErrorMessage = (error: any): string | null => {
+    try {
+        const raw = error.response?.data ?? error.response ?? error;
+        const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        return data?.message || Object.values(data?.errors || {}).flat()[0] || null;
+    } catch {
+        return null;
+    }
+};
+
 const cartStore = useCartStore();
 const page = usePage();
 const mainMenu = page.props.mainMenu as Menu;
@@ -31,13 +42,7 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
         onError((error: any) => {
-            if (error.response?.data?.message) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.data?.error?.message) {
-                toast.error(error.response.data.error.message);
-            } else {
-                toast.error('An error occurred while updating your cart');
-            }
+            toast.error(getErrorMessage(error) || 'An error occurred while updating your cart');
         });
     }
 
@@ -48,13 +53,7 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
         onError((error: any) => {
-            if (error.response?.data?.message) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.data?.error?.message) {
-                toast.error(error.response.data.error.message);
-            } else {
-                toast.error('An error occurred while removing the item');
-            }
+            toast.error(getErrorMessage(error) || 'An error occurred while removing the item');
         });
     }
 
@@ -65,13 +64,7 @@ cartStore.$onAction(({ name, onError, after }) => {
             }
         });
         onError((error: any) => {
-            if (error.response?.data?.message) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.data?.error?.message) {
-                toast.error(error.response.data.error.message);
-            } else {
-                toast.error('An error occurred while emptying your cart');
-            }
+            toast.error(getErrorMessage(error) || 'An error occurred while emptying your cart');
         });
     }
 });

@@ -41,7 +41,7 @@ test('getting price with taxes in dollars', function () {
         'price' => 10.99,
     ]);
 
-    $this->assertEquals('$'.round(floatval(10.99 * (1 + (15 / 100))), 2), $product->priceWithTaxesInDollars);
+    $this->assertEquals('$' . round(floatval(10.99 * (1 + (15 / 100))), 2), $product->priceWithTaxesInDollars);
 });
 
 test('publishing a product', function () {
@@ -123,6 +123,53 @@ test('can get formatted taxes', function () {
 
     expect($product->formatted_taxes)->toBe('IVA (15%), ISD (10%)');
 });
+
+it('has discounts', function () {
+    $product = Product::factory()->create();
+
+    $discountA = Discount::factory()->create([
+        'name' => 'Discount A',
+        'percentage' => 20,
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDays(15),
+        'status' => 'active',
+    ]);
+
+    $discountB = Discount::factory()->create([
+        'name' => 'Discount B',
+        'percentage' => 10,
+        'start_date' => now()->subDay(),
+        'end_date' => now()->addDay(),
+        'status' => 'active',
+    ]);
+
+    $product->discounts()->attach([$discountA->id, $discountB->id]);
+
+    expect($product->has_discounts)->toBeTrue();
+});
+
+it('does not have discounts', function () {
+    $product = Product::factory()->create();
+
+    $discountA = Discount::factory()->create([
+        'name' => 'Discount A',
+        'percentage' => 20,
+        'start_date' => now()->subDays(20),
+        'end_date' => now()->subdays(15),
+        'status' => 'inactive',
+    ]);
+
+    $discountB = Discount::factory()->create([
+        'name' => 'Discount B',
+        'percentage' => 10,
+        'start_date' => now()->subDays(15),
+        'end_date' => now()->subDays(5),
+        'status' => 'inactive',
+    ]);
+
+    expect($product->has_discounts)->toBeFalse();
+});
+
 
 // variants
 
@@ -219,7 +266,8 @@ test('can generate as many variants as variant options permutations', function (
     expect($product->variants[0]->variation)->toBe([
         'size' => 'small',
         'color' => 'red',
-        'material' => 'leather']);
+        'material' => 'leather'
+    ]);
     expect($product->variants[26]->variation)->toBe([
         'size' => 'large',
         'color' => 'green',
@@ -242,7 +290,6 @@ test('can not generate variants when no variant options are defined for a produc
     $product->generateVariants();
 
     expect($product->variants()->count())->toBe(0);
-
 });
 
 test('can not generate a variant if variant already exist', function () {
@@ -288,7 +335,6 @@ test('can not generate a variant if variant already exist', function () {
     expect($product->variants()->count())->toBe(27);
     $product->generateVariants();
     expect($product->variants()->count())->toBe(27);
-
 });
 
 test('verifying product has published variants', function () {
@@ -302,7 +348,6 @@ test('verifying product has published variants', function () {
     ]);
 
     expect($product->hasPublishedVariants())->toBeTrue();
-
 });
 
 test('verifying product does not have published variants', function () {
@@ -313,7 +358,6 @@ test('verifying product does not have published variants', function () {
     ]);
 
     expect($product->hasPublishedVariants())->toBeFalse();
-
 });
 
 it('gets a product by slug', function () {
@@ -602,7 +646,6 @@ test('can get images as media associated to a product', function () {
     expect($product->productImages())->toHaveCount(2);
 
     $product->productImages()->assertEquals([$imageA, $imageB]);
-
 });
 
 test('can get product images as URLs for products list component', function () {
@@ -658,7 +701,6 @@ test('can get product images as URLs for products list component', function () {
 
     expect($product->productImagesForList)->toHaveCount(2);
     expect($product->productImagesForList->toArray())->toEqual([$imageA->getFullUrl(), $imageB->getFullUrl()]);
-
 });
 
 test('can get a product related products based on collections', function () {
@@ -681,5 +723,4 @@ test('can get a product related products based on collections', function () {
     expect($productA->relatedProducts()->first()->id)->toBe($productB->id);
     expect($productB->relatedProducts()->first()->id)->toBe($productA->id);
     expect($productC->relatedProducts())->toBeEmpty();
-
 });
