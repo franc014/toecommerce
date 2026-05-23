@@ -2,10 +2,10 @@
 
 namespace App\Utils;
 
-use App\Models\Cart;
-use App\Models\CartItem;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
 
 class PerformsAddsToCart
 {

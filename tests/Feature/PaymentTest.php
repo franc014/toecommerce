@@ -1,18 +1,18 @@
 <?php
 
-use App\Enums\OrderStatus;
-use App\Enums\PaymentMethods;
-use App\Enums\StockControlModes;
 use App\Events\OrderConfirmed;
 use App\Facades\PayphonePaymentGateway;
 use App\Mail\OrderConfirmed as OrderConfirmedMailable;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use JFA\ToecommerceCore\Enums\OrderStatus;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Enums\StockControlModes;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\User;
 
 function confirmation()
 {

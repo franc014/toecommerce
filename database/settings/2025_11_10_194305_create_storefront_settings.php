@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\StockControlModes;
+use JFA\ToecommerceCore\Enums\StockControlModes;
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
 return new class extends SettingsMigration

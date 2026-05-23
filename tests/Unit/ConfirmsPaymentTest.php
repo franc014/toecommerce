@@ -1,13 +1,13 @@
 <?php
 
-use App\Exceptions\OrderAlreadyConfirmedException;
-use App\Exceptions\PayphoneTransactionErrorException;
+use JFA\ToecommerceCore\Exceptions\OrderAlreadyConfirmedException;
+use JFA\ToecommerceCore\Exceptions\PayphoneTransactionErrorException;
 use App\Facades\PayphonePaymentGateway;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\User;
 use App\Utils\ConfirmsPayment;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\User;
 
 it('handles payment confirmation', function () {
     $cart = Cart::factory()->has(CartItem::factory()->count(2), 'items')->create([

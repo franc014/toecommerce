@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Product;
-use App\Models\ProductCollection;
 use Inertia\Testing\AssertableInertia as Assert;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
 
 it('shows products by collection', function () {
 

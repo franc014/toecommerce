@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Purchasable;
 use App\Utils\ResolvesPurchasable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Exceptions;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Purchasable;
 
 test('can resolve a purchasable product class', function () {
 

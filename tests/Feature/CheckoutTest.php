@@ -1,21 +1,21 @@
 <?php
 
-use App\Enums\OrderStatus;
-use App\Enums\PaymentMethods;
 use App\Mail\BankTransferConfirmed;
 use App\Mail\CashOnDeliveryConfirmed as CashOnDeliveryConfirmedMailable;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\User;
-use App\Models\UserInfoEntry;
 use Faker\Provider\Payment;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
+use JFA\ToecommerceCore\Enums\OrderStatus;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\OrderItem;
+use JFA\ToecommerceCore\Models\User;
+use JFA\ToecommerceCore\Models\UserInfoEntry;
 use Symfony\Component\Uid\Ulid;
 
 beforeEach(function () {

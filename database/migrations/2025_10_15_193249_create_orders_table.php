@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\User;
 
 return new class extends Migration
 {

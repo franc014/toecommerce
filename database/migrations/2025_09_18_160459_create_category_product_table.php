@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Category;
-use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use JFA\ToecommerceCore\Models\Category;
+use JFA\ToecommerceCore\Models\Product;
 
 return new class extends Migration
 {

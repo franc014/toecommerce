@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\Tax;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\Tax;
+use JFA\ToecommerceCore\Models\User;
 
 test('can get a cart item by purchasable', function () {
     [$purchasable, $cart] = createCartWithItem([

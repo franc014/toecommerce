@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Settings\StorefrontSettings;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 
 class ProductsPageController extends PageController
 {

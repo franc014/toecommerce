@@ -1,13 +1,13 @@
 <?php
 
-use App\Enums\OrderStatus;
-use App\Exceptions\InvalidOrderStatusTransitionException;
+use JFA\ToecommerceCore\Exceptions\InvalidOrderStatusTransitionException;
 use App\Mail\OrderStatusChanged;
-use App\Models\Order;
-use App\Models\OrderStatusHistory;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use JFA\ToecommerceCore\Enums\OrderStatus;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\OrderStatusHistory;
+use JFA\ToecommerceCore\Models\User;
 
 beforeEach(function () {
     Mail::fake();

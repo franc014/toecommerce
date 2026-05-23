@@ -21,6 +21,7 @@
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.12",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "franc014/toecommerce-core": "@dev",
         "spatie/laravel-backup": "^10.0",
         "spatie/laravel-honeypot": "^4.6",
         "spatie/laravel-ray": "^1.40",
@@ -84,6 +85,12 @@
             "@php artisan test"
         ]
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../toecommerce-core"
+        }
+    ],
     "extra": {
         "laravel": {
             "dont-discover": []

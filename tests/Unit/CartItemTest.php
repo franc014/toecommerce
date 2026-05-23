@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
 
 test('can get purchasable product', function () {
     $product = Product::factory()->create();

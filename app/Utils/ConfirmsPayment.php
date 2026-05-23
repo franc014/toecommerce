@@ -4,8 +4,8 @@ namespace App\Utils;
 
 use App\Events\OrderConfirmed;
 use App\Facades\PayphonePaymentGateway;
-use App\Models\Cart;
-use App\Models\Order;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\Order;
 
 class ConfirmsPayment
 {

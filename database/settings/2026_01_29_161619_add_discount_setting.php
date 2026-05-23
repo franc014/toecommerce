@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\DiscountCalculationModes;
+use JFA\ToecommerceCore\Enums\DiscountCalculationModes;
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
 return new class extends SettingsMigration

@@ -3,9 +3,10 @@
         "copilot",
         "opencode"
     ],
+    "cloud": true,
     "guidelines": true,
     "mcp": true,
-    "nightwatch_mcp": true,
+    "nightwatch": true,
     "packages": [
         "filament/filament",
         "spatie/laravel-ray",
@@ -20,6 +21,7 @@
         "inertia-vue-development",
         "tailwindcss-development",
         "laravel-backup",
-        "debugging-output-and-previewing-html-using-ray"
+        "debugging-output-and-previewing-html-using-ray",
+        "deploying-laravel-cloud"
     ]
 }

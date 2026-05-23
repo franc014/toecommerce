@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\OrderConfirmed;
-use App\Settings\StorefrontSettings;
 use Illuminate\Support\Facades\DB;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 
 class ReduceProductStock
 {

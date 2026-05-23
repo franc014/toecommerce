@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PaymentMethods;
 use App\Events\BankTransferReceiptUploaded;
 use App\Events\CashOnDeliveryConfirmed;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
 
 class OrderController extends Controller
 {

@@ -2,8 +2,8 @@
 
 namespace App\CMS;
 
-use App\Models\ProductCollection;
 use Illuminate\Support\Facades\Storage;
+use JFA\ToecommerceCore\Models\ProductCollection;
 
 class CollectionsTransformable implements ContentTransformable
 {

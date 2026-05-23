@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Menus\Schemas;
 
-use App\Filament\Forms\Components\SharedFields;
 use Filament\Schemas\Schema;
+use JFA\ToecommerceCore\Filament\Forms\Components\SharedFields;
 
 class MenuForm
 {

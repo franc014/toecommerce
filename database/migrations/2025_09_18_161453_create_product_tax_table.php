@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Tax;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\Tax;
 
 return new class extends Migration
 {

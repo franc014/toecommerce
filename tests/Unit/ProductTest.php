@@ -1,13 +1,13 @@
 <?php
 
-use App\Enums\DiscountCalculationModes;
-use App\Enums\ProductStatus;
-use App\Models\Discount;
-use App\Models\Product;
-use App\Models\ProductCollection;
-use App\Models\ProductVariant;
-use App\Models\Tax;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use JFA\ToecommerceCore\Enums\DiscountCalculationModes;
+use JFA\ToecommerceCore\Enums\ProductStatus;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Tax;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 test('price should be saved as integer in the database', function () {
@@ -41,7 +41,7 @@ test('getting price with taxes in dollars', function () {
         'price' => 10.99,
     ]);
 
-    $this->assertEquals('$' . round(floatval(10.99 * (1 + (15 / 100))), 2), $product->priceWithTaxesInDollars);
+    $this->assertEquals('$'.round(floatval(10.99 * (1 + (15 / 100))), 2), $product->priceWithTaxesInDollars);
 });
 
 test('publishing a product', function () {
@@ -170,7 +170,6 @@ it('does not have discounts', function () {
     expect($product->has_discounts)->toBeFalse();
 });
 
-
 // variants
 
 test('a product can define variant options', function () {
@@ -266,7 +265,7 @@ test('can generate as many variants as variant options permutations', function (
     expect($product->variants[0]->variation)->toBe([
         'size' => 'small',
         'color' => 'red',
-        'material' => 'leather'
+        'material' => 'leather',
     ]);
     expect($product->variants[26]->variation)->toBe([
         'size' => 'large',

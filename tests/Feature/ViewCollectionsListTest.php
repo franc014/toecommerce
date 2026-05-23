@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Page;
-use App\Models\ProductCollection;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
+use App\Models\Page;
+use JFA\ToecommerceCore\Models\ProductCollection;
 
 test('can show a list of collections', function () {
 

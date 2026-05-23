@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\ProductCollection;
-use App\Models\ProductVariant;
 use Illuminate\Database\Seeder;
+use JFA\ToecommerceCore\Models\Category;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
+use JFA\ToecommerceCore\Models\ProductVariant;
 
 class ProductSeeder extends Seeder
 {

@@ -1,13 +1,13 @@
 <?php
 
-use App\Enums\StockControlModes;
-use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
-use App\Models\Discount;
-use App\Models\Product;
-use App\Models\ProductCollection;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
+use JFA\ToecommerceCore\Enums\StockControlModes;
+use JFA\ToecommerceCore\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
 
 it('shows a listing of a published product', function () {
 

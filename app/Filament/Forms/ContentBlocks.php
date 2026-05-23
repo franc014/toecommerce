@@ -3,8 +3,6 @@
 namespace App\Filament\Forms;
 
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\CTABlock;
-use App\Models\Product;
-use App\Models\ProductCollection;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
@@ -15,6 +13,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
 
 class ContentBlocks
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\OrderAlreadyConfirmedException;
-use App\Exceptions\PayphoneTransactionErrorException;
 use App\Utils\ConfirmsPayment;
 use Illuminate\Http\Request;
+use JFA\ToecommerceCore\Exceptions\OrderAlreadyConfirmedException;
+use JFA\ToecommerceCore\Exceptions\PayphoneTransactionErrorException;
 
 class PaymentController extends Controller
 {

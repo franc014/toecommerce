@@ -11,15 +11,15 @@
 |
 */
 
-use App\Enums\DiscountCalculationModes;
-use App\Enums\StockControlModes;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Tax;
-use App\Settings\StorefrontSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use JFA\ToecommerceCore\Enums\DiscountCalculationModes;
+use JFA\ToecommerceCore\Enums\StockControlModes;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Tax;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)

@@ -2,7 +2,7 @@
 
 namespace App\CMS;
 
-use App\Models\Product;
+use JFA\ToecommerceCore\Models\Product;
 
 class ProductsTransformable implements ContentTransformable
 {

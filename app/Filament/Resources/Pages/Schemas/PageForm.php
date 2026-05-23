@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Enums\SectionStatus;
-use App\Filament\Forms\Components\SharedFields;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -12,6 +11,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\HtmlString;
+use JFA\ToecommerceCore\Filament\Forms\Components\SharedFields;
 
 class PageForm
 {

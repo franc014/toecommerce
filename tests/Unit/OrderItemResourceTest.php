@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Resources\OrderItemResource;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\OrderItem;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\User;
 
 function createOrderItemWithRelations(array $overrides = []): OrderItem
 {

@@ -1,14 +1,14 @@
 <?php
 
-use App\Enums\PaymentMethods;
-use App\Exceptions\CartAlreadyPaidException;
-use App\Exceptions\PlaceOrderForEmptyCartException;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\User;
+use JFA\ToecommerceCore\Exceptions\CartAlreadyPaidException;
+use JFA\ToecommerceCore\Exceptions\PlaceOrderForEmptyCartException;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\User;
 use Symfony\Component\Uid\Ulid;
 
 it('belongs to a user', function () {

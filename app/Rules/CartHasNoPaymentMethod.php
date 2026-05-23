@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\Cart;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
+use JFA\ToecommerceCore\Models\Cart;
 
 class CartHasNoPaymentMethod implements ValidationRule
 {

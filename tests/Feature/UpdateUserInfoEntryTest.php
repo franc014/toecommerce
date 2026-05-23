@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
-use App\Models\UserInfoEntry;
+use JFA\ToecommerceCore\Models\User;
+use JFA\ToecommerceCore\Models\UserInfoEntry;
 
 test('customer can update use info entry', function () {
 

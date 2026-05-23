@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\StockControlModes;
 use App\Models\Page;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Settings\StorefrontSettings;
 use Inertia\Testing\AssertableInertia as Assert;
+use JFA\ToecommerceCore\Enums\StockControlModes;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 
 beforeEach(function () {
     Page::factory()->create(['slug' => 'products']);

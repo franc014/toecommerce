@@ -2,8 +2,8 @@
 
 namespace App\CMS;
 
-use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
+use JFA\ToecommerceCore\Models\Product;
 
 class FeaturedProductTransformable implements ContentTransformable
 {

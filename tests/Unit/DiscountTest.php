@@ -1,10 +1,10 @@
 <?php
 
-use App\Enums\DiscountCalculationModes;
-use App\Enums\DiscountStatus;
-use App\Models\Discount;
-use App\Models\Product;
-use App\Models\ProductVariant;
+use JFA\ToecommerceCore\Enums\DiscountCalculationModes;
+use JFA\ToecommerceCore\Enums\DiscountStatus;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
 
 test('a product can have many discounts', function () {
     $product = Product::factory()->create();

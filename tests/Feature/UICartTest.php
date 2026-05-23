@@ -1,12 +1,12 @@
 <?php
 
-use App\Enums\PaymentMethods;
 use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\User;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\User;
 
 test('can create a new cart from pinia', function () {
 

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
 use App\Rules\CartHasNoPaymentMethod;
 use App\Rules\ProductStockAvailable;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
+use JFA\ToecommerceCore\Models\Cart;
 
 class CartItemController extends Controller
 {

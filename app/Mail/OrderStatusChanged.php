@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
-use App\Enums\OrderStatus;
-use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use JFA\ToecommerceCore\Enums\OrderStatus;
+use JFA\ToecommerceCore\Models\Order;
 
 class OrderStatusChanged extends Mailable implements ShouldQueue
 {

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PaymentMethods;
-use App\Exceptions\CartAlreadyPaidException;
-use App\Exceptions\PlaceOrderForEmptyCartException;
 use App\Http\Resources\OrderResource;
-use App\Models\Cart;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Exceptions\CartAlreadyPaidException;
+use JFA\ToecommerceCore\Exceptions\PlaceOrderForEmptyCartException;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\Order;
 use Spatie\Honeypot\Honeypot;
 
 class CheckoutController extends Controller

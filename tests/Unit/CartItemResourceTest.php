@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Resources\CartItemResource;
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
 
 test('transforms cart item to array with all expected fields', function () {
     $cartItem = CartItem::factory()->create([

@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\Sections\Schemas;
 
-use App\Filament\Forms\Components\SharedFields;
 use App\Filament\Forms\ContentBuilder;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use JFA\ToecommerceCore\Filament\Forms\Components\SharedFields;
 
 class SectionForm
 {

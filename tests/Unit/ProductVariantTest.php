@@ -1,11 +1,11 @@
 <?php
 
-use App\Enums\DiscountCalculationModes;
-use App\Enums\ProductStatus;
-use App\Models\Discount;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Tax;
+use JFA\ToecommerceCore\Enums\DiscountCalculationModes;
+use JFA\ToecommerceCore\Enums\ProductStatus;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Tax;
 
 test('price should be saved as integer in the database', function () {
 

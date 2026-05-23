@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
-use App\Models\Product;
 use App\Traits\Metatags;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use JFA\ToecommerceCore\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\HeroBlock;
+use JFA\ToecommerceCore\Models\Product;
 use Spatie\SchemaOrg\Schema;
 
 class ProductPageController extends Controller

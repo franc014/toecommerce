@@ -2,14 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Discount;
 use App\Models\Menu;
 use App\Settings\CompanySettings;
-use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Middleware;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,8 +45,8 @@ class HandleInertiaRequests extends Middleware
         $footerMenu = Menu::byName('footer');
         $legalMenu = Menu::byName('legal');
 
-        $company = Cache::remember('settings.company', now()->addHour(), fn() => app(CompanySettings::class)->toArray());
-        $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn() => app(StorefrontSettings::class)->toArray());
+        $company = Cache::remember('settings.company', now()->addHour(), fn () => app(CompanySettings::class)->toArray());
+        $storeFront = Cache::remember('settings.storefront', now()->addHour(), fn () => app(StorefrontSettings::class)->toArray());
 
         $discountsDisplayConfig = [
             'show_message' => $storeFront['show_discount_campaign_message'] && Discount::thereIsActiveDiscountToday(),
@@ -57,11 +57,11 @@ class HandleInertiaRequests extends Middleware
 
         return [
             ...parent::share($request),
-            'mainMenu' => Inertia::once(fn() => $mainMenu),
-            'footerMenu' => Inertia::once(fn() => $footerMenu),
-            'legalMenu' => Inertia::once(fn() => $legalMenu),
-            'company' => Inertia::once(fn() => $company),
-            'name' => Inertia::once(fn() => config('app.name')),
+            'mainMenu' => Inertia::once(fn () => $mainMenu),
+            'footerMenu' => Inertia::once(fn () => $footerMenu),
+            'legalMenu' => Inertia::once(fn () => $legalMenu),
+            'company' => Inertia::once(fn () => $company),
+            'name' => Inertia::once(fn () => config('app.name')),
             'shoppingCart' => $request->hasCookie('cart') ? $request->cookie('cart') : null,
             'auth' => [
                 'user' => $authedUser,
@@ -71,7 +71,7 @@ class HandleInertiaRequests extends Middleware
                 'user_has_shipping_info' => $authedUser?->has_shipping_info,
             ],
             'discountsDisplayConfig' => $discountsDisplayConfig,
-            'flash' => fn() => [
+            'flash' => fn () => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),

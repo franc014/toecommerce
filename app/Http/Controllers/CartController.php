@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CartResource;
-use App\Models\Cart;
 use App\Rules\CartHasNoPaymentMethod;
 use Illuminate\Http\Request;
+use JFA\ToecommerceCore\Models\Cart;
 
 class CartController extends Controller
 {

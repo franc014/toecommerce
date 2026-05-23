@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductCollection;
-use App\Settings\StorefrontSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use JFA\ToecommerceCore\Models\ProductCollection;
+use JFA\ToecommerceCore\Settings\StorefrontSettings;
 
 class CollectionPageController extends Controller
 {

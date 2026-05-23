@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tax;
 use Illuminate\Database\Seeder;
+use JFA\ToecommerceCore\Models\Tax;
 
 class TaxSeeder extends Seeder
 {

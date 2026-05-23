@@ -14,7 +14,9 @@ class ResolvesPurchasable
 
     public function resolve(): Model
     {
-        $purchasableClass = resolve("\\App\Models\\".Str::studly($this->purchasableType));
+        $studlyType = Str::studly($this->purchasableType);
+
+        $purchasableClass = resolve("\\JFA\\ToecommerceCore\\Models\\{$studlyType}");
 
         return $purchasableClass::published()->findOrFail($this->purchasableId);
     }

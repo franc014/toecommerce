@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Page;
-use App\Models\Product;
-use App\Models\ProductCollection;
 use App\Models\Section;
-use App\Models\User;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductCollection;
+use JFA\ToecommerceCore\Models\User;
 
 it('gives successful response for home page', function () {
     $section1 = Section::factory()->create([

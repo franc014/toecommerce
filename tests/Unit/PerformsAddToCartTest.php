@@ -1,16 +1,16 @@
 <?php
 
-use App\Exceptions\ProductOutOfStockException;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Tax;
-use App\Models\User;
+use JFA\ToecommerceCore\Exceptions\ProductOutOfStockException;
 use App\Utils\PerformsAddsToCart;
 use App\Utils\ResolvesPurchasable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Exceptions;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Tax;
+use JFA\ToecommerceCore\Models\User;
 
 test('a product can be added to the cart', function () {
 

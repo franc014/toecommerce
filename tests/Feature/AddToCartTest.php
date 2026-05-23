@@ -1,13 +1,13 @@
 <?php
 
-use App\Enums\PaymentMethods;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Discount;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Tax;
+use JFA\ToecommerceCore\Enums\PaymentMethods;
+use JFA\ToecommerceCore\Models\Cart;
+use JFA\ToecommerceCore\Models\CartItem;
+use JFA\ToecommerceCore\Models\Discount;
+use JFA\ToecommerceCore\Models\Order;
+use JFA\ToecommerceCore\Models\Product;
+use JFA\ToecommerceCore\Models\ProductVariant;
+use JFA\ToecommerceCore\Models\Tax;
 
 it('defines the product data to add to the cart', function () {
 
