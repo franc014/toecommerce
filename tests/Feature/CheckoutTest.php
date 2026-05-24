@@ -14,7 +14,7 @@ use JFA\ToecommerceCore\Models\Cart;
 use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\OrderItem;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 use JFA\ToecommerceCore\Models\UserInfoEntry;
 use Symfony\Component\Uid\Ulid;
 

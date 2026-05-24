@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use JFA\ToecommerceCore\Enums\OrderStatus;
 use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\OrderStatusHistory;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 beforeEach(function () {
     Mail::fake();

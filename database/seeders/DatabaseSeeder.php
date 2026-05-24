@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-// use JFA\ToecommerceCore\Models\User;
+// use App\Models\User;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 // use Illuminate\Support\Facades\Artisan;
 

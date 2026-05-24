@@ -1,6 +1,6 @@
 <?php
 
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 return [
 

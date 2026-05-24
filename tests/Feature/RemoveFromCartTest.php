@@ -4,7 +4,7 @@ use JFA\ToecommerceCore\Enums\PaymentMethods;
 use JFA\ToecommerceCore\Models\Cart;
 use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Order;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 test('can remove an item from the cart', function () {
 

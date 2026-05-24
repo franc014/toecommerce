@@ -8,7 +8,7 @@ use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\OrderItem;
 use JFA\ToecommerceCore\Models\Product;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 function createOrderForResourceTest(array $orderOverrides = [], int $itemCount = 0): Order
 {

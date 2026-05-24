@@ -5,7 +5,7 @@ use JFA\ToecommerceCore\Models\Cart;
 use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\Tax;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 test('can get a cart item by purchasable', function () {
     [$purchasable, $cart] = createCartWithItem([

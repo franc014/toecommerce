@@ -10,7 +10,7 @@ use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\Product;
 use JFA\ToecommerceCore\Models\ProductVariant;
 use JFA\ToecommerceCore\Models\Tax;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 test('a product can be added to the cart', function () {
 

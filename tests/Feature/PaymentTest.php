@@ -12,7 +12,7 @@ use JFA\ToecommerceCore\Models\Cart;
 use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Order;
 use JFA\ToecommerceCore\Models\Product;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 function confirmation()
 {

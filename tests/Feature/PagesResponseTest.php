@@ -6,7 +6,7 @@ use JFA\ToecommerceCore\Models\Cart;
 use JFA\ToecommerceCore\Models\CartItem;
 use JFA\ToecommerceCore\Models\Product;
 use JFA\ToecommerceCore\Models\ProductCollection;
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 
 it('gives successful response for home page', function () {
     $section1 = Section::factory()->create([

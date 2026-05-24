@@ -1,11 +1,13 @@
 <?php
 
 use App\Providers\AppServiceProvider;
+use App\Providers\EventServiceProvider;
 use App\Providers\Filament\AdminPanelProvider;
 use App\Providers\Filament\CustomerPanelProvider;
 
 return [
     AppServiceProvider::class,
+    EventServiceProvider::class,
     AdminPanelProvider::class,
     CustomerPanelProvider::class,
 ];

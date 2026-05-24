@@ -1,6 +1,6 @@
 <?php
 
-use JFA\ToecommerceCore\Models\User;
+use App\Models\User;
 use JFA\ToecommerceCore\Models\UserInfoEntry;
 
 test('can have invoice information entries', function () {
