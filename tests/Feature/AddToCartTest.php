@@ -382,11 +382,13 @@ test('can add a product to the cart after a variant has been added', function ()
         'title' => 'Product A',
         'slug' => 'product-a',
         'price' => 20.00,
+        'stock' => 10,
         'main_image' => 'image.jpg',
     ]);
 
     $variant = ProductVariant::factory()->published()->create([
         'price' => 10.00,
+        'stock' => 10,
         'title' => 'Variant A',
         'slug' => 'variant-a',
         'main_image' => 'image.jpg',
@@ -458,6 +460,7 @@ test('can add a variant to the cart after a variant has been added', function ()
 
     $variantA = ProductVariant::factory()->published()->create([
         'price' => 10.00,
+        'stock' => 10,
         'title' => 'Variant A',
         'slug' => 'variant-a',
         'main_image' => 'image.jpg',
@@ -465,6 +468,7 @@ test('can add a variant to the cart after a variant has been added', function ()
 
     $variantB = ProductVariant::factory()->published()->create([
         'price' => 10.00,
+        'stock' => 10,
         'title' => 'Variant B',
         'slug' => 'variant-b',
         'main_image' => 'image.jpg',
@@ -613,12 +617,14 @@ test('can add a product to the cart after its variant has been added', function 
         'title' => 'Product A',
         'slug' => 'product-a',
         'price' => 20.00,
+        'stock' => 10,
         'main_image' => 'image.jpg',
     ]);
 
     $variant = ProductVariant::factory()->published()->create([
         'product_id' => $product->id,
         'price' => 10.00,
+        'stock' => 10,
         'title' => 'Variant B',
         'slug' => 'variant-b',
         'main_image' => 'image.jpg',

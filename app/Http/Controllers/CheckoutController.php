@@ -21,7 +21,7 @@ class CheckoutController extends Controller
             $cart = Cart::byUICartId($request->cookie('cart'))->firstOrFail();
             $billingInfo = auth()->user()->mainBillingInfoEntry();
             $shippingInfo = auth()->user()->mainShippingInfoEntry();
-            $cart->assingUser(auth()->user());
+            $cart->assignUser(auth()->user());
             $order = Order::placeFor(auth()->user(), $cart);
 
             return Inertia::render(
