@@ -32,9 +32,8 @@
         }
     },
     "agent": {
-    "plan": {
-      "color": "#00a6ed"
+        "plan": {
+            "color": "#00a6ed"
+        }
     }
-   
-  }
 }
