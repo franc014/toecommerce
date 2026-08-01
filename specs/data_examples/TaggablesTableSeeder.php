@@ -1,0 +1,83 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class TaggablesTableSeeder extends Seeder
+{
+    public function run(): void
+    {
+        DB::table('taggables')->insert([
+            ['tag_id' => 65, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 1],
+            ['tag_id' => 66, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 1],
+            ['tag_id' => 67, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 1],
+            ['tag_id' => 68, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 1],
+            ['tag_id' => 68, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 4],
+            ['tag_id' => 69, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 1],
+            ['tag_id' => 70, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 2],
+            ['tag_id' => 71, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 2],
+            ['tag_id' => 72, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 2],
+            ['tag_id' => 72, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 7],
+            ['tag_id' => 73, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 2],
+            ['tag_id' => 74, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 2],
+            ['tag_id' => 75, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 3],
+            ['tag_id' => 76, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 3],
+            ['tag_id' => 77, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 3],
+            ['tag_id' => 78, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 3],
+            ['tag_id' => 79, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 4],
+            ['tag_id' => 80, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 4],
+            ['tag_id' => 81, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 4],
+            ['tag_id' => 82, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 4],
+            ['tag_id' => 83, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 5],
+            ['tag_id' => 84, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 5],
+            ['tag_id' => 85, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 5],
+            ['tag_id' => 86, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 5],
+            ['tag_id' => 87, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 5],
+            ['tag_id' => 87, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 16],
+            ['tag_id' => 88, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 6],
+            ['tag_id' => 89, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 6],
+            ['tag_id' => 90, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 6],
+            ['tag_id' => 91, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 6],
+            ['tag_id' => 92, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 7],
+            ['tag_id' => 92, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 15],
+            ['tag_id' => 93, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 7],
+            ['tag_id' => 94, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 7],
+            ['tag_id' => 94, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 16],
+            ['tag_id' => 95, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 8],
+            ['tag_id' => 95, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 10],
+            ['tag_id' => 96, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 8],
+            ['tag_id' => 97, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 8],
+            ['tag_id' => 98, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 8],
+            ['tag_id' => 99, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 8],
+            ['tag_id' => 100, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 9],
+            ['tag_id' => 101, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 9],
+            ['tag_id' => 102, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 9],
+            ['tag_id' => 103, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 9],
+            ['tag_id' => 104, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 9],
+            ['tag_id' => 105, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 10],
+            ['tag_id' => 105, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 12],
+            ['tag_id' => 106, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 10],
+            ['tag_id' => 107, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 10],
+            ['tag_id' => 107, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 11],
+            ['tag_id' => 108, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 10],
+            ['tag_id' => 109, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 11],
+            ['tag_id' => 110, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 11],
+            ['tag_id' => 111, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 12],
+            ['tag_id' => 112, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 12],
+            ['tag_id' => 113, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 13],
+            ['tag_id' => 113, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 14],
+            ['tag_id' => 114, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 13],
+            ['tag_id' => 115, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 13],
+            ['tag_id' => 116, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 13],
+            ['tag_id' => 116, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 15],
+            ['tag_id' => 117, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 14],
+            ['tag_id' => 118, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 14],
+            ['tag_id' => 119, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 14],
+            ['tag_id' => 120, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 14],
+            ['tag_id' => 121, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 15],
+            ['tag_id' => 122, 'taggable_type' => 'App\Models\Product', 'taggable_id' => 16],
+        ]);
+    }
+}
